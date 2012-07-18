@@ -105,8 +105,10 @@ setMethod("nrow", signature = "Spectra",
 setMethod("[",
 		signature(x = "Spectra"),
 		function(x, i, j) {
+			if(missing(i))
+				i =  1:nrow(x@DF)
 			if(missing(j))
-				j =  seq_along(x@Wavelengths)
+				j =  1:ncol(x@DF)
 			
 			if (class(j)=="numeric" | class(j)=="character"){				
 				if (class(j)=="numeric"){
@@ -365,36 +367,3 @@ setMethod("spc.select", signature = "Spectra",
 			#print(cbind(Sel, ExSel))
 			return(ExSel)
 		})
-
-#########################################################################
-# Method : spc.plot.time
-#########################################################################
-setGeneric (name= "spc.plot.time",
-		def=function(object, ...){standardGeneric("spc.plot.time")})
-setMethod("spc.plot.time", "Spectra", function (object,Y,maxSp, ...){
-			idx = !is.na(object@Wavelengths)
-			
-			if (length(object@InvalidIdx)==0)
-				object@InvalidIdx = rep(FALSE,nrow(object@DF))		
-
-			x = 1:nrow(object)
-			xlb = "Observation number"
-			ylb = paste(object@LongName, object@Units[1])
-			
-			if(missing(Y)){
-				if(!missing(maxSp) && ncol(object)>maxSp)
-					Y = seq(1,ncol(object),length.out=maxSp)
-				else
-					Y = names(object)
-			}
-			matplot(x[!object@InvalidIdx], 
-					object@DF[!object@InvalidIdx,Y], type="l", pch=19,cex=0.3,
-					xlab=xlb,ylab=ylb,...)
-			grid(col="black")			
-		})
-
-#removeClass("TrajectoriesBis")
-#slotNames gives the name of the slots as a vector of type character.
-#getSlots gives the name of the slots and their type.
-#getClass gives the names of slots and their type, but also heirs and ancestors. 
-#showMethods
