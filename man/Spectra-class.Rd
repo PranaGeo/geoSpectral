@@ -6,6 +6,8 @@
 
 \title{Class \code{"Spectra"}}
 \description{
+Any optical dataset that was colleced at a given wavelength of the radiative spectrum 
+can be manipulated using tools offered by this class.
 %%  ~~ A concise (1-5 lines) description of what the class is. ~~
 }
 \section{Objects from the Class}{
