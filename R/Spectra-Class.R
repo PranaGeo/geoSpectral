@@ -5,11 +5,8 @@
 #removeClass("Spectra")
 if (1) {
 	setClass("Spectra", 
-			representation(DF="data.frame", 
-					Wavelengths="numeric", Units="character",
-					SelectedIdx="logical", InvalidIdx="logical",
-					ShortName="character", LongName="character", 
-					Ancillary="data.frame"), 
+			representation(
+					Wavelengths="numeric", Ancillary="Biooo"), 
 			prototype=prototype(DF=data.frame(),
 					Wavelengths=numeric(),Units="[ ]", SelectedIdx=logical(),
 					InvalidIdx=logical(),ShortName="spvar",LongName="spvar longname",

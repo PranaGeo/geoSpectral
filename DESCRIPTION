@@ -3,8 +3,15 @@ Type: Package
 Title: Classes and methods for spectral (optical) data
 Version: 0.1
 Date: 2012-07-02
-Author: Servet Ahmet Cizmeli
-Maintainer: Servet Ahmet Cizmeli <sac@arctus.ca>
-Description: This package provides S4 classes and methods for spectral data. Spectral data are regularly used in remote sensing, bio-optical oceanography and environmental and earth sciences. Any optical dataset that was colleced at a given wavelength of the radiative spectrum can be manipulated using tools offered in this package.
+Depends: R (>= 2.10.0), methods
+Author: Servet Cizmeli
+Maintainer: Servet Cizmeli <sac@arctus.ca>
+Description: This package provides S4 classes and basic manipulation methods for datasets 
+		frequently used in remote sensing, bio-optical oceanography and environmental and 
+		earth sciences. The package is based on the basic data type called Biooo which was
+		concieved for non-spectral data that can easily be represented with a data.frame. 
+		Several other classes extend Bioo to store spatial/temporal and spectral aspects 
+		of Bio-Optical data that are regularly collected during Bio-Optical oceanography
+		campaigns. 
 License: GPL
 LazyLoad: yes
