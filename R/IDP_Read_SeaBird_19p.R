@@ -41,7 +41,7 @@
 
 #x=6 Same as x=3 but with OutputSal=Y et OutputUCSD=Y (P. 54 of the Manual)
 
-Read_SeaBird_19p = function(infile, output_format=6) {
+IDP_Read_SeaBird_19p = function(infile, output_format=6) {
 	if (!file.exists(infile)) {
 		e <- simpleError(paste("File ", infile, " does not exist!", sep=""))
 		stop(e)

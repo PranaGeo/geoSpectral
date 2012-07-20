@@ -5,7 +5,7 @@
 
 #The EcoTriplet data file needs to be corrected for incomplete lines
 
-Read_EcoTriplet = function(infile) {
+IDP_Read_EcoTriplet = function(infile) {
 	
 	if (!file.exists(infile)) {
 		e <- simpleError(paste("File ", infile, " does not exist!", sep=""))

@@ -3,7 +3,7 @@
 # Author: acizmeli
 ###############################################################################
 
-Read_Hydroscat6 = function(infile) {
+IDP_Read_Hydroscat6 = function(infile) {
 	
 	if (!file.exists(infile)) {
 		e <- simpleError(paste("File ", infile, " does not exist!", sep=""))

@@ -13,16 +13,16 @@ ReadCageBioOptiqueStation = function(CastDIR) {
 	#data.frame
 	instrument = list()
 	instrument$HS6$prefix = "HS6"
-	instrument$HS6$read_fcn = "Read_Hydroscat6"
+	instrument$HS6$read_fcn = "IDP_Read_Hydroscat6"
 	instrument$HS6$extension = ".dat"
 	instrument$CTD$prefix = "CTD"
-	instrument$CTD$read_fcn = "Read_SeaBird_19p"
+	instrument$CTD$read_fcn = "IDP_Read_SeaBird_19p"
 	instrument$CTD$extension = ".TXT"
 	instrument$FL$prefix = "FL"
-	instrument$FL$read_fcn = "Read_EcoTriplet"
+	instrument$FL$read_fcn = "IDP_Read_EcoTriplet"
 	instrument$FL$extension = ".TXT"
 	instrument$ASPH$prefix = "ASPH"
-	instrument$ASPH$read_fcn = "Read_Asphere"
+	instrument$ASPH$read_fcn = "IDP_Read_Asphere"
 	instrument$ASPH$extension = ".TXT"
 	
 	out = list()
