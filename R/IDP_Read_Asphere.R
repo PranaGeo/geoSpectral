@@ -1,4 +1,4 @@
-IDP_Read_Asphere = function (infile) {
+IDP_Read_Asphere = function (infile,return.data.frame=T) {
 	if (!file.exists(infile)) {
 		e <- simpleError(paste("File ", infile, " does not exist!", sep=""))
 		stop(e)
@@ -43,6 +43,11 @@ IDP_Read_Asphere = function (infile) {
 	inv_idx = which(apply(apply(out, 2, is.infinite)==T,1,sum)>0)
 	if (length(inv_idx)>0)
 		out = out[-inv_idx,]
+	
+	if (!return.data.frame){
+		out = as(out,"Spectra")
+	}
+		
 	return(out)
 } 
 

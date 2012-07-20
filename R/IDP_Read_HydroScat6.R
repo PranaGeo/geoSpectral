@@ -3,7 +3,7 @@
 # Author: acizmeli
 ###############################################################################
 
-IDP_Read_Hydroscat6 = function(infile) {
+IDP_Read_Hydroscat6 = function(infile, return.data.frame=T) {
 	
 	if (!file.exists(infile)) {
 		e <- simpleError(paste("File ", infile, " does not exist!", sep=""))
@@ -55,6 +55,10 @@ IDP_Read_Hydroscat6 = function(infile) {
 	
 	attr(out2, "ShortName")="bb"
 	attr(out2, "LongName")="backscattering coefficient"
+	
+	if (!return.data.frame){
+		out2 = as(out2,"Spectra")
+	}
 	
 	return(out2)
 } 
