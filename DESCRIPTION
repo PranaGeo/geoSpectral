@@ -1,0 +1,13 @@
+Package: BiOpticaR
+Type: Package
+Title: Tools for Bio-Optical Oceanography in R
+Version: 0.01
+Date: 2012-07-18
+Depends: R (>= 2.10.0), methods, Spectral (>= 0.1)
+Author: Servet Cizmeli
+Maintainer: Servet Cizmeli <sac@arctus.ca>
+Description: This package contains tools for importing, displaying, processing 
+		and data collected in Bio-Optical Oceanography. It depends of the package
+		Spectral that provides classes and methods for data types that are frequently
+		encountered in the domain. 
+License: GPL
