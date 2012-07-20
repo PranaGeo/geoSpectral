@@ -5,9 +5,10 @@
 if (1) {
 	setClass("Spectra", contains="Biooo",
 			representation(
+					ShortName="character",
 					Wavelengths="numeric", Ancillary="Biooo"), 
 			prototype=prototype(DF=data.frame(),
-					Wavelengths=0, Ancillary=new("Biooo")))
+					ShortName="spvar2",Wavelengths=0, Ancillary=new("Biooo")))
 	
 }
 setMethod("initialize",
@@ -27,7 +28,9 @@ setMethod("initialize",
 				LongName <- rep(LongName, ncol(DF))				 							
 			#Set defaults for Units
 			if(missing(Units))
-				Units <- "[ ]"				 
+				Units <- "[ ]"	
+			if(missing(Ancillary))
+				Ancillary=new("Biooo")
 			if (length(Units)==1)
 				Units<- rep(Units, ncol(DF))				 							
 

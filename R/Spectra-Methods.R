@@ -26,16 +26,18 @@ setAs(from="data.frame", to="Spectra", def=function(from){
 				Units=attr(from,"Units") 
 				ShortName = attr(from, "ShortName")
 				
-				if (any(grepl("LongName", names(attributes(from)))))
+				if (any(grepl("LongName", names(attributes(from))))){
 					LongName = attr(from, "LongName")
-				else
+				} else {
 					LongName = ShortName
-				
-				if(ncol(from)>length(Wavelengths))
-					Ancillary = from[(length(Wavelengths)+1):ncol(from),drop=F]
-				else
-					Ancillary = data.frame()
-				
+				}
+				if (ncol(from)>length(Wavelengths)) {
+					myidx = (length(Wavelengths)+1):ncol(from)
+					Ancillary = from[myidx,drop=F]
+					Ancillary = new("Biooo", DF=Ancillary, Units=Units[myidx])
+				} else {
+					Ancillary = new("Biooo") #data.frame()
+				}
 				outS = new("Spectra",
 						DF=from[,1:length(Wavelengths)],
 						Ancillary=Ancillary,
@@ -60,7 +62,7 @@ setMethod("show", "Spectra", function(object){
 					head(object@Wavelengths)," ...\n",
 					"Units : ", object@Units[1], "\n",
 					"Columns : ", head(colnames(object@DF)), "...\n",
-					"Ancillary : ", names(object@Ancillary),"...\n")
+					"Ancillary : ", head(names(object@Ancillary)),"...\n")
 		})
 
 setMethod("Arith",

@@ -10,7 +10,7 @@ setAs(from="Biooo", to="data.frame", def=function(from){
 			if(any(grepl("Units", names(attributes(from)))))
 				output = from@DF
 			
-			attr(output,"ShortName") = from@ShortName
+#			attr(output,"ShortName") = from@ShortName
 			attr(output,"LongName") = from@LongName
 			attr(output,"Units") = from@Units
 			return(output)
@@ -22,8 +22,8 @@ setAs(from="data.frame", to="Biooo", def=function(from){
 				
 				if (any(grepl("Units", names(attributes(from)))))
 					outS@Units=rep(attr(from,"Units"),ncol(outS)) 
-				if (any(grepl("ShortName", names(attributes(from)))))
-					outS@ShortName = rep(attr(from, "ShortName"),ncol(outS))				
+#				if (any(grepl("ShortName", names(attributes(from)))))
+#					outS@ShortName = rep(attr(from, "ShortName"),ncol(outS))				
 				if (any(grepl("LongName", names(attributes(from)))))
 					outS@LongName = rep(attr(from, "LongName"),ncol(outS))				
 #			} else {
@@ -36,7 +36,7 @@ setAs(from="data.frame", to="Biooo", def=function(from){
 # Method : show
 #########################################################################
 setMethod("show", "Biooo", function(object){
-			cat("\n", paste(object@ShortName[1], ' : An object of class "Biooo"\n', 
+			cat("\n", paste('An object of class "Biooo"\n', 
 							ncol(object@DF),"variables in columns and", nrow(object@DF), 
 							"observations in rows"), "\n",
 					"LongName : ",head(object@LongName), "\n",					
@@ -47,14 +47,14 @@ setMethod("show", "Biooo", function(object){
 #########################################################################
 # Method : Arith
 #########################################################################
-setMethod("Arith",
-		signature(e1 = "Biooo", e2 = "Biooo"),
-		function (e1, e2) {
-			result <- callGeneric(e1@DF, e2@DF)
-			output <- new("Biooo",DF=result,Units=e1@Units,
-					ShortName = "Arith", LongName="Arith")			
-		}
-)
+#setMethod("Arith",
+#		signature(e1 = "Biooo", e2 = "Biooo"),
+#		function (e1, e2) {
+#			result <- callGeneric(e1@DF, e2@DF)
+#			output <- new("Biooo",DF=result,Units=e1@Units,
+#					LongName="Arith")			
+#		}
+#)
 #########################################################################
 # Method : names
 #########################################################################
