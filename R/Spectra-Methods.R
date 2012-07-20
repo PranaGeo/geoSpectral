@@ -185,7 +185,7 @@ setMethod("plot", "Spectra", function (x, Y, maxSp, ...){
 				mycol = 1:6
 			
 			matplot(x@Wavelengths,t(x@DF[Xidx,]),#lab=x@Wavelengths,#xaxt="n",
-					ylab= paste(x@LongName, "[", x@Units[1], "]"),
+					ylab= paste(x@LongName[1], "[", x@Units[1], "]"),
 					xlab="Wavelength [nm]", type="l", pch=19,cex=0.3, col=mycol, ...)
 			abline(h=0)
 			grid(col="black")

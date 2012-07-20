@@ -1,4 +1,4 @@
-Package: Spectral
+Package: BiOpticaR
 Type: Package
 Title: Classes and methods for spectral (optical) data
 Version: 0.1
