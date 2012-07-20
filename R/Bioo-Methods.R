@@ -6,7 +6,7 @@
 #########################################################################
 # Method : Conversions from and to data.frame
 #########################################################################
-setAs(from="Bioo", to="data.frame", def=function(from){
+setAs(from="Biooo", to="data.frame", def=function(from){
 			if(any(grepl("Units", names(attributes(from)))))
 				output = from@DF
 			
@@ -16,22 +16,19 @@ setAs(from="Bioo", to="data.frame", def=function(from){
 			return(output)
 		})
 setAs(from="data.frame", to="Biooo", def=function(from){
-			if (any(grepl("Units", names(attributes(from)))) &
-					any(grepl("ShortName", names(attributes(from))))){
+#			if (any(grepl("Units", names(attributes(from)))) &
+#					any(grepl("ShortName", names(attributes(from)))))				
+				outS = new("Biooo", DF=from)
 				
-				Units=attr(from,"Units") 
-				ShortName = attr(from, "ShortName")
-				
+				if (any(grepl("Units", names(attributes(from)))))
+					outS@Units=rep(attr(from,"Units"),ncol(outS)) 
+				if (any(grepl("ShortName", names(attributes(from)))))
+					outS@ShortName = rep(attr(from, "ShortName"),ncol(outS))				
 				if (any(grepl("LongName", names(attributes(from)))))
-					LongName = attr(from, "LongName")
-				else
-					LongName = ShortName
-				
-				outS = new("Biooo",
-						DF=from,Units=Units, LongName=LongName, ShortName=ShortName)
-			} else {
-				stop("One of the required data.frame attributes are not found : Units or ShortName")
-			}
+					outS@LongName = rep(attr(from, "LongName"),ncol(outS))				
+#			} else {
+#				stop("One or more of the required data.frame attributes are not found : Units or ShortName")
+#			}
 			return(outS)
 		})
 

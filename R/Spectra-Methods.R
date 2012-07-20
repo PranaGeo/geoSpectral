@@ -51,16 +51,16 @@ setAs(from="data.frame", to="Spectra", def=function(from){
 # Method : show
 #########################################################################
 setMethod("show", "Spectra", function(object){
-			cat("\n", paste(object@ShortName, ' : An object of class "Spectra"\n', 
+			cat("\n", paste(object@ShortName[1], ' : An object of class "Spectra"\n', 
 							length(object@Wavelengths),"spectral channels in columns and", nrow(object@DF), 
 							"observations in rows"), "\n",
-					"LongName : ",object@LongName, "\n",
+					"LongName : ",object@LongName[1], "\n",
 					"Wavelengths : ", length(object@Wavelengths), 
 					"channels [",min(object@Wavelengths),",",max(object@Wavelengths), "] ->",
 					head(object@Wavelengths)," ...\n",
 					"Units : ", object@Units[1], "\n",
 					"Columns : ", head(colnames(object@DF)), "...\n",
-					"Ancillary : ", colnames(object@Ancillary),"...\n")
+					"Ancillary : ", names(object@Ancillary),"...\n")
 		})
 
 setMethod("Arith",
@@ -76,32 +76,35 @@ setMethod("Arith",
 #########################################################################
 # Method : names
 #########################################################################
-setMethod("names", signature = "Spectra", 
-		def = function (x){
-			return(names(x@DF))
-		})
+#setMethod("names", signature = "Spectra", 
+#		def = function (x){
+#			return(names(x@DF))
+#		})
 #########################################################################
 # Method : dim
 #########################################################################
-setMethod("dim", signature = "Spectra", 
-		def = function (x){
-			return(dim(x@DF))
-		})
+#setMethod("dim", signature = "Spectra", 
+#		def = function (x){
+#			return(dim(x@DF))
+#		})
 #########################################################################
 # Method : ncol
 #########################################################################
-setMethod("ncol", signature = "Spectra", 
-		def = function (x){
-			return(ncol(x@DF))
-		})
+#setMethod("ncol", signature = "Spectra", 
+#		def = function (x){
+#			return(ncol(x@DF))
+#		})
 #########################################################################
 # Method : nrow
 #########################################################################
-setMethod("nrow", signature = "Spectra", 
-		def = function (x){
-			return(nrow(x@DF))
-		})
+#setMethod("nrow", signature = "Spectra", 
+#		def = function (x){
+#			return(nrow(x@DF))
+#		})
 
+#########################################################################
+# Method : [
+#########################################################################
 setMethod("[",
 		signature(x = "Spectra"),
 		function(x, i, j) {
@@ -149,7 +152,10 @@ setMethod("[",
 #########################################################################
 setMethod("head", signature = "Spectra", 
 		def = function (x){
-			return(head(cbind(x@DF, x@Ancillary)))
+			if(ncol(x@Ancillary)>1)
+				return(head(cbind(x@DF, x@Ancillary@DF)))
+			else
+				return(head(x@DF))
 		})
 
 #########################################################################
@@ -192,11 +198,11 @@ setMethod("lines",signature = "Spectra",
 		})
 
 #########################################################################
-# Method : spc.GetAncillary
+# Method : GetAncillary
 #########################################################################
-setGeneric (name= "spc.GetAncillary",
-		def=function(object, ...){standardGeneric("spc.GetAncillary")})
-setMethod("spc.GetAncillary", signature = "Spectra", 
+setGeneric (name= "GetAncillary",
+		def=function(object, ...){standardGeneric("GetAncillary")})
+setMethod("GetAncillary", signature = "Spectra", 
 		def = function (object, Columns){
 			if (missing(Columns))
 				return(object@Ancillary)
@@ -204,113 +210,43 @@ setMethod("spc.GetAncillary", signature = "Spectra",
 				return(object@Ancillary[,Columns])
 		})
 #########################################################################
-# Method : spc.SetAncillary
+# Method : SetAncillary
 #########################################################################
-setGeneric("spc.SetAncillary<-",function(object,value)
-		{standardGeneric("spc.SetAncillary<-")})
+setGeneric("SetAncillary<-",function(object,value)
+		{standardGeneric("SetAncillary<-")})
 setReplaceMethod(
-		f="spc.SetAncillary",
+		f="SetAncillary",
 		signature="Spectra",
 		definition=function(object,value){
+			if(class(value)=="data.frame")
+				value = as(value,"Biooo")
 			object@Ancillary <-value
 			validObject(object)
 			return (object)
 		})
 
 #########################################################################
-# Method : spc.Getwavelengths
+# Method : Getwavelengths
 #########################################################################
-setGeneric (name= "spc.GetWavelengths",
-		def=function(object){standardGeneric("spc.GetWavelengths")})
-setMethod("spc.GetWavelengths", signature = "Spectra", 
+setGeneric (name= "GetWavelengths",
+		def=function(object){standardGeneric("GetWavelengths")})
+setMethod("GetWavelengths", signature = "Spectra", 
 		def = function (object){
 			return(object@Wavelengths)
 		})
 #########################################################################
-# Method : spc.SetWavelengths
+# Method : SetWavelengths
 #########################################################################
-setGeneric("spc.SetWavelengths<-",function(object,value)
-		{standardGeneric("spc.SetWavelengths<-")})
+setGeneric("SetWavelengths<-",function(object,value)
+		{standardGeneric("SetWavelengths<-")})
 setReplaceMethod(
-		f="spc.SetWavelengths",
+		f="SetWavelengths",
 		signature="Spectra",
 		definition=function(object,value){
 			object@Wavelengths <-value
 			validObject(object)
 			return (object)
 		})
-
-#########################################################################
-# Method : spc.GetSelectedIdx
-#########################################################################
-setGeneric (name= "spc.GetSelectedIdx",
-		def=function(object){standardGeneric("spc.GetSelectedIdx")})
-setMethod("spc.GetSelectedIdx", signature = "Spectra", 
-		def = function (object){
-			return(object@SelectedIdx)
-		})
-#########################################################################
-# Method : spc.SetSelectedIdx	
-#########################################################################
-setGeneric("spc.SetSelectedIdx<-",function(object,value)
-		{standardGeneric("spc.SetSelectedIdx<-")})
-setReplaceMethod(
-		f="spc.SetSelectedIdx",
-		signature="Spectra",
-		definition=function(object,value){
-			if(is.numeric(value)){
-				idx = spc.GetInvalidIdx(object)
-				if(length(idx)==0)
-					idx = rep(FALSE,nrow(object))
-				idx[value]=TRUE
-				value=idx
-			}
-			object@SelectedIdx<-value
-			validObject(object)
-			return (object)
-		})
-
-#########################################################################
-# Method : spc.GetinvalidIdx
-#########################################################################
-setGeneric (name= "spc.GetInvalidIdx",
-		def=function(object){standardGeneric("spc.GetInvalidIdx")})
-setMethod("spc.GetInvalidIdx", signature = "Spectra", 
-		def = function (object){
-			return(object@InvalidIdx)
-		})
-#########################################################################
-# Method : spc.SetInvaliddidx	
-#########################################################################
-setGeneric("spc.SetInvalidIdx<-",function(object,value)
-		{standardGeneric("spc.SetInvalidIdx<-")})
-setReplaceMethod(
-		f="spc.SetInvalidIdx",
-		signature="Spectra",
-		definition=function(object,value){
-			if(is.numeric(value)){
-				idx = spc.GetInvalidIdx(object)
-				if(length(idx)==0)
-					idx = rep(FALSE,nrow(object))
-				idx[value]=TRUE
-				value=idx
-			}
-			object@InvalidIdx<-value
-			validObject(object)
-			return (object)
-		})
-
-##########################################################################
-## Method : spc.SelectionInvalidDo Make the selected spectra Invalid
-##########################################################################
-#setGeneric (name= "spc.SelectionInvalidDo",
-#		def=function(object){standardGeneric("spc.SelectionInvalidDo")})
-#setMethod("spc.SelectionInvalidDo", signature = "Spectra", 
-#		def = function (object){
-#			object@InvalidIdx <- object@SelectedIdx
-#			object@SelectedIdx = logical()
-#			return(object)
-#		})
 
 #########################################################################
 # Method : spc.select Select Spectra with the help of the mouse
