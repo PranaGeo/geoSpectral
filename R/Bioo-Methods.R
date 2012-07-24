@@ -179,10 +179,13 @@ setMethod("plot.time", signature="Biooo", function (object,Y,maxSp, ...){
 			
 			if (length(object@InvalidIdx)==0)
 				object@InvalidIdx = rep(FALSE,nrow(object@DF))		
-
+			
 			x = 1:nrow(object)
 			xlb = "Observation number"
-#			ylb = ""
+			if (class(object)=="Spectra")
+				ylb = object@LongName[1]
+			else
+				ylb = ""
 			
 			if(missing(Y)){
 				if(!missing(maxSp) && ncol(object)>maxSp)
@@ -192,6 +195,48 @@ setMethod("plot.time", signature="Biooo", function (object,Y,maxSp, ...){
 			}
 			matplot(x[!object@InvalidIdx], 
 					object@DF[!object@InvalidIdx,Y], type="l", pch=19,cex=0.3,
-					xlab=xlb,...)
+					xlab=xlb, ylab=ylb, ...)
+			grid(col="black")			
+		})
+
+#########################################################################
+# Method : plot.depth
+#########################################################################
+setGeneric (name= "plot.depth",
+		def=function(object, ...){standardGeneric("plot.depth")})
+setMethod("plot.depth", signature="Biooo", function (object,X,maxSp, ...){
+			idx = as(1:ncol(object@DF), "logical")
+			
+			if (length(object@InvalidIdx)==0)
+				object@InvalidIdx = rep(FALSE,nrow(object@DF))		
+			
+			ylb = "Depth [m]"
+			if (class(object)=="Spectra") {
+				xlb = object@LongName[1]
+				depth_idx = grep("DEPTH",names(object@Ancillary))
+				if (length(depth_idx)==1){
+					depth = object@Ancillary@DF[,depth_idx]
+				} else{
+					stop("Cannot match the DEPTH column")
+				}
+			} else {
+				xlb = ""
+				depth_idx = grep("DEPTH",names(object@DF))
+				if (length(depth_idx)==1){
+					depth = object@DF[,depth_idx]
+				} else{
+					stop("Cannot match the DEPTH column")
+				}
+			}
+			if(missing(X)){
+				if(!missing(maxSp) && ncol(object)>maxSp)
+					X = seq(1,ncol(object),length.out=maxSp)
+				else
+					X = names(object)
+			}
+
+			myylim = rev(range(pretty(depth[!object@InvalidIdx])))
+			matplot(object@DF[!object@InvalidIdx,X], depth[!object@InvalidIdx], 
+					type="l", pch=19,cex=0.3, xlab=xlb, ylab=ylb, ylim=myylim, ...)
 			grid(col="black")			
 		})
