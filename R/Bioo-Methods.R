@@ -6,7 +6,7 @@
 #########################################################################
 # Method : Conversions from and to data.frame
 #########################################################################
-setAs(from="Biooo", to="data.frame", def=function(from){
+setAs(from="Bioo", to="data.frame", def=function(from){
 			if(any(grepl("Units", names(attributes(from)))))
 				output = from@DF
 			
@@ -15,10 +15,10 @@ setAs(from="Biooo", to="data.frame", def=function(from){
 			attr(output,"Units") = from@Units
 			return(output)
 		})
-setAs(from="data.frame", to="Biooo", def=function(from){
+setAs(from="data.frame", to="Bioo", def=function(from){
 #			if (any(grepl("Units", names(attributes(from)))) &
 #					any(grepl("ShortName", names(attributes(from)))))				
-				outS = new("Biooo", DF=from)
+				outS = new("Bioo", DF=from)
 				
 				if (any(grepl("Units", names(attributes(from)))))
 					outS@Units=rep(attr(from,"Units"),ncol(outS)) 
@@ -35,8 +35,8 @@ setAs(from="data.frame", to="Biooo", def=function(from){
 #########################################################################
 # Method : show
 #########################################################################
-setMethod("show", "Biooo", function(object){
-			cat("\n", paste('An object of class "Biooo"\n', 
+setMethod("show", "Bioo", function(object){
+			cat("\n", paste('An object of class "Bioo"\n', 
 							ncol(object@DF),"variables in columns and", nrow(object@DF), 
 							"observations in rows"), "\n",
 					"LongName : ",head(object@LongName), "\n",					
@@ -48,43 +48,43 @@ setMethod("show", "Biooo", function(object){
 # Method : Arith
 #########################################################################
 #setMethod("Arith",
-#		signature(e1 = "Biooo", e2 = "Biooo"),
+#		signature(e1 = "Bioo", e2 = "Bioo"),
 #		function (e1, e2) {
 #			result <- callGeneric(e1@DF, e2@DF)
-#			output <- new("Biooo",DF=result,Units=e1@Units,
+#			output <- new("Bioo",DF=result,Units=e1@Units,
 #					LongName="Arith")			
 #		}
 #)
 #########################################################################
 # Method : names
 #########################################################################
-setMethod("names", signature = "Biooo", 
+setMethod("names", signature = "Bioo", 
 		def = function (x){
 			return(names(x@DF))
 		})
 #########################################################################
 # Method : dim
 #########################################################################
-setMethod("dim", signature = "Biooo", 
+setMethod("dim", signature = "Bioo", 
 		def = function (x){
 			return(dim(x@DF))
 		})
 #########################################################################
 # Method : ncol
 #########################################################################
-setMethod("ncol", signature = "Biooo", 
+setMethod("ncol", signature = "Bioo", 
 		def = function (x){
 			return(ncol(x@DF))
 		})
 #########################################################################
 # Method : nrow
 #########################################################################
-setMethod("nrow", signature = "Biooo", 
+setMethod("nrow", signature = "Bioo", 
 		def = function (x){
 			return(nrow(x@DF))
 		})
 
-setMethod("[", signature(x = "Biooo"),
+setMethod("[", signature(x = "Bioo"),
 		function(x, i, j) {
 			if(missing(i))
 				i =  1:nrow(x@DF)
@@ -104,7 +104,7 @@ setMethod("[", signature(x = "Biooo"),
 #########################################################################
 # Method : head
 #########################################################################
-setMethod("head", signature = "Biooo", 
+setMethod("head", signature = "Bioo", 
 		def = function (x){
 			return(head(x@DF))
 		})
@@ -114,7 +114,7 @@ setMethod("head", signature = "Biooo",
 #########################################################################
 setGeneric (name= "GetSelectedIdx",
 		def=function(object){standardGeneric("GetSelectedIdx")})
-setMethod("GetSelectedIdx", signature = "Biooo", 
+setMethod("GetSelectedIdx", signature = "Bioo", 
 		def = function (object){
 			return(object@SelectedIdx)
 		})
@@ -125,7 +125,7 @@ setGeneric("SetSelectedIdx<-",function(object,value)
 		{standardGeneric("SetSelectedIdx<-")})
 setReplaceMethod(
 		f="SetSelectedIdx",
-		signature="Biooo",
+		signature="Bioo",
 		definition=function(object,value){
 			if(is.numeric(value)){
 				idx = GetInvalidIdx(object)
@@ -144,7 +144,7 @@ setReplaceMethod(
 #########################################################################
 setGeneric (name= "GetInvalidIdx",
 		def=function(object){standardGeneric("GetInvalidIdx")})
-setMethod("GetInvalidIdx", signature = "Biooo", 
+setMethod("GetInvalidIdx", signature = "Bioo", 
 		def = function (object){
 			return(object@InvalidIdx)
 		})
@@ -155,7 +155,7 @@ setGeneric("SetInvalidIdx<-",function(object,value)
 		{standardGeneric("SetInvalidIdx<-")})
 setReplaceMethod(
 		f="SetInvalidIdx",
-		signature="Biooo",
+		signature="Bioo",
 		definition=function(object,value){
 			if(is.numeric(value)){
 				idx = GetInvalidIdx(object)
@@ -174,7 +174,7 @@ setReplaceMethod(
 #########################################################################
 setGeneric (name= "plot.time",
 		def=function(object, ...){standardGeneric("plot.time")})
-setMethod("plot.time", signature="Biooo", function (object,Y,maxSp, ...){
+setMethod("plot.time", signature="Bioo", function (object,Y,maxSp, ...){
 			idx = as(1:ncol(object@DF), "logical")
 			
 			if (length(object@InvalidIdx)==0)
@@ -204,7 +204,7 @@ setMethod("plot.time", signature="Biooo", function (object,Y,maxSp, ...){
 #########################################################################
 setGeneric (name= "plot.depth",
 		def=function(object, ...){standardGeneric("plot.depth")})
-setMethod("plot.depth", signature="Biooo", function (object,X,maxSp, ...){
+setMethod("plot.depth", signature="Bioo", function (object,X,maxSp, ...){
 			idx = as(1:ncol(object@DF), "logical")
 			
 			if (length(object@InvalidIdx)==0)

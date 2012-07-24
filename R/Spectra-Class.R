@@ -3,12 +3,12 @@
 # Author: acizmeli
 ###############################################################################
 if (1) {
-	setClass("Spectra", contains="Biooo",
+	setClass("Spectra", contains="Bioo",
 			representation(
 					ShortName="character",
-					Wavelengths="numeric", Ancillary="Biooo"), 
+					Wavelengths="numeric", Ancillary="Bioo"), 
 			prototype=prototype(DF=data.frame(),
-					ShortName="spvar2",Wavelengths=0, Ancillary=new("Biooo")))
+					ShortName="spvar2",Wavelengths=0, Ancillary=new("Bioo")))
 	
 }
 setMethod("initialize",
@@ -30,7 +30,7 @@ setMethod("initialize",
 			if(missing(Units))
 				Units <- "[ ]"	
 			if(missing(Ancillary))
-				Ancillary=new("Biooo")
+				Ancillary=new("Bioo")
 			if (length(Units)==1)
 				Units<- rep(Units, ncol(DF))				 							
 
