@@ -228,6 +228,7 @@ setMethod("plot.depth", signature="Biooo", function (object,X,maxSp, ...){
 					stop("Cannot match the DEPTH column")
 				}
 			}
+
 			if(missing(X)){
 				if(!missing(maxSp) && ncol(object)>maxSp)
 					X = seq(1,ncol(object),length.out=maxSp)
