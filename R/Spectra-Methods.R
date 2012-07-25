@@ -34,9 +34,9 @@ setAs(from="data.frame", to="Spectra", def=function(from){
 				if (ncol(from)>length(Wavelengths)) {
 					myidx = (length(Wavelengths)+1):ncol(from)
 					Ancillary = from[myidx,drop=F]
-					Ancillary = new("Biooo", DF=Ancillary, Units=Units[myidx])
+					Ancillary = new("Bioo", DF=Ancillary, Units=Units[myidx])
 				} else {
-					Ancillary = new("Biooo") #data.frame()
+					Ancillary = new("Bioo") #data.frame()
 				}
 				outS = new("Spectra",
 						DF=from[,1:length(Wavelengths)],
@@ -221,7 +221,7 @@ setReplaceMethod(
 		signature="Spectra",
 		definition=function(object,value){
 			if(class(value)=="data.frame")
-				value = as(value,"Biooo")
+				value = as(value,"Bioo")
 			object@Ancillary <-value
 			validObject(object)
 			return (object)

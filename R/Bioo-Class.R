@@ -4,7 +4,7 @@
 ###############################################################################
 #removeClass("Spectra")
 if (1) {
-	setClass("Biooo", 
+	setClass("Bioo", 
 			representation(DF="data.frame", 
 					Units="character",LongName="character",
 					SelectedIdx="logical", InvalidIdx="logical"), 
@@ -15,10 +15,10 @@ if (1) {
 	
 }
 setMethod("initialize",
-		signature(.Object = "Biooo"),
+		signature(.Object = "Bioo"),
 		function (.Object, ...) 
 		{
-#			cat("---------Biooo::Initialize\n")						
+#			cat("---------Bioo::Initialize\n")						
 			.Object <- callNextMethod()
 
 			if (length(.Object@Units)==1 & .Object@Units[1]=="[]" & ncol(.Object@DF)>0)
@@ -29,15 +29,15 @@ setMethod("initialize",
 #				.Object@ShortName = colnames(.Object@DF)
 #			}
 #			if (.Object@ShortName[1]=="[]") {
-#				.Object@ShortName = "Biooo"
+#				.Object@ShortName = "Bioo"
 #			}
 			#			validObject(.Object)
 			return(.Object)
 		}
 )
 
-setValidity("Biooo", function(object){
-#			cat("---------Biooo::setValidity\n")
+setValidity("Bioo", function(object){
+#			cat("---------Bioo::setValidity\n")
 			if(! class(object@DF)=="data.frame"){
 				return(" data should be a data.frame object")
 			}
