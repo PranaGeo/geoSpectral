@@ -38,6 +38,8 @@ setMethod("show", "Bioo", function(object){
 					"LongName : ",head(object@LongName), "\n",					
 					"Units : ", head(object@Units), "\n",
 					"Columns : ", head(colnames(object@DF)), "...\n")
+#			cat("\nHeader: \n")
+#			show(object@header)
 		})
 
 #########################################################################
@@ -55,31 +57,31 @@ setMethod("show", "Bioo", function(object){
 # Method : names
 #########################################################################
 setMethod("names", signature = "Bioo", 
-		def = function (x){
-			return(names(x@DF))
-		})
+		def = function (x){ return(names(x@DF)) })
 #########################################################################
 # Method : dim
 #########################################################################
 setMethod("dim", signature = "Bioo", 
-		def = function (x){
-			return(dim(x@DF))
-		})
+		def = function (x){  return(dim(x@DF))  })
 #########################################################################
 # Method : ncol
 #########################################################################
 setMethod("ncol", signature = "Bioo", 
-		def = function (x){
-			return(ncol(x@DF))
-		})
+		def = function (x){  return(ncol(x@DF))  })
 #########################################################################
 # Method : nrow
 #########################################################################
 setMethod("nrow", signature = "Bioo", 
-		def = function (x){
-			return(nrow(x@DF))
-		})
+		def = function (x){  return(nrow(x@DF))  })
+#########################################################################
+# Method : head
+#########################################################################
+setMethod("head", signature = "Bioo", 
+		def = function (x){  return(head(x@DF)) })
 
+#########################################################################
+# Method : [
+#########################################################################
 setMethod("[", signature(x = "Bioo"),
 		function(x, i, j) {
 			if(missing(i))
@@ -87,9 +89,9 @@ setMethod("[", signature(x = "Bioo"),
 			if(missing(j))
 				j =  1:ncol(x@DF)
 			
-#			x@DF <- callGeneric(x@DF, i, j)
-			
+#			x@DF <- callGeneric(x@DF, i, j)			
 			x@DF=x@DF[i,j,drop=F]
+			x@Units = x@Units[j]
 			x@SelectedIdx = logical()
 			
 			if (length(x@InvalidIdx)>1)
@@ -98,11 +100,25 @@ setMethod("[", signature(x = "Bioo"),
 		})
 
 #########################################################################
-# Method : head
+# Method : GetBiooHeader
 #########################################################################
-setMethod("head", signature = "Bioo", 
-		def = function (x){
-			return(head(x@DF))
+setGeneric (name= "GetBiooHeader",
+		def=function(object){standardGeneric("GetBiooHeader")})
+setMethod("GetBiooHeader", signature = "Bioo", 
+		def = function (object){
+			return(object@header)
+		})
+#########################################################################
+# Method : SetBiooHeader
+#########################################################################
+setGeneric (name="SetBiooHeader<-",
+		def=function(object,value,...){standardGeneric("SetBiooHeader<-")})
+setReplaceMethod(
+		f="SetBiooHeader",
+		signature="Bioo",
+		definition=function(object,value){
+			object@header<-value
+			return(object)
 		})
 
 #########################################################################

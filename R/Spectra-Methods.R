@@ -70,39 +70,9 @@ setMethod("Arith",
 		function (e1, e2) {
 			result <- callGeneric(e1@DF, e2@DF)
 			output <- new("Spectra",DF=result,Wavelengths=e1@Wavelengths,Units=e1@Units,
-					ShortName = "Arith", LongName="Arith")
-			
+					ShortName = "Arith", LongName="Arith")			
 			return(output)
-		}
-)
-#########################################################################
-# Method : names
-#########################################################################
-#setMethod("names", signature = "Spectra", 
-#		def = function (x){
-#			return(names(x@DF))
-#		})
-#########################################################################
-# Method : dim
-#########################################################################
-#setMethod("dim", signature = "Spectra", 
-#		def = function (x){
-#			return(dim(x@DF))
-#		})
-#########################################################################
-# Method : ncol
-#########################################################################
-#setMethod("ncol", signature = "Spectra", 
-#		def = function (x){
-#			return(ncol(x@DF))
-#		})
-#########################################################################
-# Method : nrow
-#########################################################################
-#setMethod("nrow", signature = "Spectra", 
-#		def = function (x){
-#			return(nrow(x@DF))
-#		})
+		})
 
 #########################################################################
 # Method : [
@@ -110,6 +80,7 @@ setMethod("Arith",
 setMethod("[",
 		signature(x = "Spectra"),
 		function(x, i, j) {
+			OUT_ANC = 0
 			if(missing(i))
 				i =  1:nrow(x@DF)
 			if(missing(j))
@@ -120,32 +91,49 @@ setMethod("[",
 					j.new = match(j,x@Wavelengths)
 				}
 				if (class(j)=="character"){
-					if(!grepl("::",j))
-						stop("Could not recognize the wavelength selectio format. Use the operator ::")
-					temp = strsplit(j, "::")
-					mylower = as.numeric(temp[[1]][1])
-					myupper = as.numeric(temp[[1]][2])					
-					j.new = which(x@Wavelengths>=mylower & x@Wavelengths<=myupper)
-				}
-				
+					if (!exists("j.new") & any(match(j, names(x),nomatch=F))) {
+						j.new = match(j, names(x))
+					}
+					if (!exists("j.new") & any(match(j, names(x@Ancillary),nomatch=F))) {
+						OUT_ANC = 1
+						j.new = match(j, names(x@Ancillary))						
+					}
+					if (!exists("j.new") && length(j)==1 && grepl("::",j)) {					
+						#The requested input is in format lbd1::lbd2
+						temp = strsplit(j, "::")
+						mylower = as.numeric(temp[[1]][1])
+						myupper = as.numeric(temp[[1]][2])					
+						j.new = which(x@Wavelengths>=mylower & x@Wavelengths<=myupper)
+					}
+					if (!exists("j.new"))
+						stop("Could not recognize the wavelength selection format. Use the operator :: or provide spectra or ancillary data column indexes or names")
+					
+				}			
 				if (all(is.na(j.new)))
-					stop("Could not find matching wavelengths")
+					stop("Could not find matching wavelengths or ancillary data")
 				if (any(na.idx <-(is.na(j.new)))) {
 					j.new=j.new[!is.na(j.new)]
-					warning(paste("Could not match wavelengths :", j[which(na.idx)]))
+					warning(paste("Could not match wavelengths or ancillary data :", j[which(na.idx)]))
 				}
 				if (!all(is.finite(j.new)))
-					stop("Could not find matching wavelengths")
+					stop("Could not find matching wavelengths or ancillary data")
 				j = j.new
 			}
-			
-			x@DF=x@DF[i,j,drop=F]
-			x@Ancillary=x@Ancillary[i,,drop=F]
-			x@Wavelengths = x@Wavelengths[j] 
-			x@SelectedIdx = logical()
-			
+			InvalidIdx = x@InvalidIdx
+			if (!OUT_ANC) {				
+				x@DF=x@DF[i,j,drop=F]
+				x@Ancillary=x@Ancillary[i,,drop=F]
+				x@Wavelengths = x@Wavelengths[j]
+				x@Units= x@Units[j] 
+			} else{
+				x=x@Ancillary
+				x = x[i,j,drop=F]				
+			}
 			if (length(x@InvalidIdx)>1)
 				x@InvalidIdx = x@InvalidIdx[i] 
+			
+			x@SelectedIdx = logical()
+			
 			return(x)
 		})
 
