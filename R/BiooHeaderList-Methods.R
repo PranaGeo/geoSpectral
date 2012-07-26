@@ -20,7 +20,6 @@ setMethod("biooHeaderAdd", signature="BiooHeaderList", function(object,Name,Valu
 			}
 			return(out)
 		})
-
 #########################################################################
 # Constructor function : BiooHeaderList()
 #########################################################################

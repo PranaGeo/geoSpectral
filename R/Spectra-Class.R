@@ -39,15 +39,6 @@ setMethod("initialize",
 					LongName=LongName,Wavelengths=Wavelengths,Units=Units,Ancillary=Ancillary)
 			#			.Object <- callNextMethod()
 			
-#			if (.Object@ShortName=="[]") {
-#				ShortName = colnames(.Object@DF)[1]
-#				if (!is.na(ShortName)){
-#					if (grepl("_", ShortName)) {
-#						ShortName = strsplit(ShortName,"_")[[1]][1]
-#					}
-#				}
-#			}			
-			#			validObject(.Object)
 			return(.Object)
 		}
 )

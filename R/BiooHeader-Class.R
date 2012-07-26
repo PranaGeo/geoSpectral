@@ -8,7 +8,6 @@
 #########################################################################
 setClass("BiooHeader", contains="list",
 		prototype=prototype(list(Station="",Cruise="")))
-	
 setMethod("initialize",
 		signature(.Object = "BiooHeader"),
 		function (.Object, ...) 

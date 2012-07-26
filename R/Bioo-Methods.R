@@ -16,15 +16,14 @@ setAs(from="Bioo", to="data.frame", def=function(from){
 			return(output)
 		})
 setAs(from="data.frame", to="Bioo", def=function(from){
-				outS = new("Bioo", DF=from)
-#		browser()
-				Units = attr(from,"Units")
-				if(length(Units)==1)
-					Units = rep(Units, ncol(outS))
-				if (any(grepl("Units", names(attributes(from)))))
-					outS@Units=Units 
-				if (any(grepl("LongName", names(attributes(from)))))
-					outS@LongName = rep(attr(from, "LongName"),ncol(outS))				
+			outS = new("Bioo", DF=from)
+			Units = attr(from,"Units")
+			if(length(Units)==1)
+				Units = rep(Units, ncol(outS))
+			if (any(grepl("Units", names(attributes(from)))))
+				outS@Units=Units 
+			if (any(grepl("LongName", names(attributes(from)))))
+				outS@LongName = rep(attr(from, "LongName"),ncol(outS))				
 			return(outS)
 		})
 
@@ -68,7 +67,7 @@ setMethod("dim", signature = "Bioo",
 #########################################################################
 setMethod("ncol", signature = "Bioo", 
 		def = function (x){  return(ncol(x@DF))  })
-#########################################################################
+########################################################################
 # Method : nrow
 #########################################################################
 setMethod("nrow", signature = "Bioo", 
@@ -82,7 +81,7 @@ setMethod("head", signature = "Bioo",
 #########################################################################
 # Method : [
 #########################################################################
-setMethod("[", signature(x = "Bioo"),
+etMethod("[", signature(x = "Bioo"),
 		function(x, i, j) {
 			if(missing(i))
 				i =  1:nrow(x@DF)
