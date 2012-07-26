@@ -16,19 +16,15 @@ setAs(from="Bioo", to="data.frame", def=function(from){
 			return(output)
 		})
 setAs(from="data.frame", to="Bioo", def=function(from){
-#			if (any(grepl("Units", names(attributes(from)))) &
-#					any(grepl("ShortName", names(attributes(from)))))				
 				outS = new("Bioo", DF=from)
-				
+#		browser()
+				Units = attr(from,"Units")
+				if(length(Units)==1)
+					Units = rep(Units, ncol(outS))
 				if (any(grepl("Units", names(attributes(from)))))
-					outS@Units=rep(attr(from,"Units"),ncol(outS)) 
-#				if (any(grepl("ShortName", names(attributes(from)))))
-#					outS@ShortName = rep(attr(from, "ShortName"),ncol(outS))				
+					outS@Units=Units 
 				if (any(grepl("LongName", names(attributes(from)))))
 					outS@LongName = rep(attr(from, "LongName"),ncol(outS))				
-#			} else {
-#				stop("One or more of the required data.frame attributes are not found : Units or ShortName")
-#			}
 			return(outS)
 		})
 

@@ -5,10 +5,10 @@
 #removeClass("Spectra")
 if (1) {
 	setClass("Bioo", 
-			representation(DF="data.frame", 
+			representation(DF="data.frame", header="BiooHeader",
 					Units="character",LongName="character",
 					SelectedIdx="logical", InvalidIdx="logical"), 
-			prototype=prototype(DF=data.frame(),
+			prototype=prototype(DF=data.frame(),new("BiooHeader"),
 					Units="[]", LongName="[]", 
 					SelectedIdx=logical(),
 					InvalidIdx=logical()))
@@ -21,9 +21,9 @@ setMethod("initialize",
 #			cat("---------Bioo::Initialize\n")						
 			.Object <- callNextMethod()
 
-			if (length(.Object@Units)==1 & .Object@Units[1]=="[]" & ncol(.Object@DF)>0)
+			if (length(.Object@Units)==1 & .Object@Units[1]=="[]" & ncol(.Object@DF)>0){
 				.Object@Units = rep("[ ]",ncol(.Object@DF))
-			
+			}
   
 			#			if (.Object@ShortName[1]=="[]" & ncol(.Object@DF)!=0) {
 #				.Object@ShortName = colnames(.Object@DF)
