@@ -87,8 +87,10 @@ setMethod("[", signature(x = "Bioo"),
 				i =  1:nrow(x@DF)
 			if(missing(j))
 				j =  1:ncol(x@DF)
+
+			if(is.character(j))
+				j = match(j, names(x))
 			
-#			x@DF <- callGeneric(x@DF, i, j)			
 			x@DF=x@DF[i,j,drop=F]
 			x@Units = x@Units[j]
 			x@SelectedIdx = logical()
@@ -239,16 +241,40 @@ setMethod("plot.depth", signature="Bioo", function (object,X,maxSp, ...){
 					stop("Cannot match the DEPTH column")
 				}
 			}
-
+			
 			if(missing(X)){
 				if(!missing(maxSp) && ncol(object)>maxSp)
 					X = seq(1,ncol(object),length.out=maxSp)
 				else
 					X = names(object)
 			}
+			if (is.numeric(X))
+				X = names(object)[X]
 
 			myylim = rev(range(pretty(depth[!object@InvalidIdx])))
-			matplot(object@DF[!object@InvalidIdx,X], depth[!object@InvalidIdx], 
-					type="l", pch=19,cex=0.3, xlab=xlb, ylab=ylb, ylim=myylim, ...)
-			grid(col="black")			
+			#If any, do not draw these parameters
+			X = gsub("DEPTH","",X,fixed=T)
+			X = gsub("VOLTAGE","",X,fixed=T)
+			X = gsub("TIME","",X,fixed=T)
+			X=X[X!=""]
+			
+			myunits = object@Units[match(X,names(object))]
+			mynames = names(object@DF)[match(X,names(object))]
+			u_units = unique(myunits)
+			my_sides = rep(c(1,3), ceiling(length(u_units)/2))
+			for (I in 1:length(u_units)){
+				if (I!=1)
+					axis(my_sides[I], col=I)
+				myX = object@DF[!object@InvalidIdx,X]
+				myY = depth[!object@InvalidIdx]
+				col_idx = match(u_units[I],myunits)
+				xlb = paste(mynames[col_idx[1]], " [", myunits[col_idx[1]],"]",sep="")
+				
+				if (I==1){
+					matplot(myX[,col_idx],myY,type="l", pch=19,cex=0.3, xlab=xlb,ylab=ylb,ylim=myylim,col=I, ...)
+				} else {
+					matlines(myX[,col_idx],myY,type="l", pch=19,cex=0.3, xlab=xlb,ylab=ylb,ylim=myylim,col=I, ...)
+				}
+				grid(col="black")		
+			}
 		})
