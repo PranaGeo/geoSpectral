@@ -81,7 +81,7 @@ setMethod("head", signature = "Bioo",
 #########################################################################
 # Method : [
 #########################################################################
-etMethod("[", signature(x = "Bioo"),
+setMethod("[", signature(x = "Bioo"),
 		function(x, i, j) {
 			if(missing(i))
 				i =  1:nrow(x@DF)
