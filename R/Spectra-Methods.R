@@ -75,6 +75,53 @@ setMethod("Arith",
 		})
 
 #########################################################################
+# Method : $
+#########################################################################
+setMethod("$", signature="Spectra",
+		function(x, name) {
+			if (name %in% names(x)){
+				Boutput = x@DF[[name]]
+			} 
+			if (name %in% names(x@Ancillary)){
+				Boutput = x@Ancillary@DF[[name]]				
+			}
+			if(!exists("Boutput"))
+				stop("Could not match any Spectral or Ancillary data columns")
+			return(Boutput)
+		})
+#########################################################################
+# Method : [[
+#########################################################################
+setMethod("[[", signature="Spectra",
+		function(x, i, j, ...) {
+			if (i %in% names(x)){
+				Boutput = x@DF[[i]]
+			} 
+			if (i %in% names(x@Ancillary)){
+				Boutput = x@Ancillary@DF[[i]]				
+			}
+			if(!exists("Boutput"))
+				stop("Could not match any Spectral or Ancillary data columns")
+			return(Boutput)
+		})
+setReplaceMethod("[[",  signature="Spectra",
+		function(x, i, j, value) {
+			matched = 0
+			if (length(value)!=nrow(x))
+				stop("Replace value must have the same number or rows as the input object")
+			if (i %in% names(x)){
+				matched = 1
+				x@DF[[i]] <- value
+			} 
+			if (i %in% names(x@Ancillary)){
+				matched = 1
+				x@Ancillary@DF[[i]] <- value				
+			}
+			if(!matched)
+				stop("Could not match any Spectral or Ancillary data columns")
+			return(x)
+		})
+#########################################################################
 # Method : [
 #########################################################################
 setMethod("[",
@@ -159,10 +206,10 @@ setMethod("plot", "Spectra", function (x, Y, maxSp, ...){
 				idx = seq(1,nrow(x),length.out=maxSp	)
 			else
 				idx = 1:nrow(x)
-				
+			
 			Xidx = rep(FALSE, nrow(x@DF))
 			Xidx[idx] = TRUE
-			 
+			
 			if(any(x@InvalidIdx)){
 				Xidx[x@InvalidIdx]=FALSE
 			}

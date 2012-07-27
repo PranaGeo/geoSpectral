@@ -79,6 +79,36 @@ setMethod("head", signature = "Bioo",
 		def = function (x){  return(head(x@DF)) })
 
 #########################################################################
+# Method : $
+#########################################################################
+setMethod("$", signature = "Bioo", 
+		function(x, name) {
+			x@DF[[name]]
+		})
+setReplaceMethod("$", signature = "Bioo", 
+		function(x, name, value) {
+			if (length(value)!=nrow(x))
+				stop("Replace value must have the same number or rows as the input object")
+			x@DF[[name]] = value
+			return(x)
+		})
+
+#########################################################################
+# Method : [[
+#########################################################################
+setMethod("[[", signature="Bioo",
+		function(x, i, j, ...) {
+			x@DF[[i]]
+		})
+setReplaceMethod("[[",  signature="Bioo",
+		function(x, i, j, value) {
+			if (length(value)!=nrow(x))
+				stop("Replace value must have the same number or rows as the input object")
+			x@DF[[i]] <- value
+			return(x)
+		})
+
+#########################################################################
 # Method : [
 #########################################################################
 setMethod("[", signature(x = "Bioo"),
@@ -187,7 +217,7 @@ setReplaceMethod(
 #########################################################################
 setGeneric (name= "plot.time",
 		def=function(object, ...){standardGeneric("plot.time")})
-setMethod("plot.time", signature="Bioo", function (object,Y,maxSp, ...){
+setMethod("plot.time", signature="Bioo", function (object,Y,maxSp=50, ...){
 			idx = as(1:ncol(object@DF), "logical")
 			
 			if (length(object@InvalidIdx)==0)
@@ -217,7 +247,7 @@ setMethod("plot.time", signature="Bioo", function (object,Y,maxSp, ...){
 #########################################################################
 setGeneric (name= "plot.depth",
 		def=function(object, ...){standardGeneric("plot.depth")})
-setMethod("plot.depth", signature="Bioo", function (object,X,maxSp, ...){
+setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=50, ...){
 			idx = as(1:ncol(object@DF), "logical")
 			
 			if (length(object@InvalidIdx)==0)
@@ -241,9 +271,9 @@ setMethod("plot.depth", signature="Bioo", function (object,X,maxSp, ...){
 					stop("Cannot match the DEPTH column")
 				}
 			}
-			
+
 			if(missing(X)){
-				if(!missing(maxSp) && ncol(object)>maxSp)
+				if(ncol(object)>maxSp)
 					X = seq(1,ncol(object),length.out=maxSp)
 				else
 					X = names(object)
@@ -262,19 +292,34 @@ setMethod("plot.depth", signature="Bioo", function (object,X,maxSp, ...){
 			mynames = names(object@DF)[match(X,names(object))]
 			u_units = unique(myunits)
 			my_sides = rep(c(1,3), ceiling(length(u_units)/2))
-			for (I in 1:length(u_units)){
-				if (I!=1)
-					axis(my_sides[I], col=I)
+			
+			if(length(u_units)==1){
 				myX = object@DF[!object@InvalidIdx,X]
 				myY = depth[!object@InvalidIdx]
-				col_idx = match(u_units[I],myunits)
-				xlb = paste(mynames[col_idx[1]], " [", myunits[col_idx[1]],"]",sep="")
-				
-				if (I==1){
-					matplot(myX[,col_idx],myY,type="l", pch=19,cex=0.3, xlab=xlb,ylab=ylb,ylim=myylim,col=I, ...)
-				} else {
-					matlines(myX[,col_idx],myY,type="l", pch=19,cex=0.3, xlab=xlb,ylab=ylb,ylim=myylim,col=I, ...)
+				matplot(myX,myY,type="l", pch=19,cex=0.3, xlab=xlb,ylab=ylb,ylim=myylim,...)
+			}else{
+#			for (I in 1:length(u_units)){
+				for (I in 1:2){
+					if (I!=1)
+						par(new=T)
+					myX = object@DF[!object@InvalidIdx,X]
+					myY = depth[!object@InvalidIdx]
+					col_idx = match(u_units[I],myunits)
+					xlb = paste(mynames[col_idx[1]], " [", myunits[col_idx[1]],"]",sep="")
+					
+					plot(myX[,col_idx],myY,type="l", axes=F,pch=19,cex=0.3, ylim=myylim,col=I,xlab="",ylab="",...)
+					axis(my_sides[I], col=I, pretty(range(myX[,col_idx]),10))
+					mtext(my_sides[I],text=xlb,line=2)
+					if (I==1)
+						box()				
 				}
-				grid(col="black")		
+				axis(2,pretty(range(myY),10))
+				mtext(2, text=ylb,line=2)
+				grid(col="black")	
 			}
 		})
+		#				if (I==1){
+#				} else {
+#					matlines(myX[,col_idx],myY,type="l", pch=19,cex=0.3, xlab=xlb,ylab=ylb,ylim=myylim,col=I, ...)
+#				}
+		
