@@ -42,17 +42,6 @@ setMethod("show", "Bioo", function(object){
 		})
 
 #########################################################################
-# Method : Arith
-#########################################################################
-#setMethod("Arith",
-#		signature(e1 = "Bioo", e2 = "Bioo"),
-#		function (e1, e2) {
-#			result <- callGeneric(e1@DF, e2@DF)
-#			output <- new("Bioo",DF=result,Units=e1@Units,
-#					LongName="Arith")			
-#		}
-#)
-#########################################################################
 # Method : names
 #########################################################################
 setMethod("names", signature = "Bioo", 
@@ -318,8 +307,20 @@ setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=50, ...){
 				grid(col="black")	
 			}
 		})
-		#				if (I==1){
-#				} else {
-#					matlines(myX[,col_idx],myY,type="l", pch=19,cex=0.3, xlab=xlb,ylab=ylb,ylim=myylim,col=I, ...)
-#				}
-		
+#########################################################################
+# Method : biooInterpTime
+#########################################################################
+setGeneric (name= "biooInterpTime",
+		def=function(source1,target1,column,plot=F){standardGeneric("biooInterpTime")})
+setMethod("biooInterpTime", signature = "Bioo", 
+		def = function (source1,target1,column){
+			my = approx(source1$TIME, source1[[column]],xout=target1$TIME)
+			
+			if(plot){
+				plot(source1$TIME, source1[[column]],type="l",ylab=column,xlab="TIME")
+#				plot.time(source1[,c("TIME",column)])
+				points(my$x,my$y,col="green",cex=0.4)
+				grid(col="black")
+			}
+			return(myout)
+		})
