@@ -7,7 +7,7 @@
 # Class : BiooHeader	
 #########################################################################
 setClass("BiooHeader", contains="list",
-		prototype=prototype(list(Station="",Cruise="")))
+		prototype=prototype(list(Station=NA,Cruise=NA,Latitude=NA,Longitude=NA)))
 setMethod("initialize",
 		signature(.Object = "BiooHeader"),
 		function (.Object, ...) 

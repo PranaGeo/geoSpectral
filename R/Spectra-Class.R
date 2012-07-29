@@ -20,8 +20,8 @@ setMethod("initialize",
 			#Set defaults for ShortName
 			if(missing(ShortName))
 				ShortName <- "spvar"				 
-			if (length(ShortName)==1)
-				ShortName <- rep(ShortName, ncol(DF))				 							
+			if (length(ShortName)!=1)
+				ShortName <- ShortName[1]				 							
 			#Set defaults for LongName
 			if(missing(LongName))
 				LongName <- "spvar longname"				 
@@ -50,6 +50,9 @@ setValidity("Spectra", function(object){
 			}
 			if(length(object@Wavelengths)!= ncol(object@DF)){
 				return("Number of Spectral channels is not equal the number of DF columns")
+			}
+			if(!all(is.finite(object@Wavelengths))){
+				return("All the wavelengths should be numeric and finite")
 			}
 			if(any(diff(object@Wavelengths)<=0)){
 				return("Wavelength should be increasing and without replicates.")

@@ -285,11 +285,14 @@ setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=50, ...){
 			mynames = names(object@DF)[match(X,names(object))]
 			u_units = unique(myunits)
 			my_sides = rep(c(1,3), ceiling(length(u_units)/2))
-browser()			
+
 			if(length(u_units)==1){
 				myX = object@DF[!object@InvalidIdx,X]
 				myY = depth[!object@InvalidIdx]
-				matplot(myX,myY,type="l", pch=19,cex=0.3, xlab=xlb,ylab=ylb,ylim=myylim,...)
+browser()				
+				matplot(myX,myY,type="l",xlab="",ylab="",pch=19,cex=0.3,ylim=myylim,...)
+				mtext(ylb,side=2,line=2,cex=0.7)
+				mtext(xlb,side=1,line=2,cex=0.7)
 				grid(col="black")		
 			}else{
 #			for (I in 1:length(u_units)){
@@ -328,4 +331,15 @@ setMethod("biooInterpTime", signature = "Bioo",
 				grid(col="black")
 			}
 			return(myout)
+		})
+#########################################################################
+# Method : biooInvalidDetect
+#########################################################################
+setGeneric (name= "biooInvalidDetect",
+		def=function(source1){standardGeneric("biooInvalidDetect")})
+setMethod("biooInvalidDetect", signature = "Bioo", def=function(source1){
+			out = apply(source1@DF, 2,is.na)
+			if(is.null(dim(out))& nrow(source1@DF)==1)
+				dim(out)<-c(1,ncol(source1@DF))
+			out = apply(out,1,all)
 		})

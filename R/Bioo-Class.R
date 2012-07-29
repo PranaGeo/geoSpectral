@@ -65,7 +65,10 @@ setValidity("Bioo", function(object){
 #########################################################################
 # Class : BiooList
 #########################################################################
-setClass("BiooList",representation(header="BiooHeader"), contains="list")
+setClass("BiooList",contains="list",
+		representation=representation(by="character"), 
+		prototype=prototype(by="VariousVariables"), 
+		)
 
 setValidity("BiooList", function(object){
 #			cat("---------BiooList::setValidity\n")

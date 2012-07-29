@@ -2,29 +2,46 @@
 # 
 # Author: acizmeli
 ###############################################################################
+#########################################################################
+# Method : Conversion from Bioo to BiooList using a data field (factor)
+#########################################################################
+Bioo2BiooList = function(myobj, name){
+	if(!is.factor(myobj[[name]]))
+		stop(paste("The data/ancillary '", name, "' should be a factor" ))
+	#Get the indexes of each row :
+	idx = lapply(levels(myobj[[name]]),function(x) which(x==myobj[[name]]))
+	output = as(lapply(idx,function(x) myobj[x,]),"BiooList")
+	output@by = name
+	return(output)
+}
 
 #########################################################################
-# Method : plot
+# Method : plot.grid
 #########################################################################
-setMethod("plot", "BiooList", function (x,Y, nnrow, nncol, ...){
-			nb_spc = length(which(sapply(x, is, "Spectra")))
+setGeneric (name= "plot.grid",
+		def=function(x,FUN, nnrow, nncol,...){standardGeneric("plot.grid")})
+setMethod("plot.grid", "BiooList", function (x,FUN, nnrow, nncol, ...){
+			nb_spc = length(which(sapply(x, inherits, "Bioo")))
 			mypar = par()
 			nrow = ceiling(nb_spc/nncol)
 			
-			mar = c(4,4,0.5,0.5)
+#			FUN <- match.fun(FUN)
+			
+			mar = c(4,4,1,0.5)
 			oma = c(0,0,0,0)#c(1.5,2,1,1)
 			par(mfrow=c(nnrow,nncol), mar=mar, oma=oma)
 			
-			for (I in 1:length(x)) {				
-				if(is(x[[I]], "Spectra")) {
-					plot(x[[I]],...)
+			for (I in 1:length(x)) {
+				if(nrow(x[[I]])>1){
+					eval(call("FUN", x[[I]]))
+					try(title(paste(x@by, ":", as.character(x[[I]]$STATION[1]))),silent=TRUE)
+					if (par()$mfg[1]==par()$mfg[3] & par()$mfg[2]==par()$mfg[4] & I<length(x)) {
+						dev.new()
+						par(mfrow=c(nnrow,nncol), mar=mar, oma=oma)
+					}				
 				}
-				if (par()$mfg[1]==par()$mfg[3] & par()$mfg[2]==par()$mfg[4] & I<length(x)) {
-					dev.new()
-					par(mfrow=c(nnrow,nncol), mar=mar, oma=oma)
-				}				
 			}
-			par(mfrow=mypar$mfrow)
+			par(mfrow=mypar$mfrow,mar=mypar$mar,oma=mypar$oma)
 		})
 
 #########################################################################
@@ -44,9 +61,9 @@ setMethod("plot", "BiooList", function (x,Y, nnrow, nncol, ...){
 #########################################################################
 # Method : names
 #########################################################################
-setMethod("names", "BiooList", function(object){
-			sapply(object, function(x) {
-						if(class(x)=="Bioo") "Bioo"	else x@ShortName[1]
+setMethod("names", "BiooList", function(x){
+			sapply(x, function(mobject) {
+						if(class(mobject)=="Bioo") "Bioo"	else mobject@ShortName[1]
 					})
 		})
 
@@ -65,10 +82,12 @@ setMethod("$", signature = "BiooList",
 # Method : show
 #########################################################################
 setMethod("show", "BiooList", function(object){
-			sapply(1:length(object), function(x) {
-						cat(paste("Element", x, ":"))
-						show(object[[x]])
-					})
+			if(length(object)>0)
+				sapply(1:length(object), function(x) {
+							cat(paste("Element", x, ":"))
+							show(object[[x]])
+						})
+			else cat("Empty BiooList\n")
 		})
 
 #########################################################################
@@ -77,3 +96,10 @@ setMethod("show", "BiooList", function(object){
 BiooList = function (spclist){
 	new("BiooList", spclist)
 }
+#########################################################################
+# Method : biooInvalidDetect
+#########################################################################
+setMethod("biooInvalidDetect", signature = "BiooList", def=function(source12){
+			out = lapply(source12, function(x) {SetInvalidIdx(x)<-biooInvalidDetect(x)})
+			return(out)
+})
