@@ -79,6 +79,7 @@ setReplaceMethod("$", signature = "Bioo",
 			if (length(value)!=nrow(x))
 				stop("Replace value must have the same number or rows as the input object")
 			x@DF[[name]] = value
+			validObject(x)
 			return(x)
 		})
 
@@ -94,6 +95,7 @@ setReplaceMethod("[[",  signature="Bioo",
 			if (length(value)!=nrow(x))
 				stop("Replace value must have the same number or rows as the input object")
 			x@DF[[i]] <- value
+			validObject(x)
 			return(x)
 		})
 
@@ -138,6 +140,7 @@ setReplaceMethod(
 		signature="Bioo",
 		definition=function(object,value){
 			object@header<-value
+			validObject(x)
 			return(object)
 		})
 
