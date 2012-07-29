@@ -45,17 +45,6 @@ setValidity("Bioo", function(object){
 			} else if(length(object@Units)!= ncol(object@DF)){
 				return("Number of Unit elements is not equal the number of DF columns")
 			}
-#			if (object@ShortName[1]=="[]") {
-#			} else if (length(object@ShortName)!=ncol(object@DF)){
-#				return("The slot ShortName should have the same length as the number of columns in slot DF")
-#			}
-#			if (!all(is.character(object@ShortName)) | any(is.na(object@ShortName)) | any(is.null(object@ShortName)) 
-#					|  any(object@ShortName=="")){
-#				return("Invalid slot : ShortName!")
-#			}	
-#			if (any(grepl(" ", object@ShortName))){
-#				return("The slot ShortName cannot contain ' '.")
-#			}
 			if (object@LongName[1]=="[]") {
 			} else if (length(object@LongName)!=ncol(object@DF)){
 				return("The slot LongName should have the same length as the number of columns in slot DF")
@@ -69,6 +58,19 @@ setValidity("Bioo", function(object){
 				if(length(object@InvalidIdx)!=nrow(object@DF)){
 					return("The slot InvalidIdx should have the same length as the number of rows of spectral data")
 				}
+			}
+			return(TRUE)
+		})
+
+#########################################################################
+# Class : BiooList
+#########################################################################
+setClass("BiooList",representation(header="BiooHeader"), contains="list")
+
+setValidity("BiooList", function(object){
+#			cat("---------BiooList::setValidity\n")
+			if(!all(sapply(object, inherits,"Bioo"))) {
+				return("All BiooList elements should inherit from the Bioo class")
 			}
 			return(TRUE)
 		})

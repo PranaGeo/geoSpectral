@@ -61,16 +61,3 @@ setValidity("Spectra", function(object){
 			}
 			return(TRUE)
 		})
-
-#########################################################################
-# Class : SpectraCollection
-#########################################################################
-setClass("SpectraCollection",representation(header="list"), contains="list")
-
-setValidity("SpectraCollection", function(object){
-#			cat("---------SpectraCollection::setValidity\n")
-			if(!any(sapply(object, is, "Spectra")) ){
-				return("SpectraCollection should contain at least one Spectra object")
-			}
-			return(TRUE)
-		})

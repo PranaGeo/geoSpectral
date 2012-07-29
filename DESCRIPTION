@@ -16,4 +16,4 @@ Description: This package provides S4 classes and basic manipulation methods for
 License: GPL
 LazyLoad: yes
 Collate: BiooHeader-Class.R BiooHeader-Methods.R BiooHeaderList-Methods.R BiooHeaderList-Class.R
-		Bioo-Class.R  Bioo-Methods.R Spectra-Class.R Spectra-Methods.R SpectraCollection-Methods.R 
+		Bioo-Class.R  Bioo-Methods.R Spectra-Class.R Spectra-Methods.R BiooList-Methods.R 

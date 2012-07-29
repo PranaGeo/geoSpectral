@@ -6,7 +6,7 @@
 #########################################################################
 # Method : plot
 #########################################################################
-setMethod("plot", "SpectraCollection", function (x,Y, nnrow, nncol, ...){
+setMethod("plot", "BiooList", function (x,Y, nnrow, nncol, ...){
 			nb_spc = length(which(sapply(x, is, "Spectra")))
 			mypar = par()
 			nrow = ceiling(nb_spc/nncol)
@@ -14,7 +14,7 @@ setMethod("plot", "SpectraCollection", function (x,Y, nnrow, nncol, ...){
 			mar = c(4,4,0.5,0.5)
 			oma = c(0,0,0,0)#c(1.5,2,1,1)
 			par(mfrow=c(nnrow,nncol), mar=mar, oma=oma)
-				
+			
 			for (I in 1:length(x)) {				
 				if(is(x[[I]], "Spectra")) {
 					plot(x[[I]],...)
@@ -28,24 +28,24 @@ setMethod("plot", "SpectraCollection", function (x,Y, nnrow, nncol, ...){
 		})
 
 #########################################################################
+# Method : names
+#########################################################################
+setMethod("names", "BiooList", function(object){
+			sapply(object, function(x) x@ShortName)
+		})
+#########################################################################
 # Method : show
 #########################################################################
-setMethod("show", "SpectraCollection", function(object){
+setMethod("show", "BiooList", function(object){
 			sapply(1:length(object), function(x) {
-						if(is(object[[x]], "Spectra")) {
-							cat(paste("Element", x, ":"))
-							show(object[[x]])
-						} else if(!is(object[[x]], "Spectra"))
-							cat(paste("Element", x, ":", "Not a Spectra object\n\n"))
+						cat(paste("Element", x, ":"))
+						show(object[[x]])
 					})
 		})
 
 #########################################################################
-# Constructor function : SpectraCollection()
+# Constructor function : BiooList()
 #########################################################################
-SpectraCollection = function (spclist, header=list()){
-	if(missing("header"))
-		new("SpectraCollection", spclist)
-	else
-		new("SpectraCollection", spclist, header=header)	
+BiooList = function (spclist){
+	new("BiooList", spclist)
 }

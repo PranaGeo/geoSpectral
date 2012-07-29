@@ -273,7 +273,8 @@ setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=50, ...){
 			if (is.numeric(X))
 				X = names(object)[X]
 
-			myylim = rev(range(pretty(depth[!object@InvalidIdx])))
+			myylim = rev(range(pretty(depth[!object@InvalidIdx],n=10)))
+			myylim[2]=-0.1	
 			#If any, do not draw these parameters
 			X = gsub("DEPTH","",X,fixed=T)
 			X = gsub("VOLTAGE","",X,fixed=T)
@@ -284,11 +285,12 @@ setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=50, ...){
 			mynames = names(object@DF)[match(X,names(object))]
 			u_units = unique(myunits)
 			my_sides = rep(c(1,3), ceiling(length(u_units)/2))
-			
+browser()			
 			if(length(u_units)==1){
 				myX = object@DF[!object@InvalidIdx,X]
 				myY = depth[!object@InvalidIdx]
 				matplot(myX,myY,type="l", pch=19,cex=0.3, xlab=xlb,ylab=ylb,ylim=myylim,...)
+				grid(col="black")		
 			}else{
 #			for (I in 1:length(u_units)){
 				for (I in 1:2){
@@ -303,7 +305,7 @@ setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=50, ...){
 					axis(my_sides[I], col=I, pretty(range(myX[,col_idx]),10))
 					mtext(my_sides[I],text=xlb,line=2)
 					if (I==1)
-						box()				
+						box(); 	
 				}
 				axis(2,pretty(range(myY),10))
 				mtext(2, text=ylb,line=2)
