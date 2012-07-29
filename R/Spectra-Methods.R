@@ -226,13 +226,20 @@ setMethod("plot", "Spectra", function (x, Y, maxSp, ...){
 				mycol[x@SelectedIdx]="red"
 			} else
 				mycol = 1:6
-
-			matplot(x@Wavelengths,t(x@DF[Xidx,]),#lab=x@Wavelengths,#xaxt="n",
-					ylab= paste(x@LongName[1], "[", x@Units[1], "]"),
-					xlab="Wavelength [nm]", type="l", pch=19,cex=0.3, col=mycol, ...)
+			
+			if(any(grepl("col",names(match.call())))) {
+				matplot(x@Wavelengths,t(x@DF[Xidx,]),#lab=x@Wavelengths,#xaxt="n",
+						ylab= paste(x@LongName[1], "[", x@Units[1], "]"),
+						xlab="Wavelength [nm]", type="l", pch=19,cex=0.3, ...)
+			} else {
+				matplot(x@Wavelengths,t(x@DF[Xidx,]),#lab=x@Wavelengths,#xaxt="n",
+						ylab= paste(x@LongName[1], "[", x@Units[1], "]"),
+						xlab="Wavelength [nm]", type="l", pch=19,cex=0.3, col=mycol, ...)
+				
+			}
 			abline(h=0)
 			grid(col="black")
-		})
+})
 #########################################################################
 # Method : lines
 #########################################################################
@@ -321,7 +328,7 @@ setMethod("spc.select", signature = "Spectra",
 			Sel = rep(FALSE, nrow(object@DF))			
 			
 			plot(object,col="gray")
-			lbd = spc.GetWavelengths(object)
+			lbd = GetWavelengths(object)
 			idx = mat_identify(lbd, t(object@DF))
 			print(paste("Selected row",idx))
 			oidx = idx
