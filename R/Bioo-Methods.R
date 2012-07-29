@@ -140,7 +140,7 @@ setReplaceMethod(
 		signature="Bioo",
 		definition=function(object,value){
 			object@header<-value
-			validObject(x)
+			validObject(object)
 			return(object)
 		})
 
