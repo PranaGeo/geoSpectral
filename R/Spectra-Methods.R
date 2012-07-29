@@ -227,14 +227,15 @@ setMethod("plot", "Spectra", function (x, Y, maxSp, ...){
 				mycol[x@SelectedIdx]="red"
 			} else
 				mycol = 1:6
-			
+			x@Units = gsub("\\[\\]","",x@Units)
+			x@Units = gsub("\\[ \\]","",x@Units)
 			if(any(grepl("col",names(match.call())))) {
 				matplot(x@Wavelengths,t(x@DF[Xidx,]),#lab=x@Wavelengths,#xaxt="n",
-						ylab= paste(x@LongName[1], "[", x@Units[1], "]"),
+						ylab= paste(x@LongName[1], " [", x@Units[1], "]",sep=""),
 						xlab="Wavelength [nm]", type="l", pch=19,cex=0.3, ...)
 			} else {
 				matplot(x@Wavelengths,t(x@DF[Xidx,]),#lab=x@Wavelengths,#xaxt="n",
-						ylab= paste(x@LongName[1], "[", x@Units[1], "]"),
+						ylab= paste(x@LongName[1], " [", x@Units[1], "]",sep=""),
 						xlab="Wavelength [nm]", type="l", pch=19,cex=0.3, col=mycol, ...)
 				
 			}
