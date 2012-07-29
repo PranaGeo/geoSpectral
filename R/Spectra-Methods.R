@@ -75,6 +75,40 @@ setMethod("Arith",
 		})
 
 #########################################################################
+# Method : [[
+#########################################################################
+setMethod("[[", signature="Spectra",
+		function(x, i, j, ...) {
+			if (i %in% names(x)){
+				Boutput = x@DF[[i]]
+			} 
+			if (i %in% names(x@Ancillary)){
+				Boutput = x@Ancillary@DF[[i]]				
+			}
+			if(!exists("Boutput"))
+				stop("Could not match any Spectral or Ancillary data columns")
+			validObject(x)
+			return(Boutput)
+		})
+setReplaceMethod("[[",  signature="Spectra",
+		definition=function(x, i, j, value) {
+			matched = 0
+			if (length(value)!=nrow(x))
+				stop("Replace value must have the same number or rows as the input object")
+			if (i %in% names(x)){
+				matched = 1
+				x@DF[[i]] <- value
+			} 
+			if (i %in% names(x@Ancillary)){
+				matched = 1
+				x@Ancillary@DF[[i]] <- value				
+			}
+			if(!matched)
+				stop("Could not match any Spectral or Ancillary data columns")
+			validObject(x)
+			return(x)
+		})
+#########################################################################
 # Method : $
 #########################################################################
 setMethod("$", signature="Spectra",
@@ -89,36 +123,10 @@ setMethod("$", signature="Spectra",
 				stop("Could not match any Spectral or Ancillary data columns")
 			return(Boutput)
 		})
-#########################################################################
-# Method : [[
-#########################################################################
-setMethod("[[", signature="Spectra",
-		function(x, i, j, ...) {
-			if (i %in% names(x)){
-				Boutput = x@DF[[i]]
-			} 
-			if (i %in% names(x@Ancillary)){
-				Boutput = x@Ancillary@DF[[i]]				
-			}
-			if(!exists("Boutput"))
-				stop("Could not match any Spectral or Ancillary data columns")
-			return(Boutput)
-		})
-setReplaceMethod("[[",  signature="Spectra",
-		function(x, i, j, value) {
-			matched = 0
-			if (length(value)!=nrow(x))
-				stop("Replace value must have the same number or rows as the input object")
-			if (i %in% names(x)){
-				matched = 1
-				x@DF[[i]] <- value
-			} 
-			if (i %in% names(x@Ancillary)){
-				matched = 1
-				x@Ancillary@DF[[i]] <- value				
-			}
-			if(!matched)
-				stop("Could not match any Spectral or Ancillary data columns")
+setReplaceMethod("$", signature = "Bioo", 
+		function(x, name, value) {
+			x[[name]]=value
+			#validObject(x) will be called by the [[ method
 			return(x)
 		})
 #########################################################################
@@ -218,7 +226,7 @@ setMethod("plot", "Spectra", function (x, Y, maxSp, ...){
 				mycol[x@SelectedIdx]="red"
 			} else
 				mycol = 1:6
-			
+
 			matplot(x@Wavelengths,t(x@DF[Xidx,]),#lab=x@Wavelengths,#xaxt="n",
 					ylab= paste(x@LongName[1], "[", x@Units[1], "]"),
 					xlab="Wavelength [nm]", type="l", pch=19,cex=0.3, col=mycol, ...)
@@ -251,9 +259,7 @@ setMethod("GetAncillary", signature = "Spectra",
 #########################################################################
 setGeneric("SetAncillary<-",function(object,value)
 		{standardGeneric("SetAncillary<-")})
-setReplaceMethod(
-		f="SetAncillary",
-		signature="Spectra",
+setReplaceMethod(f="SetAncillary",	signature="Spectra",
 		definition=function(object,value){
 			if(class(value)=="data.frame")
 				value = as(value,"Bioo")
@@ -276,9 +282,7 @@ setMethod("GetWavelengths", signature = "Spectra",
 #########################################################################
 setGeneric("SetWavelengths<-",function(object,value)
 		{standardGeneric("SetWavelengths<-")})
-setReplaceMethod(
-		f="SetWavelengths",
-		signature="Spectra",
+setReplaceMethod(f="SetWavelengths", signature="Spectra",
 		definition=function(object,value){
 			object@Wavelengths <-value
 			validObject(object)
