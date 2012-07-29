@@ -28,11 +28,39 @@ setMethod("plot", "BiooList", function (x,Y, nnrow, nncol, ...){
 		})
 
 #########################################################################
+# Method : [[
+#########################################################################
+#setMethod("[[", signature="BiooList",
+#		function(x, i, j, ...) {
+#			myn = sapply(x, function(tt) {
+#						if(class(x)=="Bioo") "Bioo"	else tt@ShortName[1]
+#					})
+#			
+##			if(any(grepl(name,myn)))
+##				x[[grep(name,myn)[1]]]
+##			else stop("Could not match any object name")
+#		})
+
+#########################################################################
 # Method : names
 #########################################################################
 setMethod("names", "BiooList", function(object){
-			sapply(object, function(x) x@ShortName)
+			sapply(object, function(x) {
+						if(class(x)=="Bioo") "Bioo"	else x@ShortName[1]
+					})
 		})
+
+#########################################################################
+# Method : $
+#########################################################################
+setMethod("$", signature = "BiooList", 
+		function(x, name) {
+			myn = names(x)
+			if(any(grepl(name,myn)))
+				x[[grep(name,myn)[1]]]
+			else stop("Could not match any object name")
+		})
+
 #########################################################################
 # Method : show
 #########################################################################
