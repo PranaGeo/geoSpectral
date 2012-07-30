@@ -33,8 +33,11 @@ setMethod("plot.grid", "BiooList", function (x,FUN, nnrow, nncol, ...){
 			
 			for (I in 1:length(x)) {
 				if(nrow(x[[I]])>1){
-					eval(call("FUN", x[[I]]))
-					try(title(paste(x@by, ":", as.character(x[[I]]$STATION[1]))),silent=TRUE)
+					eval_txt = paste(FUN, "(x[[1]],...)",sep="")
+					eval(parse(text=eval_txt))
+
+					if(x@by!="VariousVariables")
+						try(title(paste(x@by, ":", as.character(x[[I]]$STATION[1]))),silent=TRUE)
 					if (par()$mfg[1]==par()$mfg[3] & par()$mfg[2]==par()$mfg[4] & I<length(x)) {
 						dev.new()
 						par(mfrow=c(nnrow,nncol), mar=mar, oma=oma)
