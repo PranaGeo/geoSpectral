@@ -108,7 +108,7 @@ setMethod("[", signature(x = "Bioo"),
 				i =  1:nrow(x@DF)
 			if(missing(j))
 				j =  1:ncol(x@DF)
-
+			
 			if(is.character(j))
 				j = match(j, names(x))
 			
@@ -239,7 +239,7 @@ setMethod("plot.time", signature="Bioo", function (object,Y,maxSp=50, ...){
 #########################################################################
 setGeneric (name= "plot.depth",
 		def=function(object, ...){standardGeneric("plot.depth")})
-setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=50, ...){
+setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=20, title, ...){
 			idx = as(1:ncol(object@DF), "logical")
 			
 			if (length(object@InvalidIdx)==0)
@@ -263,7 +263,7 @@ setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=50, ...){
 					stop("Cannot match the DEPTH column")
 				}
 			}
-
+			
 			if(missing(X)){
 				if(ncol(object)>maxSp)
 					X = seq(1,ncol(object),length.out=maxSp)
@@ -272,7 +272,7 @@ setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=50, ...){
 			}
 			if (is.numeric(X))
 				X = names(object)[X]
-
+			
 			myylim = rev(range(pretty(depth[!object@InvalidIdx],n=10)))
 			myylim[2]=-0.1	
 			#If any, do not draw these parameters
@@ -285,34 +285,54 @@ setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=50, ...){
 			mynames = names(object@DF)[match(X,names(object))]
 			u_units = unique(myunits)
 			my_sides = rep(c(1,3), ceiling(length(u_units)/2))
+			
+			#Extract the data to plot
+			myX = object@DF[!object@InvalidIdx,X]
+			myY = depth[!object@InvalidIdx]
+			
+			#Sort with respect to depth
+			d_idx = sort.int(myY,index.return = TRUE)
+			myY = d_idx$x
+			myX = myX[d_idx$ix,]
+			#Eliminate rows full with zeros
+			idx = !apply(myX==0,1,all)
+			myY = myY[idx]
+			myX = myX[idx,]
+			#Eliminate NAs in depth
+			idx = !is.na(myY)
+			myY = myY[idx]
+			myX = myX[idx,]
 
-			if(length(u_units)==1){
-				myX = object@DF[!object@InvalidIdx,X]
-				myY = depth[!object@InvalidIdx]
-browser()				
-				matplot(myX,myY,type="l",xlab="",ylab="",pch=19,cex=0.3,ylim=myylim,...)
-				mtext(ylb,side=2,line=2,cex=0.7)
-				mtext(xlb,side=1,line=2,cex=0.7)
-				grid(col="black")		
-			}else{
-#			for (I in 1:length(u_units)){
-				for (I in 1:2){
-					if (I!=1)
-						par(new=T)
-					myX = object@DF[!object@InvalidIdx,X]
-					myY = depth[!object@InvalidIdx]
-					col_idx = match(u_units[I],myunits)
-					xlb = paste(mynames[col_idx[1]], " [", myunits[col_idx[1]],"]",sep="")
+			if (!all(diff(myY)==0) & !(length(myY)<2)) {
+				if(length(u_units)==1){	
+					matplot(myX,myY,type="l",xlab="",ylab="",ylim=myylim,...)
+					matpoints(myX,myY,xlab="",ylab="",pch=19,cex=0.4,ylim=myylim,...)
 					
-					plot(myX[,col_idx],myY,type="l", axes=F,pch=19,cex=0.3, ylim=myylim,col=I,xlab="",ylab="",...)
-					axis(my_sides[I], col=I, pretty(range(myX[,col_idx]),10))
-					mtext(my_sides[I],text=xlb,line=2)
-					if (I==1)
-						box(); 	
+					mtext(ylb,side=2,line=2,cex=0.7)
+					mtext(xlb,side=1,line=2,cex=0.7)
+					grid(col="black")		
+				}else{
+#			for (I in 1:length(u_units)){
+					for (I in 1:2){
+						if (I!=1)
+							par(new=T)
+						col_idx = match(u_units[I],myunits)
+						xlb = paste(mynames[col_idx[1]], " [", myunits[col_idx[1]],"]",sep="")
+						
+						plot(myX[,col_idx],myY,type="l", axes=F,pch=19,cex=0.3, ylim=myylim,col=I,xlab="",ylab="",...)
+						axis(my_sides[I], col=I, pretty(range(myX[,col_idx]),10))
+						mtext(my_sides[I],text=xlb,line=2)
+						if (I==1)
+							box(); 	
+					}
+					axis(2,pretty(range(myY),10))
+					mtext(2, text=ylb,line=2)
+					grid(col="black")	
 				}
-				axis(2,pretty(range(myY),10))
-				mtext(2, text=ylb,line=2)
-				grid(col="black")	
+				if(!missing(title))
+					title(title)
+			} else{
+				return(0)
 			}
 		})
 #########################################################################
