@@ -4,42 +4,43 @@
 ###############################################################################
 
 #########################################################################
-# Method : biooScanDirName	
+# Method : biooScanFileName  
 #########################################################################
+#Uses FileNameScanTemplate
 #If there is Skip in the field name, it will be skipped
-biooScanDirName = function(template, in.listnames) {
-	#Take the first instrument
-	out = biooHeaderAdd(template, "InBaseName", basename(in.listnames))
-	out = biooHeaderAdd(out, "InDirName", dirname(in.listnames))
-	
-	if (is.character(template$DirNameTemplate)){		
-		for (I in 1:length(template$DirNameTemplate)){
-			
-			if(!grepl(template$DirNameTemplate[I],"Skip", ignore.case=T)) {
-				if (class(out)=="BiooHeader")
-					EXT = out$extension
-				if (class(out)=="BiooHeaderList")
-					EXT = out[[1]]$extension
-				
-				#Choose the directory name in the hierarch that contains the tags
-				try(tags<- ExtractTagFromFilename(in.listnames, REV_TAGNO=template$ReverseDirTagNo, SEP="/"),silent=T)
-				if (!exists("tags") || is.null(tags))
-					tags = ExtractTagFromFilename(in.listnames, REV_TAGNO=1, SEP="/")
-				#Determine the tags in the input directory name
-				tags = ExtractTagFromFilename(tags, TAGNO=I, SEP="_",  EXT)
-				
-				#If it is the Date field, use DatesFromFilename() to convert it to an xts object
-				if(template$DirNameTemplate[I]=="Date"){
-					temp = DatesFromFilename(tags, "Date", SORT=FALSE)
-					tags = temp$StartDate
-				}
-				tags = gsub(template$DirNameTemplate[I],"",tags)
-				out = biooHeaderAdd(out, template$DirNameTemplate[I], tags)
-				rm(tags)
-			}
-		}
-	}
-	return(out)
+biooScanFileName = function(template, in.listnames) {
+  #Take the first instrument
+  out = biooHeaderAdd(template, "InBaseName", basename(in.listnames))
+  out = biooHeaderAdd(out, "InDirName", dirname(in.listnames))
+  
+  if (is.character(template$FileNameScanTemplate)){		
+    for (I in 1:length(template$FileNameScanTemplate)){
+      
+      if(!grepl(template$FileNameScanTemplate[I],"Skip", ignore.case=T)) {
+        if (class(out)=="BiooHeader")
+          EXT = out$extension
+        if (class(out)=="BiooHeaderList")
+          EXT = out[[1]]$extension
+        
+        #Choose the directory name in the hierarchy that contains the tags
+        try(tags<- ExtractTagFromFilename(in.listnames, REV_TAGNO=template$ReverseDirTagNo, SEP="/"),silent=T)
+        if (!exists("tags") || is.null(tags))
+          tags = ExtractTagFromFilename(in.listnames, REV_TAGNO=1, SEP="/")
+        #Determine the tags in the input directory name
+        tags = ExtractTagFromFilename(tags, TAGNO=I, SEP="_",  EXT)
+        
+        #If it is the Date field, use DatesFromFilename() to convert it to an xts object
+        if(template$FileNameScanTemplate[I]=="Date"){
+          temp = DatesFromFilename(tags, "Date", SORT=FALSE)
+          tags = temp$StartDate
+        }
+        tags = gsub(template$FileNameScanTemplate[I],"",tags)
+        out = biooHeaderAdd(out, template$FileNameScanTemplate[I], tags)
+        rm(tags)
+      }
+    }
+  }
+  return(out)
 }
 
 #########################################################################

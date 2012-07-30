@@ -106,7 +106,15 @@ BiooList = function (spclist){
 #########################################################################
 # Method : biooInvalidDetect
 #########################################################################
-setMethod("biooInvalidDetect", signature = "BiooList", def=function(source12){
-			out = lapply(source12, function(x) {SetInvalidIdx(x)<-biooInvalidDetect(x)})
+setMethod("biooInvalidDetect", signature = "BiooList", def=function(source1){
+			out = lapply(source1, function(x) {SetInvalidIdx(x)<-biooInvalidDetect(x)})
 			return(out)
 })
+
+#########################################################################
+# Method : GetBiooHeader
+#########################################################################
+setMethod("GetBiooHeader", signature = "BiooList", 
+          def = function (object,name){
+            sapply(object, GetBiooHeader,name)
+          })

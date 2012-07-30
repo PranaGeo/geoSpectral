@@ -125,10 +125,19 @@ setMethod("[", signature(x = "Bioo"),
 # Method : GetBiooHeader
 #########################################################################
 setGeneric (name= "GetBiooHeader",
-		def=function(object){standardGeneric("GetBiooHeader")})
+		def=function(object,name){standardGeneric("GetBiooHeader")})
 setMethod("GetBiooHeader", signature = "Bioo", 
-		def = function (object){
-			return(object@header)
+		def = function (object,name){
+      if(missing(name)){
+        out = object@header
+      }else {
+        if(is.null(object@header[[name]])){
+          out = NA
+        }else{
+          out = object@header[[name]]
+        }
+        return(out)
+      }
 		})
 #########################################################################
 # Method : SetBiooHeader
