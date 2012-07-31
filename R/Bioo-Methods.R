@@ -347,18 +347,17 @@ setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=20, title, ..
 # Method : biooInterpTime
 #########################################################################
 setGeneric (name= "biooInterpTime",
-		def=function(source1,target1,column,plot=F){standardGeneric("biooInterpTime")})
+		def=function(source1,target1,column,show.plot){standardGeneric("biooInterpTime")})
 setMethod("biooInterpTime", signature = "Bioo", 
-		def = function (source1,target1,column){
+		def = function (source1,target1,column,show.plot=FALSE){
 			my = approx(source1$TIME, source1[[column]],xout=target1$TIME)
-			
-			if(plot){
+			if(show.plot){
 				plot(source1$TIME, source1[[column]],type="l",ylab=column,xlab="TIME")
 #				plot.time(source1[,c("TIME",column)])
 				points(my$x,my$y,col="green",cex=0.4)
 				grid(col="black")
 			}
-			return(myout)
+			return(my$y)
 		})
 #########################################################################
 # Method : biooInvalidDetect
