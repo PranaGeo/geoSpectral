@@ -144,10 +144,8 @@ setMethod("GetBiooHeader", signature = "Bioo",
 #########################################################################
 setGeneric (name="SetBiooHeader<-",
 		def=function(object,value,...){standardGeneric("SetBiooHeader<-")})
-setReplaceMethod(
-		f="SetBiooHeader",
-		signature="Bioo",
-		definition=function(object,value){
+setReplaceMethod(f="SetBiooHeader", signature="Bioo",
+		definition=function(object,value,...){
 			object@header<-value
 			validObject(object)
 			return(object)

@@ -118,3 +118,22 @@ setMethod("GetBiooHeader", signature = "BiooList",
           def = function (object,name){
             sapply(object, GetBiooHeader,name)
           })
+
+#########################################################################
+# Method : SetBiooHeader
+#########################################################################
+setReplaceMethod(f="SetBiooHeader", signature="BiooList",
+  definition=function(object,value,...){
+    if(inherits(value,"Bioo"))
+      stop("It is forbidden to place in a BiooHeader object that inherit from the Bioo class")
+
+    if(length(value)==1)
+      value = rep(value,length(object))
+    
+    a=sapply(1:length(object), function(x) {
+      object[[x]] = SetBiooHeader(object[[x]],value[x])
+      })
+
+    validObject(object)
+    return(object)
+  })
