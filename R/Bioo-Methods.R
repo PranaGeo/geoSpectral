@@ -296,21 +296,20 @@ setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=20, title, ..
 			my_sides = rep(c(1,3), ceiling(length(u_units)/2))
 			
 			#Extract the data to plot
-			myX = object@DF[!object@InvalidIdx,X]
+			myX = object@DF[!object@InvalidIdx,X,drop=F]
 			myY = depth[!object@InvalidIdx]
-			
 			#Sort with respect to depth
 			d_idx = sort.int(myY,index.return = TRUE)
 			myY = d_idx$x
-			myX = myX[d_idx$ix,]
-			#Eliminate rows full with zeros
+			myX = myX[d_idx$ix,,drop=F]
+      #Eliminate rows full with zeros
 			idx = !apply(myX==0,1,all)
 			myY = myY[idx]
-			myX = myX[idx,]
+			myX = myX[idx,,drop=F]
 			#Eliminate NAs in depth
 			idx = !is.na(myY)
 			myY = myY[idx]
-			myX = myX[idx,]
+			myX = myX[idx,,drop=F]
 
 			if (!all(diff(myY)==0) & !(length(myY)<2)) {
 				if(length(u_units)==1){	

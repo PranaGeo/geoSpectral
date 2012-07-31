@@ -31,8 +31,8 @@ setAs(from="data.frame", to="Spectra", def=function(from){
 				} else {
 					LongName = ShortName
 				}
-browser()				
-				if (ncol(from)>length(Wavelengths)) {
+
+        if (ncol(from)>length(Wavelengths)) {
 					myidx = (length(Wavelengths)+1):ncol(from)
 					Ancillary = from[myidx,drop=F]
 					Ancillary = new("Bioo", DF=Ancillary, Units=Units[myidx])
