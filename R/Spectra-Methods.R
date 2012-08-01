@@ -7,11 +7,10 @@
 # Method : Conversions from and to data.frame
 #########################################################################
 setAs(from="Spectra", to="data.frame", def=function(from){
-			if(any(grepl("Wavelengths", names(attributes(from)))) & 
-					any(grepl("Units", names(attributes(from)))))
-				output = cbind(from@DF,from@Ancillary)
-			
-			attr(output,"ShortName") = from@ShortName
+  if(ncol(from@Ancillary)>0)
+				output = cbind(from@DF,from@Ancillary@DF)
+
+      attr(output,"ShortName") = from@ShortName
 			attr(output,"LongName") = from@LongName
 			attr(output,"Wavelengths") = from@Wavelengths
 			attr(output,"Units") = from@Units
