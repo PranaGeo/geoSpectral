@@ -372,3 +372,20 @@ setMethod("spc.select", signature = "Spectra",
 			#print(cbind(Sel, ExSel))
 			return(ExSel)
 		})
+
+#########################################################################
+# Method : subset
+#########################################################################
+#The argument "select" is not implemented yet. Use "[]"
+setMethod("subset",  signature="Spectra",
+          definition=function(x, subset, select, drop = FALSE, ...) {
+            DF = subset(x@DF,subset,select)
+            if(ncol(x@Ancillary)>0)
+              Anc = subset(x@Ancillary,subset)
+            
+            x@DF = DF
+            if(exists("Anc") && class(Anc)=="Bioo")
+              x@Ancillary = Anc
+            validObject(x)
+            return(x)
+          })

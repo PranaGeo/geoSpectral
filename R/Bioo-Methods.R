@@ -426,3 +426,15 @@ setMethod("biooDataToHeader", signature = "Bioo",
             
             return(object)
           })
+
+#########################################################################
+# Method : subset
+#########################################################################
+#The argument "select" is not implemented yet. Use "[]"
+setMethod("subset",  signature="Bioo",
+          definition=function(x, subset, select, drop = FALSE, ...) {   
+            DF = subset(x@DF,subset)
+            x@DF = DF
+            validObject(x)
+            return(x)
+          })
