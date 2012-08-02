@@ -9,7 +9,7 @@ if (1) {
 					Units="character",LongName="character",
 					SelectedIdx="logical", InvalidIdx="logical"), 
 			prototype=prototype(DF=data.frame(),new("BiooHeader"),
-					Units="[]", LongName="[]", 
+					Units=character(), LongName=character(), 
 					SelectedIdx=logical(),
 					InvalidIdx=logical()))
 	
@@ -41,14 +41,14 @@ setValidity("Bioo", function(object){
 			if(! class(object@DF)=="data.frame"){
 				return(" data should be a data.frame object")
 			}
-			if (object@Units[1]=="[]") {
-			} else if(length(object@Units)!= ncol(object@DF)){
-				return("Number of Unit elements is not equal the number of DF columns")
-			}
-			if (object@LongName[1]=="[]") {
-			} else if (length(object@LongName)!=ncol(object@DF)){
-				return("The slot LongName should have the same length as the number of columns in slot DF")
-			}
+			if (length(object@Units)>0)
+			  if(length(object@Units)!= ncol(object@DF))
+			    return("Number of Unit elements is not equal the number of DF columns")
+			
+			if (length(object@LongName)>0)
+			  if (length(object@LongName)!=ncol(object@DF))
+			    return("The slot LongName should have the same length as the number of columns in slot DF")
+			
 			if(length(object@SelectedIdx)!=0){
 				if(length(object@SelectedIdx)!=nrow(object@DF)){
 					return("The slot SelectedIdx should have the same length as the number of columns in slot DF")

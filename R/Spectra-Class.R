@@ -20,6 +20,8 @@ setMethod("initialize",
 			#Set defaults for ShortName
 		  if(missing(DF))
 		    DF <- data.frame()
+		  if(missing(Wavelengths))
+		    Wavelengths <- numeric()
 		  if(missing(ShortName))
 		    ShortName <- "spvar"				 
 		  if (length(ShortName)!=1)
@@ -29,13 +31,14 @@ setMethod("initialize",
 				LongName <- "spvar longname"				 
 			if (length(LongName)==1)
 				LongName <- rep(LongName, ncol(DF))				 							
-			#Set defaults for Units
+			#Set the default for Units
 			if(missing(Units))
 				Units <- "[ ]"	
-			if(missing(Ancillary))
+		  if (length(Units)==1)
+		    Units<- rep(Units, ncol(DF))				 							
+		  #Set the default for Ancillary
+		  if(missing(Ancillary))
 				Ancillary=new("Bioo")
-			if (length(Units)==1)
-				Units<- rep(Units, ncol(DF))				 							
 			
 			.Object=callNextMethod(.Object, ShortName=ShortName,DF=DF,
 					LongName=LongName,Wavelengths=Wavelengths,Units=Units,Ancillary=Ancillary)

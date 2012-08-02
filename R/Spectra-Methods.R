@@ -53,17 +53,28 @@ setAs(from="data.frame", to="Spectra", def=function(from){
 # Method : show
 #########################################################################
 setMethod("show", "Spectra", function(object){
-			cat("\n", paste(object@ShortName[1], ' : An object of class "Spectra"\n', 
-							length(object@Wavelengths),"spectral channels in columns and", nrow(object@DF), 
-							"observations in rows"), "\n",
-					"LongName : ",object@LongName[1], "\n",
-					"Wavelengths : ", length(object@Wavelengths), 
-					"channels [",min(object@Wavelengths),",",max(object@Wavelengths), "] ->",
-					head(object@Wavelengths)," ...\n",
-					"Units : ", object@Units[1], "\n",
-					"Columns : ", head(colnames(object@DF)), "...\n",
-					"Ancillary : ", head(names(object@Ancillary)),"...\n")
-		})
+  if(ncol(object)==0){
+    LongName = character()
+    Units = character()
+    LbdStr = character()
+  } else {
+    LongName = object@LongName[1]
+    Units = object@Units[1]
+    LbdStr = paste("[",min(object@Wavelengths),",",max(object@Wavelengths), "] ->",
+                   head(object@Wavelengths)," ...\n",sep=" ")                    
+  }
+  
+  cat("\n", paste(object@ShortName[1], ' : An object of class "Spectra"\n', 
+                  length(object@Wavelengths),"spectral channels in columns and", nrow(object@DF), 
+                  "observations in rows"), "\n",
+      "LongName : ", LongName, "\n",
+      "Wavelengths : ", length(object@Wavelengths), "channels", LbdStr,
+      "Units : ", Units, "\n",
+      "Columns : ", head(colnames(object@DF)), "...\n",
+      "Ancillary : ", head(names(object@Ancillary)),"...\n")
+})		
+
+
 
 setMethod("Arith",
 		signature(e1 = "Spectra", e2 = "Spectra"),
