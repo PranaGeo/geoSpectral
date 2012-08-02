@@ -357,10 +357,38 @@ setMethod("biooInterpTime", signature = "Bioo",
 			}
 			return(my$y)
 		})
+
+#########################################################################
+# Method : bioo.saveas.shapefile.point
+#########################################################################
+#Uses rgdal::writeOGR() to export a Bioo element as a point shapefile
+setGeneric(name="bioo.saveas.shapefile.point",
+            def=function(input,filename){standardGeneric("bioo.saveas.shapefile.point")})
+setMethod("bioo.saveas.shapefile.point", signature = "Bioo", def=function(input, filename){
+  if(missing(filename)){
+    filename = file.path(".",paste(input@ShortName,".shp",sep=""))
+  }
+  layern = strsplit(basename(filename),"\\.")[[1]][1]
+  dirn = dirname(filename)
+  
+  if(!any(grep("LAT",names(input))) | !any(grepl("LONG",names(input))))
+    stop("Could not find the columns LAT and LONG")
+  if ( ! (all(is.finite(input$LAT)) & all(is.finite(input$LAT))) )
+    stop("LAT and LONG columns should be finite numerics")
+  if (file.exists(filename))
+    stop(paste("The file",filename, "exists. Please delete it first"))
+  
+  out = as(input,"data.frame")
+  coordinates(out) = c("LONG","LAT")
+  proj4string(out)=CRS("+init=epsg:4326")
+  writeOGR(out, dirn, layer=layern,driver="ESRI Shapefile")
+  print(paste("Saved as", file.path(filename)))
+  
+})
 #########################################################################
 # Method : biooInvalidDetect
 #########################################################################
-setGeneric (name= "biooInvalidDetect",
+setGeneric(name= "biooInvalidDetect",
 		def=function(source1){standardGeneric("biooInvalidDetect")})
 setMethod("biooInvalidDetect", signature = "Bioo", def=function(source1){
 			out = apply(source1@DF, 2,is.na)
