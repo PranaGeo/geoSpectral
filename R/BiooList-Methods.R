@@ -2,19 +2,6 @@
 # 
 # Author: acizmeli
 ###############################################################################
-#########################################################################
-# Method : Conversion from Bioo to BiooList using a data field (factor)
-#########################################################################
-Bioo2BiooList = function(myobj, name){
-	if(!is.factor(myobj[[name]]))
-	  myobj[[name]] = as.factor(myobj[[name]])
-  
-  #Get the indexes of each row :
-	idx = lapply(levels(myobj[[name]]),function(x) which(x==myobj[[name]]))
-	output = as(lapply(idx,function(x) myobj[x,]),"BiooList")
-	output@by = name
-	return(output)
-}
 
 #########################################################################
 # Method : plot.grid
@@ -138,3 +125,13 @@ setReplaceMethod(f="SetBiooHeader", signature="BiooList",
     validObject(object)
     return(object)
   })
+
+#########################################################################
+# Method : biooDataToHeader
+#########################################################################
+setMethod("biooDataToHeader", signature = "BiooList", 
+          def=function(object,headerfield,dataname,compress=TRUE,...){
+            temp = lapply(object, biooDataToHeader, headerfield,dataname,compress,...)
+            object@.Data=temp
+            return(object)
+          })

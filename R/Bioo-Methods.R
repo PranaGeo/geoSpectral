@@ -28,6 +28,20 @@ setAs(from="data.frame", to="Bioo", def=function(from){
 		})
 
 #########################################################################
+# Method : Conversion from Bioo to BiooList using a data field (factor)
+#########################################################################
+#Later add the functionality with FUN (i.e. taking means)
+Bioo2BiooList = function(myobj, name,FUN){
+  #Get the indexes of each DF row :
+  idx = lapply(unique(myobj[[name]]),function(x) which(x==myobj[[name]]))
+  #For each row index in the list, subset the DF, return a list
+  output = lapply(idx,function(x) myobj[x,])
+  output = as(output,"BiooList")
+  output@by = name
+  return(output)
+}
+
+#########################################################################
 # Method : show
 #########################################################################
 setMethod("show", "Bioo", function(object){
@@ -365,7 +379,7 @@ setMethod("biooInterpTime", signature = "Bioo",
 setGeneric(name="bioo.saveas.shapefile.point",
             def=function(input,filename){standardGeneric("bioo.saveas.shapefile.point")})
 setMethod("bioo.saveas.shapefile.point", signature = "Bioo", def=function(input, filename){
-  if(missing(filename)){
+ if(missing(filename)){
     filename = file.path(".",paste(input@ShortName,".shp",sep=""))
   }
   layern = strsplit(basename(filename),"\\.")[[1]][1]
@@ -396,3 +410,19 @@ setMethod("biooInvalidDetect", signature = "Bioo", def=function(source1){
 				dim(out)<-c(1,ncol(source1@DF))
 			out = apply(out,1,all)
 		})
+
+#########################################################################
+# Method : biooDataToHeader
+#########################################################################
+setGeneric(name= "biooDataToHeader",
+           def=function(object,headerfield,dataname,compress,...){standardGeneric("biooDataToHeader")})
+setMethod("biooDataToHeader", signature = "Bioo", 
+          def=function(object,headerfield,dataname,compress=TRUE,...){
+            if(missing(headerfield))
+              headerfield = dataname
+            object@header[[headerfield]]=object[[dataname]]
+            if(compress )
+              object@header[[headerfield]]=object[[dataname]][1]
+            
+            return(object)
+          })
