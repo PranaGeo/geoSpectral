@@ -60,15 +60,14 @@ setMethod("show", "Spectra", function(object){
   } else {
     LongName = object@LongName[1]
     Units = object@Units[1]
-    LbdStr = paste("[",min(object@Wavelengths),",",max(object@Wavelengths), "] ->",
-                   head(object@Wavelengths)," ...\n",sep=" ")                    
+    LbdStr = paste("[",min(object@Wavelengths),",",max(object@Wavelengths), "] ->",sep=" ")                    
   }
   
   cat("\n", paste(object@ShortName[1], ' : An object of class "Spectra"\n', 
                   length(object@Wavelengths),"spectral channels in columns and", nrow(object@DF), 
                   "observations in rows"), "\n",
       "LongName : ", LongName, "\n",
-      "Wavelengths : ", length(object@Wavelengths), "channels", LbdStr,
+      "Wavelengths : ", length(object@Wavelengths), "channels", LbdStr, head(object@Wavelengths)," ...\n",
       "Units : ", Units, "\n",
       "Columns : ", head(colnames(object@DF)), "...\n",
       "Ancillary : ", head(names(object@Ancillary)),"...\n")
@@ -104,13 +103,14 @@ setMethod("[[", signature="Spectra",
 setReplaceMethod("[[",  signature="Spectra",
 		definition=function(x, i, j, value) {
 			matched = 0
-			if (length(value)!=nrow(x))
+
+      if (length(value)!=nrow(x))
 				stop("Replace value must have the same number or rows as the input object")
-			if (i %in% names(x)){
+			if (i %in% names(x@DF)){
 				matched = 1
 				x@DF[[i]] <- value
 			} 
-			if (i %in% names(x@Ancillary)){
+			if (i %in% names(x@Ancillary)) {
 				matched = 1
 				x@Ancillary@DF[[i]] <- value				
 			}

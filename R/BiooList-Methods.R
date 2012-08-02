@@ -7,8 +7,9 @@
 #########################################################################
 Bioo2BiooList = function(myobj, name){
 	if(!is.factor(myobj[[name]]))
-		stop(paste("The data/ancillary '", name, "' should be a factor" ))
-	#Get the indexes of each row :
+	  myobj[[name]] = as.factor(myobj[[name]])
+  
+  #Get the indexes of each row :
 	idx = lapply(levels(myobj[[name]]),function(x) which(x==myobj[[name]]))
 	output = as(lapply(idx,function(x) myobj[x,]),"BiooList")
 	output@by = name
