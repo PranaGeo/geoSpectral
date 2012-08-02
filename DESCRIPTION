@@ -3,7 +3,7 @@ Type: Package
 Title: Classes and methods for spectral (optical) data
 Version: 0.1
 Date: 2012-07-02
-Depends: R (>= 2.10.0), methods, rgdal
+Depends: R (>= 2.10.0), methods, rgdal, udunits2
 Author: Servet Cizmeli
 Maintainer: Servet Cizmeli <sac@arctus.ca>
 Description: This package provides S4 classes and basic manipulation methods for datasets 
