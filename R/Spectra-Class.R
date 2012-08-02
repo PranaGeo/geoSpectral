@@ -18,9 +18,11 @@ setMethod("initialize",
 		{
 #			cat("---------Spectra::Initialize\n")
 			#Set defaults for ShortName
-			if(missing(ShortName))
-				ShortName <- "spvar"				 
-			if (length(ShortName)!=1)
+		  if(missing(DF))
+		    DF <- data.frame()
+		  if(missing(ShortName))
+		    ShortName <- "spvar"				 
+		  if (length(ShortName)!=1)
 				ShortName <- ShortName[1]				 							
 			#Set defaults for LongName
 			if(missing(LongName))
