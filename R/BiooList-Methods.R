@@ -40,18 +40,36 @@ setMethod("plot.grid", "BiooList", function (x,FUN, nnrow, nncol, ...){
 		})
 
 #########################################################################
-# Method : [[
+# Method : subset
 #########################################################################
-#setMethod("[[", signature="BiooList",
-#		function(x, i, j, ...) {
-#			myn = sapply(x, function(tt) {
-#						if(class(x)=="Bioo") "Bioo"	else tt@ShortName[1]
-#					})
-#			
-##			if(any(grepl(name,myn)))
-##				x[[grep(name,myn)[1]]]
-##			else stop("Could not match any object name")
-#		})
+#The argument "select" is not implemented yet. Use "[]"
+setMethod("subset",  signature="BiooList",
+          definition=function(x, subset, select, drop = FALSE, ...) {                   
+            
+            if(class(subset)=="list") { 
+              if(length(subset)>1 & length(subset)!=length(x))
+                stop('The argument "subset" should be a list of length one or the same length of the BiooList object')          
+              
+              if(!missing(select)) 
+                temp = lapply(1:length(x), function(t) subset(x[[t]], subset=subset[[t]], select=select, drop=drop, ...))
+              else
+                temp = lapply(1:length(x), function(t) subset(x[[t]], subset=subset[[t]], drop=drop, ...))
+              
+              } else {
+              stop('The input argument "subset" should be a list element containing indexes')
+            }
+            
+            x@.Data = temp
+            return(x)
+          })
+
+
+
+
+
+
+
+
 
 #########################################################################
 # Method : names

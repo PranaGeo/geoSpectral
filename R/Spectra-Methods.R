@@ -372,3 +372,34 @@ setMethod("spc.select", signature = "Spectra",
 			#print(cbind(Sel, ExSel))
 			return(ExSel)
 		})
+
+#########################################################################
+# Method : subset
+#########################################################################
+#The argument "select" is not implemented yet. Use "[]"
+setMethod("subset",  signature="Spectra",
+          definition=function(x, subset, select, drop = FALSE, ...) {
+            DF = subset(x@DF,subset,select)
+            if(ncol(x@Ancillary)>0)
+              Anc = subset(x@Ancillary,subset)
+            
+            #Save the column names of the original data
+            mynames = names(x)
+            
+            #Perform the changes
+            x@DF = DF
+            if(exists("Anc") && class(Anc)=="Bioo")
+              x@Ancillary = Anc
+            
+            #Find index of the remaining columns
+            if(!missing(select)) { 
+              c_idx = match(names(DF), mynames)
+              
+              #Update units and Wavelengths, LongName
+              x@Units = x@Units[c_idx]
+              x@LongName = x@LongName[c_idx]
+              x@Wavelengths = x@Wavelengths[c_idx]
+            }
+            validObject(x)
+            return(x)
+          })
