@@ -56,7 +56,7 @@ setMethod("subset",  signature="BiooList",
                 temp = lapply(1:length(x), function(t) subset(x[[t]], subset=subset[[t]], drop=drop, ...))
               
               } else {
-              stop('The input argument "subset" should be a list element containing indexes')
+                stop('The input argument "subset" should be a list element containing indexes')
             }
             
             x@.Data = temp
