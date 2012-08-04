@@ -29,7 +29,7 @@ setMethod("plot.grid", "BiooList", function (x,FUN, nnrow, nncol, ...){
 						eval_txt = paste(FUN, "(x[[I]],...)",sep="")
 					}
 					eval(parse(text=eval_txt))
-
+					
 					if (par()$mfg[1]==par()$mfg[3] & par()$mfg[2]==par()$mfg[4] & I<length(x)) {
 						dev.new()
 						par(mfrow=c(nnrow,nncol), mar=mar, oma=oma)
@@ -44,32 +44,43 @@ setMethod("plot.grid", "BiooList", function (x,FUN, nnrow, nncol, ...){
 #########################################################################
 #The argument "select" is not implemented yet. Use "[]"
 setMethod("subset",  signature="BiooList",
-          definition=function(x, subset, select, drop = FALSE, ...) {                   
-            
-            if(class(subset)=="list") { 
-              if(length(subset)>1 & length(subset)!=length(x))
-                stop('The argument "subset" should be a list of length one or the same length of the BiooList object')          
-              
-              if(!missing(select)) 
-                temp = lapply(1:length(x), function(t) subset(x[[t]], subset=subset[[t]], select=select, drop=drop, ...))
-              else
-                temp = lapply(1:length(x), function(t) subset(x[[t]], subset=subset[[t]], drop=drop, ...))
-              
-              } else {
-                stop('The input argument "subset" should be a list element containing indexes')
-            }
-            
-            x@.Data = temp
-            return(x)
-          })
+		definition=function(x, subset, select, drop = FALSE, ...) {                   
+			
+			if(class(subset)=="list") { 
+				if(length(subset)>1 & length(subset)!=length(x))
+					stop('The argument "subset" should be a list of length one or the same length of the BiooList object')          
+				
+				if(!missing(select)) 
+					temp = lapply(1:length(x), function(t) subset(x[[t]], subset=subset[[t]], select=select, drop=drop, ...))
+				else
+					temp = lapply(1:length(x), function(t) subset(x[[t]], subset=subset[[t]], drop=drop, ...))
+				
+			} else {
+				stop('The input argument "subset" should be a list element containing indexes')
+			}
+			
+			x@.Data = temp
+			return(x)
+		})
 
-
-
-
-
-
-
-
+#########################################################################
+# Method : Arith
+#########################################################################
+#setMethod("Arith",signature(e1 = "BiooList", e2 = "BiooList"),function (e1, e2) {
+#			browser()
+#			if(length(e1)!=length(e2))
+#				stop("Lengths of input BiooList object should match")
+#			
+#			result <- callGeneric(e1[[1]], e2@DF[[1]])
+#			output <- new("Spectra",DF=result,Wavelengths=e1@Wavelengths,Units=e1@Units,
+#					ShortName = "Arith", LongName="Arith")			
+#			return(output)
+#		})
+#
+#lapply(1:length(e1), function(x){
+#			browser()
+#			callGeneric(e1[[x]]@DF, e2[[x]]@DF)
+#		})
 
 #########################################################################
 # Method : names
@@ -115,41 +126,41 @@ BiooList = function (spclist){
 setMethod("biooInvalidDetect", signature = "BiooList", def=function(source1){
 			out = lapply(source1, function(x) {SetInvalidIdx(x)<-biooInvalidDetect(x)})
 			return(out)
-})
+		})
 
 #########################################################################
 # Method : GetBiooHeader
 #########################################################################
 setMethod("GetBiooHeader", signature = "BiooList", 
-          def = function (object,name){
-            sapply(object, GetBiooHeader,name)
-          })
+		def = function (object,name){
+			sapply(object, GetBiooHeader,name)
+		})
 
 #########################################################################
 # Method : SetBiooHeader
 #########################################################################
 setReplaceMethod(f="SetBiooHeader", signature="BiooList",
-  definition=function(object,value,...){
-    if(inherits(value,"Bioo"))
-      stop("It is forbidden to place in a BiooHeader object that inherit from the Bioo class")
-
-    if(length(value)==1)
-      value = rep(value,length(object))
-    
-    a=sapply(1:length(object), function(x) {
-      object[[x]] = SetBiooHeader(object[[x]],value[x])
-      })
-
-    validObject(object)
-    return(object)
-  })
+		definition=function(object,value,...){
+			if(inherits(value,"Bioo"))
+				stop("It is forbidden to place in a BiooHeader object that inherit from the Bioo class")
+			
+			if(length(value)==1)
+				value = rep(value,length(object))
+			
+			a=sapply(1:length(object), function(x) {
+						object[[x]] = SetBiooHeader(object[[x]],value[x])
+					})
+			
+			validObject(object)
+			return(object)
+		})
 
 #########################################################################
 # Method : biooDataToHeader
 #########################################################################
 setMethod("biooDataToHeader", signature = "BiooList", 
-          def=function(object,headerfield,dataname,compress=TRUE,...){
-            temp = lapply(object, biooDataToHeader, headerfield,dataname,compress,...)
-            object@.Data=temp
-            return(object)
-          })
+		def=function(object,headerfield,dataname,compress=TRUE,...){
+			temp = lapply(object, biooDataToHeader, headerfield,dataname,compress,...)
+			object@.Data=temp
+			return(object)
+		})
