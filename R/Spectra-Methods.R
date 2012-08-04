@@ -73,14 +73,13 @@ setMethod("show", "Spectra", function(object){
       "Ancillary : ", head(names(object@Ancillary)),"...\n")
 })		
 
-
-
-setMethod("Arith",
-		signature(e1 = "Spectra", e2 = "Spectra"),
-		function (e1, e2) {
+#########################################################################
+# Method : Arith
+#########################################################################
+setMethod("Arith", signature(e1 = "Spectra", e2 = "Spectra"),function (e1, e2) {
 			result <- callGeneric(e1@DF, e2@DF)
 			output <- new("Spectra",DF=result,Wavelengths=e1@Wavelengths,Units=e1@Units,
-					ShortName = "Arith", LongName="Arith")			
+					ShortName = "Arith", LongName="Arith",Ancillary=GetAncillary(e1))			
 			return(output)
 		})
 
