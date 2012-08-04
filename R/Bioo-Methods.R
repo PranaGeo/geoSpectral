@@ -260,31 +260,25 @@ setMethod("plot.time", signature="Bioo", function (object,Y,maxSp=50, ...){
 #########################################################################
 setGeneric (name= "plot.depth",
 		def=function(object, ...){standardGeneric("plot.depth")})
-setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=20, title, ...){
+setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=20, 
+				title, add=FALSE, xlab=NULL, ylab=NULL, ylim=NULL,...){
+			
 			idx = as(1:ncol(object@DF), "logical")
+			depth=object$DEPTH
 			
 			if (length(object@InvalidIdx)==0)
 				object@InvalidIdx = rep(FALSE,nrow(object@DF))		
 			
-			ylb = "Depth [m]"
-			if (class(object)=="Spectra") {
-				xlb = object@LongName[1]
-				depth_idx = grep("DEPTH",names(object@Ancillary))
-				if (length(depth_idx)==1){
-					depth = object@Ancillary@DF[,depth_idx]
-				} else{
-					stop("Cannot match the DEPTH column")
-				}
-			} else {
-				xlb = ""
-				depth_idx = grep("DEPTH",names(object@DF))
-				if (length(depth_idx)==1){
-					depth = object@DF[,depth_idx]
-				} else{
-					stop("Cannot match the DEPTH column")
+			if(missing(ylab))
+				ylab = "Depth [m]"
+			
+			if(missing(xlab)) {
+				if (class(object)=="Spectra") {
+					xlab = paste(object@LongName[1], " [", object@Units,"]",sep="") 					
+				} else {
+					xlab = ""
 				}
 			}
-			
 			if(missing(X)){
 				if(ncol(object)>maxSp)
 					X = seq(1,ncol(object),length.out=maxSp)
@@ -293,9 +287,11 @@ setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=20, title, ..
 			}
 			if (is.numeric(X))
 				X = names(object)[X]
-			
-			myylim = rev(range(pretty(depth[!object@InvalidIdx],n=10)))
-			myylim[2]=-0.1	
+
+			if(missing(ylim)){
+				ylim = rev(range(pretty(depth[!object@InvalidIdx],n=10)))
+				ylim[2]=-0.1	
+			}
 			#If any, do not draw these parameters
 			X = gsub("DEPTH","",X,fixed=T)
 			X = gsub("VOLTAGE","",X,fixed=T)
@@ -325,11 +321,15 @@ setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=20, title, ..
 
 			if (!all(diff(myY)==0) & !(length(myY)<2)) {
 				if(length(u_units)==1){	
-					matplot(myX,myY,type="l",xlab="",ylab="",ylim=myylim,...)
-					matpoints(myX,myY,xlab="",ylab="",pch=19,cex=0.4,ylim=myylim,...)
+					if(add)
+						matlines(myX,myY,type="l",xlab="",ylab="",ylim=ylim,...)
+					else
+						matplot(myX,myY,type="l",xlab="",ylab="",ylim=ylim,...)
 					
-					mtext(ylb,side=2,line=2,cex=0.7)
-					mtext(xlb,side=1,line=2,cex=0.7)
+					matpoints(myX,myY,xlab="",ylab="",pch=19,cex=0.4,ylim=ylim,...)
+					
+					mtext(ylab,side=2,line=3,cex=1.6)
+					mtext(xlab,side=1,line=3,cex=1.6)
 					grid(col="black")		
 				}else{
 #			for (I in 1:length(u_units)){
@@ -337,11 +337,11 @@ setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=20, title, ..
 						if (I!=1)
 							par(new=T)
 						col_idx = match(u_units[I],myunits)
-						xlb = paste(mynames[col_idx[1]], " [", myunits[col_idx[1]],"]",sep="")
+						xlab = paste(mynames[col_idx[1]], " [", myunits[col_idx[1]],"]",sep="")
 						
-						plot(myX[,col_idx],myY,type="l", axes=F,pch=19,cex=0.3, ylim=myylim,col=I,xlab="",ylab="",...)
+						plot(myX[,col_idx],myY,type="l", axes=F,pch=19,cex=0.3, ylim=ylim,col=I,xlab="",ylab="",...)
 						axis(my_sides[I], col=I, pretty(range(myX[,col_idx]),10))
-						mtext(my_sides[I],text=xlb,line=2)
+						mtext(my_sides[I],text=xlab,line=2)
 						if (I==1)
 							box(); 	
 					}
