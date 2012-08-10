@@ -32,13 +32,13 @@ setAs(from="data.frame", to="Bioo", def=function(from){
 #########################################################################
 #Later add the functionality with FUN (i.e. taking means)
 Bioo2BiooList = function(myobj, name,FUN){
-  #Get the indexes of each DF row :
-  idx = lapply(unique(myobj[[name]]),function(x) which(x==myobj[[name]]))
-  #For each row index in the list, subset the DF, return a list
-  output = lapply(idx,function(x) myobj[x,])
-  output = as(output,"BiooList")
-  output@by = name
-  return(output)
+	#Get the indexes of each DF row :
+	idx = lapply(unique(myobj[[name]]),function(x) which(x==myobj[[name]]))
+	#For each row index in the list, subset the DF, return a list
+	output = lapply(idx,function(x) myobj[x,])
+	output = as(output,"BiooList")
+	output@by = name
+	return(output)
 }
 
 #########################################################################
@@ -142,16 +142,16 @@ setGeneric (name= "GetBiooHeader",
 		def=function(object,name){standardGeneric("GetBiooHeader")})
 setMethod("GetBiooHeader", signature = "Bioo", 
 		def = function (object,name){
-      if(missing(name)){
-        out = object@header
-      }else {
-        if(is.null(object@header[[name]])){
-          out = NA
-        }else{
-          out = object@header[[name]]
-        }
-        return(out)
-      }
+			if(missing(name)){
+				out = object@header
+			}else {
+				if(is.null(object@header[[name]])){
+					out = NA
+				}else{
+					out = object@header[[name]]
+				}
+				return(out)
+			}
 		})
 #########################################################################
 # Method : SetBiooHeader
@@ -287,7 +287,7 @@ setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=20,
 			}
 			if (is.numeric(X))
 				X = names(object)[X]
-
+			
 			if(missing(ylim)){
 				ylim = rev(range(pretty(depth[!object@InvalidIdx],n=10)))
 				ylim[2]=-0.1	
@@ -310,7 +310,7 @@ setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=20,
 			d_idx = sort.int(myY,index.return = TRUE)
 			myY = d_idx$x
 			myX = myX[d_idx$ix,,drop=F]
-      #Eliminate rows full with zeros
+			#Eliminate rows full with zeros
 			idx = !apply(myX==0,1,all)
 			myY = myY[idx]
 			myX = myX[idx,,drop=F]
@@ -318,7 +318,7 @@ setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=20,
 			idx = !is.na(myY)
 			myY = myY[idx]
 			myX = myX[idx,,drop=F]
-
+			
 			if (!all(diff(myY)==0) & !(length(myY)<2)) {
 				if(length(u_units)==1){	
 					if(add)
@@ -355,6 +355,35 @@ setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=20,
 				return(0)
 			}
 		})
+		
+#########################################################################
+# Method : plot.depth.by.station
+#########################################################################
+setGeneric (name= "plot.depth.by.station",
+				def=function(input,fname){standardGeneric("plot.depth.by.station")})
+setMethod("plot.depth.by.station", signature="Bioo", function(input,fname) { 
+			Stat=character()
+			mymax = sapply(input,function(x) max(x$X440,na.rm=TRUE));mymax=max(mymax,na.rm=TRUE)*1.1
+			mymin = sapply(input,function(x) min(x$X440,na.rm=TRUE));mymin=min(mymin,na.rm=TRUE)*0.9
+			dmax = max(sapply(input,function(x) max(x$DEPTH,na.rm=TRUE)),na.rm=TRUE)
+			fname = paste(fname, "_", gsub("/","_ov_",input[[I]]@ShortName),".png",sep="")
+			png(file=fname)
+			for (I in 1:length(input)) {
+				xlab = paste(input[[I]]@ShortName, " [ ", input[[I]]@Units[1], " ]",sep="")
+				if (I==1) {
+					plot(input[[I]][["X440"]],input[[I]][["DEPTH"]],
+							col=I,lwd=3,xlim=c(mymin,mymax),ylim=c(dmax,-0.1),type="l",xlab="",ylab="",cex.axis=1.4)
+					points(input[[I]][["X440"]],input[[I]][["DEPTH"]],col=I,bg=I,pch=21)
+				}
+				else
+					plot.depth(input[[I]], "X440",add=T,"col"=I,lwd=3,xlab=xlab)
+				Stat[I] = input[[I]]$STATION[1] 
+			}
+			legend("bottomright",Stat,col=1:I,fill=1:I)
+			dev.off()
+			print(paste("Saved",fname))
+		})
+
 #########################################################################
 # Method : biooInterpTime
 #########################################################################
@@ -377,28 +406,28 @@ setMethod("biooInterpTime", signature = "Bioo",
 #########################################################################
 #Uses rgdal::writeOGR() to export a Bioo element as a point shapefile
 setGeneric(name="bioo.saveas.shapefile.point",
-            def=function(input,filename){standardGeneric("bioo.saveas.shapefile.point")})
+		def=function(input,filename){standardGeneric("bioo.saveas.shapefile.point")})
 setMethod("bioo.saveas.shapefile.point", signature = "Bioo", def=function(input, filename){
- if(missing(filename)){
-    filename = file.path(".",paste(input@ShortName,".shp",sep=""))
-  }
-  layern = strsplit(basename(filename),"\\.")[[1]][1]
-  dirn = dirname(filename)
-  
-  if(!any(grep("LAT",names(input))) | !any(grepl("LONG",names(input))))
-    stop("Could not find the columns LAT and LONG")
-  if ( ! (all(is.finite(input$LAT)) & all(is.finite(input$LAT))) )
-    stop("LAT and LONG columns should be finite numerics")
-  if (file.exists(filename))
-    stop(paste("The file",filename, "exists. Please delete it first"))
-  
-  out = as(input,"data.frame")
-  coordinates(out) = c("LONG","LAT")
-  proj4string(out)=CRS("+init=epsg:4326")
-  writeOGR(out, dirn, layer=layern,driver="ESRI Shapefile")
-  print(paste("Saved as", file.path(filename)))
-  
-})
+			if(missing(filename)){
+				filename = file.path(".",paste(input@ShortName,".shp",sep=""))
+			}
+			layern = strsplit(basename(filename),"\\.")[[1]][1]
+			dirn = dirname(filename)
+			
+			if(!any(grep("LAT",names(input))) | !any(grepl("LONG",names(input))))
+				stop("Could not find the columns LAT and LONG")
+			if ( ! (all(is.finite(input$LAT)) & all(is.finite(input$LAT))) )
+				stop("LAT and LONG columns should be finite numerics")
+			if (file.exists(filename))
+				stop(paste("The file",filename, "exists. Please delete it first"))
+			
+			out = as(input,"data.frame")
+			coordinates(out) = c("LONG","LAT")
+			proj4string(out)=CRS("+init=epsg:4326")
+			writeOGR(out, dirn, layer=layern,driver="ESRI Shapefile")
+			print(paste("Saved as", file.path(filename)))
+			
+		})
 #########################################################################
 # Method : biooInvalidDetect
 #########################################################################
@@ -415,26 +444,97 @@ setMethod("biooInvalidDetect", signature = "Bioo", def=function(source1){
 # Method : biooDataToHeader
 #########################################################################
 setGeneric(name= "biooDataToHeader",
-           def=function(object,headerfield,dataname,compress,...){standardGeneric("biooDataToHeader")})
+		def=function(object,headerfield,dataname,compress,...){standardGeneric("biooDataToHeader")})
 setMethod("biooDataToHeader", signature = "Bioo", 
-          def=function(object,headerfield,dataname,compress=TRUE,...){
-            if(missing(headerfield))
-              headerfield = dataname
-            object@header[[headerfield]]=object[[dataname]]
-            if(compress )
-              object@header[[headerfield]]=object[[dataname]][1]
-            
-            return(object)
-          })
+		def=function(object,headerfield,dataname,compress=TRUE,...){
+			if(missing(headerfield))
+				headerfield = dataname
+			object@header[[headerfield]]=object[[dataname]]
+			if(compress )
+				object@header[[headerfield]]=object[[dataname]][1]
+			
+			return(object)
+		})
 
 #########################################################################
 # Method : subset
 #########################################################################
 #The argument "select" is not implemented yet. Use "[]"
 setMethod("subset",  signature="Bioo",
-          definition=function(x, subset, select, drop = FALSE, ...) {   
-            DF = subset(x@DF,subset)
-            x@DF = DF
-            validObject(x)
-            return(x)
-          })
+		definition=function(x, subset, select, drop = FALSE, ...) {   
+			DF = subset(x@DF,subset)
+			x@DF = DF
+			validObject(x)
+			return(x)
+		})
+
+#########################################################################
+# Method : bioo.add.column
+#########################################################################
+setGeneric(name= "bioo.export.ODV",
+		def=function(input, filename,Type="*") {standardGeneric("bioo.export.ODV")})
+setMethod("bioo.export.ODV", signature="Bioo", definition= function(input, filename,Type="*") {
+#Add the required Type column
+	input = bioo.add.column(input, name="Type",value=Type,units="")
+	
+#Prepare metadata
+	metadata=paste("//<Creator>", "Servet Cizmeli for AQUATEL (sac@arctus.ca)", "</Creator>", sep="")
+	metadata=rbind(metadata,paste("//<CreateTime>", Sys.time(), "</CreateTime>", sep=""))
+	metadata=rbind(metadata,paste("//<Software>", R.version$version.string, "</Software>", sep=""))
+	metadata=rbind(metadata,paste("//<Source> </Source>", sep=""))
+	metadata=rbind(metadata,paste("//<SourceLastModified>", Sys.time(), "</SourceLastModified>", sep=""))
+	metadata=rbind(metadata,paste("//<MissingValueIndicators>", "NA", "</MissingValueIndicators>", sep=""))
+	metadata=rbind(metadata,paste("//<DataField>", "Ocean", "</DataField>", sep=""))
+	metadata=rbind(metadata,paste("//<DataType>", "Profiles", "</DataType>", sep=""))
+	
+#Set the data column names as required by the ODV format
+	clmnnames = names(input)
+	clmnnames[grep("DEPTH", clmnnames)]="Depth [m]"
+	clmnnames[grep("LONG", clmnnames)]="Longitude [degrees_east]"
+	clmnnames[grep("LAT", clmnnames)]="Latitude [degrees_north]"
+	clmnnames[grep("STATION", clmnnames)]="Station"
+	clmnnames[grep("CRUISE", clmnnames)]="Cruise"
+	clmnnames[grep("TIME", clmnnames)]="yyyy-mm-ddThh:mm:ss.sss"
+	
+#	clmnnames[grep("TEMPERATURE", clmnnames)]="Temperature [oC]"
+#	clmnnames[grep("SALINITY", clmnnames)]="Salinity [psu]"
+#	clmnnames[grep("Tchla", clmnnames)]="Tchla [mg/m3]"
+#	clmnnames[grep("Acdom440", clmnnames)]="Acdom440 [m-1]"
+#	clmnnames[grep("Acdom350", clmnnames)]="Acdom350 [m-1]"
+#	clmnnames[grep("Anap443", clmnnames)]="Anap443 [m-1]"
+#	clmnnames[grep("Aphy443", clmnnames)]="Aphy443 [m-1]"
+	
+#Write table in ODV spreadsheet format on disk
+	print(paste("writing", filename ))
+	write.table(metadata, filename , row.names=F, col.names=F,append=F, quote=F)
+	write.table(clmnnames, filename, row.names=F, col.names=F,append=T, quote=F,eol="\t")
+	write.table("", filename, row.names=F, col.names=F,append=T, quote=F)
+	write.table(cbind(input@DF,input@Ancillary@DF), filename, sep="\t", row.names=F, col.names=F,append=T,quote=F)
+})
+
+#########################################################################
+# Method : bioo.add.column
+#########################################################################
+setGeneric(name= "bioo.add.column",
+		def=function(object, name, value, units){standardGeneric("bioo.add.column")})
+setMethod("bioo.add.column", signature="Bioo", definition= function (object, name, value, units) {
+			if (name %in% names(object)){
+				stop(paste("The column", name, "already exists. Consider using the methods $, [ or [["))
+			} 		  
+			if(!is.data.frame(value)){
+				value = data.frame(value)
+				names(value) = name
+			}
+			
+			if (missing(units) && length(unique(object@Units))==1)
+				units = object@Units[1]
+			
+			if (length(units)!= ncol(value))
+				stop(paste('The input variable "units" should have the same lengths as the number of columns of "value"'))
+			
+			object@DF = cbind(object@DF,value)
+			object@Units = c(object@Units, units)
+			
+			validObject(object)
+			return(object)
+		})

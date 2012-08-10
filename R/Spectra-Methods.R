@@ -7,10 +7,10 @@
 # Method : Conversions from and to data.frame
 #########################################################################
 setAs(from="Spectra", to="data.frame", def=function(from){
-  if(ncol(from@Ancillary)>0)
+			if(ncol(from@Ancillary)>0)
 				output = cbind(from@DF,from@Ancillary@DF)
-
-      attr(output,"ShortName") = from@ShortName
+			
+			attr(output,"ShortName") = from@ShortName
 			attr(output,"LongName") = from@LongName
 			attr(output,"Wavelengths") = from@Wavelengths
 			attr(output,"Units") = from@Units
@@ -30,8 +30,8 @@ setAs(from="data.frame", to="Spectra", def=function(from){
 				} else {
 					LongName = ShortName
 				}
-
-        if (ncol(from)>length(Wavelengths)) {
+				
+				if (ncol(from)>length(Wavelengths)) {
 					myidx = (length(Wavelengths)+1):ncol(from)
 					Ancillary = from[myidx,drop=F]
 					Ancillary = new("Bioo", DF=Ancillary, Units=Units[myidx])
@@ -53,25 +53,25 @@ setAs(from="data.frame", to="Spectra", def=function(from){
 # Method : show
 #########################################################################
 setMethod("show", "Spectra", function(object){
-  if(ncol(object)==0){
-    LongName = character()
-    Units = character()
-    LbdStr = character()
-  } else {
-    LongName = object@LongName[1]
-    Units = object@Units[1]
-    LbdStr = paste("[",min(object@Wavelengths),",",max(object@Wavelengths), "] ->",sep=" ")                    
-  }
-  
-  cat("\n", paste(object@ShortName[1], ' : An object of class "Spectra"\n', 
-                  length(object@Wavelengths),"spectral channels in columns and", nrow(object@DF), 
-                  "observations in rows"), "\n",
-      "LongName : ", LongName, "\n",
-      "Wavelengths : ", length(object@Wavelengths), "channels", LbdStr, head(object@Wavelengths)," ...\n",
-      "Units : ", Units, "\n",
-      "Columns : ", head(colnames(object@DF)), "...\n",
-      "Ancillary : ", head(names(object@Ancillary)),"...\n")
-})		
+			if(ncol(object)==0){
+				LongName = character()
+				Units = character()
+				LbdStr = character()
+			} else {
+				LongName = object@LongName[1]
+				Units = object@Units[1]
+				LbdStr = paste("[",min(object@Wavelengths),",",max(object@Wavelengths), "] ->",sep=" ")                    
+			}
+			
+			cat("\n", paste(object@ShortName[1], ' : An object of class "Spectra"\n', 
+							length(object@Wavelengths),"spectral channels in columns and", nrow(object@DF), 
+							"observations in rows"), "\n",
+					"LongName : ", LongName, "\n",
+					"Wavelengths : ", length(object@Wavelengths), "channels", LbdStr, head(object@Wavelengths)," ...\n",
+					"Units : ", Units, "\n",
+					"Columns : ", head(colnames(object@DF)), "...\n",
+					"Ancillary : ", head(names(object@Ancillary)),"...\n")
+		})		
 
 #########################################################################
 # Method : Arith
@@ -102,8 +102,8 @@ setMethod("[[", signature="Spectra",
 setReplaceMethod("[[",  signature="Spectra",
 		definition=function(x, i, j, value) {
 			matched = 0
-
-      if (length(value)!=nrow(x))
+			
+			if (length(value)!=nrow(x))
 				stop("Replace value must have the same number or rows as the input object")
 			if (i %in% names(x@DF)){
 				matched = 1
@@ -205,12 +205,12 @@ setMethod("[",
 # Method : names
 #########################################################################
 setMethod("names", signature = "Spectra", 
-          def = function (x){ 
-            if(ncol(x@Ancillary)>1)
-              return(c(names(x@DF),names(x@Ancillary)))
-            else                
-              return(names(x@DF)) 
-          })
+		def = function (x){ 
+			if(ncol(x@Ancillary)>1)
+				return(c(names(x@DF),names(x@Ancillary)))
+			else                
+				return(names(x@DF)) 
+		})
 #########################################################################
 # Method : head
 #########################################################################
@@ -259,7 +259,7 @@ setMethod("plot", "Spectra", function (x, Y, maxSp, ...){
 			}
 			abline(h=0)
 			grid(col="black")
-})
+		})
 #########################################################################
 # Method : lines
 #########################################################################
@@ -377,28 +377,67 @@ setMethod("spc.select", signature = "Spectra",
 #########################################################################
 #The argument "select" is not implemented yet. Use "[]"
 setMethod("subset",  signature="Spectra",
-          definition=function(x, subset, select, drop = FALSE, ...) {
-            DF = subset(x@DF,subset,select)
-            if(ncol(x@Ancillary)>0)
-              Anc = subset(x@Ancillary,subset)
-            
-            #Save the column names of the original data
-            mynames = names(x)
-            
-            #Perform the changes
-            x@DF = DF
-            if(exists("Anc") && class(Anc)=="Bioo")
-              x@Ancillary = Anc
-            
-            #Find index of the remaining columns
-            if(!missing(select)) { 
-              c_idx = match(names(DF), mynames)
-              
-              #Update units and Wavelengths, LongName
-              x@Units = x@Units[c_idx]
-              x@LongName = x@LongName[c_idx]
-              x@Wavelengths = x@Wavelengths[c_idx]
-            }
-            validObject(x)
-            return(x)
-          })
+		definition=function(x, subset, select, drop = FALSE, ...) {
+			DF = subset(x@DF,subset,select)
+			if(ncol(x@Ancillary)>0)
+				Anc = subset(x@Ancillary,subset)
+			
+			#Save the column names of the original data
+			mynames = names(x)
+			
+			#Perform the changes
+			x@DF = DF
+			if(exists("Anc") && class(Anc)=="Bioo")
+				x@Ancillary = Anc
+			
+			#Find index of the remaining columns
+			if(!missing(select)) { 
+				c_idx = match(names(DF), mynames)
+				
+				#Update units and Wavelengths, LongName
+				x@Units = x@Units[c_idx]
+				x@LongName = x@LongName[c_idx]
+				x@Wavelengths = x@Wavelengths[c_idx]
+			}
+			validObject(x)
+			return(x)
+		})
+
+#########################################################################
+# Method : bioo.add.column
+#########################################################################
+setMethod("bioo.add.column", signature="Spectra", definition= function (object, name, value, units) {
+			object@Ancillary = bioo.add.column(object@Ancillary,name,value,units)
+			validObject(object)
+			return(object)
+		})
+
+#########################################################################
+# Method : spc.add.channel
+#########################################################################
+setGeneric(name= "spc.add.channel",
+		def=function(object, name, value, units,wavelengths){standardGeneric("spc.add.channel")})
+setMethod("spc.add.channel", signature="Spectra", definition= function (object, name, value, wavelengths) {
+			if(missing(wavelengths))
+				stop("Missing the required input variable : wavelengths")
+			
+			if (name %in% names(object)){
+				stop(paste("The channel", name, "already exists. Consider using the methods $, [ or [["))
+			} 		  
+			if(!is.data.frame(value)){
+				value = data.frame(value)
+				names(value) = name
+			}
+						
+			if (missing(units) && length(unique(object@Units))==1)
+				units = object@Units[1]
+			
+			if (length(units)!= ncol(value))
+				stop(paste('The input variable "units" should have the same lengths as the number of columns of "value"'))
+			
+			object@DF = cbind(object@DF,value)
+			object@Units = c(object@Units, units)
+			
+			validObject(object)
+			return(object)
+		})
