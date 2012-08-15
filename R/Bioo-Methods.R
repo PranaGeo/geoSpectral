@@ -402,12 +402,12 @@ setMethod("biooInterpTime", signature = "Bioo",
 		})
 
 #########################################################################
-# Method : bioo.saveas.shapefile.point
+# Method : bioo.export.shapefile.point
 #########################################################################
 #Uses rgdal::writeOGR() to export a Bioo element as a point shapefile
-setGeneric(name="bioo.saveas.shapefile.point",
-		def=function(input,filename){standardGeneric("bioo.saveas.shapefile.point")})
-setMethod("bioo.saveas.shapefile.point", signature = "Bioo", def=function(input, filename){
+setGeneric(name="bioo.export.shapefile.point",
+		def=function(input,filename){standardGeneric("bioo.export.shapefile.point")})
+setMethod("bioo.export.shapefile.point", signature = "Bioo", def=function(input, filename){
 			if(missing(filename)){
 				filename = file.path(".",paste(input@ShortName,".shp",sep=""))
 			}
