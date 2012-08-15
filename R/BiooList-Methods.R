@@ -164,3 +164,15 @@ setMethod("biooDataToHeader", signature = "BiooList",
 			object@.Data=temp
 			return(object)
 		})
+
+#########################################################################
+# Method : subset
+#########################################################################
+setMethod("subset",  signature="BiooList",
+		definition=function(x, subset, select, drop = FALSE, ...) {
+			myby = x@by
+			
+			x = lapply(x, subset, subset,select,drop,...)
+			x = as(x, "BiooList")
+			x@by = myby
+		})

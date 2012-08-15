@@ -376,30 +376,41 @@ setMethod("spc.select", signature = "Spectra",
 #########################################################################
 # Method : subset
 #########################################################################
-#The argument "select" is not implemented yet. Use "[]"
 setMethod("subset",  signature="Spectra",
 		definition=function(x, subset, select, drop = FALSE, ...) {
-			DF = subset(x@DF,subset,select)
-			if(ncol(x@Ancillary)>0)
-				Anc = subset(x@Ancillary,subset)
-			
-			#Save the column names of the original data
-			mynames = names(x)
-			
-			#Perform the changes
-			x@DF = DF
-			if(exists("Anc") && class(Anc)=="Bioo")
-				x@Ancillary = Anc
-			
-			#Find index of the remaining columns
-			if(!missing(select)) { 
-				c_idx = match(names(DF), mynames)
+			if (missing(subset)) 
+				mycall <- TRUE
+			else {
+				mycall <- substitute(subset)
+				try(xidx <- eval(mycall, x@DF, parent.frame()),silent=T)
+				try(xidx <- eval(mycall, x@Ancillary@DF, parent.frame()),silent=T)		
+				if (!is.logical(xidx)) 
+					stop("'subset' must evaluate to logical")				
+				xidx <- xidx & !is.na(xidx)
+				if (length(x@SelectedIdx)>0)
+					x@SelectedIdx = x@SelectedIdx[xidx]
+				if (length(x@InvalidIdx)>0)
+					x@InvalidIdx = x@InvalidIdx[xidx]
+				if (nrow(x@Ancillary)>0)
+					x@Ancillary@DF = x@Ancillary@DF[xidx,]				
+			}	
+			if (missing(select)) 
+				vars <- TRUE
+			else {
+				nl <- as.list(seq_along(x@DF))
+				names(nl) <- names(x@DF)
+#					browser()
+				vars <- eval(substitute(select), nl, parent.frame())
+				if(!(vars %in% names(x@DF)))
+					stop(paste("The select variables", vars, "is not a spectral column name"))
 				
-				#Update units and Wavelengths, LongName
-				x@Units = x@Units[c_idx]
-				x@LongName = x@LongName[c_idx]
-				x@Wavelengths = x@Wavelengths[c_idx]
+				y_idx = as.integer(nl[vars])
+				x@Units = x@Units[y_idx]
+				x@LongName = x@LongName[y_idx]
+				x@Wavelengths = x@Wavelengths[y_idx]
 			}
+			x@DF = x@DF[xidx, vars, drop = drop]
+									
 			validObject(x)
 			return(x)
 		})
