@@ -14,7 +14,7 @@ setClass("Spectra", contains="Bioo",
 
 setMethod("initialize",
 		signature(.Object = "Spectra"),
-		function (.Object, DF, ShortName, LongName, Wavelengths, Units, Ancillary, ...) 
+		function (.Object, DF, ShortName, LongName, Wavelengths, Units, Ancillary, header, ...) 
 		{
 #			cat("---------Spectra::Initialize\n")
 			#Set defaults for ShortName
@@ -35,13 +35,16 @@ setMethod("initialize",
 			if(missing(Units))
 				Units <- "[ ]"	
 		  if (length(Units)==1)
-		    Units<- rep(Units, ncol(DF))				 							
-		  #Set the default for Ancillary
+			  Units<- rep(Units, ncol(DF))				 							
+		  #Set the default for Ancillary data
 		  if(missing(Ancillary))
-				Ancillary=new("Bioo")
-			
+			  Ancillary=new("Bioo")
+		  #Set the default header
+		  if(missing(header))
+			  header = new("BiooHeader")
+		  
 			.Object=callNextMethod(.Object, ShortName=ShortName,DF=DF,
-					LongName=LongName,Wavelengths=Wavelengths,Units=Units,Ancillary=Ancillary)
+					LongName=LongName,Wavelengths=Wavelengths,Units=Units,Ancillary=Ancillary,header=header)
 			#			.Object <- callNextMethod()
 			
 			return(.Object)

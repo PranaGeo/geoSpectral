@@ -16,14 +16,26 @@ if (1) {
 }
 setMethod("initialize",
 		signature(.Object = "Bioo"),
-		function (.Object, ...) 
+		function (.Object, DF, Units, LongName, header, ...) 
 		{
+			if(missing(DF))
+				DF = data.frame()
+			if(missing(header))
+				header = new("BiooHeader")
+			if(missing(Units))
+				Units <- "[ ]"	
+			if (length(Units)==1)
+				Units <- rep(Units, ncol(DF))				 							
+			if(missing(LongName))
+				LongName <- names(DF)				 
+			if (length(LongName)==1)
+				LongName <- rep(LongName, ncol(DF))				 							
+			
 #			cat("---------Bioo::Initialize\n")						
-			.Object <- callNextMethod()
+			.Object <- callNextMethod(.Object,DF=DF,LongName=LongName,Units=Units,header=header)
 
-			if (length(.Object@Units)==1 & .Object@Units[1]=="[]" & ncol(.Object@DF)>0){
-				.Object@Units = rep("[ ]",ncol(.Object@DF))
-			}
+#			if (length(.Object@Units)==1 & .Object@Units[1]=="[]" & ncol(.Object@DF)>0){
+#				.Object@Units = rep("[ ]",ncol(.Object@DF))
   
 			#			if (.Object@ShortName[1]=="[]" & ncol(.Object@DF)!=0) {
 #				.Object@ShortName = colnames(.Object@DF)
@@ -41,11 +53,11 @@ setValidity("Bioo", function(object){
 			if(! class(object@DF)=="data.frame"){
 				return(" data should be a data.frame object")
 			}
-			if (length(object@Units)>0)
+#			if (length(object@Units)>0)
 			  if(length(object@Units)!= ncol(object@DF))
-			    return("Number of Unit elements is not equal the number of DF columns")
+			    return("Number of Unit elements is not equal the number of columns in slot DF")
 			
-			if (length(object@LongName)>0)
+#			if (length(object@LongName)>0)
 			  if (length(object@LongName)!=ncol(object@DF))
 			    return("The slot LongName should have the same length as the number of columns in slot DF")
 			

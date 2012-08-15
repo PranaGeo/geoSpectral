@@ -462,8 +462,29 @@ setMethod("biooDataToHeader", signature = "Bioo",
 #The argument "select" is not implemented yet. Use "[]"
 setMethod("subset",  signature="Bioo",
 		definition=function(x, subset, select, drop = FALSE, ...) {   
-			DF = subset(x@DF,subset)
-			x@DF = DF
+			if (missing(subset)) 
+				mycall <- TRUE
+			else {
+				mycall <- substitute(subset)
+				xidx <- eval(mycall, x@DF, parent.frame())
+				if (!is.logical(xidx)) 
+					stop("'subset' must evaluate to logical")
+				xidx <- xidx & !is.na(xidx)
+			}
+			
+			if (missing(select)) 
+				vars <- TRUE
+			else {
+				nl <- as.list(seq_along(x@DF))
+				names(nl) <- names(x)
+				vars <- eval(substitute(select), nl, parent.frame())
+				y_idx = as.integer(nl[vars])
+				x@Units = x@Units[y_idx]
+				x@LongName = x@LongName[y_idx]
+			}
+#			browser()
+			x@DF = x@DF[xidx, vars, drop = drop]
+#			DF = subset(x@DF,subset)
 			validObject(x)
 			return(x)
 		})
