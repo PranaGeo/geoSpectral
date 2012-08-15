@@ -189,6 +189,7 @@ setMethod("[",
 				x@DF=x@DF[i,j,drop=F]
 				x@Ancillary=x@Ancillary[i,,drop=F]
 				x@Wavelengths = x@Wavelengths[j]
+				x@LongName= x@LongName[j]
 				x@Units= x@Units[j] 
 			} else{
 				x=x@Ancillary
