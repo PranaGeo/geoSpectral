@@ -10,21 +10,21 @@ setClass("Spectra", contains="Bioo",
 				ShortName="character",
 				Wavelengths="numeric", Ancillary="Bioo"), 
 		prototype=prototype(DF=data.frame(),
-				ShortName="spvar2",Wavelengths=0, Ancillary=new("Bioo")))
+				ShortName="spvar2",Wavelengths=numeric(), Ancillary=new("Bioo")))
 
 setMethod("initialize",
 		signature(.Object = "Spectra"),
-		function (.Object, DF, ShortName, LongName, Wavelengths, Units, Ancillary, header, ...) 
+		function (.Object, DF, ShortName, LongName, Wavelengths, Units, Ancillary) 
 		{
-#			cat("---------Spectra::Initialize\n")
+			cat("---------Spectra::Initialize\n")
 			#Set defaults for ShortName
-		  if(missing(DF))
-		    DF <- data.frame()
-		  if(missing(Wavelengths))
-		    Wavelengths <- numeric()
-		  if(missing(ShortName))
-		    ShortName <- "spvar"				 
-		  if (length(ShortName)!=1)
+			if(missing(DF))
+				DF <- data.frame()
+			if(missing(Wavelengths))
+				Wavelengths <- numeric()
+			if(missing(ShortName))
+				ShortName <- "spvar"				 
+			if (length(ShortName)!=1)
 				ShortName <- ShortName[1]				 							
 			#Set defaults for LongName
 			if(missing(LongName))
@@ -34,17 +34,18 @@ setMethod("initialize",
 			#Set the default for Units
 			if(missing(Units))
 				Units <- "[ ]"	
-		  if (length(Units)==1)
-			  Units<- rep(Units, ncol(DF))				 							
-		  #Set the default for Ancillary data
-		  if(missing(Ancillary))
-			  Ancillary=new("Bioo")
-		  #Set the default header
-		  if(missing(header))
-			  header = new("BiooHeader")
-		  
-			.Object=callNextMethod(.Object, ShortName=ShortName,DF=DF,
-					LongName=LongName,Wavelengths=Wavelengths,Units=Units,Ancillary=Ancillary,header=header)
+			if (length(Units)==1)
+				Units<- rep(Units, ncol(DF))				 							
+			#Set the default for Ancillary data
+			if(missing(Ancillary))
+				Ancillary=new("Bioo")
+			#Set the default header
+#			if(missing(header))
+#				header = new("BiooHeader")
+			
+#			browser()
+			.Object=callNextMethod(.Object, DF=DF, ShortName=ShortName,
+					LongName=LongName,Wavelengths=Wavelengths,Units=Units,Ancillary=Ancillary)
 			#			.Object <- callNextMethod()
 			
 			return(.Object)
@@ -52,7 +53,7 @@ setMethod("initialize",
 )
 
 setValidity("Spectra", function(object){
-#			cat("---------Spectra::setValidity\n")
+			cat("---------Spectra::setValidity\n")
 			if(!all(sapply(object@DF, class)=="numeric")){
 				return("Spectral data should be a data.frame object with numeric columns")
 			}
