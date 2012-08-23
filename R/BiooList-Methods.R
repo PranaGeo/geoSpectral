@@ -168,11 +168,17 @@ setMethod("biooDataToHeader", signature = "BiooList",
 #########################################################################
 # Method : subset
 #########################################################################
-setMethod("subset",  signature="BiooList",
-		definition=function(x, subset, select, drop = FALSE, ...) {
-			myby = x@by
-			
-			x = lapply(x, subset, subset,select,drop,...)
-			x = as(x, "BiooList")
-			x@by = myby
-		})
+#setMethod("subset",  signature="BiooList",
+#		definition=function(x, subset, select, drop = FALSE, ...) {
+##			myby = x@by
+#			
+#			for(AA in 1:length(x)) {
+#				browser()
+#				mycall <- substitute(subset)
+#				xidx <- eval(mycall, x[[AA]], parent.frame())
+#			}
+##			x[[AA]] = subset(x[[AA]], subset,select,drop)
+#			x = lapply(x, subset, subset,select,drop,...)
+#			x = as(x, "BiooList")
+#			x@by = myby
+#		})
