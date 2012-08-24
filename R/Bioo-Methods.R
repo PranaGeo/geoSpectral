@@ -136,6 +136,28 @@ setMethod("[", signature(x = "Bioo"),
 		})
 
 #########################################################################
+# Method : sort
+#########################################################################
+setMethod("sort", signature="Bioo", definition= function (x, which.col, decreasing = FALSE, ...){
+			if(!(is.numeric(x[[which.col]]) | all(is.finite(x[[which.col]]))))
+				stop(paste("The column", which.col, "should be numeric with finite values."))
+			
+			if(length(which.col)>1)
+				stop(paste("Sorting with respect to only one is supported"))
+			
+			#Sort with respect to the selected input column
+			d_idx = sort.int(x[[which.col]], decreasing, index.return = TRUE)
+			x@DF= x@DF[d_idx$ix,,drop=F]
+			if (nrow(x@Ancillary)>1)
+				x@Ancillary@DF = x@Ancillary@DF[d_idx$ix,]
+			if(length(x@SelectedIdx)>0)
+				x@SelectedIdx = x@SelectedIdx[d_idx$ix]
+			if(length(x@InvalidIdx)>0)
+				x@InvalidIdx = x@InvalidIdx[d_idx$ix]
+			return(x)
+		})
+
+#########################################################################
 # Method : GetBiooHeader
 #########################################################################
 setGeneric (name= "GetBiooHeader",

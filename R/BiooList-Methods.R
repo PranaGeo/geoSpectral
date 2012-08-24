@@ -164,6 +164,14 @@ setMethod("biooDataToHeader", signature = "BiooList",
 			object@.Data=temp
 			return(object)
 		})
+#########################################################################
+# Method : sort
+#########################################################################
+setMethod("sort", signature="BiooList", definition= function (x, which.col, decreasing = FALSE, ...){
+		newdata = lapply(x, sort, which.col=which.col, decreasing=decreasing, ...)
+		x@.Data = newdata
+		return(x)
+		})
 
 #########################################################################
 # Method : subset
