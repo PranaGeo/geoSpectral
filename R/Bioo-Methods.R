@@ -146,7 +146,7 @@ setMethod("sort", signature="Bioo", definition= function (x, which.col, decreasi
 				stop(paste("Sorting with respect to only one is supported"))
 			
 			#Sort with respect to the selected input column
-			d_idx = sort.int(x[[which.col]], decreasing, index.return = TRUE)
+			d_idx = sort.int(x[[which.col]], decreasing=decreasing, index.return = TRUE)
 			x@DF= x@DF[d_idx$ix,,drop=F]
 			if (nrow(x@Ancillary)>1)
 				x@Ancillary@DF = x@Ancillary@DF[d_idx$ix,]
