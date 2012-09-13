@@ -6,6 +6,21 @@
 #########################################################################
 # Method : Conversions from and to data.frame
 #########################################################################
+setAs(from="Spectra", to="Bioo", def=function(from){
+			if(ncol(from@Ancillary)>0){ 
+				output = from@Ancillary
+				output@DF = cbind(from@DF, output@DF)
+				output@Units = c(from@Units, output@Units)
+				output@LongName = c(from@LongName, output@LongName)
+			} else {
+				output = new("Bioo",DF=from@DF,LongName=from@LongName,Units=from@Units)
+			}
+			return(output)
+		})
+
+#########################################################################
+# Method : Conversions from and to data.frame
+#########################################################################
 setAs(from="Spectra", to="data.frame", def=function(from){
 			if(ncol(from@Ancillary)>0)
 				output = cbind(from@DF,from@Ancillary@DF)
@@ -99,10 +114,8 @@ setMethod("[[", signature="Spectra",
 			validObject(x)
 			return(Boutput)
 		})
-setReplaceMethod("[[",  signature="Spectra",
-		definition=function(x, i, j, value) {
+setReplaceMethod("[[",  signature="Spectra", definition=function(x, i, j, value) {
 			matched = 0
-			
 			if (length(value)!=nrow(x))
 				stop("Replace value must have the same number or rows as the input object")
 			if (i %in% names(x@DF)){
@@ -410,7 +423,7 @@ setMethod("subset",  signature="Spectra",
 				x@Wavelengths = x@Wavelengths[y_idx]
 			}
 			x@DF = x@DF[xidx, vars, drop = drop]
-									
+			
 			validObject(x)
 			return(x)
 		})
@@ -418,8 +431,8 @@ setMethod("subset",  signature="Spectra",
 #########################################################################
 # Method : bioo.add.column
 #########################################################################
-setMethod("bioo.add.column", signature="Spectra", definition= function (object, name, value, units) {
-			object@Ancillary = bioo.add.column(object@Ancillary,name,value,units)
+setMethod("bioo.add.column", signature="Spectra", definition= function (object, name, value, units,longname) {
+			object@Ancillary = bioo.add.column(object@Ancillary,name=name,value=value,units=units,longname=longname)
 			validObject(object)
 			return(object)
 		})
@@ -440,7 +453,7 @@ setMethod("spc.add.channel", signature="Spectra", definition= function (object, 
 				value = data.frame(value)
 				names(value) = name
 			}
-						
+			
 			if (missing(units) && length(unique(object@Units))==1)
 				units = object@Units[1]
 			

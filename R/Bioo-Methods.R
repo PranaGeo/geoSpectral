@@ -79,6 +79,13 @@ setMethod("nrow", signature = "Bioo",
 #########################################################################
 setMethod("head", signature = "Bioo", 
 		def = function (x){  return(head(x@DF)) })
+#########################################################################
+# Method : cbind
+#########################################################################
+setMethod("cbind", signature = "Bioo", def = function (..., deparse.level = 1){
+			browser()
+			return() 
+		})
 
 #########################################################################
 # Method : $
@@ -511,7 +518,7 @@ setMethod("subset",  signature="Bioo",
 		})
 
 #########################################################################
-# Method : bioo.add.column
+# Method : bioo.export.ODV
 #########################################################################
 setGeneric(name= "bioo.export.ODV",
 		def=function(input, filename,Type="*") {standardGeneric("bioo.export.ODV")})
@@ -551,31 +558,35 @@ setMethod("bioo.export.ODV", signature="Bioo", definition= function(input, filen
 	write.table(metadata, filename , row.names=F, col.names=F,append=F, quote=F)
 	write.table(clmnnames, filename, row.names=F, col.names=F,append=T, quote=F,eol="\t")
 	write.table("", filename, row.names=F, col.names=F,append=T, quote=F)
-	write.table(cbind(input@DF,input@Ancillary@DF), filename, sep="\t", row.names=F, col.names=F,append=T,quote=F)
+	if (class(input)=="Spectral")
+		write.table(cbind(input@DF,input@Ancillary@DF), filename, sep="\t", row.names=F, col.names=F,append=T,quote=F)
+	if (class(input)=="Bioo")
+		write.table(input@DF, filename, sep="\t", row.names=F, col.names=F,append=T,quote=F)
 })
 
 #########################################################################
 # Method : bioo.add.column
 #########################################################################
 setGeneric(name= "bioo.add.column",
-		def=function(object, name, value, units){standardGeneric("bioo.add.column")})
-setMethod("bioo.add.column", signature="Bioo", definition= function (object, name, value, units) {
+		def=function(object, name, value, units,longname){standardGeneric("bioo.add.column")})
+setMethod("bioo.add.column", signature="Bioo", definition= function (object, name, value, units,longname) {
 			if (name %in% names(object)){
 				stop(paste("The column", name, "already exists. Consider using the methods $, [ or [["))
 			} 		  
 			if(!is.data.frame(value)){
 				value = data.frame(value)
 				names(value) = name
-			}
-			
+			}			
 			if (missing(units) && length(unique(object@Units))==1)
-				units = object@Units[1]
-			
+				units = object@Units[1]			
 			if (length(units)!= ncol(value))
 				stop(paste('The input variable "units" should have the same lengths as the number of columns of "value"'))
+			if (missing(longname))
+				longname = name
 			
 			object@DF = cbind(object@DF,value)
 			object@Units = c(object@Units, units)
+			object@LongName = c(object@LongName,longname)
 			
 			validObject(object)
 			return(object)
