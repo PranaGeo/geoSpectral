@@ -146,7 +146,7 @@ setMethod("$", signature="Spectra",
 				stop("Could not match any Spectral or Ancillary data columns")
 			return(Boutput)
 		})
-setReplaceMethod("$", signature = "Bioo", 
+setReplaceMethod("$", signature = "Spectra", 
 		function(x, name, value) {
 			x[[name]]=value
 			#validObject(x) will be called by the [[ method
@@ -218,23 +218,23 @@ setMethod("[",
 #########################################################################
 # Method : names
 #########################################################################
-setMethod("names", signature = "Spectra", 
-		def = function (x){ 
-			if(ncol(x@Ancillary)>1)
-				return(c(names(x@DF),names(x@Ancillary)))
-			else                
-				return(names(x@DF)) 
-		})
+#setMethod("names", signature = "Spectra", 
+#		def = function (x){ 
+#			if(ncol(x@Ancillary)>1)
+#				return(c(names(x@DF),names(x@Ancillary)))
+#			else                
+#				return(names(x@DF)) 
+#		})
 #########################################################################
 # Method : head
 #########################################################################
-setMethod("head", signature = "Spectra", 
-		def = function (x){
-			if(ncol(x@Ancillary)>1)
-				return(head(cbind(x@DF, x@Ancillary@DF)))
-			else
-				return(head(x@DF))
-		})
+#setMethod("head", signature = "Spectra", 
+#		def = function (x){
+#			if(ncol(x@Ancillary)>1)
+#				return(head(cbind(x@DF, x@Ancillary@DF)))
+#			else
+#				return(head(x@DF))
+#		})
 
 #########################################################################
 # Method : plot
@@ -466,3 +466,29 @@ setMethod("spc.add.channel", signature="Spectra", definition= function (object, 
 			validObject(object)
 			return(object)
 		})
+
+#########################################################################
+# Method : names
+#########################################################################
+setMethod("names", signature = "Spectra", 
+		def = function (x){ return(names(x@DF)) })
+#########################################################################
+# Method : dim
+#########################################################################
+setMethod("dim", signature = "Spectra", 
+		def = function (x){  return(dim(x@DF))  })
+#########################################################################
+# Method : ncol
+#########################################################################
+setMethod("ncol", signature = "Spectra", 
+		def = function (x){  return(ncol(x@DF))  })
+########################################################################
+# Method : nrow
+#########################################################################
+setMethod("nrow", signature = "Spectra", 
+		def = function (x){  return(nrow(x@DF))  })
+#########################################################################
+# Method : head
+#########################################################################
+setMethod("head", signature = "Spectra", 
+		def = function (x){  return(head(x@DF)) })

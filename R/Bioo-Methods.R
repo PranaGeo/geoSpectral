@@ -134,6 +134,7 @@ setMethod("[", signature(x = "Bioo"),
 			
 			x@DF=x@DF[i,j,drop=F]
 			x@Units = x@Units[j]
+			x@LongName= x@LongName[j]
 			x@SelectedIdx = logical()
 			
 			if (length(x@InvalidIdx)>1)
