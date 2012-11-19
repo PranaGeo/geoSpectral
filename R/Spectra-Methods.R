@@ -329,6 +329,17 @@ setReplaceMethod(f="SetWavelengths", signature="Spectra",
 			validObject(object)
 			return (object)
 		})
+#########################################################################
+# Method : spc.columnameConstruct
+#########################################################################
+setGeneric("spc.columnameConstruct",function(object,value)
+		{standardGeneric("spc.columnameConstruct")})
+setMethod(f="spc.columnameConstruct", signature="Spectra",
+		definition=function(object,value){
+			if(missing(value))
+				value = object@ShortName
+			return(paste(value,GetWavelengths(object),sep="_"))
+		})
 
 #########################################################################
 # Method : spc.select Select Spectra with the help of the mouse
@@ -472,6 +483,11 @@ setMethod("spc.add.channel", signature="Spectra", definition= function (object, 
 #########################################################################
 setMethod("names", signature = "Spectra", 
 		def = function (x){ return(names(x@DF)) })
+setReplaceMethod("names", signature = "Spectra", def = function (x,value){
+			colnames(x@DF) = value
+			validObject(x)
+			return(x) 
+		})
 #########################################################################
 # Method : dim
 #########################################################################

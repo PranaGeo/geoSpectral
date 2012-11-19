@@ -545,9 +545,8 @@ setMethod("bioo.export.ODV", signature="Bioo", definition= function(input, filen
 	clmnnames[grep("STATION", clmnnames)]="Station"
 	clmnnames[grep("CRUISE", clmnnames)]="Cruise"
 	clmnnames[grep("TIME", clmnnames)]="yyyy-mm-ddThh:mm:ss.sss"
-	
-#	clmnnames[grep("TEMPERATURE", clmnnames)]="Temperature [oC]"
-#	clmnnames[grep("SALINITY", clmnnames)]="Salinity [psu]"
+	clmnnames[grep("TEMPERATURE", clmnnames)]="Temperature [oC]"
+	clmnnames[grep("SALINITY", clmnnames)]="Salinity [psu]"
 #	clmnnames[grep("Tchla", clmnnames)]="Tchla [mg/m3]"
 #	clmnnames[grep("Acdom440", clmnnames)]="Acdom440 [m-1]"
 #	clmnnames[grep("Acdom350", clmnnames)]="Acdom350 [m-1]"
