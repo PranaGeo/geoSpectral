@@ -164,7 +164,7 @@ setMethod("[",
 			if(missing(j))
 				j =  1:ncol(x@DF)
 			
-			if (class(j)=="numeric" | class(j)=="character"){				
+			if (class(j)=="numeric" | class(j)=="character"){
 				if (class(j)=="numeric"){
 					j.new = match(j,x@Wavelengths)
 				}
@@ -200,7 +200,8 @@ setMethod("[",
 			InvalidIdx = x@InvalidIdx
 			if (!OUT_ANC) {				
 				x@DF=x@DF[i,j,drop=F]
-				x@Ancillary=x@Ancillary[i,,drop=F]
+				if(nrow(x@Ancillary)>0)
+					x@Ancillary=x@Ancillary[i,,drop=F]
 				x@Wavelengths = x@Wavelengths[j]
 				x@LongName= x@LongName[j]
 				x@Units= x@Units[j] 
