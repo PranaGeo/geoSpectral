@@ -89,12 +89,43 @@ setMethod("show", "Spectra", function(object){
 		})		
 
 #########################################################################
+# Method : names
+#########################################################################
+setMethod("names", signature = "Spectra", 
+		def = function (x){ return(names(x@DF)) })
+setReplaceMethod("names", signature = "Spectra", def = function (x,value){
+			colnames(x@DF) = value
+			validObject(x)
+			return(x) 
+		})
+#########################################################################
+# Method : dim
+#########################################################################
+setMethod("dim", signature = "Spectra", 
+		def = function (x){  return(dim(x@DF))  })
+#########################################################################
+# Method : ncol
+#########################################################################
+setMethod("ncol", signature = "Spectra", 
+		def = function (x){  return(ncol(x@DF))  })
+########################################################################
+# Method : nrow
+#########################################################################
+setMethod("nrow", signature = "Spectra", 
+		def = function (x){  return(nrow(x@DF))  })
+#########################################################################
+# Method : head
+#########################################################################
+setMethod("head", signature = "Spectra", 
+		def = function (x){  return(head(x@DF)) })
+
+#########################################################################
 # Method : Arith
 #########################################################################
 setMethod("Arith", signature(e1 = "Spectra", e2 = "Spectra"),function (e1, e2) {
 			result <- callGeneric(e1@DF, e2@DF)
 			output <- new("Spectra",DF=result,Wavelengths=e1@Wavelengths,Units=e1@Units,
-					ShortName = "Arith", LongName="Arith",Ancillary=GetAncillary(e1))			
+					ShortName = "Arith", LongName="Arith",Ancillary=spc.getancillary(e1))			
 			return(output)
 		})
 
@@ -285,11 +316,11 @@ setMethod("lines",signature = "Spectra",
 		})
 
 #########################################################################
-# Method : GetAncillary
+# Method : spc.getancillary
 #########################################################################
-setGeneric (name= "GetAncillary",
-		def=function(object, ...){standardGeneric("GetAncillary")})
-setMethod("GetAncillary", signature = "Spectra", 
+setGeneric (name= "spc.getancillary",
+		def=function(object, ...){standardGeneric("spc.getancillary")})
+setMethod("spc.getancillary", signature = "Spectra", 
 		def = function (object, Columns){
 			if (missing(Columns))
 				return(object@Ancillary)
@@ -299,9 +330,9 @@ setMethod("GetAncillary", signature = "Spectra",
 #########################################################################
 # Method : SetAncillary
 #########################################################################
-setGeneric("SetAncillary<-",function(object,value)
-		{standardGeneric("SetAncillary<-")})
-setReplaceMethod(f="SetAncillary",	signature="Spectra",
+setGeneric("spc.setancillary<-",function(object,value)
+		{standardGeneric("spc.setancillary<-")})
+setReplaceMethod(f="spc.setancillary",	signature="Spectra",
 		definition=function(object,value){
 			if(class(value)=="data.frame")
 				value = as(value,"Bioo")
@@ -313,18 +344,18 @@ setReplaceMethod(f="SetAncillary",	signature="Spectra",
 #########################################################################
 # Method : Getwavelengths
 #########################################################################
-setGeneric (name= "GetWavelengths",
-		def=function(object){standardGeneric("GetWavelengths")})
-setMethod("GetWavelengths", signature = "Spectra", 
+setGeneric (name= "spc.getwavelengths",
+		def=function(object){standardGeneric("spc.getwavelengths")})
+setMethod("spc.getwavelengths", signature = "Spectra", 
 		def = function (object){
 			return(object@Wavelengths)
 		})
 #########################################################################
 # Method : SetWavelengths
 #########################################################################
-setGeneric("SetWavelengths<-",function(object,value)
-		{standardGeneric("SetWavelengths<-")})
-setReplaceMethod(f="SetWavelengths", signature="Spectra",
+setGeneric("spc.setwavelengths<-",function(object,value)
+		{standardGeneric("spc.setwavelengths<-")})
+setReplaceMethod(f="spc.setwavelengths", signature="Spectra",
 		definition=function(object,value){
 			object@Wavelengths <-value
 			validObject(object)
@@ -333,9 +364,9 @@ setReplaceMethod(f="SetWavelengths", signature="Spectra",
 #########################################################################
 # Method : spc.columnameConstruct
 #########################################################################
-setGeneric("spc.columnameConstruct",function(object,value)
-		{standardGeneric("spc.columnameConstruct")})
-setMethod(f="spc.columnameConstruct", signature="Spectra",
+setGeneric("spc.cname.construct",function(object,value)
+		{standardGeneric("spc.cname.construct")})
+setMethod(f="spc.cname.construct", signature="Spectra",
 		definition=function(object,value){
 			if(missing(value))
 				value = object@ShortName
@@ -478,34 +509,3 @@ setMethod("spc.add.channel", signature="Spectra", definition= function (object, 
 			validObject(object)
 			return(object)
 		})
-
-#########################################################################
-# Method : names
-#########################################################################
-setMethod("names", signature = "Spectra", 
-		def = function (x){ return(names(x@DF)) })
-setReplaceMethod("names", signature = "Spectra", def = function (x,value){
-			colnames(x@DF) = value
-			validObject(x)
-			return(x) 
-		})
-#########################################################################
-# Method : dim
-#########################################################################
-setMethod("dim", signature = "Spectra", 
-		def = function (x){  return(dim(x@DF))  })
-#########################################################################
-# Method : ncol
-#########################################################################
-setMethod("ncol", signature = "Spectra", 
-		def = function (x){  return(ncol(x@DF))  })
-########################################################################
-# Method : nrow
-#########################################################################
-setMethod("nrow", signature = "Spectra", 
-		def = function (x){  return(nrow(x@DF))  })
-#########################################################################
-# Method : head
-#########################################################################
-setMethod("head", signature = "Spectra", 
-		def = function (x){  return(head(x@DF)) })

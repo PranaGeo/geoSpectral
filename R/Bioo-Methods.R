@@ -165,11 +165,11 @@ setMethod("sort", signature="Bioo", definition= function (x, which.col, decreasi
 		})
 
 #########################################################################
-# Method : GetBiooHeader
+# Method : bioo.getheader
 #########################################################################
-setGeneric (name= "GetBiooHeader",
-		def=function(object,name){standardGeneric("GetBiooHeader")})
-setMethod("GetBiooHeader", signature = "Bioo", 
+setGeneric (name= "bioo.getheader",
+		def=function(object,name){standardGeneric("bioo.getheader")})
+setMethod("bioo.getheader", signature = "Bioo", 
 		def = function (object,name){
 			if(missing(name)){
 				out = object@header
@@ -183,11 +183,11 @@ setMethod("GetBiooHeader", signature = "Bioo",
 			}
 		})
 #########################################################################
-# Method : SetBiooHeader
+# Method : bioo.setheader
 #########################################################################
-setGeneric (name="SetBiooHeader<-",
-		def=function(object,value,...){standardGeneric("SetBiooHeader<-")})
-setReplaceMethod(f="SetBiooHeader", signature="Bioo",
+setGeneric (name="bioo.setheader<-",
+		def=function(object,value,...){standardGeneric("bioo.setheader<-")})
+setReplaceMethod(f="bioo.setheader", signature="Bioo",
 		definition=function(object,value,...){
 			object@header<-value
 			validObject(object)
@@ -195,25 +195,23 @@ setReplaceMethod(f="SetBiooHeader", signature="Bioo",
 		})
 
 #########################################################################
-# Method : GetSelectedIdx
+# Method : bioo.getselected.idx
 #########################################################################
-setGeneric (name= "GetSelectedIdx",
-		def=function(object){standardGeneric("GetSelectedIdx")})
-setMethod("GetSelectedIdx", signature = "Bioo", 
+setGeneric (name= "bioo.getselected.idx",
+		def=function(object){standardGeneric("bioo.getselected_idx")})
+setMethod("bioo.getselected.idx", signature = "Bioo", 
 		def = function (object){
 			return(object@SelectedIdx)
 		})
 #########################################################################
-# Method : SetSelectedIdx	
+# Method : bioo.setselected.idx	
 #########################################################################
-setGeneric("SetSelectedIdx<-",function(object,value)
-		{standardGeneric("SetSelectedIdx<-")})
-setReplaceMethod(
-		f="SetSelectedIdx",
-		signature="Bioo",
+setGeneric("bioo.setselected.idx<-",function(object,value)
+		{standardGeneric("bioo.setselected.idx<-")})
+setReplaceMethod(f="bioo.setselected.idx", signature="Bioo",
 		definition=function(object,value){
 			if(is.numeric(value)){
-				idx = GetInvalidIdx(object)
+				idx = bioo.getinvalid.idx(object)
 				if(length(idx)==0)
 					idx = rep(FALSE,nrow(object))
 				idx[value]=TRUE
@@ -225,25 +223,23 @@ setReplaceMethod(
 		})
 
 #########################################################################
-# Method : GetinvalidIdx
+# Method : bioo.getinvalid.idx
 #########################################################################
-setGeneric (name= "GetInvalidIdx",
-		def=function(object){standardGeneric("GetInvalidIdx")})
-setMethod("GetInvalidIdx", signature = "Bioo", 
+setGeneric (name= "bioo.getinvalid.idx",
+		def=function(object){standardGeneric("bioo.getinvalid.idx")})
+setMethod("bioo.getinvalid.idx", signature = "Bioo", 
 		def = function (object){
 			return(object@InvalidIdx)
 		})
 #########################################################################
-# Method : SetInvaliddidx	
+# Method : bioo.setinvalid.idx
 #########################################################################
-setGeneric("SetInvalidIdx<-",function(object,value)
-		{standardGeneric("SetInvalidIdx<-")})
-setReplaceMethod(
-		f="SetInvalidIdx",
-		signature="Bioo",
+setGeneric("bioo.setinvalid.idx<-",function(object,value)
+		{standardGeneric("bioo.setinvalid.idx<-")})
+setReplaceMethod(f="bioo.setinvalid.idx", signature="Bioo",
 		definition=function(object,value){
 			if(is.numeric(value)){
-				idx = GetInvalidIdx(object)
+				idx = bioo.getinvalid.idx(object)
 				if(length(idx)==0)
 					idx = rep(FALSE,nrow(object))
 				idx[value]=TRUE
@@ -414,11 +410,11 @@ setMethod("plot.depth.by.station", signature="Bioo", function(input,fname) {
 		})
 
 #########################################################################
-# Method : biooInterpTime
+# Method : bioo.interp.time
 #########################################################################
-setGeneric (name= "biooInterpTime",
-		def=function(source1,target1,column,show.plot){standardGeneric("biooInterpTime")})
-setMethod("biooInterpTime", signature = "Bioo", 
+setGeneric (name= "bioo.interp.time",
+		def=function(source1,target1,column,show.plot){standardGeneric("bioo.interp.time")})
+setMethod("bioo.interp.time", signature = "Bioo", 
 		def = function (source1,target1,column,show.plot=FALSE){
 			my = approx(source1$TIME, source1[[column]],xout=target1$TIME)
 			if(show.plot){
@@ -458,11 +454,11 @@ setMethod("bioo.export.shapefile.point", signature = "Bioo", def=function(input,
 			
 		})
 #########################################################################
-# Method : biooInvalidDetect
+# Method : bioo.invalid.detect
 #########################################################################
-setGeneric(name= "biooInvalidDetect",
-		def=function(source1){standardGeneric("biooInvalidDetect")})
-setMethod("biooInvalidDetect", signature = "Bioo", def=function(source1){
+setGeneric(name= "bioo.invalid.detect",
+		def=function(source1){standardGeneric("bioo.invalid.detect")})
+setMethod("bioo.invalid.detect", signature = "Bioo", def=function(source1){
 			out = apply(source1@DF, 2,is.na)
 			if(is.null(dim(out))& nrow(source1@DF)==1)
 				dim(out)<-c(1,ncol(source1@DF))
@@ -470,11 +466,11 @@ setMethod("biooInvalidDetect", signature = "Bioo", def=function(source1){
 		})
 
 #########################################################################
-# Method : biooDataToHeader
+# Method : bioo.data2header
 #########################################################################
-setGeneric(name= "biooDataToHeader",
-		def=function(object,headerfield,dataname,compress,...){standardGeneric("biooDataToHeader")})
-setMethod("biooDataToHeader", signature = "Bioo", 
+setGeneric(name= "bioo.data2header",
+		def=function(object,headerfield,dataname,compress,...){standardGeneric("bioo.data2header")})
+setMethod("bioo.data2header", signature = "Bioo", 
 		def=function(object,headerfield,dataname,compress=TRUE,...){
 			if(missing(headerfield))
 				headerfield = dataname

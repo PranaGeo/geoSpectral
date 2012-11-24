@@ -150,25 +150,25 @@ BiooList = function (spclist){
 	new("BiooList", spclist)
 }
 #########################################################################
-# Method : biooInvalidDetect
+# Method : bioo.invalid.detect
 #########################################################################
-setMethod("biooInvalidDetect", signature = "BiooList", def=function(source1){
+setMethod("bioo.invalid.detect", signature = "BiooList", def=function(source1){
 			out = lapply(source1, function(x) {SetInvalidIdx(x)<-biooInvalidDetect(x)})
 			return(out)
 		})
 
 #########################################################################
-# Method : GetBiooHeader
+# Method : bioo.getheader
 #########################################################################
-setMethod("GetBiooHeader", signature = "BiooList", 
+setMethod("bioo.getheader", signature = "BiooList", 
 		def = function (object,name){
-			sapply(object, GetBiooHeader,name)
+			sapply(object, bioo.getheader,name)
 		})
 
 #########################################################################
-# Method : SetBiooHeader
+# Method : bioo.setheader<-
 #########################################################################
-setReplaceMethod(f="SetBiooHeader", signature="BiooList",
+setReplaceMethod(f="bioo.setheader", signature="BiooList",
 		definition=function(object,value,...){
 			if(inherits(value,"Bioo"))
 				stop("It is forbidden to place in a BiooHeader object that inherit from the Bioo class")
@@ -185,9 +185,9 @@ setReplaceMethod(f="SetBiooHeader", signature="BiooList",
 		})
 
 #########################################################################
-# Method : biooDataToHeader
+# Method : bioo.data2header
 #########################################################################
-setMethod("biooDataToHeader", signature = "BiooList", 
+setMethod("bioo.data2header", signature = "BiooList", 
 		def=function(object,headerfield,dataname,compress=TRUE,...){
 			temp = lapply(object, biooDataToHeader, headerfield,dataname,compress,...)
 			object@.Data=temp
