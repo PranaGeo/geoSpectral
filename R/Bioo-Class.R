@@ -58,12 +58,13 @@ setValidity("Bioo", function(object){
 			    return("Number of Unit elements is not equal the number of columns in slot DF")
 			
 #			if (length(object@LongName)>0)
-			  if (length(object@LongName)!=ncol(object@DF))
-			    return("The slot LongName should have the same length as the number of columns in slot DF")
-			
+			if (length(object@LongName)!=ncol(object@DF))
+				if(class(object)=="Bioo") {
+					return("The slot LongName should have the same length as the number of columns in slot DF")
+				}
 			if(length(object@SelectedIdx)!=0){
 				if(length(object@SelectedIdx)!=nrow(object@DF)){
-					return("The slot SelectedIdx should have the same length as the number of columns in slot DF")
+					return("The slot SelectedIdx should have the same length as the number of rows in slot DF")
 				}
 			}
 			if(length(object@InvalidIdx)!=0){

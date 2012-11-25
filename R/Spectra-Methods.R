@@ -15,6 +15,7 @@ setAs(from="Spectra", to="Bioo", def=function(from){
 			} else {
 				output = new("Bioo",DF=from@DF,LongName=from@LongName,Units=from@Units)
 			}
+			validObject(output)
 			return(output)
 		})
 
@@ -61,6 +62,7 @@ setAs(from="data.frame", to="Spectra", def=function(from){
 			} else {
 				stop("One of the required attributes are not found : Wavelengths, Units or ShortName")
 			}
+			validObject(outS)
 			return(outS)
 		})
 
@@ -118,6 +120,25 @@ setMethod("nrow", signature = "Spectra",
 #########################################################################
 setMethod("head", signature = "Spectra", 
 		def = function (x){  return(head(x@DF)) })
+
+#########################################################################
+# Method : spc.rbind
+#########################################################################
+setMethod("spc.rbind", signature = "Spectra", def = function (...){
+			if(all(!(names(..1)==names(..2))))
+				stop("Names of all columns should be the same")
+			if(all(!(spc.getwavelengths(..1)==spc.getwavelengths(..2))))
+				stop("Wavelengths of all input Spectra objects should be the same")
+			outt = ..1
+			outt@DF = rbind(..1@DF,..2@DF)
+			#TO BE USED LATER : match.call(expand.dots = F)$...
+			
+			outt@Ancillary = spc.rbind(..1@Ancillary,..2@Ancillary)
+			outt@SelectedIdx = logical()
+			outt@InvalidIdx = logical()
+			validObject(outt)
+			return(outt) 
+		})
 
 #########################################################################
 # Method : Arith
@@ -370,7 +391,7 @@ setMethod(f="spc.cname.construct", signature="Spectra",
 		definition=function(object,value){
 			if(missing(value))
 				value = object@ShortName
-			return(paste(value,GetWavelengths(object),sep="_"))
+			return(paste(value,spc.getwavelengths(object),sep="_"))
 		})
 
 #########################################################################
@@ -475,7 +496,8 @@ setMethod("subset",  signature="Spectra",
 # Method : bioo.add.column
 #########################################################################
 setMethod("bioo.add.column", signature="Spectra", definition= function (object, name, value, units,longname) {
-			object@Ancillary = bioo.add.column(object@Ancillary,name=name,value=value,units=units,longname=longname)
+			A = bioo.add.column(object@Ancillary,name=name,value=value,units=units,longname=longname)
+			object@Ancillary = A 
 			validObject(object)
 			return(object)
 		})

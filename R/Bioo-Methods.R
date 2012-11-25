@@ -88,6 +88,22 @@ setMethod("cbind", signature = "Bioo", def = function (..., deparse.level = 1){
 		})
 
 #########################################################################
+# Method : spc.rbind
+#########################################################################
+setGeneric (name= "spc.rbind",
+		def=function(...){standardGeneric("spc.rbind")})
+setMethod("spc.rbind", signature = "Bioo", def = function (...){
+			if(all(!(names(..1)==names(..2))))
+				stop("Names of all columns should be the same")
+			outt = ..1
+			outt@DF = rbind(..1@DF,..2@DF)
+			outt@SelectedIdx = logical()
+			outt@InvalidIdx = logical()
+			validObject(outt)
+			return(outt) 
+		})
+
+#########################################################################
 # Method : $
 #########################################################################
 setMethod("$", signature = "Bioo", 
@@ -579,11 +595,18 @@ setMethod("bioo.add.column", signature="Bioo", definition= function (object, nam
 				stop(paste('The input variable "units" should have the same lengths as the number of columns of "value"'))
 			if (missing(longname))
 				longname = name
-			
-			object@DF = cbind(object@DF,value)
-			object@Units = c(object@Units, units)
-			object@LongName = c(object@LongName,longname)
-			
+			if(nrow(object)>0 & nrow(object)!=nrow(value))
+				stop(paste('The number of rows do not match'))			
+				
+			if(nrow(object)==0){
+				object@DF = value
+				object@Units = c(object@Units, units)
+				object@LongName = c(object@LongName,longname)
+			} else{
+				object@DF = cbind(object@DF,value)
+				object@Units = c(object@Units, units)
+				object@LongName = c(object@LongName,longname)
+			}
 			validObject(object)
 			return(object)
 		})
