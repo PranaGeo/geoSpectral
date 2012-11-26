@@ -93,10 +93,22 @@ setMethod("cbind", signature = "Bioo", def = function (..., deparse.level = 1){
 setGeneric (name= "spc.rbind",
 		def=function(...){standardGeneric("spc.rbind")})
 setMethod("spc.rbind", signature = "Bioo", def = function (...){
-			if(all(!(names(..1)==names(..2))))
+			DFL=sapply(list(...),function(x) names(x),simplify=F)
+			if(!all(sapply(1:length(DFL),function(x) all(DFL[[x]]==DFL[[1]]))))
 				stop("Names of all columns should be the same")
+#			dots <-match.call(expand.dots=F)$...
+
+			#Exctract the input arguments as a list of data frames
+			DFL=sapply(list(...),function(x) x@DF,simplify=F)
+			
+			#Check that all the inputs are Bioo objects
+			if(!all(sapply(list(...), class)=="Bioo"))
+				stop("All input arguments should be Bioo objects")
+			
 			outt = ..1
-			outt@DF = rbind(..1@DF,..2@DF)
+			#apply rbind() on the DF slot of the input arguments 
+			outt@DF = do.call(rbind,DFL)
+			
 			outt@SelectedIdx = logical()
 			outt@InvalidIdx = logical()
 			validObject(outt)

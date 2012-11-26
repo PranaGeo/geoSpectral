@@ -125,10 +125,21 @@ setMethod("head", signature = "Spectra",
 # Method : spc.rbind
 #########################################################################
 setMethod("spc.rbind", signature = "Spectra", def = function (...){
-			if(all(!(names(..1)==names(..2))))
+			DFL=sapply(list(...),function(x) names(x),simplify=F)
+			#Check that column names match
+			if(!all(sapply(1:length(DFL),function(x) all(DFL[[x]]==DFL[[1]]))))
 				stop("Names of all columns should be the same")
-			if(all(!(spc.getwavelengths(..1)==spc.getwavelengths(..2))))
+
+			DFL=sapply(list(...),ncol)
+			#Check that the number of columns match 
+			if(!all(sapply(1:length(DFL),function(x) all(DFL[[x]]==DFL[[1]]))))
+				stop("All input Spectra objects should have the same number of columns")
+			
+			DFL=sapply(list(...),spc.getwavelengths)
+			#Check that all Wavelengths are equal
+			if(!all(apply(DFL,1,diff)==0))
 				stop("Wavelengths of all input Spectra objects should be the same")
+
 			outt = ..1
 			outt@DF = rbind(..1@DF,..2@DF)
 			#TO BE USED LATER : match.call(expand.dots = F)$...
@@ -404,13 +415,11 @@ mat_identify <- function(x, y, ...){
 	} else {
 		index <- max(which(x <= l$x))
 		f <- (l$x - x[index]) / diff(x[index+(0:1)])
-		#	browser()
 		
 		yi <- f * (y[index+1,] - y[index,] ) + y[index,]
 		result <- which.min(abs(yi-l$y))
 		lines(x, y[,result], lwd=2, col="red")
 	}
-#	browser()
 #  text(l, label=colnames(y)[result])
 	return(result)
 }
@@ -476,7 +485,7 @@ setMethod("subset",  signature="Spectra",
 			else {
 				nl <- as.list(seq_along(x@DF))
 				names(nl) <- names(x@DF)
-#					browser()
+
 				vars <- eval(substitute(select), nl, parent.frame())
 				if(!(vars %in% names(x@DF)))
 					stop(paste("The select variables", vars, "is not a spectral column name"))
