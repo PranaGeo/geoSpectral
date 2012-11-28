@@ -189,7 +189,7 @@ setReplaceMethod(f="bioo.setheader", signature="BiooList",
 #########################################################################
 setMethod("bioo.data2header", signature = "BiooList", 
 		def=function(object,headerfield,dataname,compress=TRUE,...){
-			temp = lapply(object, biooDataToHeader, headerfield,dataname,compress,...)
+			temp = lapply(object, bioo.data2header, headerfield,dataname,compress,...)
 			object@.Data=temp
 			return(object)
 		})
