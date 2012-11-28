@@ -455,33 +455,6 @@ setMethod("bioo.interp.time", signature = "Bioo",
 		})
 
 #########################################################################
-# Method : bioo.export.shapefile.point
-#########################################################################
-#Uses rgdal::writeOGR() to export a Bioo element as a point shapefile
-setGeneric(name="bioo.export.shapefile.point",
-		def=function(input,filename){standardGeneric("bioo.export.shapefile.point")})
-setMethod("bioo.export.shapefile.point", signature = "Bioo", def=function(input, filename){
-			if(missing(filename)){
-				filename = file.path(".",paste(input@ShortName,".shp",sep=""))
-			}
-			layern = strsplit(basename(filename),"\\.")[[1]][1]
-			dirn = dirname(filename)
-			
-			if(!any(grep("LAT",names(input))) | !any(grepl("LONG",names(input))))
-				stop("Could not find the columns LAT and LONG")
-			if ( ! (all(is.finite(input$LAT)) & all(is.finite(input$LAT))) )
-				stop("LAT and LONG columns should be finite numerics")
-			if (file.exists(filename))
-				stop(paste("The file",filename, "exists. Please delete it first"))
-			
-			out = as(input,"data.frame")
-			coordinates(out) = c("LONG","LAT")
-			proj4string(out)=CRS("+init=epsg:4326")
-			writeOGR(out, dirn, layer=layern,driver="ESRI Shapefile")
-			print(paste("Saved as", file.path(filename)))
-			
-		})
-#########################################################################
 # Method : bioo.invalid.detect
 #########################################################################
 setGeneric(name= "bioo.invalid.detect",
@@ -541,52 +514,6 @@ setMethod("subset",  signature="Bioo",
 			validObject(x)
 			return(x)
 		})
-
-#########################################################################
-# Method : bioo.export.ODV
-#########################################################################
-setGeneric(name= "bioo.export.ODV",
-		def=function(input, filename,Type="*") {standardGeneric("bioo.export.ODV")})
-setMethod("bioo.export.ODV", signature="Bioo", definition= function(input, filename,Type="*") {
-#Add the required Type column
-	input = bioo.add.column(input, name="Type",value=Type,units="")
-	
-#Prepare metadata
-	metadata=paste("//<Creator>", "Servet Cizmeli for AQUATEL (sac@arctus.ca)", "</Creator>", sep="")
-	metadata=rbind(metadata,paste("//<CreateTime>", Sys.time(), "</CreateTime>", sep=""))
-	metadata=rbind(metadata,paste("//<Software>", R.version$version.string, "</Software>", sep=""))
-	metadata=rbind(metadata,paste("//<Source> </Source>", sep=""))
-	metadata=rbind(metadata,paste("//<SourceLastModified>", Sys.time(), "</SourceLastModified>", sep=""))
-	metadata=rbind(metadata,paste("//<MissingValueIndicators>", "NA", "</MissingValueIndicators>", sep=""))
-	metadata=rbind(metadata,paste("//<DataField>", "Ocean", "</DataField>", sep=""))
-	metadata=rbind(metadata,paste("//<DataType>", "Profiles", "</DataType>", sep=""))
-	
-#Set the data column names as required by the ODV format
-	clmnnames = names(input)
-	clmnnames[grep("DEPTH", clmnnames)]="Depth [m]"
-	clmnnames[grep("LONG", clmnnames)]="Longitude [degrees_east]"
-	clmnnames[grep("LAT", clmnnames)]="Latitude [degrees_north]"
-	clmnnames[grep("STATION", clmnnames)]="Station"
-	clmnnames[grep("CRUISE", clmnnames)]="Cruise"
-	clmnnames[grep("TIME", clmnnames)]="yyyy-mm-ddThh:mm:ss.sss"
-	clmnnames[grep("TEMPERATURE", clmnnames)]="Temperature [oC]"
-	clmnnames[grep("SALINITY", clmnnames)]="Salinity [psu]"
-#	clmnnames[grep("Tchla", clmnnames)]="Tchla [mg/m3]"
-#	clmnnames[grep("Acdom440", clmnnames)]="Acdom440 [m-1]"
-#	clmnnames[grep("Acdom350", clmnnames)]="Acdom350 [m-1]"
-#	clmnnames[grep("Anap443", clmnnames)]="Anap443 [m-1]"
-#	clmnnames[grep("Aphy443", clmnnames)]="Aphy443 [m-1]"
-	
-#Write table in ODV spreadsheet format on disk
-	print(paste("writing", filename ))
-	write.table(metadata, filename , row.names=F, col.names=F,append=F, quote=F)
-	write.table(clmnnames, filename, row.names=F, col.names=F,append=T, quote=F,eol="\t")
-	write.table("", filename, row.names=F, col.names=F,append=T, quote=F)
-	if (class(input)=="Spectral")
-		write.table(cbind(input@DF,input@Ancillary@DF), filename, sep="\t", row.names=F, col.names=F,append=T,quote=F)
-	if (class(input)=="Bioo")
-		write.table(input@DF, filename, sep="\t", row.names=F, col.names=F,append=T,quote=F)
-})
 
 #########################################################################
 # Method : bioo.add.column
