@@ -83,7 +83,7 @@ setMethod("head", signature = "Bioo",
 # Method : cbind
 #########################################################################
 setMethod("cbind", signature = "Bioo", def = function (..., deparse.level = 1){
-			browser()
+			stop("Not implemented yet!")
 			return() 
 		})
 
@@ -525,6 +525,9 @@ setMethod("bioo.add.column", signature="Bioo", definition= function (object, nam
 				stop(paste("The column", name, "already exists. Consider using the methods $, [ or [["))
 			} 		  
 			if(!is.data.frame(value)){
+				if(length(value)==1)
+					value = rep(value, nrow(object))
+				
 				value = data.frame(value)
 				names(value) = name
 			}			
@@ -534,6 +537,7 @@ setMethod("bioo.add.column", signature="Bioo", definition= function (object, nam
 				stop(paste('The input variable "units" should have the same lengths as the number of columns of "value"'))
 			if (missing(longname))
 				longname = name
+				
 			if(nrow(object)>0 & nrow(object)!=nrow(value))
 				stop(paste('The number of rows do not match'))			
 				
