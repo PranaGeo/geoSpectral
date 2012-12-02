@@ -540,3 +540,13 @@ setMethod("spc.add.channel", signature="Spectra", definition= function (object, 
 			validObject(object)
 			return(object)
 		})
+
+#########################################################################
+# Method : bioo.setheader
+#########################################################################
+setReplaceMethod(f="bioo.setheader", signature="Spectra",
+		definition=function(object,value,...){
+			object@header<-value
+			validObject(object)
+			return(object)
+		})
