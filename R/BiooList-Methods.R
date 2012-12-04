@@ -51,6 +51,7 @@ setMethod("plot.grid", "BiooList", function (x,FUN, nnrow, nncol, ...){
 			for (I in 1:length(x)) {
 				if(nrow(x[[I]])>1){
 					if(x@by!="VariousVariables"){
+            browser()
 						tit = paste(x@by, ":", as.character(x[[I]]$STATION[1]))
 						eval_txt = paste(FUN, "(x[[I]],title=tit,...)",sep="")
 					}
@@ -177,7 +178,7 @@ setReplaceMethod(f="bioo.setheader", signature="BiooList",
 				value = rep(value,length(object))
 			
 			a=sapply(1:length(object), function(x) {
-						object[[x]] = SetBiooHeader(object[[x]],value[x])
+						object[[x]] = bioo.setheader(object[[x]],value[x])
 					})
 			
 			validObject(object)

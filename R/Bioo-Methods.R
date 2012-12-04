@@ -226,7 +226,7 @@ setReplaceMethod(f="bioo.setheader", signature="Bioo",
 # Method : bioo.getselected.idx
 #########################################################################
 setGeneric (name= "bioo.getselected.idx",
-		def=function(object){standardGeneric("bioo.getselected_idx")})
+		def=function(object){standardGeneric("bioo.getselected.idx")})
 setMethod("bioo.getselected.idx", signature = "Bioo", 
 		def = function (object){
 			return(object@SelectedIdx)
@@ -412,30 +412,30 @@ setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=20,
 #########################################################################
 # Method : plot.depth.by.station
 #########################################################################
-setGeneric (name= "plot.depth.by.station",
-				def=function(input,fname){standardGeneric("plot.depth.by.station")})
-setMethod("plot.depth.by.station", signature="Bioo", function(input,fname) { 
-			Stat=character()
-			mymax = sapply(input,function(x) max(x$X440,na.rm=TRUE));mymax=max(mymax,na.rm=TRUE)*1.1
-			mymin = sapply(input,function(x) min(x$X440,na.rm=TRUE));mymin=min(mymin,na.rm=TRUE)*0.9
-			dmax = max(sapply(input,function(x) max(x$DEPTH,na.rm=TRUE)),na.rm=TRUE)
-			fname = paste(fname, "_", gsub("/","_ov_",input[[I]]@ShortName),".png",sep="")
-			png(file=fname)
-			for (I in 1:length(input)) {
-				xlab = paste(input[[I]]@ShortName, " [ ", input[[I]]@Units[1], " ]",sep="")
-				if (I==1) {
-					plot(input[[I]][["X440"]],input[[I]][["DEPTH"]],
-							col=I,lwd=3,xlim=c(mymin,mymax),ylim=c(dmax,-0.1),type="l",xlab="",ylab="",cex.axis=1.4)
-					points(input[[I]][["X440"]],input[[I]][["DEPTH"]],col=I,bg=I,pch=21)
-				}
-				else
-					plot.depth(input[[I]], "X440",add=T,"col"=I,lwd=3,xlab=xlab)
-				Stat[I] = input[[I]]$STATION[1] 
-			}
-			legend("bottomright",Stat,col=1:I,fill=1:I)
-			dev.off()
-			print(paste("Saved",fname))
-		})
+# setGeneric (name= "plot.depth.by.station",
+# 				def=function(input,fname){standardGeneric("plot.depth.by.station")})
+# setMethod("plot.depth.by.station", signature="Bioo", function(input,fname) { 
+# 			Stat=character()
+# 			mymax = sapply(input,function(x) max(x$X440,na.rm=TRUE));mymax=max(mymax,na.rm=TRUE)*1.1
+# 			mymin = sapply(input,function(x) min(x$X440,na.rm=TRUE));mymin=min(mymin,na.rm=TRUE)*0.9
+# 			dmax = max(sapply(input,function(x) max(x$DEPTH,na.rm=TRUE)),na.rm=TRUE)
+# 			fname = paste(fname, "_", gsub("/","_ov_",input[[I]]@ShortName),".png",sep="")
+# 			png(file=fname)
+# 			for (I in 1:length(input)) {
+# 				xlab = paste(input[[I]]@ShortName, " [ ", input[[I]]@Units[1], " ]",sep="")
+# 				if (I==1) {
+# 					plot(input[[I]][["X440"]],input[[I]][["DEPTH"]],
+# 							col=I,lwd=3,xlim=c(mymin,mymax),ylim=c(dmax,-0.1),type="l",xlab="",ylab="",cex.axis=1.4)
+# 					points(input[[I]][["X440"]],input[[I]][["DEPTH"]],col=I,bg=I,pch=21)
+# 				}
+# 				else
+# 					plot.depth(input[[I]], "X440",add=T,"col"=I,lwd=3,xlab=xlab)
+# 				Stat[I] = input[[I]]$STATION[1] 
+# 			}
+# 			legend("bottomright",Stat,col=1:I,fill=1:I)
+# 			dev.off()
+# 			print(paste("Saved",fname))
+# 		})
 
 #########################################################################
 # Method : bioo.interp.time
