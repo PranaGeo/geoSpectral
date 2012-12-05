@@ -51,9 +51,8 @@ setMethod("spc.plot.grid", "BiooList", function (x,FUN, nnrow, nncol, ...){
 			for (I in 1:length(x)) {
 				if(nrow(x[[I]])>1){
 					if(x@by!="VariousVariables"){
-            browser()
-						tit = paste(x@by, ":", as.character(x[[I]]$STATION[1]))
-						eval_txt = paste(FUN, "(x[[I]],title=tit,...)",sep="")
+						tit = paste(x@by, ":", as.character(bioo.getheader(x[[I]],x@by)))
+						eval_txt = paste(FUN, "(x[[I]],main=tit,...)",sep="")
 					}
 					else{
 						eval_txt = paste(FUN, "(x[[I]],...)",sep="")
