@@ -301,9 +301,10 @@ setMethod("[",
 #		})
 
 #########################################################################
-# Method : plot
+# Method : spc.plot
 #########################################################################
-setMethod("plot", "Spectra", function (x, Y, maxSp, lab_cex,...){						
+setGeneric("spc.plot",function(x,Y,...){standardGeneric("spc.plot")})
+setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,...){						
 			if (length(x@InvalidIdx)==0)
 				x@InvalidIdx = rep(FALSE,nrow(x@DF))
 			
@@ -346,10 +347,10 @@ setMethod("plot", "Spectra", function (x, Y, maxSp, lab_cex,...){
 			grid(col="black")
 		})
 #########################################################################
-# Method : lines
+# Method : spc.lines
 #########################################################################
-setMethod("lines",signature = "Spectra",
-		definition = function(x,...){
+setGeneric("spc.lines",function(x,...){standardGeneric("spc.lines")})
+setMethod("spc.lines",signature = "Spectra",definition = function(x,...){
 			a=sapply(1:nrow(x@DF), function(S) {
 						lines(x@Wavelengths, x@DF[S,],...)})
 		})
@@ -441,7 +442,6 @@ setMethod("spc.select", signature = "Spectra",
 				ExSel = rep(FALSE, nrow(object@DF))			
 			Sel = rep(FALSE, nrow(object@DF))			
 			
-			plot(object,col="gray")
 			lbd = GetWavelengths(object)
 			idx = mat_identify(lbd, t(object@DF))
 			print(paste("Selected row",idx))
