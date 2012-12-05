@@ -303,7 +303,7 @@ setMethod("[",
 #########################################################################
 # Method : plot
 #########################################################################
-setMethod("plot", "Spectra", function (x, Y, maxSp, ...){						
+setMethod("plot", "Spectra", function (x, Y, maxSp, lab_cex,...){						
 			if (length(x@InvalidIdx)==0)
 				x@InvalidIdx = rep(FALSE,nrow(x@DF))
 			
@@ -325,16 +325,23 @@ setMethod("plot", "Spectra", function (x, Y, maxSp, ...){
 				mycol = 1:6
 			x@Units = gsub("\\[\\]","",x@Units)
 			x@Units = gsub("\\[ \\]","",x@Units)
+
+			ylab= paste(x@LongName[1], " [", x@Units[1], "]",sep="")
+			xlab="Wavelength [nm]"
+
 			if(any(grepl("col",names(match.call())))) {
 				matplot(x@Wavelengths,t(x@DF[Xidx,]),#lab=x@Wavelengths,#xaxt="n",
-						ylab= paste(x@LongName[1], " [", x@Units[1], "]",sep=""),
-						xlab="Wavelength [nm]", type="l", pch=19,cex=0.3, ...)
+						ylab= "",xlab="", type="l", pch=19,cex=0.3, ...)
 			} else {
 				matplot(x@Wavelengths,t(x@DF[Xidx,]),#lab=x@Wavelengths,#xaxt="n",
-						ylab= paste(x@LongName[1], " [", x@Units[1], "]",sep=""),
-						xlab="Wavelength [nm]", type="l", pch=19,cex=0.3, col=mycol, ...)
-				
+						ylab= "",xlab="", type="l", pch=19,cex=0.3, col=mycol, ...)
 			}
+			if(missing(lab_cex))
+				lab_cex = 1
+			
+			mtext(xlab,side=1,line=2,cex=lab_cex)
+			mtext(ylab,side=2,line=2,cex=lab_cex)
+			
 			abline(h=0)
 			grid(col="black")
 		})

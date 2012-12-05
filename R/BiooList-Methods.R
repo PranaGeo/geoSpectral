@@ -37,27 +37,32 @@ setAs(from="BiooList", to="Bioo", def=function(from){
 #########################################################################
 setGeneric (name= "spc.plot.grid",
 		def=function(x,FUN, nnrow, nncol,...){standardGeneric("spc.plot.grid")})
-setMethod("spc.plot.grid", "BiooList", function (x,FUN, nnrow, nncol, ...){
+setMethod("spc.plot.grid", "BiooList", function (x,FUN, nnrow, nncol, mar, oma, lab_cex, ...){
 			nb_spc = length(which(sapply(x, inherits, "Bioo")))
 			mypar = par()
 			nrow = ceiling(nb_spc/nncol)
 			
 #			FUN <- match.fun(FUN)
+			if(missing(mar))
+				mar = c(4,4.5,1,0.5)
+			if(missing(oma))
+				oma = c(0,0,0,0)#c(1.5,2,1,1)
+			if(missing(lab_cex))
+				lab_cex = 1
 			
-			mar = c(4,4,1,0.5)
-			oma = c(0,0,0,0)#c(1.5,2,1,1)
 			par(mfrow=c(nnrow,nncol), mar=mar, oma=oma)
 			
 			for (I in 1:length(x)) {
-				if(nrow(x[[I]])>1){
+				if(1){ #(nrow(x[[I]])>1){
 					if(x@by!="VariousVariables"){
 						tit = paste(x@by, ":", as.character(bioo.getheader(x[[I]],x@by)))
-						eval_txt = paste(FUN, "(x[[I]],main=tit,...)",sep="")
 					}
 					else{
-						eval_txt = paste(FUN, "(x[[I]],...)",sep="")
+						tit=""#paste(x[[I]]@ShortName)
 					}
+					eval_txt = paste(FUN, "(x[[I]],lab_cex=lab_cex,...)",sep="")
 					eval(parse(text=eval_txt))
+					title(main=tit,mgp=c(2,1,0))
 					
 					if (par()$mfg[1]==par()$mfg[3] & par()$mfg[2]==par()$mfg[4] & I<length(x)) {
 						dev.new()
@@ -68,6 +73,44 @@ setMethod("spc.plot.grid", "BiooList", function (x,FUN, nnrow, nncol, ...){
 			par(mfrow=mypar$mfrow,mar=mypar$mar,oma=mypar$oma)
 		})
 
+#########################################################################
+# Method : spc.plot.overlay
+#########################################################################
+setGeneric (name= "spc.plot.overlay",
+		def=function(x,FUN, nnrow, nncol,...){standardGeneric("spc.plot.overlay")})
+setMethod("spc.plot.overlay", "BiooList", function (x,FUN, mar, oma, lab_cex, ...){
+			mypar = par()
+			
+#			FUN <- match.fun(FUN)
+			if(missing(mar))
+				mar = c(4,4.5,1,0.5)
+			if(missing(oma))
+				oma = c(0,0,0,0)#c(1.5,2,1,1)
+			if(missing(lab_cex))
+				lab_cex = 1
+			
+			par(mar=mar, oma=oma)
+			
+			for (I in 1:length(x)) {
+				if(1){ #(nrow(x[[I]])>1){
+					if(x@by!="VariousVariables"){
+						tit = paste(x@by, ":", as.character(bioo.getheader(x[[I]],x@by)))
+					}
+					else{
+						tit=""#paste(x[[I]]@ShortName)
+					}
+					eval_txt = paste(FUN, "(x[[I]],lab_cex=lab_cex,...)",sep="")
+					eval(parse(text=eval_txt))
+					title(main=tit,mgp=c(2,1,0))
+					
+					if (par()$mfg[1]==par()$mfg[3] & par()$mfg[2]==par()$mfg[4] & I<length(x)) {
+						dev.new()
+						par(mfrow=c(nnrow,nncol), mar=mar, oma=oma)
+					}				
+				}
+			}
+			par(mfrow=mypar$mfrow,mar=mypar$mar,oma=mypar$oma)
+		})
 #########################################################################
 # Method : subset
 #########################################################################

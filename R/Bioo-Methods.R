@@ -283,7 +283,7 @@ setReplaceMethod(f="bioo.setinvalid.idx", signature="Bioo",
 #########################################################################
 setGeneric (name= "plot.time",
 		def=function(object, ...){standardGeneric("plot.time")})
-setMethod("plot.time", signature="Bioo", function (object,Y,maxSp=50, ...){
+setMethod("plot.time", signature="Bioo", function (object,Y,maxSp=50,lab_cex, ...){
 			idx = as(1:ncol(object@DF), "logical")
 			
 			if (length(object@InvalidIdx)==0)
@@ -302,9 +302,15 @@ setMethod("plot.time", signature="Bioo", function (object,Y,maxSp=50, ...){
 				else
 					Y = names(object)
 			}
+			if(missing(lab_cex))
+				lab_cex = 1
+			
 			matplot(x[!object@InvalidIdx], 
 					object@DF[!object@InvalidIdx,Y], type="l", pch=19,cex=0.3,
-					xlab=xlb, ylab=ylb, ...)
+					xlab="", ylab="", ...)
+			mtext(xlab,side=1,line=2,cex=lab_cex)
+			mtext(ylab,side=2,line=2,cex=lab_cex)
+			
 			grid(col="black")			
 		})
 
@@ -313,7 +319,7 @@ setMethod("plot.time", signature="Bioo", function (object,Y,maxSp=50, ...){
 #########################################################################
 setGeneric (name= "plot.depth",
 		def=function(object, ...){standardGeneric("plot.depth")})
-setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=20, 
+setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=20,lab_cex,
 				title, add=FALSE, xlab=NULL, ylab=NULL, ylim=NULL,...){
 			
 			idx = as(1:ncol(object@DF), "logical")
@@ -381,8 +387,11 @@ setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=20,
 					
 					matpoints(myX,myY,xlab="",ylab="",pch=19,cex=0.4,ylim=ylim,...)
 					
-					mtext(ylab,side=2,line=3,cex=1.6)
-					mtext(xlab,side=1,line=3,cex=1.6)
+					if(missing(lab_cex))
+						lab_cex = 1
+					
+					mtext(ylab,side=2,line=3,cex=lab_cex)
+					mtext(xlab,side=1,line=3,cex=lab_cex)
 					grid(col="black")		
 				}else{
 #			for (I in 1:length(u_units)){
