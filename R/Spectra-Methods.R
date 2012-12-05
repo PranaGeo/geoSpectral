@@ -15,6 +15,7 @@ setAs(from="Spectra", to="Bioo", def=function(from){
 			} else {
 				output = new("Bioo",DF=from@DF,LongName=from@LongName,Units=from@Units)
 			}
+			output@header = from@header
 			validObject(output)
 			return(output)
 		})
@@ -275,8 +276,7 @@ setMethod("[",
 			if (length(x@InvalidIdx)>1)
 				x@InvalidIdx = x@InvalidIdx[i] 
 			
-			x@SelectedIdx = logical()
-			
+			x@SelectedIdx = logical()			
 			return(x)
 		})
 #########################################################################
