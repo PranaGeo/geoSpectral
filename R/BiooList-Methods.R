@@ -33,11 +33,11 @@ setAs(from="BiooList", to="Bioo", def=function(from){
 })
 
 #########################################################################
-# Method : plot.grid
+# Method : spc.plot.grid
 #########################################################################
-setGeneric (name= "plot.grid",
-		def=function(x,FUN, nnrow, nncol,...){standardGeneric("plot.grid")})
-setMethod("plot.grid", "BiooList", function (x,FUN, nnrow, nncol, ...){
+setGeneric (name= "spc.plot.grid",
+		def=function(x,FUN, nnrow, nncol,...){standardGeneric("spc.plot.grid")})
+setMethod("spc.plot.grid", "BiooList", function (x,FUN, nnrow, nncol, ...){
 			nb_spc = length(which(sapply(x, inherits, "Bioo")))
 			mypar = par()
 			nrow = ceiling(nb_spc/nncol)
