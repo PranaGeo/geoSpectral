@@ -350,7 +350,7 @@ setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,...){
 # Method : spc.lines
 #########################################################################
 setGeneric("spc.lines",function(x,...){standardGeneric("spc.lines")})
-setMethod("spc.lines",signature = "Spectra",definition = function(x,...){
+setMethod("spc.lines",signature = "Spectra",definition = function(x,lab_cex,...){
 			a=sapply(1:nrow(x@DF), function(S) {
 						lines(x@Wavelengths, x@DF[S,],...)})
 		})
@@ -485,7 +485,7 @@ setMethod("subset",  signature="Spectra",
 				if (length(x@InvalidIdx)>0)
 					x@InvalidIdx = x@InvalidIdx[xidx]
 				if (nrow(x@Ancillary)>0)
-					x@Ancillary@DF = x@Ancillary@DF[xidx,]				
+					x@Ancillary@DF = x@Ancillary@DF[xidx,,drop=drop]					
 			}	
 			if (missing(select)) 
 				vars <- TRUE
