@@ -330,15 +330,16 @@ setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,...){
 			ylab= paste(x@LongName[1], " [", x@Units[1], "]",sep="")
 			xlab="Wavelength [nm]"
 
-			if(any(grepl("col",names(match.call())))) {
-				matplot(x@Wavelengths,t(x@DF[Xidx,]),#lab=x@Wavelengths,#xaxt="n",
-						ylab= "",xlab="", type="l", pch=19,cex=0.3, ...)
-			} else {
-				matplot(x@Wavelengths,t(x@DF[Xidx,]),#lab=x@Wavelengths,#xaxt="n",
-						ylab= "",xlab="", type="l", pch=19,cex=0.3, col=mycol, ...)
-			}
 			if(missing(lab_cex))
 				lab_cex = 1
+			
+			if(any(grepl("col",names(match.call())))) {
+				matplot(x@Wavelengths,t(x@DF[Xidx,]),#lab=x@Wavelengths,#xaxt="n",
+						ylab= "",xlab="", type="l", pch=19,cex=0.3, cex.axis=lab_cex, ...)
+			} else {
+				matplot(x@Wavelengths,t(x@DF[Xidx,]),#lab=x@Wavelengths,#xaxt="n",
+						ylab= "",xlab="", type="l", pch=19,cex=0.3, cex.axis=lab_cex, col=mycol, ...)
+			}
 			
 			mtext(xlab,side=1,line=2,cex=lab_cex)
 			mtext(ylab,side=2,line=2,cex=lab_cex)
@@ -350,7 +351,7 @@ setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,...){
 # Method : spc.lines
 #########################################################################
 setGeneric("spc.lines",function(x,...){standardGeneric("spc.lines")})
-setMethod("spc.lines",signature = "Spectra",definition = function(x,lab_cex,...){
+setMethod("spc.lines",signature = "Spectra",definition = function(x,...){
 			a=sapply(1:nrow(x@DF), function(S) {
 						lines(x@Wavelengths, x@DF[S,],...)})
 		})
