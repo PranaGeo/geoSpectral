@@ -55,7 +55,8 @@ setMethod("spc.plot.grid", "BiooList", function (x,FUN, nnrow, nncol, mar, oma, 
 			for (I in 1:length(x)) {
 				if(1){ #(nrow(x[[I]])>1){
 					if(x@by!="VariousVariables"){
-						tit = paste(x@by, ":", as.character(bioo.getheader(x[[I]],x@by)))
+						#tit = paste(x@by, ":", as.character(bioo.getheader(x[[I]],x@by)))
+						tit = paste(as.character(bioo.getheader(x[[I]],x@by)))
 					}
 					else{
 						tit=""#paste(x[[I]]@ShortName)
@@ -78,38 +79,34 @@ setMethod("spc.plot.grid", "BiooList", function (x,FUN, nnrow, nncol, mar, oma, 
 #########################################################################
 setGeneric (name= "spc.plot.overlay",
 		def=function(x,FUN, nnrow, nncol,...){standardGeneric("spc.plot.overlay")})
-setMethod("spc.plot.overlay", "BiooList", function (x,FUN, mar, oma, lab_cex, ...){
+setMethod("spc.plot.overlay", "BiooList", function (x, lab_cex, ...){
 			mypar = par()
 			
-#			FUN <- match.fun(FUN)
-			if(missing(mar))
-				mar = c(4,4.5,1,0.5)
-			if(missing(oma))
-				oma = c(0,0,0,0)#c(1.5,2,1,1)
 			if(missing(lab_cex))
 				lab_cex = 1
 			
-			par(mar=mar, oma=oma)
-			
+			all_x = unlist(lapply(x,function(t) t@Wavelengths))
+			all_y = unlist(lapply(x,function(t) t@DF))
+			xlim = range(all_x)
+			ylim = range(all_y)
+			tit=""
 			for (I in 1:length(x)) {
-				if(1){ #(nrow(x[[I]])>1){
-					if(x@by!="VariousVariables"){
-						tit = paste(x@by, ":", as.character(bioo.getheader(x[[I]],x@by)))
-					}
-					else{
-						tit=""#paste(x[[I]]@ShortName)
-					}
-					eval_txt = paste(FUN, "(x[[I]],lab_cex=lab_cex,...)",sep="")
-					eval(parse(text=eval_txt))
-					title(main=tit,mgp=c(2,1,0))
-					
-					if (par()$mfg[1]==par()$mfg[3] & par()$mfg[2]==par()$mfg[4] & I<length(x)) {
-						dev.new()
-						par(mfrow=c(nnrow,nncol), mar=mar, oma=oma)
-					}				
+				if(x@by!="VariousVariables"){
+					#tit[I] = paste(x@by, ":", as.character(bioo.getheader(x[[I]],x@by)))
+					tit[I] = paste(as.character(bioo.getheader(x[[I]],x@by)))
 				}
-			}
-			par(mfrow=mypar$mfrow,mar=mypar$mar,oma=mypar$oma)
+				else{
+					tit[I]=as.character(I)#paste(x[[I]]@ShortName)
+				}
+				if(I==1)
+					eval_txt = paste("spc.plot", "(x[[I]],lab_cex=lab_cex,xlim=xlim,col=I,...)",sep="")
+				else
+					eval_txt = paste("spc.lines", "(x[[I]],lab_cex=lab_cex,ylim=ylim,col=I,...)",sep="")
+				eval(parse(text=eval_txt))				
+				#title(main=tit,mgp=c(2,1,0))
+			}#end for
+			legend("bottomright",tit,col=1:I,fill=1:I)
+			
 		})
 #########################################################################
 # Method : subset
