@@ -97,7 +97,7 @@ setMethod("spc.rbind", signature = "Bioo", def = function (...){
 			if(!all(sapply(1:length(DFL),function(x) all(DFL[[x]]==DFL[[1]]))))
 				stop("Names of all columns should be the same")
 #			dots <-match.call(expand.dots=F)$...
-
+			
 			#Exctract the input arguments as a list of data frames
 			DFL=sapply(list(...),function(x) x@DF,simplify=F)
 			
@@ -320,7 +320,7 @@ setMethod("plot.time", signature="Bioo", function (object,Y,maxSp=50,lab_cex, ..
 setGeneric (name= "plot.depth",
 		def=function(object, ...){standardGeneric("plot.depth")})
 setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=20,lab_cex,
-				title, add=FALSE, xlab=NULL, ylab=NULL, ylim=NULL,...){
+				title, add=FALSE, xlab=NULL, ylab=NULL, ylim=NULL,xlim=NULL,...){
 			
 			idx = as(1:ncol(object@DF), "logical")
 			depth=object$DEPTH
@@ -328,16 +328,6 @@ setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=20,lab_cex,
 			if (length(object@InvalidIdx)==0)
 				object@InvalidIdx = rep(FALSE,nrow(object@DF))		
 			
-			if(missing(ylab))
-				ylab = "Depth [m]"
-			
-			if(missing(xlab)) {
-				if (class(object)=="Spectra") {
-					xlab = paste(object@LongName[1], " [", object@Units,"]",sep="") 					
-				} else {
-					xlab = ""
-				}
-			}
 			if(missing(X)){
 				if(ncol(object)>maxSp)
 					X = seq(1,ncol(object),length.out=maxSp)
@@ -347,6 +337,20 @@ setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=20,lab_cex,
 			if (is.numeric(X))
 				X = names(object)[X]
 			
+			if(missing(ylab))
+				ylab = "Depth [m]"
+			
+			if(missing(xlab)) {
+				if (class(object)=="Spectra") {
+					xlab = paste(object@LongName[1], " [", object@Units[1],"]",sep="") 					
+				} else {
+					if(length(X)==1)
+						xlab =  paste(X, " [", object@Units[1],"]",sep="")					
+					else{
+						xlab = ""
+					}
+				}
+			}
 			if(missing(ylim)){
 				ylim = rev(range(pretty(depth[!object@InvalidIdx],n=10)))
 				ylim[2]=-0.1	
@@ -382,16 +386,19 @@ setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=20,lab_cex,
 				if(length(u_units)==1){	
 					if(add)
 						matlines(myX,myY,type="l",xlab="",ylab="",ylim=ylim,...)
-					else
-						matplot(myX,myY,type="l",xlab="",ylab="",ylim=ylim,...)
-					
+					else{
+						if (all(is.finite(xlim)))
+							matplot(myX,myY,type="l",cex.axis=lab_cex,xlab="",ylab="",ylim=ylim,xlim=xlim,...)
+						else
+							matplot(myX,myY,type="l",cex.axis=lab_cex,xlab="",ylab="",ylim=ylim,...)						
+					}
 					matpoints(myX,myY,xlab="",ylab="",pch=19,cex=0.4,ylim=ylim,...)
 					
 					if(missing(lab_cex))
 						lab_cex = 1
 					
-					mtext(ylab,side=2,line=3,cex=lab_cex)
-					mtext(xlab,side=1,line=3,cex=lab_cex)
+					mtext(ylab,side=2,line=2,cex=lab_cex)
+					mtext(xlab,side=1,line=2,cex=lab_cex)
 					grid(col="black")		
 				}else{
 #			for (I in 1:length(u_units)){
@@ -403,7 +410,7 @@ setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=20,lab_cex,
 						
 						plot(myX[,col_idx],myY,type="l", axes=F,pch=19,cex=0.3, ylim=ylim,col=I,xlab="",ylab="",...)
 						axis(my_sides[I], col=I, pretty(range(myX[,col_idx]),10))
-						mtext(my_sides[I],text=xlab,line=2)
+						mtext(my_sides[I],text=xlab,line=2,cex=lab_cex)
 						if (I==1)
 							box(); 	
 					}
@@ -411,13 +418,17 @@ setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=20,lab_cex,
 					mtext(2, text=ylb,line=2)
 					grid(col="black")	
 				}
+				#Draw the title if provided from the call
 				if(!missing(title))
 					title(title)
+				#Draw the legend
+				if(length(X)>1 & !add)
+					legend("bottomright",X,col=1:length(X),fill=1:length(X))
 			} else{
 				return(0)
 			}
 		})
-		
+
 #########################################################################
 # Method : plot.depth.by.station
 #########################################################################
@@ -546,10 +557,10 @@ setMethod("bioo.add.column", signature="Bioo", definition= function (object, nam
 				stop(paste('The input variable "units" should have the same lengths as the number of columns of "value"'))
 			if (missing(longname))
 				longname = name
-				
+			
 			if(nrow(object)>0 & nrow(object)!=nrow(value))
 				stop(paste('The number of rows do not match'))			
-				
+			
 			if(nrow(object)==0){
 				object@DF = value
 				object@Units = c(object@Units, units)
