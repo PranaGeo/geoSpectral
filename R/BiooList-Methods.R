@@ -78,30 +78,59 @@ setMethod("spc.plot.grid", "BiooList", function (x,FUN, nnrow, nncol, mar, oma, 
 # Method : spc.plot.overlay
 #########################################################################
 setGeneric (name= "spc.plot.overlay",
-		def=function(x,FUN, nnrow, nncol,...){standardGeneric("spc.plot.overlay")})
-setMethod("spc.plot.overlay", "BiooList", function (x, lab_cex, ...){
-			mypar = par()
-			
+		def=function(object, ...){standardGeneric("spc.plot.overlay")})
+setMethod("spc.plot.overlay", "BiooList", function (object, lab_cex, ...){
 			if(missing(lab_cex))
 				lab_cex = 1
 			
-			all_x = unlist(lapply(x,function(t) t@Wavelengths))
-			all_y = unlist(lapply(x,function(t) t@DF))
+			all_x = unlist(lapply(object,function(t) t@Wavelengths))
+			all_y = unlist(lapply(object,function(t) t@DF))
 			xlim = range(all_x)
 			ylim = range(all_y)
 			tit=""
-			for (I in 1:length(x)) {
-				if(x@by!="VariousVariables"){
-					#tit[I] = paste(x@by, ":", as.character(bioo.getheader(x[[I]],x@by)))
-					tit[I] = paste(as.character(bioo.getheader(x[[I]],x@by)))
+			for (I in 1:length(object)) {
+				if(object@by!="VariousVariables"){
+					#tit[I] = paste(object@by, ":", as.character(bioo.getheader(object[[I]],object@by)))
+					tit[I] = paste(as.character(bioo.getheader(object[[I]],object@by)))
 				}
 				else{
-					tit[I]=as.character(I)#paste(x[[I]]@ShortName)
+					tit[I]=as.character(I)#paste(object[[I]]@ShortName)
 				}
 				if(I==1)
-					eval_txt = paste("spc.plot", "(x[[I]],lab_cex=lab_cex,xlim=xlim,col=I,...)",sep="")
+					eval_txt = paste("spc.plot", "(object[[I]],lab_cex=lab_cex,xlim=xlim,col=I,...)",sep="")
 				else
-					eval_txt = paste("spc.lines", "(x[[I]],lab_cex=lab_cex,ylim=ylim,col=I,...)",sep="")
+					eval_txt = paste("spc.lines", "(object[[I]],lab_cex=lab_cex,ylim=ylim,col=I,...)",sep="")
+				eval(parse(text=eval_txt))				
+				#title(main=tit,mgp=c(2,1,0))
+			}#end for
+			legend("bottomright",tit,col=1:I,fill=1:I)
+			
+		})
+
+#########################################################################
+setGeneric (name= "spc.plot.depth.overlay",
+		def=function(object,X,...){standardGeneric("spc.plot.depth.overlay")})
+setMethod("spc.plot.depth.overlay", "BiooList", function (object, X, lab_cex, ...){
+			if(missing(lab_cex))
+				lab_cex = 1
+#			browser()
+			all_y = unlist(lapply(object,function(t) t$DEPTH))
+			all_x = unlist(lapply(object,function(t) t@DF[X]))
+			xlim = range(all_x)
+			ylim = range(all_y)
+			tit=""
+			for (I in 1:length(object)) {
+				if(object@by!="VariousVariables"){
+					#tit[I] = paste(object@by, ":", as.character(bioo.getheader(object[[I]],object@by)))
+					tit[I] = paste(as.character(bioo.getheader(object[[I]],object@by)))
+				}
+				else{
+					tit[I]=as.character(I)#paste(object[[I]]@ShortName)
+				}
+				if(I==1)
+					eval_txt = paste("plot.depth","(object[[I]],X,lab_cex=lab_cex,xlim=xlim,col=I,...)",sep="")
+				else
+					eval_txt =  paste("plot.depth","(object[[I]],X,add=T,lab_cex=lab_cex,xlim=xlim,col=I,...)",sep="")
 				eval(parse(text=eval_txt))				
 				#title(main=tit,mgp=c(2,1,0))
 			}#end for
