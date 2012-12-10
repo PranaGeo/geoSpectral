@@ -180,8 +180,11 @@ setMethod("[[", signature="Spectra",
 		})
 setReplaceMethod("[[",  signature="Spectra", definition=function(x, i, j, value) {
 			matched = 0
-			if (length(value)!=nrow(x))
+			if(class(value)=="data.frame")
+				stop("The input variable 'value' cannot be a data.frame")
+			if (length(value)!=nrow(x)){
 				stop("Replace value must have the same number or rows as the input object")
+			}
 			if (i %in% names(x@DF)){
 				matched = 1
 				x@DF[[i]] <- value
@@ -328,7 +331,7 @@ setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,...){
 			x@Units = gsub("\\[ \\]","",x@Units)
 
 			ylab= paste(x@LongName[1], " [", x@Units[1], "]",sep="")
-			xlab="Wavelength [nm]"
+			xlab=paste("Wavelength [",x@WavelengthUnit,"]",sep="")
 
 			if(missing(lab_cex))
 				lab_cex = 1

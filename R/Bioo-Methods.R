@@ -543,9 +543,9 @@ setMethod("subset",  signature="Bioo",
 setGeneric(name= "bioo.add.column",
 		def=function(object, name, value, units,longname){standardGeneric("bioo.add.column")})
 setMethod("bioo.add.column", signature="Bioo", definition= function (object, name, value, units,longname) {
-			if (name %in% names(object)){
-				stop(paste("The column", name, "already exists. Consider using the methods $, [ or [["))
-			} 		  
+#			if (name %in% names(object)){
+#				stop(paste("The column", name, "already exists. Consider using the methods $, [ or [["))
+#			} 
 			if(!is.data.frame(value)){
 				if(nrow(object)>0 && length(value)==1)
 					value = rep(value, nrow(object))
@@ -560,9 +560,9 @@ setMethod("bioo.add.column", signature="Bioo", definition= function (object, nam
 			if (missing(longname))
 				longname = name
 			
-			if(nrow(object)>0 & nrow(object)!=nrow(value))
+			if(nrow(object)>0 & nrow(object)!=nrow(value)){
 				stop(paste('The number of rows do not match'))			
-		
+			}
 			if(nrow(object)==0){
 				object@DF = value
 				object@Units = c(object@Units, units)
