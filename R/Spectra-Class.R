@@ -8,13 +8,19 @@
 setClass("Spectra", contains="Bioo", 
 		representation(
 				ShortName="character",
-				Wavelengths="numeric", Ancillary="Bioo"), 
-		prototype=prototype(DF=data.frame(),
-				ShortName="spvar2",Wavelengths=numeric(), Ancillary=new("Bioo")))
+				Wavelengths="numeric", 
+				WavelengthUnit = "character", 
+				Ancillary="Bioo"), 
+		prototype=prototype(
+				DF=data.frame(),
+				ShortName="spvar2",
+				Wavelengths=numeric(), 
+				WavelengthUnit = character(), 
+				Ancillary=new("Bioo")))
 
 setMethod("initialize",
 		signature(.Object = "Spectra"),
-		function (.Object, DF, ShortName, LongName, Wavelengths, Units, Ancillary, header,...) 
+		function (.Object, DF, ShortName, LongName, Wavelengths, Units, Ancillary, header,WavelengthUnit,...) 
 		{
 #			cat("---------Spectra::Initialize\n")
 			#Set defaults for ShortName
@@ -42,7 +48,9 @@ setMethod("initialize",
 			#Set the default header
 			if(missing(header))
 				header = .Object@header
-			
+			if(missing(WavelengthUnit))
+				WavelengthUnit = "nm"
+
 			.Object@Wavelengths=Wavelengths
 			.Object@Ancillary=Ancillary
 			.Object@Units=Units
@@ -50,14 +58,13 @@ setMethod("initialize",
 			.Object@ShortName=ShortName
 			.Object@LongName=LongName
 			.Object@header=header
-			
+			.Object@WavelengthUnit = WavelengthUnit
 			#			.Object=callNextMethod(.Object, DF=DF, ShortName=ShortName,
 #					LongName=LongName,Wavelengths=Wavelengths,Units=Units,Ancillary=Ancillary)
 			#			.Object <- callNextMethod()
 			
 			return(.Object)
-		}
-)
+		})
 
 setValidity("Spectra", function(object){
 #			cat("---------Spectra::setValidity\n")
