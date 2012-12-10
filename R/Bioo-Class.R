@@ -5,14 +5,22 @@
 #removeClass("Spectra")
 if (1) {
 	setClass("Bioo", 
-			representation(DF="data.frame", header="BiooHeader",
-					Units="character",LongName="character",
-					SelectedIdx="logical", InvalidIdx="logical"), 
-			prototype=prototype(DF=data.frame(),new("BiooHeader"),
-					Units=character(), LongName=character(), 
+			representation(
+					DF="data.frame", 
+					header="BiooHeader",
+					Units="character",
+					LongName="character",
+					SelectedIdx="logical", 
+					InvalidIdx="logical",
+					ProcessLog="list"), 
+			prototype=prototype(
+					DF=data.frame(),
+					header=new("BiooHeader"),
+					Units=character(), 
+					LongName=character(), 
 					SelectedIdx=logical(),
-					InvalidIdx=logical()))
-	
+					InvalidIdx=logical(),
+					ProcessLog=list(time)))
 }
 setMethod("initialize",
 		signature(.Object = "Bioo"),
