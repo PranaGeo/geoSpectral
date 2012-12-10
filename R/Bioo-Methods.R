@@ -382,6 +382,8 @@ setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=20,lab_cex,
 			myY = myY[idx]
 			myX = myX[idx,,drop=F]
 			
+			if(missing(lab_cex))
+				lab_cex=1
 			if (!all(diff(myY)==0) & !(length(myY)<2)) {
 				if(length(u_units)==1){	
 					if(add)
@@ -545,7 +547,7 @@ setMethod("bioo.add.column", signature="Bioo", definition= function (object, nam
 				stop(paste("The column", name, "already exists. Consider using the methods $, [ or [["))
 			} 		  
 			if(!is.data.frame(value)){
-				if(length(value)==1)
+				if(nrow(object)>0 && length(value)==1)
 					value = rep(value, nrow(object))
 				
 				value = data.frame(value)
@@ -560,7 +562,7 @@ setMethod("bioo.add.column", signature="Bioo", definition= function (object, nam
 			
 			if(nrow(object)>0 & nrow(object)!=nrow(value))
 				stop(paste('The number of rows do not match'))			
-			
+		
 			if(nrow(object)==0){
 				object@DF = value
 				object@Units = c(object@Units, units)
