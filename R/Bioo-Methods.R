@@ -193,6 +193,29 @@ setMethod("sort", signature="Bioo", definition= function (x, which.col, decreasi
 		})
 
 #########################################################################
+# Method : rep
+#########################################################################
+setMethod("rep", signature(x = "Bioo"),
+		function(x, times, length.out, each, ...) {
+			if(!missing(length.out))
+				stop("The argument 'length.out' is not supported yet")
+			if(!missing(each))
+				stop("The argument 'each' is not supported yet")
+			
+			DF=data.frame(sapply(1:ncol(x), function(y) rep(x@DF[1,y], times))) 
+			names(DF) <- names(x)
+			x@DF <- DF
+			
+			x@SelectedIdx = logical()
+
+			if (length(x@InvalidIdx)>1)
+				x@InvalidIdx = rep(x@InvalidIdx,times)
+			
+			validObject(x)
+			return(x)
+		})
+
+#########################################################################
 # Method : bioo.getheader
 #########################################################################
 setGeneric (name= "bioo.getheader",
