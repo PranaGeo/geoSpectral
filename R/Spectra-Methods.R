@@ -181,8 +181,24 @@ setMethod("rep", signature(x = "Spectra"),
 #########################################################################
 setMethod("Arith", signature(e1 = "Spectra", e2 = "Spectra"),function (e1, e2) {
 			result <- callGeneric(e1@DF, e2@DF)
-			output <- new("Spectra",DF=result,Wavelengths=e1@Wavelengths,Units=e1@Units,
-					ShortName = "Arith", LongName="Arith",Ancillary=spc.getancillary(e1))			
+#			output <- new("Spectra",DF=result,Wavelengths=e1@Wavelengths,Units=e1@Units,
+#					ShortName = "Arith", LongName="Arith",Ancillary=spc.getancillary(e1))			
+			output = e1
+			output@DF = result
+			validObject(output)
+			return(output)
+		})
+
+#########################################################################
+# Method : Arith
+#########################################################################
+setMethod("Arith", signature(e1 = "Spectra", e2 = "numeric"),function (e1, e2) {
+			result <- callGeneric(e1@DF, e2)
+#			output <- new("Spectra",DF=result,Wavelengths=e1@Wavelengths,Units=e1@Units,
+#					ShortName = "Arith", LongName="Arith",Ancillary=spc.getancillary(e1))
+			output = e1
+			output@DF = result
+			validObject(output)
 			return(output)
 		})
 
