@@ -596,6 +596,7 @@ setMethod("spc.interp.spectral", signature = "Spectra",
 			if(missing(target_lbd))
 				stop("The input argument 'target_lbd' is missing")
 			
+			out = source1
 			lbd_source1 = spc.getwavelengths(source1)
 			DF = as.data.frame(matrix(nrow=nrow(source1),ncol=length(target_lbd)))
 			DF=sapply(1:nrow(DF), function(x) {
@@ -609,8 +610,12 @@ setMethod("spc.interp.spectral", signature = "Spectra",
 				points(my$x,my$y,col="green",cex=0.4)
 				grid(col="black")
 			}
-			out = new("Spectra",DF=DF,Wavelengths=target_lbd,ShortName=source1@ShortName,
-					Units=source1@Units)
+			out@DF = DF
+			out@Wavelengths = target_lbd
+			out@Units = rep(out@Units[1],length(target_lbd))
+			out@LongName = rep(out@LongName[1],length(target_lbd))
+			#			out = new("Spectra",DF=DF,Wavelengths=target_lbd,ShortName=source1@ShortName,
+#					LongName=source1@LongName[1], Units=source1@Units[1])
 			names(out) = spc.cname.construct(out)
 			validObject(out)
 			return(out)
