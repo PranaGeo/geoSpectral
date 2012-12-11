@@ -82,29 +82,48 @@ setGeneric (name= "spc.plot.overlay",
 setMethod("spc.plot.overlay", "BiooList", function (object, lab_cex, ...){
 			if(missing(lab_cex))
 				lab_cex = 1
-			
 			all_x = unlist(lapply(object,function(t) t@Wavelengths))
 			all_y = unlist(lapply(object,function(t) t@DF))
+			browser()
+
 			xlim = range(all_x)
 			ylim = range(all_y)
+			
+			if(any(grepl("xlim",names(match.call())))){
+				xlim = eval(match.call(expand.dots = T)$xlim)
+			}
+			if(any(grepl("ylim",names(match.call())))){
+				ylim = eval(match.call(expand.dots = T)$ylim)
+			}
 			tit=""
+			#Check object names to see if they can be put in the legend
+			nms = sapply(names(object), function(x) x==names(object)[1])
+			nms = nms[-1]
+			
 			for (I in 1:length(object)) {
 				if(object@by!="VariousVariables"){
 					#tit[I] = paste(object@by, ":", as.character(bioo.getheader(object[[I]],object@by)))
 					tit[I] = paste(as.character(bioo.getheader(object[[I]],object@by)))
 				}
 				else{
-					tit[I]=as.character(I)#paste(object[[I]]@ShortName)
+					if(all(!nms))
+						tit[I]=names(object)[I]					
+					else
+						tit[I]=as.character(I)#paste(object[[I]]@ShortName)
 				}
 				if(I==1)
-					eval_txt = paste("spc.plot", "(object[[I]],lab_cex=lab_cex,xlim=xlim,col=I,...)",sep="")
+					eval_txt = paste("spc.plot", "(object[[I]],lab_cex=lab_cex,col=I,...)",sep="")
 				else
-					eval_txt = paste("spc.lines", "(object[[I]],lab_cex=lab_cex,ylim=ylim,col=I,...)",sep="")
+					eval_txt = paste("spc.lines", "(object[[I]],lab_cex=lab_cex,col=I,...)",sep="")
+				if (!any(grepl("xlim",names(match.call()))))
+					eval_txt = gsub("object\\[\\[I\\]\\],","object\\[\\[I\\]\\],xlim=xlim,",eval_txt)
+				if (!any(grepl("ylim",names(match.call()))))
+					eval_txt = gsub("object\\[\\[I\\]\\],","object\\[\\[I\\]\\],ylim=ylim,",eval_txt)
+				
 				eval(parse(text=eval_txt))				
 				#title(main=tit,mgp=c(2,1,0))
 			}#end for
-			legend("bottomright",tit,col=1:I,fill=1:I)
-			
+			legend("bottomright",tit,col=1:I,fill=1:I)			
 		})
 
 #########################################################################
@@ -274,7 +293,9 @@ setMethod("sort", signature="BiooList", definition= function (x, which.col, decr
 #########################################################################
 # Method : lapply
 #########################################################################
-setMethod("lapply", signature="BiooList", definition= function (X, FUN, ...) {
+setGeneric (name= "spc.lapply",
+		def=function(X, FUN,...){standardGeneric("spc.lapply")})
+setMethod("spc.lapply", signature="BiooList", definition= function (X, FUN, ...) {
 			by = X@by
 			X = lapply(as(X,"list"),FUN,...)
 			X = as(X, "BiooList")
