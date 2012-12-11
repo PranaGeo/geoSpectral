@@ -616,7 +616,7 @@ setMethod("spc.interp.spectral", signature = "Spectra",
 			lbd_source1 = spc.getwavelengths(source1)
 			DF = as.data.frame(matrix(nrow=nrow(source1),ncol=length(target_lbd)))
 			DF=sapply(1:nrow(DF), function(x) {
-						my = approx(lbd_source1, source1@DF[1,],xout=target_lbd)
+						my = approx(lbd_source1, source1@DF[x,],xout=target_lbd)
 						DF[x,] = t(my$y)
 					})
 			DF = data.frame(t(DF))
