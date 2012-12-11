@@ -470,7 +470,7 @@ setMethod("spc.select", signature = "Spectra",
 				ExSel = rep(FALSE, nrow(object@DF))			
 			Sel = rep(FALSE, nrow(object@DF))			
 			
-			lbd = GetWavelengths(object)
+			lbd = spc.getwavelengths(object)
 			idx = mat_identify(lbd, t(object@DF))
 			print(paste("Selected row",idx))
 			oidx = idx
@@ -584,4 +584,34 @@ setReplaceMethod(f="bioo.setheader", signature="Spectra",
 			object@header<-value
 			validObject(object)
 			return(object)
+		})
+
+#########################################################################
+# Method : spc.interp.spectral
+#########################################################################
+setGeneric (name= "spc.interp.spectral",
+		def=function(source1,target_lbd,...){standardGeneric("spc.interp.spectral")})
+setMethod("spc.interp.spectral", signature = "Spectra", 
+		def = function (source1,target_lbd,show.plot=FALSE){
+			if(missing(target_lbd))
+				stop("The input argument 'target_lbd' is missing")
+			
+			lbd_source1 = spc.getwavelengths(source1)
+			DF = as.data.frame(matrix(nrow=nrow(source1),ncol=length(target_lbd)))
+			DF=sapply(1:nrow(DF), function(x) {
+						my = approx(lbd_source1, source1@DF[1,],xout=target_lbd)
+						DF[x,] = t(my$y)
+					})
+			DF = data.frame(t(DF))
+			if(show.plot){
+				plot(lbd_source1, source1@DF[1,],type="l",ylab=source1@LongName,xlab="Wavelength")
+#				plot.time(source1[,c("TIME",column)])
+				points(my$x,my$y,col="green",cex=0.4)
+				grid(col="black")
+			}
+			out = new("Spectra",DF=DF,Wavelengths=target_lbd,ShortName=source1@ShortName,
+					Units=source1@Units)
+			names(out) = spc.cname.construct(out)
+			validObject(out)
+			return(out)
 		})
