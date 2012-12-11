@@ -340,9 +340,9 @@ setMethod("plot.time", signature="Bioo", function (object,Y,maxSp=50,lab_cex, ..
 #########################################################################
 # Method : plot.depth
 #########################################################################
-setGeneric (name= "plot.depth",
-		def=function(object, ...){standardGeneric("plot.depth")})
-setMethod("plot.depth", signature="Bioo", function (object,X,maxSp=20,lab_cex,
+setGeneric (name= "spc.plot.depth",
+		def=function(object, ...){standardGeneric("spc.plot.depth")})
+setMethod("spc.plot.depth", signature="Bioo", function (object,X,maxSp=20,lab_cex,
 				title, add=FALSE, xlab=NULL, ylab=NULL, ylim=NULL,xlim=NULL,...){
 			
 			idx = as(1:ncol(object@DF), "logical")
