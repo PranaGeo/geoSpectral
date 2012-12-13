@@ -37,7 +37,8 @@ setAs(from="BiooList", to="Bioo", def=function(from){
 #########################################################################
 setGeneric (name= "spc.plot.grid",
 		def=function(x,FUN, nnrow, nncol,...){standardGeneric("spc.plot.grid")})
-setMethod("spc.plot.grid", "BiooList", function (x,FUN, nnrow, nncol, mar, oma, lab_cex, ...){
+setMethod("spc.plot.grid", "BiooList", function (x,FUN, nnrow, nncol, mar=c(4,4.5,1,0.5), 
+				oma = c(0,0,0,0), lab_cex, ...){
 			nb_spc = length(which(sapply(x, inherits, "Bioo")))
 			mypar = par()
 			nrow = ceiling(nb_spc/nncol)

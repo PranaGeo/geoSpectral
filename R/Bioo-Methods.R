@@ -388,7 +388,7 @@ setMethod("spc.plot.depth", signature="Bioo", function (object,X,maxSp=20,lab_ce
 			mynames = names(object@DF)[match(X,names(object))]
 			u_units = unique(myunits)
 			my_sides = rep(c(1,3), ceiling(length(u_units)/2))
-			
+	
 			#Extract the data to plot
 			myX = object@DF[!object@InvalidIdx,X,drop=F]
 			myY = depth[!object@InvalidIdx]
@@ -407,8 +407,10 @@ setMethod("spc.plot.depth", signature="Bioo", function (object,X,maxSp=20,lab_ce
 			
 			if(missing(lab_cex))
 				lab_cex=1
+
 			if (!all(diff(myY)==0) & !(length(myY)<2)) {
 				if(length(u_units)==1){	
+					#All columns to be plotted have the same unit 
 					if(add)
 						matlines(myX,myY,type="l",xlab="",ylab="",ylim=ylim,...)
 					else{
@@ -417,15 +419,13 @@ setMethod("spc.plot.depth", signature="Bioo", function (object,X,maxSp=20,lab_ce
 						else
 							matplot(myX,myY,type="l",cex.axis=lab_cex,xlab="",ylab="",ylim=ylim,...)						
 					}
-					matpoints(myX,myY,xlab="",ylab="",pch=19,cex=0.4,ylim=ylim,...)
-					
-					if(missing(lab_cex))
-						lab_cex = 1
+					matpoints(myX,myY,xlab="",ylab="",pch=19,cex=0.4,ylim=ylim,...)					
 					
 					mtext(ylab,side=2,line=2,cex=lab_cex)
 					mtext(xlab,side=1,line=2,cex=lab_cex)
 					grid(col="black")		
 				}else{
+					#All columns to be plotted have different units 
 #			for (I in 1:length(u_units)){
 					for (I in 1:2){
 						if (I!=1)
@@ -440,7 +440,7 @@ setMethod("spc.plot.depth", signature="Bioo", function (object,X,maxSp=20,lab_ce
 							box(); 	
 					}
 					axis(2,pretty(range(myY),10))
-					mtext(2, text=ylb,line=2)
+					mtext(2, text=ylab,line=2)
 					grid(col="black")	
 				}
 				#Draw the title if provided from the call
@@ -448,7 +448,7 @@ setMethod("spc.plot.depth", signature="Bioo", function (object,X,maxSp=20,lab_ce
 					title(title)
 				#Draw the legend
 				if(length(X)>1 & !add)
-					legend("bottomright",X,col=1:length(X),fill=1:length(X))
+					legend("bottomright",X,col=1:length(X),fill=1:length(X),bty="n")
 			} else{
 				return(0)
 			}
