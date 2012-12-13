@@ -448,7 +448,7 @@ setMethod("spc.plot.depth", signature="Bioo", function (object,X,maxSp=20,lab_ce
 					title(title)
 				#Draw the legend
 				if(length(X)>1 & !add)
-					legend("bottomright",X,col=1:length(X),fill=1:length(X),bty="n")
+					legend("bottomright",X,col=1:length(X),fill=1:length(X),bty="n",cex=lab_cex)
 			} else{
 				return(0)
 			}
