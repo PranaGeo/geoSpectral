@@ -85,8 +85,7 @@ setMethod("spc.plot.overlay", "BiooList", function (object, lab_cex, ...){
 				lab_cex = 1
 			all_x = unlist(lapply(object,function(t) t@Wavelengths))
 			all_y = unlist(lapply(object,function(t) t@DF))
-			browser()
-
+#			browser()
 			xlim = range(all_x)
 			ylim = range(all_y)
 			
@@ -124,7 +123,7 @@ setMethod("spc.plot.overlay", "BiooList", function (object, lab_cex, ...){
 				eval(parse(text=eval_txt))				
 				#title(main=tit,mgp=c(2,1,0))
 			}#end for
-			legend("bottomright",tit,col=1:I,fill=1:I)			
+			legend("bottomright",tit,col=1:I,fill=1:I,cex=lab_cex,bty="n")			
 		})
 
 #########################################################################
@@ -148,13 +147,13 @@ setMethod("spc.plot.depth.overlay", "BiooList", function (object, X, lab_cex, ..
 					tit[I]=as.character(I)#paste(object[[I]]@ShortName)
 				}
 				if(I==1)
-					eval_txt = paste("plot.depth","(object[[I]],X,lab_cex=lab_cex,xlim=xlim,col=I,...)",sep="")
+					eval_txt = paste("spc.plot.depth","(object[[I]],X,lab_cex=lab_cex,xlim=xlim,col=I,...)",sep="")
 				else
-					eval_txt =  paste("plot.depth","(object[[I]],X,add=T,lab_cex=lab_cex,xlim=xlim,col=I,...)",sep="")
+					eval_txt =  paste("spc.plot.depth","(object[[I]],X,add=T,lab_cex=lab_cex,xlim=xlim,col=I,...)",sep="")
 				eval(parse(text=eval_txt))				
 				#title(main=tit,mgp=c(2,1,0))
 			}#end for
-			legend("bottomright",tit,col=1:I,fill=1:I)
+			legend("bottomright",tit,col=1:I,fill=1:I,cex=lab_cex,bty="n")
 			
 		})
 #########################################################################
