@@ -246,6 +246,20 @@ setReplaceMethod(f="bioo.setheader", signature="Bioo",
 		})
 
 #########################################################################
+# Method : bioo.updateheader
+#########################################################################
+setGeneric (name="bioo.updateheader<-",
+		def=function(object,Name,value,...){standardGeneric("bioo.updateheader<-")})
+setReplaceMethod(f="bioo.updateheader", signature="Bioo",
+		definition=function(object,Name,value,...){
+			hdr=bioo.getheader(object)
+			hdr[[Name]]=value
+			bioo.setheader(object)<-hdr
+			validObject(object)
+			return(object)
+		})
+
+#########################################################################
 # Method : bioo.getselected.idx
 #########################################################################
 setGeneric (name= "bioo.getselected.idx",

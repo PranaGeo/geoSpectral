@@ -603,6 +603,18 @@ setReplaceMethod(f="bioo.setheader", signature="Spectra",
 		})
 
 #########################################################################
+# Method : bioo.updateheader
+#########################################################################
+setReplaceMethod(f="bioo.updateheader", signature="Spectra",
+		definition=function(object,Name,value,...){
+			hdr=bioo.getheader(object)
+			hdr[[Name]]=value
+			bioo.setheader(object)<-hdr
+			validObject(object)
+			return(object)
+		})
+
+#########################################################################
 # Method : spc.interp.spectral
 #########################################################################
 setGeneric (name= "spc.interp.spectral",
