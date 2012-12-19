@@ -214,8 +214,8 @@ setMethod("names", "BiooList", function(x){
 setMethod("$", signature = "BiooList", 
 		function(x, name) {
 			myn = names(x)
-			if(any(grepl(name,myn)))
-				x[[grep(name,myn)[1]]]
+			if(any(grepl(name,myn))){
+				x[[match(name,myn)[1]]]}
 			else stop("Could not match any object name")
 		})
 
