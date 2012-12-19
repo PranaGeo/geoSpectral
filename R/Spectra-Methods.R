@@ -130,7 +130,7 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...){
 			#Check that column names match
 			if(!all(sapply(1:length(DFL),function(x) all(DFL[[x]]==DFL[[1]]))))
 				stop("Names of all columns should be the same")
-
+			
 			DFL=sapply(list(...),ncol)
 			#Check that the number of columns match 
 			if(!all(sapply(1:length(DFL),function(x) all(DFL[[x]]==DFL[[1]]))))
@@ -140,7 +140,7 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...){
 			#Check that all Wavelengths are equal
 			if(!all(apply(DFL,1,diff)==0))
 				stop("Wavelengths of all input Spectra objects should be the same")
-
+			
 			outt = ..1
 			outt@DF = rbind(..1@DF,..2@DF)
 			#TO BE USED LATER : match.call(expand.dots = F)$...
@@ -170,7 +170,7 @@ setMethod("rep", signature(x = "Spectra"),
 			
 			if (length(x@InvalidIdx)>1)
 				x@InvalidIdx = rep(x@InvalidIdx,times)
-
+			
 			validObject(x)
 			return(x)
 		})
@@ -207,15 +207,24 @@ setMethod("Arith", signature(e1 = "Spectra", e2 = "numeric"),function (e1, e2) {
 #########################################################################
 setMethod("[[", signature="Spectra",
 		function(x, i, j, ...) {
-			if (i %in% names(x)){
-				Boutput = x@DF[[i]]
-			} 
-			if (i %in% names(x@Ancillary)){
-				Boutput = x@Ancillary@DF[[i]]				
+			if(missing(i))
+				i = as.integer(1:nrow(x))
+			if(missing(j))
+				j = as.integer(1:ncol(x))
+			if(class(j)=="numeric"){
+				Boutput= x[,j]@DF[i,]
+			}
+			if(class(j)=="integer"|class(j)=="character") {
+				if (i %in% names(x) | i <= nrow(x)){
+					Boutput = x@DF[i,j]
+				} 
+				if (i %in% names(x@Ancillary)){
+					Boutput = x@Ancillary@DF[[i]]				
+				}
 			}
 			if(!exists("Boutput"))
 				stop("Could not match any Spectral or Ancillary data columns")
-			validObject(x)
+
 			return(Boutput)
 		})
 setReplaceMethod("[[",  signature="Spectra", definition=function(x, i, j, value) {
@@ -298,7 +307,7 @@ setMethod("[",
 					stop("Could not find matching wavelengths or ancillary data")
 				if (any(na.idx <-(is.na(j.new)))) {
 					j.new=j.new[!is.na(j.new)]
-					warning(paste("Could not match wavelengths or ancillary data :", j[which(na.idx)]))
+#					warning(paste("Could not match wavelengths or ancillary data :", j[which(na.idx)]))
 				}
 				if (!all(is.finite(j.new)))
 					stop("Could not find matching wavelengths or ancillary data")
@@ -347,7 +356,7 @@ setMethod("[",
 # Method : spc.plot
 #########################################################################
 setGeneric("spc.plot",function(x,Y,...){standardGeneric("spc.plot")})
-setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,...){						
+setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,...){						
 			if (length(x@InvalidIdx)==0)
 				x@InvalidIdx = rep(FALSE,nrow(x@DF))
 			
@@ -369,10 +378,12 @@ setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,...){
 				mycol = 1:6
 			x@Units = gsub("\\[\\]","",x@Units)
 			x@Units = gsub("\\[ \\]","",x@Units)
-
-			ylab= paste(x@LongName[1], " [", x@Units[1], "]",sep="")
-			xlab=paste("Wavelength [",x@WavelengthUnit,"]",sep="")
-
+			
+			if(missing(ylab))
+				ylab= paste(x@LongName[1], " [", x@Units[1], "]",sep="")
+			if(missing(xlab))
+				xlab=paste("Wavelength [",x@WavelengthUnit,"]",sep="")
+			
 			if(missing(lab_cex))
 				lab_cex = 1
 			
@@ -536,7 +547,7 @@ setMethod("subset",  signature="Spectra",
 			else {
 				nl <- as.list(seq_along(x@DF))
 				names(nl) <- names(x@DF)
-
+				
 				vars <- eval(substitute(select), nl, parent.frame())
 				if(!(vars %in% names(x@DF)))
 					stop(paste("The select variables", vars, "is not a spectral column name"))
