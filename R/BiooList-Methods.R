@@ -114,7 +114,7 @@ setMethod("spc.plot.overlay", "BiooList", function (object, lab_cex, ...){
 				if(I==1)
 					eval_txt = paste("spc.plot", "(object[[I]],lab_cex=lab_cex,col=I,...)",sep="")
 				else
-					eval_txt = paste("spc.lines", "(object[[I]],lab_cex=lab_cex,col=I,...)",sep="")
+					eval_txt = paste("spc.lines", "(object[[I]],col=I,...)",sep="")
 				if (!any(grepl("xlim",names(match.call()))))
 					eval_txt = gsub("object\\[\\[I\\]\\],","object\\[\\[I\\]\\],xlim=xlim,",eval_txt)
 				if (!any(grepl("ylim",names(match.call()))))

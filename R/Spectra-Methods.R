@@ -614,7 +614,6 @@ setReplaceMethod(f="bioo.setheader", signature="Spectra",
 		})
 
 #########################################################################
-<<<<<<< HEAD
 # Method : bioo.updateheader
 #########################################################################
 setReplaceMethod(f="bioo.updateheader", signature="Spectra",
@@ -627,8 +626,6 @@ setReplaceMethod(f="bioo.updateheader", signature="Spectra",
 		})
 
 #########################################################################
-=======
->>>>>>> eb7c42dd9db41796458ca9fe0d95e6865b1f3bfe
 # Method : spc.interp.spectral
 #########################################################################
 setGeneric (name= "spc.interp.spectral",
