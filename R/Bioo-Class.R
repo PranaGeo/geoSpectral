@@ -12,7 +12,8 @@ if (1) {
 					LongName="character",
 					SelectedIdx="logical", 
 					InvalidIdx="logical",
-					ProcessLog="list"), 
+					ProcessLog="list",
+					ClassVersion="numeric"), 
 			prototype=prototype(
 					DF=data.frame(),
 					header=new("BiooHeader"),
@@ -20,11 +21,12 @@ if (1) {
 					LongName=character(), 
 					SelectedIdx=logical(),
 					InvalidIdx=logical(),
-					ProcessLog=list(time)))
+					ProcessLog=list(time),
+					ClassVersion=numeric()))
 }
 setMethod("initialize",
 		signature(.Object = "Bioo"),
-		function (.Object, DF, Units, LongName, header, ...) 
+		function (.Object, DF, Units, LongName, header, ClassVersion,...) 
 		{
 			if(missing(DF))
 				DF = data.frame()
@@ -38,9 +40,12 @@ setMethod("initialize",
 				LongName <- names(DF)				 
 			if (length(LongName)==1)
 				LongName <- rep(LongName, ncol(DF))				 							
+			if (missing(ClassVersion))
+				ClassVersion = 1
 			
 #			cat("---------Bioo::Initialize\n")						
-			.Object <- callNextMethod(.Object,DF=DF,LongName=LongName,Units=Units,header=header)
+			.Object <- callNextMethod(.Object,DF=DF,LongName=LongName,Units=Units,
+					header=header,ClassVersion=ClassVersion)
 
 #			if (length(.Object@Units)==1 & .Object@Units[1]=="[]" & ncol(.Object@DF)>0){
 #				.Object@Units = rep("[ ]",ncol(.Object@DF))
