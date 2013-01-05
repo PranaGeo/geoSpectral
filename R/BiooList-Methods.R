@@ -237,7 +237,14 @@ setMethod("$", signature = "BiooList",
 setMethod("show", "BiooList", function(object){
 			if(length(object)>0)
 				sapply(1:length(object), function(x) {
-							cat(paste("Element", x, ":"))
+							if(object@by!="VariousVariables") {
+								byName = paste(object@by, bioo.getheader(object[[x]],object@by), ":")								
+							}
+							else { 
+								byName = paste("Element", x, ":")								
+							}
+							
+							cat(byName)
 							show(object[[x]])
 						})
 			else cat("Empty BiooList\n")
