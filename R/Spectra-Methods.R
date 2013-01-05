@@ -356,7 +356,7 @@ setMethod("[",
 # Method : spc.plot
 #########################################################################
 setGeneric("spc.plot",function(x,Y,...){standardGeneric("spc.plot")})
-setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,...){						
+setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="l",...){						
 			if (length(x@InvalidIdx)==0)
 				x@InvalidIdx = rep(FALSE,nrow(x@DF))
 			
@@ -371,33 +371,43 @@ setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,...){
 			if(any(x@InvalidIdx)){
 				Xidx[x@InvalidIdx]=FALSE
 			}
-			if(any(x@SelectedIdx)){
-				mycol = rep("gray", nrow(x@DF))
-				mycol[x@SelectedIdx]="red"
-			} else
-				mycol = 1:6
+#			if(any(x@SelectedIdx)){
+#				mycol = rep("gray", nrow(x@DF))
+#				mycol[x@SelectedIdx]="red"
+#			} else
+			
+#			if(missing(col)) 
+#				col = 1:10
+			
 			x@Units = gsub("\\[\\]","",x@Units)
 			x@Units = gsub("\\[ \\]","",x@Units)
 			
 			if(missing(ylab))
-				ylab= paste(x@LongName[1], " [", x@Units[1], "]",sep="")
+#				ylab= paste(x@LongName[1], " [", x@Units[1], "]",sep="")
+				ylab= paste(x@LongName[1], " ", x@Units[1],sep="")
 			if(missing(xlab))
 				xlab=paste("Wavelength [",x@WavelengthUnit,"]",sep="")
-			
+				
 			if(missing(lab_cex))
 				lab_cex = 1
+#			if(missing(type))
+#				type="l"
+#			if(missing(lty))
+#				lty=1
 			
-			if(any(grepl("col",names(match.call())))) {
+#			if(any(grepl("col",names(match.call())))) {
+#				matplot(x@Wavelengths,t(x@DF[Xidx,]),#lab=x@Wavelengths,#xaxt="n",
+#						ylab= "",xlab="", type="l", pch=19,cex=0.3, cex.axis=lab_cex, ...)
+#			} else {
 				matplot(x@Wavelengths,t(x@DF[Xidx,]),#lab=x@Wavelengths,#xaxt="n",
-						ylab= "",xlab="", type="l", pch=19,cex=0.3, cex.axis=lab_cex, ...)
-			} else {
-				matplot(x@Wavelengths,t(x@DF[Xidx,]),#lab=x@Wavelengths,#xaxt="n",
-						ylab= "",xlab="", type="l", pch=19,cex=0.3, cex.axis=lab_cex, col=mycol, ...)
-			}
-			
-			mtext(xlab,side=1,line=2,cex=lab_cex)
+						ylab= "",xlab="",type=type, pch=19,cex=0.3,cex.axis=lab_cex, ...)
+#			}
+			mtext(as.expression(xlab),side=1,line=2,cex=lab_cex)
+			ylab = "Scalar~quantum~irradiance~mu .mol.m^{-2}~s^{-1}"
+			ylab = gsub(" ","~",ylab)
+			ylab = eval(parse(text=paste("expression(",ylab,")",sep="")))
 			mtext(ylab,side=2,line=2,cex=lab_cex)
-			
+							
 			abline(h=0)
 			grid(col="black")
 		})

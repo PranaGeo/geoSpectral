@@ -80,9 +80,18 @@ setMethod("spc.plot.grid", "BiooList", function (x,FUN, nnrow, nncol, mar=c(4,4.
 #########################################################################
 setGeneric (name= "spc.plot.overlay",
 		def=function(object, ...){standardGeneric("spc.plot.overlay")})
-setMethod("spc.plot.overlay", "BiooList", function (object, lab_cex, ...){
-			if(missing(lab_cex))
-				lab_cex = 1
+setMethod("spc.plot.overlay", "BiooList", function (object, lab_cex=1,leg_idx=T, type="l", lty=1,lwd=1, col, ...){
+			if(missing(col))
+				col = 1:length(object)
+			if(length(leg_idx)==1)
+				leg_idx = rep(leg_idx,length(object))
+			if(length(lty)==1)
+				lty = rep(lty,length(object))
+			if(length(lwd)==1)
+				lwd = rep(lwd,length(object))
+			if(length(type)==1)
+				type = rep(type,length(object))
+			
 			all_x = unlist(lapply(object,function(t) t@Wavelengths))
 			all_y = unlist(lapply(object,function(t) t@DF))
 #			browser()
@@ -112,19 +121,22 @@ setMethod("spc.plot.overlay", "BiooList", function (object, lab_cex, ...){
 						tit[I]=as.character(I)#paste(object[[I]]@ShortName)
 				}
 				if(I==1)
-					eval_txt = paste("spc.plot", "(object[[I]],lab_cex=lab_cex,col=I,...)",sep="")
+					eval_txt = paste("spc.plot", "(object[[I]],lab_cex=lab_cex,col=col[I],lty=lty[I],lwd=lwd[I],type=type[I],...)",sep="")
 				else
-					eval_txt = paste("spc.lines", "(object[[I]],col=I,...)",sep="")
+					eval_txt = paste("spc.lines", "(object[[I]],col=col[I],lty=lty[I],lwd=lwd[I],type=type[I],...)",sep="")
 				if (!any(grepl("xlim",names(match.call()))))
 					eval_txt = gsub("object\\[\\[I\\]\\],","object\\[\\[I\\]\\],xlim=xlim,",eval_txt)
 				if (!any(grepl("ylim",names(match.call()))))
 					eval_txt = gsub("object\\[\\[I\\]\\],","object\\[\\[I\\]\\],ylim=ylim,",eval_txt)
-				
+#			print(eval_txt)	
 				eval(parse(text=eval_txt))				
 				#title(main=tit,mgp=c(2,1,0))
 			}#end for
-			legend("bottomright",tit,col=1:I,fill=1:I,cex=lab_cex,bty="n")			
-		})
+			if(!all(diff(lty)==0))
+				legend("bottomright",tit[leg_idx],col=col[leg_idx],cex=lab_cex,bty="n",lty=lty[leg_idx],lwd=lwd[leg_idx])	
+			else
+				legend("bottomright",tit[leg_idx],col=col[leg_idx],fill=col[leg_idx],cex=lab_cex,bty="n")	
+			})
 
 #########################################################################
 setGeneric (name= "spc.plot.depth.overlay",
