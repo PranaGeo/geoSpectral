@@ -316,11 +316,11 @@ setReplaceMethod(f="bioo.setinvalid.idx", signature="Bioo",
 		})
 
 #########################################################################
-# Method : plot.time
+# Method : spc.plot.time
 #########################################################################
-setGeneric (name= "plot.time",
-		def=function(object, ...){standardGeneric("plot.time")})
-setMethod("plot.time", signature="Bioo", function (object,Y,maxSp=50,lab_cex, ...){
+setGeneric (name= "spc.plot.time",
+		def=function(object, ...){standardGeneric("spc.plot.time")})
+setMethod("spc.plot.time", signature="Bioo", function (object,Y,maxSp=50,lab_cex, ...){
 			idx = as(1:ncol(object@DF), "logical")
 			
 			if (length(object@InvalidIdx)==0)
