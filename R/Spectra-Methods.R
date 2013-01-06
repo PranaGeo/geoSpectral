@@ -688,3 +688,19 @@ setReplaceMethod(f="bioo.setselected.idx", signature="Spectra",
 			validObject(object)
 			return (object)
 		})
+#########################################################################
+# Method : bioo.setinvalid.idx
+#########################################################################
+setReplaceMethod(f="bioo.setinvalid.idx", signature="Spectra",
+		definition=function(object,value){
+			if(is.numeric(value)){
+				idx = bioo.getinvalid.idx(object)
+				if(length(idx)==0)
+					idx = rep(FALSE,nrow(object))
+				idx[value]=TRUE
+				value=idx
+			}
+			object@InvalidIdx<-value
+			validObject(object)
+			return (object)
+		})
