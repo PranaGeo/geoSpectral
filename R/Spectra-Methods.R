@@ -406,7 +406,7 @@ setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="
 						ylab= "",xlab="",type=type, pch=19,cex=0.3,cex.axis=lab_cex, ...)
 #			}
 			mtext(as.expression(xlab),side=1,line=2,cex=lab_cex)
-			ylab = "Scalar~quantum~irradiance~mu .mol.m^{-2}~s^{-1}"
+#			ylab = "Scalar~quantum~irradiance~mu .mol.m^{-2}~s^{-1}"
 			ylab = gsub(" ","~",ylab)
 			ylab = eval(parse(text=paste("expression(",ylab,")",sep="")))
 			mtext(ylab,side=2,line=2,cex=lab_cex)

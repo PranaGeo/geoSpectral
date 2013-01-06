@@ -207,7 +207,7 @@ setMethod("rep", signature(x = "Bioo"),
 			x@DF <- DF
 			
 			x@SelectedIdx = logical()
-
+			
 			if (length(x@InvalidIdx)>1)
 				x@InvalidIdx = rep(x@InvalidIdx,times)
 			
@@ -328,10 +328,6 @@ setMethod("spc.plot.time", signature="Bioo", function (object,Y,maxSp=50,lab_cex
 			
 			x = 1:nrow(object)
 			xlb = "Observation number"
-			if (class(object)=="Spectra")
-				ylb = object@LongName[1]
-			else
-				ylb = ""
 			
 			if(missing(Y)){
 				if(!missing(maxSp) && ncol(object)>maxSp)
@@ -345,14 +341,29 @@ setMethod("spc.plot.time", signature="Bioo", function (object,Y,maxSp=50,lab_cex
 			matplot(x[!object@InvalidIdx], 
 					object@DF[!object@InvalidIdx,Y], type="l", pch=19,cex=0.3,
 					xlab="", ylab="", ...)
-			mtext(xlab,side=1,line=2,cex=lab_cex)
-			mtext(ylab,side=2,line=2,cex=lab_cex)
 			
-			grid(col="black")			
+			grid(col="black")
+			
+			#Draw the legend
+			if(class(Y)=="numeric")
+				Y = names(object)[Y]
+			
+			if(length(Y)>1&length(Y)<=10) {
+				legend("bottomright",Y,col=1:length(Y),fill=1:length(Y),bty="n",cex=lab_cex)
+				ylb = paste(object@LongName[1], object@Units[1])	
+			}
+			else{
+				if(length(Y)==1)
+					ylb = Y
+				else
+					ylb = object@LongName[1]
+			}
+			mtext(xlb,side=1,line=2,cex=lab_cex)
+			mtext(ylb,side=2,line=2,cex=lab_cex)
 		})
 
 #########################################################################
-# Method : plot.depth
+# Method : spc.plot.depth
 #########################################################################
 setGeneric (name= "spc.plot.depth",
 		def=function(object, ...){standardGeneric("spc.plot.depth")})
@@ -402,7 +413,7 @@ setMethod("spc.plot.depth", signature="Bioo", function (object,X,maxSp=20,lab_ce
 			mynames = names(object@DF)[match(X,names(object))]
 			u_units = unique(myunits)
 			my_sides = rep(c(1,3), ceiling(length(u_units)/2))
-	
+			
 			#Extract the data to plot
 			myX = object@DF[!object@InvalidIdx,X,drop=F]
 			myY = depth[!object@InvalidIdx]
@@ -421,7 +432,7 @@ setMethod("spc.plot.depth", signature="Bioo", function (object,X,maxSp=20,lab_ce
 			
 			if(missing(lab_cex))
 				lab_cex=1
-
+			
 			if (!all(diff(myY)==0) & !(length(myY)<2)) {
 				if(length(u_units)==1){	
 					#All columns to be plotted have the same unit 
@@ -506,7 +517,7 @@ setMethod("bioo.interp.time", signature = "Bioo",
 			my = approx(source1$TIME, source1[[column]],xout=target1$TIME)
 			if(show.plot){
 				plot(source1$TIME, source1[[column]],type="l",ylab=column,xlab="TIME")
-#				plot.time(source1[,c("TIME",column)])
+#				spc.plot.time(source1[,c("TIME",column)])
 				points(my$x,my$y,col="green",cex=0.4)
 				grid(col="black")
 			}
