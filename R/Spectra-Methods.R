@@ -16,6 +16,9 @@ setAs(from="Spectra", to="Bioo", def=function(from){
 				output = new("Bioo",DF=from@DF,LongName=from@LongName,Units=from@Units)
 			}
 			output@header = from@header
+			output@ProcessLog= from@ProcessLog
+			output@SelectedIdx= from@SelectedIdx
+			output@InvalidIdx= from@InvalidIdx
 			validObject(output)
 			return(output)
 		})
