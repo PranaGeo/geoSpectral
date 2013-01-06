@@ -574,16 +574,6 @@ setMethod("subset",  signature="Spectra",
 		})
 
 #########################################################################
-# Method : bioo.add.column
-#########################################################################
-setMethod("bioo.add.column", signature="Spectra", definition= function (object, name, value, units,longname) {
-			A = bioo.add.column(object@Ancillary,name=name,value=value,units=units,longname=longname)
-			object@Ancillary = A 
-			validObject(object)
-			return(object)
-		})
-
-#########################################################################
 # Method : spc.add.channel
 #########################################################################
 setGeneric(name= "spc.add.channel",
@@ -609,28 +599,6 @@ setMethod("spc.add.channel", signature="Spectra", definition= function (object, 
 			object@DF = cbind(object@DF,value)
 			object@Units = c(object@Units, units)
 			
-			validObject(object)
-			return(object)
-		})
-
-#########################################################################
-# Method : bioo.setheader
-#########################################################################
-setReplaceMethod(f="bioo.setheader", signature="Spectra",
-		definition=function(object,value,...){
-			object@header<-value
-			validObject(object)
-			return(object)
-		})
-
-#########################################################################
-# Method : bioo.updateheader
-#########################################################################
-setReplaceMethod(f="bioo.updateheader", signature="Spectra",
-		definition=function(object,Name,value,...){
-			hdr=bioo.getheader(object)
-			hdr[[Name]]=value
-			bioo.setheader(object)<-hdr
 			validObject(object)
 			return(object)
 		})
@@ -668,4 +636,52 @@ setMethod("spc.interp.spectral", signature = "Spectra",
 			names(out) = spc.cname.construct(out)
 			validObject(out)
 			return(out)
+		})
+
+#########################################################################
+# Method : bioo.setheader
+#########################################################################
+setReplaceMethod(f="bioo.setheader", signature="Spectra",
+		definition=function(object,value,...){
+			object@header<-value
+			validObject(object)
+			return(object)
+		})
+
+#########################################################################
+# Method : bioo.add.column
+#########################################################################
+setMethod("bioo.add.column", signature="Spectra", definition= function (object, name, value, units,longname) {
+			A = bioo.add.column(object@Ancillary,name=name,value=value,units=units,longname=longname)
+			object@Ancillary = A 
+			validObject(object)
+			return(object)
+		})
+
+#########################################################################
+# Method : bioo.updateheader
+#########################################################################
+setReplaceMethod(f="bioo.updateheader", signature="Spectra",
+		definition=function(object,Name,value,...){
+			hdr=bioo.getheader(object)
+			hdr[[Name]]=value
+			bioo.setheader(object)<-hdr
+			validObject(object)
+			return(object)
+		})
+#########################################################################
+# Method : bioo.setselected.idx
+#########################################################################
+setReplaceMethod(f="bioo.setselected.idx", signature="Spectra",
+		definition=function(object,value){
+			if(is.numeric(value)){
+				idx = bioo.getinvalid.idx(object)
+				if(length(idx)==0)
+					idx = rep(FALSE,nrow(object))
+				idx[value]=TRUE
+				value=idx
+			}
+			object@SelectedIdx<-value
+			validObject(object)
+			return (object)
 		})
