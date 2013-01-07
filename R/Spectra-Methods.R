@@ -359,7 +359,7 @@ setMethod("[",
 # Method : spc.plot
 #########################################################################
 setGeneric("spc.plot",function(x,Y,...){standardGeneric("spc.plot")})
-setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="l",...){						
+setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="l",lwd=2,...){						
 			if (length(x@InvalidIdx)==0)
 				x@InvalidIdx = rep(FALSE,nrow(x@DF))
 			
@@ -384,13 +384,7 @@ setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="
 			
 			x@Units = gsub("\\[\\]","",x@Units)
 			x@Units = gsub("\\[ \\]","",x@Units)
-			
-			if(missing(ylab))
-#				ylab= paste(x@LongName[1], " [", x@Units[1], "]",sep="")
-				ylab= paste(x@LongName[1], " ", x@Units[1],sep="")
-			if(missing(xlab))
-				xlab=paste("Wavelength [",x@WavelengthUnit,"]",sep="")
-				
+							
 			if(missing(lab_cex))
 				lab_cex = 1
 #			if(missing(type))
@@ -403,12 +397,16 @@ setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="
 #						ylab= "",xlab="", type="l", pch=19,cex=0.3, cex.axis=lab_cex, ...)
 #			} else {
 				matplot(x@Wavelengths,t(x@DF[Xidx,]),#lab=x@Wavelengths,#xaxt="n",
-						ylab= "",xlab="",type=type, pch=19,cex=0.3,cex.axis=lab_cex, ...)
+						ylab= "",xlab="",type=type, pch=19,cex=0.3,cex.axis=lab_cex,lwd=lwd,...)
 #			}
-			mtext(as.expression(xlab),side=1,line=2,cex=lab_cex)
-#			ylab = "Scalar~quantum~irradiance~mu .mol.m^{-2}~s^{-1}"
-			ylab = gsub(" ","~",ylab)
-			ylab = eval(parse(text=paste("expression(",ylab,")",sep="")))
+			if(missing(ylab))
+			ylab = bquote(.(x@LongName[1])*", ["*.(x@Units[1])*"]")
+		#	ylab = "Scalar~quantum~irradiance~mu .mol.m^{-2}~s^{-1}"
+		
+			if(missing(xlab))
+				xlab=bquote("Wavelength ["*.(x@WavelengthUnit)*"]")
+			
+			mtext(xlab,side=1,line=2,cex=lab_cex)			
 			mtext(ylab,side=2,line=2,cex=lab_cex)
 							
 			abline(h=0)

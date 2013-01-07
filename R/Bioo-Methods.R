@@ -320,7 +320,7 @@ setReplaceMethod(f="bioo.setinvalid.idx", signature="Bioo",
 #########################################################################
 setGeneric (name= "spc.plot.time",
 		def=function(object, ...){standardGeneric("spc.plot.time")})
-setMethod("spc.plot.time", signature="Bioo", function (object,Y,maxSp=50,lab_cex, ...){
+setMethod("spc.plot.time", signature="Bioo", function (object,Y,maxSp=50,lab_cex,lwd=2, ...){
 			idx = as(1:ncol(object@DF), "logical")
 			
 			if (length(object@InvalidIdx)==0)
@@ -339,8 +339,7 @@ setMethod("spc.plot.time", signature="Bioo", function (object,Y,maxSp=50,lab_cex
 				lab_cex = 1
 			
 			matplot(x[!object@InvalidIdx], 
-					object@DF[!object@InvalidIdx,Y], type="l", pch=19,cex=0.3,
-					xlab="", ylab="", ...)
+					object@DF[!object@InvalidIdx,Y], type="l", pch=19,cex=0.3,xlab="",ylab="",lwd=lwd,...)
 			
 			grid(col="black")
 			
@@ -350,16 +349,20 @@ setMethod("spc.plot.time", signature="Bioo", function (object,Y,maxSp=50,lab_cex
 			
 			if(length(Y)>1&length(Y)<=10) {
 				legend("bottomright",Y,col=1:length(Y),fill=1:length(Y),bty="n",cex=lab_cex)
-				ylb = paste(object@LongName[1], object@Units[1])	
+				ylb = bquote(.(object@LongName[1])*", ["*.(object@Units[1])*"]")	
 			}
 			else{
 				if(length(Y)==1)
 					ylb = Y
 				else
-					ylb = object@LongName[1]
+					ylb = bquote(.(object@LongName[1])*", ["*.(object@Units[1])*"]")	
 			}
 			mtext(xlb,side=1,line=2,cex=lab_cex)
 			mtext(ylb,side=2,line=2,cex=lab_cex)
+			
+			#Draw the legend
+			if(length(Y)>1 & length(Y)<=10)
+				legend("bottomright",Y,col=1:length(Y),lty=1:length(Y),bty="n",lwd=2,cex=lab_cex)
 		})
 
 #########################################################################
@@ -367,35 +370,36 @@ setMethod("spc.plot.time", signature="Bioo", function (object,Y,maxSp=50,lab_cex
 #########################################################################
 setGeneric (name= "spc.plot.depth",
 		def=function(object, ...){standardGeneric("spc.plot.depth")})
-setMethod("spc.plot.depth", signature="Bioo", function (object,X,maxSp=20,lab_cex,
-				title, add=FALSE, xlab=NULL, ylab=NULL, ylim=NULL,xlim=NULL,...){
-			
+setMethod("spc.plot.depth", signature="Bioo", function (object,X,maxSp=10,lab_cex,
+				title, add=FALSE, xlab=NULL, ylab=NULL, ylim=NULL,xlim=NULL,lwd=2,...){
 			idx = as(1:ncol(object@DF), "logical")
 			depth=object$DEPTH
+			if(length(is.finite(depth))<1)
+				stop("Could not find the column DEPTH")
 			
 			if (length(object@InvalidIdx)==0)
 				object@InvalidIdx = rep(FALSE,nrow(object@DF))		
 			
 			if(missing(X)){
 				if(ncol(object)>maxSp)
-					X = seq(1,ncol(object),length.out=maxSp)
+					X = round(seq(1,ncol(object),length.out=maxSp))
 				else
 					X = names(object)
 			}
 			if (is.numeric(X))
 				X = names(object)[X]
-			
+
 			if(missing(ylab))
 				ylab = "Depth [m]"
 			
 			if(missing(xlab)) {
 				if (class(object)=="Spectra") {
-					xlab = paste(object@LongName[1], " [", object@Units[1],"]",sep="") 					
+					xlab = bquote(.(object@LongName[1])*", ["*.(object@Units[1])*"]")				
 				} else {
 					if(length(X)==1)
-						xlab =  paste(X, " [", object@Units[1],"]",sep="")					
+						xlab =  bquote(.(X)*", ["*.(object@Units[1])*"]")	
 					else{
-						xlab = ""
+						xlab = bquote(.(object@LongName[1])*", ["*.(object@Units[1])*"]")
 					}
 				}
 			}
@@ -432,7 +436,6 @@ setMethod("spc.plot.depth", signature="Bioo", function (object,X,maxSp=20,lab_ce
 			
 			if(missing(lab_cex))
 				lab_cex=1
-			
 			if (!all(diff(myY)==0) & !(length(myY)<2)) {
 				if(length(u_units)==1){	
 					#All columns to be plotted have the same unit 
@@ -440,40 +443,50 @@ setMethod("spc.plot.depth", signature="Bioo", function (object,X,maxSp=20,lab_ce
 						matlines(myX,myY,type="l",xlab="",ylab="",ylim=ylim,...)
 					else{
 						if (all(is.finite(xlim)))
-							matplot(myX,myY,type="l",cex.axis=lab_cex,xlab="",ylab="",ylim=ylim,xlim=xlim,...)
+							matplot(myX,myY,type="l",cex.axis=lab_cex,xlab="",ylab="",ylim=ylim,xlim=xlim,lwd=lwd,...)
 						else
-							matplot(myX,myY,type="l",cex.axis=lab_cex,xlab="",ylab="",ylim=ylim,...)						
+							matplot(myX,myY,type="l",cex.axis=lab_cex,xlab="",ylab="",ylim=ylim,lwd=lwd,...)						
 					}
 					matpoints(myX,myY,xlab="",ylab="",pch=19,cex=0.4,ylim=ylim,...)					
 					
 					mtext(ylab,side=2,line=2,cex=lab_cex)
 					mtext(xlab,side=1,line=2,cex=lab_cex)
 					grid(col="black")		
+					#Draw the legend
+					if(length(X)>1 & !add & length(X)<=10)
+						legend("bottomright",X,col=1:length(X),lty=1:length(X),bty="n",lwd=2,cex=lab_cex)
+					
 				}else{
 					#All columns to be plotted have different units 
-#			for (I in 1:length(u_units)){
+#					for (I in 1:length(u_units)){
 					for (I in 1:2){
 						if (I!=1)
 							par(new=T)
-						col_idx = match(u_units[I],myunits)
-						xlab = paste(mynames[col_idx[1]], " [", myunits[col_idx[1]],"]",sep="")
+						col_idx = which(u_units[I]==myunits)
+						xlab = bquote(.(object@LongName[1])*", ["*.(object@Units[1])*"]")
 						
-						plot(myX[,col_idx],myY,type="l", axes=F,pch=19,cex=0.3, ylim=ylim,col=I,xlab="",ylab="",...)
-						axis(my_sides[I], col=I, pretty(range(myX[,col_idx]),10))
+						matplot(myX[,col_idx],myY,type="l", axes=F,pch=19,cex=0.3, ylim=ylim,col=I,xlab="",ylab="",lwd=lwd,...)
 						mtext(my_sides[I],text=xlab,line=2,cex=lab_cex)
-						if (I==1)
+						axis(my_sides[I], col=I, pretty(range(myX[,col_idx]),10))
+						if (I==1){
 							box(); 	
+							cols = rep(1, length(X))
+						}
+						else {
+							cols[col_idx] = I
+						}
 					}
+					grid(col="black")
 					axis(2,pretty(range(myY),10))
 					mtext(2, text=ylab,line=2)
-					grid(col="black")	
+					#Draw the legend
+					if(length(X)>1 & !add & length(X)<=10)
+						legend("bottomright",X,col=cols,lty=cols,bty="n",lwd=2,cex=lab_cex)
+					
 				}
 				#Draw the title if provided from the call
 				if(!missing(title))
 					title(title)
-				#Draw the legend
-				if(length(X)>1 & !add)
-					legend("bottomright",X,col=1:length(X),fill=1:length(X),bty="n",cex=lab_cex)
 			} else{
 				return(0)
 			}
