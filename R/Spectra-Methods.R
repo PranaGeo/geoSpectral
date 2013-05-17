@@ -58,6 +58,7 @@ setAs(from="data.frame", to="Spectra", def=function(from){
 				} else {
 					Ancillary = new("Bioo") #data.frame()
 				}
+				browser()
 				outS = new("Spectra",
 						DF=from[,1:length(Wavelengths)],
 						Ancillary=Ancillary,

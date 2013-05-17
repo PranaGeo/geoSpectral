@@ -5,27 +5,27 @@
 #########################################################################
 # Class : Spectra
 #########################################################################
-setClass("Spectra", contains="Bioo", 
+setClass("Spectra", contains="STIDF", 
 		representation(
 				ShortName="character",
 				Wavelengths="numeric", 
 				WavelengthUnit = "character", 
-				Ancillary="Bioo"), 
+				Ancillary="data.frame"), 
 		prototype=prototype(
-				DF=data.frame(),
+				data=data.frame(),
 				ShortName="spvar2",
 				Wavelengths=numeric(), 
 				WavelengthUnit = character(), 
-				Ancillary=new("Bioo")))
+				Ancillary=data.frame()))
 
 setMethod("initialize",
 		signature(.Object = "Spectra"),
-		function (.Object, DF, ShortName, LongName, Wavelengths, Units, Ancillary, header,WavelengthUnit,...) 
+		function (.Object, data, ShortName, LongName, Wavelengths, Units, Ancillary, header,WavelengthUnit,...) 
 		{
 #			cat("---------Spectra::Initialize\n")
 			#Set defaults for ShortName
-			if (missing(DF))
-				DF <- data.frame()
+			if (missing(data))
+				data <- data.frame()
 			if (missing(Wavelengths))
 				Wavelengths <- numeric()
 			if (missing(ShortName))
@@ -36,12 +36,12 @@ setMethod("initialize",
 			if (missing(LongName))
 				LongName <- "spvar longname"				 
 			if (length(LongName)==1)
-				LongName <- rep(LongName, ncol(DF))				 							
+				LongName <- rep(LongName, ncol(data))				 							
 			#Set the default for Units
 			if (missing(Units))
 				Units <- "[ ]"	
 			if (length(Units)==1)
-				Units<- rep(Units, ncol(DF))				 							
+				Units<- rep(Units, ncol(data))				 							
 			#Set the default for Ancillary data
 			if (missing(Ancillary))
 				Ancillary=new("Bioo")
@@ -54,12 +54,12 @@ setMethod("initialize",
 			.Object@Wavelengths=Wavelengths
 			.Object@Ancillary=Ancillary
 			.Object@Units=Units
-			.Object@DF=DF
+			.Object@data=data
 			.Object@ShortName=ShortName
 			.Object@LongName=LongName
 			.Object@header=header
 			.Object@WavelengthUnit = WavelengthUnit
-			#			.Object=callNextMethod(.Object, DF=DF, ShortName=ShortName,
+			#			.Object=callNextMethod(.Object, data=data, ShortName=ShortName,
 #					LongName=LongName,Wavelengths=Wavelengths,Units=Units,Ancillary=Ancillary)
 			#			.Object <- callNextMethod()
 			
@@ -68,11 +68,11 @@ setMethod("initialize",
 
 setValidity("Spectra", function(object){
 #			cat("---------Spectra::setValidity\n")
-			if(!all(sapply(object@DF, class)=="numeric")){
+			if(!all(sapply(object@data, class)=="numeric")){
 				return("Spectral data should be a data.frame object with numeric columns")
 			}
-			if(length(object@Wavelengths)!= ncol(object@DF)){
-				return("Number of Spectral channels is not equal the number of DF columns")
+			if(length(object@Wavelengths)!= ncol(object@data)){
+				return("Number of Spectral channels is not equal the number of data columns")
 			}
 			if(!all(is.finite(object@Wavelengths))){
 				return("All the wavelengths should be numeric and finite")
@@ -81,7 +81,7 @@ setValidity("Spectra", function(object){
 				return("Wavelength should be increasing and without replicates.")
 			}
 			if(nrow(object@Ancillary)!=0){
-				if(nrow(object@Ancillary)!=nrow(object@DF)){
+				if(nrow(object@Ancillary)!=nrow(object@data)){
 					return("Ancillary data frame should have the same number of rows as spectral data")
 				}
 			}

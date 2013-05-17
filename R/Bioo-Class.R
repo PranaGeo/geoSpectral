@@ -3,10 +3,10 @@
 # Author: acizmeli
 ###############################################################################
 #removeClass("Spectra")
+require(spacetime)
 if (1) {
 	setClass("Bioo", 
-			representation(
-					DF="data.frame", 
+			representation("STIDF",
 					header="BiooHeader",
 					Units="character",
 					LongName="character",
@@ -15,7 +15,6 @@ if (1) {
 					ProcessLog="list",
 					ClassVersion="numeric"), 
 			prototype=prototype(
-					DF=data.frame(),
 					header=new("BiooHeader"),
 					Units=character(), 
 					LongName=character(), 
@@ -26,32 +25,30 @@ if (1) {
 }
 setMethod("initialize",
 		signature(.Object = "Bioo"),
-		function (.Object, DF, Units, LongName, header, ClassVersion,...) 
+		function (.Object, Units, LongName, header, ClassVersion,...) 
 		{
-			if(missing(DF))
-				DF = data.frame()
 			if(missing(header))
 				header = new("BiooHeader")
 			if(missing(Units))
 				Units <- "[ ]"	
 			if (length(Units)==1)
-				Units <- rep(Units, ncol(DF))				 							
+				Units <- rep(Units, ncol(.Object@data))				 							
 			if(missing(LongName))
-				LongName <- names(DF)				 
+				LongName <- names(.Object@data)				 
 			if (length(LongName)==1)
-				LongName <- rep(LongName, ncol(DF))				 							
+				LongName <- rep(LongName, ncol(.Object@data))				 							
 			if (missing(ClassVersion))
 				ClassVersion = 1
 			
 #			cat("---------Bioo::Initialize\n")						
-			.Object <- callNextMethod(.Object,DF=DF,LongName=LongName,Units=Units,
+			.Object <- callNextMethod(.Object,LongName=LongName,Units=Units,
 					header=header,ClassVersion=ClassVersion)
 
-#			if (length(.Object@Units)==1 & .Object@Units[1]=="[]" & ncol(.Object@DF)>0){
-#				.Object@Units = rep("[ ]",ncol(.Object@DF))
+#			if (length(.Object@Units)==1 & .Object@Units[1]=="[]" & ncol(.Object@data)>0){
+#				.Object@Units = rep("[ ]",ncol(.Object@data))
   
-			#			if (.Object@ShortName[1]=="[]" & ncol(.Object@DF)!=0) {
-#				.Object@ShortName = colnames(.Object@DF)
+			#			if (.Object@ShortName[1]=="[]" & ncol(.Object@data)!=0) {
+#				.Object@ShortName = colnames(.Object@data)
 #			}
 #			if (.Object@ShortName[1]=="[]") {
 #				.Object@ShortName = "Bioo"
@@ -63,25 +60,25 @@ setMethod("initialize",
 
 setValidity("Bioo", function(object){
 #			cat("---------Bioo::setValidity\n")
-			if(! class(object@DF)=="data.frame"){
+			if(! class(object@data)=="data.frame"){
 				return(" data should be a data.frame object")
 			}
 #			if (length(object@Units)>0)
-			  if(length(object@Units)!= ncol(object@DF))
-			    return("Number of Unit elements is not equal the number of columns in slot DF")
+			  if(length(object@Units)!= ncol(object@data))
+			    return("Number of Unit elements is not equal the number of columns in slot data")
 			
 #			if (length(object@LongName)>0)
-			if (length(object@LongName)!=ncol(object@DF))
+			if (length(object@LongName)!=ncol(object@data))
 				if(class(object)=="Bioo") {
-					return("The slot LongName should have the same length as the number of columns in slot DF")
+					return("The slot LongName should have the same length as the number of columns in slot data")
 				}
 			if(length(object@SelectedIdx)!=0){
-				if(length(object@SelectedIdx)!=nrow(object@DF)){
-					return("The slot SelectedIdx should have the same length as the number of rows in slot DF")
+				if(length(object@SelectedIdx)!=nrow(object@data)){
+					return("The slot SelectedIdx should have the same length as the number of rows in slot data")
 				}
 			}
 			if(length(object@InvalidIdx)!=0){
-				if(length(object@InvalidIdx)!=nrow(object@DF)){
+				if(length(object@InvalidIdx)!=nrow(object@data)){
 					return("The slot InvalidIdx should have the same length as the number of rows of spectral data")
 				}
 			}
