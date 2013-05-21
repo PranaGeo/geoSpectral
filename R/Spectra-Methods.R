@@ -7,8 +7,8 @@
 # Method : Conversions from and to data.frame
 #########################################################################
 setAs(from="Spectra", to="Bioo", def=function(from){
-			if(ncol(from@Ancillary)>0){ 
-				output = from@Ancillary
+			if(ncol(from@inDF)>0){ 
+				output = from@inDF
 				output@DF = cbind(from@DF, output@DF)
 				output@Units = c(from@Units, output@Units)
 				output@LongName = c(from@LongName, output@LongName)
@@ -27,8 +27,8 @@ setAs(from="Spectra", to="Bioo", def=function(from){
 # Method : Conversions from and to data.frame
 #########################################################################
 setAs(from="Spectra", to="data.frame", def=function(from){
-			if(ncol(from@Ancillary)>0)
-				output = cbind(from@DF,from@Ancillary@DF)
+			if(ncol(from@inDF)>0)
+				output = cbind(from@DF,from@inDF@DF)
 			
 			attr(output,"ShortName") = from@ShortName
 			attr(output,"LongName") = from@LongName
@@ -51,17 +51,17 @@ setAs(from="data.frame", to="Spectra", def=function(from){
 					LongName = ShortName
 				}
 				
+				browser()
 				if (ncol(from)>length(Wavelengths)) {
 					myidx = (length(Wavelengths)+1):ncol(from)
-					Ancillary = from[myidx,drop=F]
-					Ancillary = new("Bioo", DF=Ancillary, Units=Units[myidx])
+					inDF = from[myidx,drop=F]
+					inDF = new("Bioo", DF=inDF, Units=Units[myidx])
 				} else {
-					Ancillary = new("Bioo") #data.frame()
+					inDF = new("Bioo") #data.frame()
 				}
-				browser()
 				outS = new("Spectra",
 						DF=from[,1:length(Wavelengths)],
-						Ancillary=Ancillary,
+						inDF=inDF,
 						Wavelengths=Wavelengths, Units=Units[1:length(Wavelengths)], 
 						LongName = LongName, ShortName = ShortName)
 			} else {
@@ -92,7 +92,7 @@ setMethod("show", "Spectra", function(object){
 					"Wavelengths : ", length(object@Wavelengths), "channels", LbdStr, head(object@Wavelengths)," ...\n",
 					"Units : ", Units, "\n",
 					"Columns : ", head(colnames(object@DF)), "...\n",
-					"Ancillary : ", head(names(object@Ancillary)),"...\n")
+					"inDF : ", head(names(object@inDF)),"...\n")
 		})		
 
 #########################################################################
@@ -149,7 +149,7 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...){
 			outt@DF = rbind(..1@DF,..2@DF)
 			#TO BE USED LATER : match.call(expand.dots = F)$...
 			
-			outt@Ancillary = spc.rbind(..1@Ancillary,..2@Ancillary)
+			outt@inDF = spc.rbind(..1@inDF,..2@inDF)
 			outt@SelectedIdx = logical()
 			outt@InvalidIdx = logical()
 			validObject(outt)
@@ -164,8 +164,8 @@ setMethod("rep", signature(x = "Spectra"),
 				stop("The argument 'each' is not supported yet")
 			
 			DF=data.frame(sapply(1:ncol(x), function(y) rep(x@DF[1,y], times))) 
-			if(nrow(x@Ancillary)>0)
-				x@Ancillary = rep(x@Ancillary,times) 
+			if(nrow(x@inDF)>0)
+				x@inDF = rep(x@inDF,times) 
 			
 			names(DF) <- names(x)
 			x@DF <- DF
@@ -186,7 +186,7 @@ setMethod("rep", signature(x = "Spectra"),
 setMethod("Arith", signature(e1 = "Spectra", e2 = "Spectra"),function (e1, e2) {
 			result <- callGeneric(e1@DF, e2@DF)
 #			output <- new("Spectra",DF=result,Wavelengths=e1@Wavelengths,Units=e1@Units,
-#					ShortName = "Arith", LongName="Arith",Ancillary=spc.getancillary(e1))			
+#					ShortName = "Arith", LongName="Arith",inDF=spc.getinDF(e1))			
 			output = e1
 			output@DF = result
 			validObject(output)
@@ -199,7 +199,7 @@ setMethod("Arith", signature(e1 = "Spectra", e2 = "Spectra"),function (e1, e2) {
 setMethod("Arith", signature(e1 = "Spectra", e2 = "numeric"),function (e1, e2) {
 			result <- callGeneric(e1@DF, e2)
 #			output <- new("Spectra",DF=result,Wavelengths=e1@Wavelengths,Units=e1@Units,
-#					ShortName = "Arith", LongName="Arith",Ancillary=spc.getancillary(e1))
+#					ShortName = "Arith", LongName="Arith",inDF=spc.getinDF(e1))
 			output = e1
 			output@DF = result
 			validObject(output)
@@ -222,13 +222,13 @@ setMethod("[[", signature="Spectra",
 				if (i %in% names(x) | i <= nrow(x)){
 					Boutput = x@DF[i,j]
 				} 
-				if (i %in% names(x@Ancillary)){
-					Boutput = x@Ancillary@DF[[i]]				
+				if (i %in% names(x@inDF)){
+					Boutput = x@inDF@DF[[i]]				
 				}
 			}
 			if(!exists("Boutput"))
-				stop("Could not match any Spectral or Ancillary data columns")
-
+				stop("Could not match any Spectral or inDF data columns")
+			
 			return(Boutput)
 		})
 setReplaceMethod("[[",  signature="Spectra", definition=function(x, i, j, value) {
@@ -242,12 +242,12 @@ setReplaceMethod("[[",  signature="Spectra", definition=function(x, i, j, value)
 				matched = 1
 				x@DF[[i]] <- value
 			} 
-			if (i %in% names(x@Ancillary)) {
+			if (i %in% names(x@inDF)) {
 				matched = 1
-				x@Ancillary@DF[[i]] <- value				
+				x@inDF@DF[[i]] <- value				
 			}
 			if(!matched)
-				stop("Could not match any Spectral or Ancillary data columns")
+				stop("Could not match any Spectral or inDF data columns")
 			validObject(x)
 			return(x)
 		})
@@ -259,11 +259,11 @@ setMethod("$", signature="Spectra",
 			if (name %in% names(x)){
 				Boutput = x@DF[[name]]
 			} 
-			if (name %in% names(x@Ancillary)){
-				Boutput = x@Ancillary@DF[[name]]				
+			if (name %in% names(x@inDF)){
+				Boutput = x@inDF@DF[[name]]				
 			}
 			if(!exists("Boutput"))
-				stop("Could not match any Spectral or Ancillary data columns")
+				stop("Could not match any Spectral or inDF data columns")
 			return(Boutput)
 		})
 setReplaceMethod("$", signature = "Spectra", 
@@ -292,9 +292,9 @@ setMethod("[",
 					if (!exists("j.new") & any(match(j, names(x),nomatch=F))) {
 						j.new = match(j, names(x))
 					}
-					if (!exists("j.new") & any(match(j, names(x@Ancillary),nomatch=F))) {
+					if (!exists("j.new") & any(match(j, names(x@inDF),nomatch=F))) {
 						OUT_ANC = 1
-						j.new = match(j, names(x@Ancillary))						
+						j.new = match(j, names(x@inDF))						
 					}
 					if (!exists("j.new") && length(j)==1 && grepl("::",j)) {					
 						#The requested input is in format lbd1::lbd2
@@ -304,29 +304,29 @@ setMethod("[",
 						j.new = which(x@Wavelengths>=mylower & x@Wavelengths<=myupper)
 					}
 					if (!exists("j.new"))
-						stop("Could not recognize the wavelength selection format. Use the operator :: or provide spectra or ancillary data column indexes or names")
+						stop("Could not recognize the wavelength selection format. Use the operator :: or provide spectra or inDF data column indexes or names")
 					
 				}			
 				if (all(is.na(j.new)))
-					stop("Could not find matching wavelengths or ancillary data")
+					stop("Could not find matching wavelengths or inDF data")
 				if (any(na.idx <-(is.na(j.new)))) {
 					j.new=j.new[!is.na(j.new)]
-#					warning(paste("Could not match wavelengths or ancillary data :", j[which(na.idx)]))
+#					warning(paste("Could not match wavelengths or inDF data :", j[which(na.idx)]))
 				}
 				if (!all(is.finite(j.new)))
-					stop("Could not find matching wavelengths or ancillary data")
+					stop("Could not find matching wavelengths or inDF data")
 				j = j.new
 			}
 			InvalidIdx = x@InvalidIdx
 			if (!OUT_ANC) {				
 				x@DF=x@DF[i,j,drop=F]
-				if(nrow(x@Ancillary)>0)
-					x@Ancillary=x@Ancillary[i,,drop=F]
+				if(nrow(x@inDF)>0)
+					x@inDF=x@inDF[i,,drop=F]
 				x@Wavelengths = x@Wavelengths[j]
 				x@LongName= x@LongName[j]
 				x@Units= x@Units[j] 
 			} else{
-				x=x@Ancillary
+				x=x@inDF
 				x = x[i,j,drop=F]				
 			}
 			if (length(x@InvalidIdx)>1)
@@ -340,8 +340,8 @@ setMethod("[",
 #########################################################################
 #setMethod("names", signature = "Spectra", 
 #		def = function (x){ 
-#			if(ncol(x@Ancillary)>1)
-#				return(c(names(x@DF),names(x@Ancillary)))
+#			if(ncol(x@inDF)>1)
+#				return(c(names(x@DF),names(x@inDF)))
 #			else                
 #				return(names(x@DF)) 
 #		})
@@ -350,8 +350,8 @@ setMethod("[",
 #########################################################################
 #setMethod("head", signature = "Spectra", 
 #		def = function (x){
-#			if(ncol(x@Ancillary)>1)
-#				return(head(cbind(x@DF, x@Ancillary@DF)))
+#			if(ncol(x@inDF)>1)
+#				return(head(cbind(x@DF, x@inDF@DF)))
 #			else
 #				return(head(x@DF))
 #		})
@@ -385,7 +385,7 @@ setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="
 			
 			x@Units = gsub("\\[\\]","",x@Units)
 			x@Units = gsub("\\[ \\]","",x@Units)
-							
+			
 			if(missing(lab_cex))
 				lab_cex = 1
 #			if(missing(type))
@@ -397,19 +397,19 @@ setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="
 #				matplot(x@Wavelengths,t(x@DF[Xidx,]),#lab=x@Wavelengths,#xaxt="n",
 #						ylab= "",xlab="", type="l", pch=19,cex=0.3, cex.axis=lab_cex, ...)
 #			} else {
-				matplot(x@Wavelengths,t(x@DF[Xidx,]),#lab=x@Wavelengths,#xaxt="n",
-						ylab= "",xlab="",type=type, pch=19,cex=0.3,cex.axis=lab_cex,lwd=lwd,...)
+			matplot(x@Wavelengths,t(x@DF[Xidx,]),#lab=x@Wavelengths,#xaxt="n",
+					ylab= "",xlab="",type=type, pch=19,cex=0.3,cex.axis=lab_cex,lwd=lwd,...)
 #			}
 			if(missing(ylab))
-			ylab = bquote(.(x@LongName[1])*", ["*.(x@Units[1])*"]")
-		#	ylab = "Scalar~quantum~irradiance~mu .mol.m^{-2}~s^{-1}"
-		
+				ylab = bquote(.(x@LongName[1])*", ["*.(x@Units[1])*"]")
+			#	ylab = "Scalar~quantum~irradiance~mu .mol.m^{-2}~s^{-1}"
+			
 			if(missing(xlab))
 				xlab=bquote("Wavelength ["*.(x@WavelengthUnit)*"]")
 			
 			mtext(xlab,side=1,line=2,cex=lab_cex)			
 			mtext(ylab,side=2,line=2,cex=lab_cex)
-							
+			
 			abline(h=0)
 			grid(col="black")
 		})
@@ -423,27 +423,27 @@ setMethod("spc.lines",signature = "Spectra",definition = function(x,...){
 		})
 
 #########################################################################
-# Method : spc.getancillary
+# Method : spc.getinDF
 #########################################################################
-setGeneric (name= "spc.getancillary",
-		def=function(object, ...){standardGeneric("spc.getancillary")})
-setMethod("spc.getancillary", signature = "Spectra", 
+setGeneric (name= "spc.getinDF",
+		def=function(object, ...){standardGeneric("spc.getinDF")})
+setMethod("spc.getinDF", signature = "Spectra", 
 		def = function (object, Columns){
 			if (missing(Columns))
-				return(object@Ancillary)
+				return(object@inDF)
 			else 
-				return(object@Ancillary[,Columns])
+				return(object@inDF[,Columns])
 		})
 #########################################################################
-# Method : SetAncillary
+# Method : SetinDF
 #########################################################################
-setGeneric("spc.setancillary<-",function(object,value)
-		{standardGeneric("spc.setancillary<-")})
-setReplaceMethod(f="spc.setancillary",	signature="Spectra",
+setGeneric("spc.setinDF<-",function(object,value)
+		{standardGeneric("spc.setinDF<-")})
+setReplaceMethod(f="spc.setinDF",	signature="Spectra",
 		definition=function(object,value){
 			if(class(value)=="data.frame")
 				value = as(value,"Bioo")
-			object@Ancillary <-value
+			object@inDF <-value
 			validObject(object)
 			return (object)
 		})
@@ -543,7 +543,7 @@ setMethod("subset",  signature="Spectra",
 			else {
 				mycall <- substitute(subset)
 				try(xidx <- eval(mycall, x@DF, parent.frame()),silent=T)
-				try(xidx <- eval(mycall, x@Ancillary@DF, parent.frame()),silent=T)		
+				try(xidx <- eval(mycall, x@inDF@DF, parent.frame()),silent=T)		
 				if (!is.logical(xidx)) 
 					stop("'subset' must evaluate to logical")				
 				xidx <- xidx & !is.na(xidx)
@@ -551,8 +551,8 @@ setMethod("subset",  signature="Spectra",
 					x@SelectedIdx = x@SelectedIdx[xidx]
 				if (length(x@InvalidIdx)>0)
 					x@InvalidIdx = x@InvalidIdx[xidx]
-				if (nrow(x@Ancillary)>0)
-					x@Ancillary@DF = x@Ancillary@DF[xidx,,drop=drop]					
+				if (nrow(x@inDF)>0)
+					x@inDF@DF = x@inDF@DF[xidx,,drop=drop]					
 			}	
 			if (missing(select)) 
 				vars <- TRUE
@@ -654,8 +654,8 @@ setReplaceMethod(f="bioo.setheader", signature="Spectra",
 # Method : bioo.add.column
 #########################################################################
 setMethod("bioo.add.column", signature="Spectra", definition= function (object, name, value, units,longname) {
-			A = bioo.add.column(object@Ancillary,name=name,value=value,units=units,longname=longname)
-			object@Ancillary = A 
+			A = bioo.add.column(object@inDF,name=name,value=value,units=units,longname=longname)
+			object@inDF = A 
 			validObject(object)
 			return(object)
 		})
@@ -703,3 +703,53 @@ setReplaceMethod(f="bioo.setinvalid.idx", signature="Spectra",
 			validObject(object)
 			return (object)
 		})
+
+
+Spectra = function(inDF,space,time,...){
+	longcol="";latcol="";timecol=""
+	if(missing(space)){
+		if ("LAT" %in% names(inDF))
+			latcol = "LAT"
+		if ("lat" %in% names(inDF))
+			latcol = "lat"
+		if ("latitude" %in% names(inDF))
+			latcol = "latitude"
+		if ("LATITUDE" %in% names(inDF))
+			latcol = "LATITUDE"
+		if ("LON" %in% names(inDF))
+			longcol = "LON"
+		if ("LONG" %in% names(inDF))
+			longcol = "LONG"
+		if ("lon" %in% names(inDF))
+			longcol = "lon"
+		if ("long" %in% names(inDF))
+			longcol = "long"
+		if ("longitude" %in% names(inDF))
+			longcol = "longitude"
+		if ("LONGITUDE" %in% names(inDF))
+			longcol = "LONGITUDE"
+		
+		if (!(longcol %in% names(inDF))) {
+			inDF$LONG=1
+			longcol="LONG"
+			warning("Could not find a longitude column named either of: lon,long,LON,LONG,longitue,LONGITUDE. Assigning LONG=1.0 to all rows")
+		} 
+		if(!(latcol %in% names(inDF))){
+			inDF$LAT=1
+			latcol="LAT"
+			warning("Could not find a latitude column named either of: lat,LAT,latitude,LATITUDE. Assigning LAT=1.0 to all rows")
+		}
+	}
+	if(missing(time)){
+		if ("time" %in% names(inDF))
+			timecol = "time"
+		if ("TIME" %in% names(inDF))
+			timecol = "TIME"
+		if (!timecol %in% names(inDF)){
+			inDF$TIME=1
+			timecol="TIME"
+			warning("Could not find a time column named either of : time or TIME. Assigning TIME=1.0 to all rows")
+		}
+	}
+	stConstruct(inDF,c(longcol,latcol),timecol,...)
+}
