@@ -51,7 +51,6 @@ setAs(from="data.frame", to="Spectra", def=function(from){
 					LongName = ShortName
 				}
 				
-				browser()
 				if (ncol(from)>length(Wavelengths)) {
 					myidx = (length(Wavelengths)+1):ncol(from)
 					inDF = from[myidx,drop=F]
@@ -704,7 +703,7 @@ setReplaceMethod(f="bioo.setinvalid.idx", signature="Spectra",
 			return (object)
 		})
 
-
+#Creates a STIDF function from longtable. If not provided, assumes LAT,LON and TIME columns as 1.
 Spectra = function(inDF,space,time,...){
 	longcol="";latcol="";timecol=""
 	if(missing(space)){
@@ -751,5 +750,7 @@ Spectra = function(inDF,space,time,...){
 			warning("Could not find a time column named either of : time or TIME. Assigning TIME=1.0 to all rows")
 		}
 	}
-	stConstruct(inDF,c(longcol,latcol),timecol,...)
+	out = stConstruct(inDF,c(longcol,latcol),timecol,...)
+	validObject(out)
+	return(out)
 }
