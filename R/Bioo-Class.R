@@ -1,10 +1,11 @@
+
 # TODO: Add comment
 # 
 # Author: acizmeli
 ###############################################################################
 #removeClass("Spectra")
 require(spacetime)
-if (1) {
+if (1 & 1) {
 	setClass("Bioo", 
 			representation("STIDF",
 					header="BiooHeader",

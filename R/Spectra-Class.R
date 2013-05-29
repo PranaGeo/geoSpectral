@@ -8,26 +8,36 @@
 setClass("Spectra", contains="STIDF", 
 		representation(
 				ShortName="character",
+				LongName="character",
 				Wavelengths="numeric", 
-				WavelengthUnit = "character", 
-				Ancillary="data.frame"), 
+				WavelengthsUnit = "character", 
+				Spectra="matrix",
+				header="BiooHeader",
+				Units="character",
+				InvalidIdx="logical"), 
 		prototype=prototype(
-				data=data.frame(),
 				ShortName="spvar2",
-				Wavelengths=numeric(), 
-				WavelengthUnit = character(), 
-				Ancillary=data.frame()))
-
+				LongName="spvar2 longname",
+				Wavelengths=0, 
+				WavelengthsUnit = "nm", 
+				Spectra=matrix(),
+				header=new("BiooHeader"),
+				Units="[ ]",
+				InvalidIdx=logical()))
+if (0){
+	
 setMethod("initialize",
 		signature(.Object = "Spectra"),
-		function (.Object, data, ShortName, LongName, Wavelengths, Units, Ancillary, header,WavelengthUnit,...) 
+		function (.Object, ShortName, LongName, Wavelengths, WavelengthsUnit,
+				Spectra,header,Units, ...) 
 		{
+			browser()
 #			cat("---------Spectra::Initialize\n")
 			#Set defaults for ShortName
-			if (missing(data))
-				data <- data.frame()
+			if (missing(Spectra))
+				Spectra <- matrix()
 			if (missing(Wavelengths))
-				Wavelengths <- numeric()
+				Wavelengths <- numeric(ncol(Spectra))
 			if (missing(ShortName))
 				ShortName <- "spvar"				 
 			if (length(ShortName)!=1)
@@ -36,42 +46,38 @@ setMethod("initialize",
 			if (missing(LongName))
 				LongName <- "spvar longname"				 
 			if (length(LongName)==1)
-				LongName <- rep(LongName, ncol(data))				 							
+				LongName <- rep(LongName, ncol(Spectra))				 							
 			#Set the default for Units
 			if (missing(Units))
 				Units <- "[ ]"	
 			if (length(Units)==1)
-				Units<- rep(Units, ncol(data))				 							
-			#Set the default for Ancillary data
-			if (missing(Ancillary))
-				Ancillary=new("Bioo")
+				Units<- rep(Units, ncol(Spectra))				 							
 			#Set the default header
 			if(missing(header))
 				header = .Object@header
-			if(missing(WavelengthUnit))
-				WavelengthUnit = "nm"
+			if(missing(WavelengthsUnit))
+				WavelengthsUnit = "nm"
 
 			.Object@Wavelengths=Wavelengths
-			.Object@Ancillary=Ancillary
 			.Object@Units=Units
-			.Object@data=data
+			.Object@Spectra=Spectra
 			.Object@ShortName=ShortName
 			.Object@LongName=LongName
 			.Object@header=header
-			.Object@WavelengthUnit = WavelengthUnit
+			.Object@WavelengthsUnit = WavelengthsUnit
 			#			.Object=callNextMethod(.Object, data=data, ShortName=ShortName,
 #					LongName=LongName,Wavelengths=Wavelengths,Units=Units,Ancillary=Ancillary)
-			#			.Object <- callNextMethod()
-			
+			#			.Object <- callNextMethod()			
 			return(.Object)
 		})
+}
 
 setValidity("Spectra", function(object){
 #			cat("---------Spectra::setValidity\n")
-			if(!all(sapply(object@data, class)=="numeric")){
+			if(!all(sapply(object@Spectra, class)=="numeric")){
 				return("Spectral data should be a data.frame object with numeric columns")
 			}
-			if(length(object@Wavelengths)!= ncol(object@data)){
+			if(length(object@Wavelengths)!= ncol(object@Spectra)){
 				return("Number of Spectral channels is not equal the number of data columns")
 			}
 			if(!all(is.finite(object@Wavelengths))){
@@ -80,10 +86,14 @@ setValidity("Spectra", function(object){
 			if(any(diff(object@Wavelengths)<=0)){
 				return("Wavelength should be increasing and without replicates.")
 			}
-			if(nrow(object@Ancillary)!=0){
-				if(nrow(object@Ancillary)!=nrow(object@data)){
+			if(nrow(object@data)!=0){
+				if(nrow(object@data)!=nrow(object@Spectra)){
 					return("Ancillary data frame should have the same number of rows as spectral data")
 				}
+			}
+			if(length(object@InvalidIdx)!=0){
+				if(length(object@InvalidIdx)!=nrow(object(Spectra)))
+					return("Invalid index length should match the number of data rows")
 			}
 			return(TRUE)
 		})
