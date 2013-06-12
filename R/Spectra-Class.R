@@ -14,7 +14,8 @@ setClass("Spectra", contains="STIDF",
 				Spectra="matrix",
 				header="BiooHeader",
 				Units="character",
-				InvalidIdx="logical"), 
+				InvalidIdx="logical",
+				SelectedIdx="logical"), 
 		prototype=prototype(
 				ShortName="spvar2",
 				LongName="spvar2 longname",
@@ -23,7 +24,8 @@ setClass("Spectra", contains="STIDF",
 				Spectra=matrix(),
 				header=new("BiooHeader"),
 				Units="[ ]",
-				InvalidIdx=logical()))
+				InvalidIdx=logical(),
+				SelectedIdx=logical()))
 if (0){
 	
 setMethod("initialize",
@@ -94,6 +96,10 @@ setValidity("Spectra", function(object){
 			if(length(object@InvalidIdx)!=0){
 				if(length(object@InvalidIdx)!=nrow(object(Spectra)))
 					return("Invalid index length should match the number of data rows")
+			}
+			if(length(object@SelectedIdx)!=0){
+				if(length(object@SelectedIdx)!=nrow(object(Spectra)))
+					return("Selected index length should match the number of data rows")
 			}
 			return(TRUE)
 		})

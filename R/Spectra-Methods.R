@@ -145,3 +145,118 @@ setMethod("spc.lines",signature = "Spectra",definition = function(x,...){
 			a=sapply(1:nrow(x@Spectra), function(S) {
 						lines(x@Wavelengths, x@Spectra[S,],...)})
 		})
+
+#########################################################################
+# Method : spc.rbind
+#########################################################################
+setMethod("spc.rbind", signature = "Spectra", def = function (...){
+			#Check that column names match
+			DFL=sapply(list(...),function(x) names(x@data),simplify=F)
+			if(!all(sapply(1:length(DFL),function(x) all(DFL[[x]]==DFL[[1]]))))
+				stop("Names of all Ancillary data columns should be the same")
+			
+			#Check that column names match
+			DFL=sapply(list(...),function(x) colnames(x@Spectra),simplify=F)
+			if(!all(sapply(1:length(DFL),function(x) all(DFL[[x]]==DFL[[1]]))))
+				stop("Names of all Spectral data columns should be the same")
+			
+			#Check that the number of columns match 
+			DFL=sapply(list(...), function(x) ncol(x@Spectra),simplify=F)
+			if(!all(sapply(1:length(DFL),function(x) all(DFL[[x]]==DFL[[1]]))))
+				stop("All Spectra arrays should have the same number of columns")
+			DFL=sapply(list(...), function(x) ncol(x@data),simplify=F)
+			if(!all(sapply(1:length(DFL),function(x) all(DFL[[x]]==DFL[[1]]))))
+				stop("All Ancillary arrays should have the same number of columns")
+			
+			DFL=sapply(list(...),spc.getwavelengths)
+			#Check that all Wavelengths are equal
+			if(!all(apply(DFL,1,diff)==0))
+				stop("Wavelengths of all input Spectra objects should be the same")
+			
+			#Create the output variable
+			outt = ..1
+			#Get a list of all input arguments
+			allinargs = aa=match.call(expand.dots = F)$...
+			
+			#For all input arguments
+			for(I in 2:length(allinargs)){
+				#Get the slot Names
+				sltn = slotNames(..1)
+				#Slots to omit in the rbind process 
+				sltn = sltn[sltn!="ShortName"]
+				sltn = sltn[sltn!="LongName"]
+				sltn = sltn[sltn!="Wavelengths"]
+				sltn = sltn[sltn!="WavelengthsUnit"]
+				sltn = sltn[sltn!="Units"]
+				if(!inherits(eval((allinargs[[I]])),"STI"))
+					stop("The input argument should inherit from class STI")
+				#For all slots
+				for(J in 1:length(sltn)){
+					myslot = slot(eval((allinargs[[I]])),sltn[J])
+					if(class(myslot)[1]=="BiooHeader"){
+						aa=as.data.frame(rbind(slot(outt,sltn[J]),myslot))
+						rownames(aa)=NULL
+						bb = as.list(aa)
+						bb = lapply(bb,function(x){names(x)<-NULL;x})
+						outt@header = as(bb,"BiooHeader")
+					}
+#					if (length(myslot)==0)
+#						myslot=NA
+					if(class(myslot)[1]=="matrix"|class(myslot)[1]=="data.frame")
+						slot(outt,sltn[J])<- rbind(slot(outt,sltn[J]),myslot)
+					if(class(myslot)[1]=="logical"|class(myslot)[1]=="numeric"|
+							class(myslot)[1]=="character"|class(myslot)[1]=="POSIXct")
+						if(class(myslot)[1]=="POSIXct"){
+							mytz = attr(outt@endTime,"tzone")
+							slot(outt,sltn[J])<-as.POSIXct(as.POSIXlt(c(slot(outt,sltn[J]),myslot),tz=mytz))
+						}
+					if(class(myslot)[1]=="xts"){
+						slot(outt,sltn[J])<-c(slot(outt,sltn[J]),myslot)
+						slot(outt,sltn[J])<-xts(1:length(slot(outt,sltn[J])),time(slot(outt,sltn[J])))
+					}	
+					if(class(myslot)[1]=="SpatialPoints"){
+						prj = slot(outt,sltn[J])@proj4string
+						if (!identical(prj@projargs,myslot@proj4string@projargs))
+							stop("proj4strings do not match!")
+						#rbind the coordinates
+						coords = rbind(coordinates(slot(outt,sltn[J])),coordinates(myslot))
+						#Create a SpatialPoints object
+						slot(outt,sltn[J])<-SpatialPoints(coords,proj4string=prj)
+					}
+				} #end for all slots
+			} #end for all input arguments			
+			validObject(outt)
+			return(outt) 
+		})
+
+#########################################################################
+# Method : Getwavelengths
+#########################################################################
+setGeneric (name= "spc.getwavelengths",
+		def=function(object){standardGeneric("spc.getwavelengths")})
+setMethod("spc.getwavelengths", signature = "Spectra", 
+		def = function (object){
+			return(object@Wavelengths)
+		})
+#########################################################################
+# Method : SetWavelengths
+#########################################################################
+setGeneric("spc.setwavelengths<-",function(object,value)
+		{standardGeneric("spc.setwavelengths<-")})
+setReplaceMethod(f="spc.setwavelengths", signature="Spectra",
+		definition=function(object,value){
+			object@Wavelengths <-value
+			validObject(object)
+			return (object)
+		})
+#########################################################################
+# Method : spc.cname.construct
+#########################################################################
+setGeneric("spc.cname.construct",function(object,value)
+		{standardGeneric("spc.cname.construct")})
+setMethod(f="spc.cname.construct", signature="Spectra",
+		definition=function(object,value){
+			if(missing(value))
+				value = object@ShortName
+			return(paste(value,spc.getwavelengths(object),sep="_"))
+		})
