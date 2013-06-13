@@ -217,7 +217,7 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...){
 			
 			#Get a list of all input arguments
 			allinargs = aa=match.call(expand.dots = F)$...
-			
+
 			#For all input arguments
 			for(I in 2:length(allinargs)){
 				#Get the slot Names
