@@ -7,9 +7,9 @@
 # Method : dim
 #########################################################################
 setMethod("dim", signature = "Spectra", 
-	def = function (x){
-		return(dim(x@Spectra))  
-	})
+		def = function (x){
+			return(dim(x@Spectra))  
+		})
 #########################################################################
 # Method : ncol
 #########################################################################
@@ -208,9 +208,13 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...){
 			#Check that all Wavelengths are equal
 			if(!all(apply(DFL,1,diff)==0))
 				stop("Wavelengths of all input Spectra objects should be the same")
-			
 			#Create the output variable
 			outt = ..1
+			
+			#Error if does not contain SpatialPoints
+			if(class(outt@sp)!="SpatialPoints")
+				stop("Only support ST* inherited object based on SpatialPoints")
+			
 			#Get a list of all input arguments
 			allinargs = aa=match.call(expand.dots = F)$...
 			
@@ -266,7 +270,57 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...){
 		})
 
 #########################################################################
-# Method : Getwavelengths
+# Method : spc.rbind
+#########################################################################
+setMethod("spc.rbind", signature = "STI", def = function (...){
+			#Create the output variable
+			outt = ..1
+			
+			#Get a list of all input arguments
+			allinargs = aa=match.call(expand.dots = F)$...
+			
+			#For all input arguments
+			for(I in 2:length(allinargs)){
+				#Get the slot Names
+				sltn = slotNames(..1)
+
+				#Error if does not inherit from STI or contain SpatialPoints 
+				if(class(eval(allinargs[[I]])@sp)!="SpatialPoints")
+					stop("Only support ST* inherited object based on SpatialPoints")				
+				if(!inherits(eval((allinargs[[I]])),"STI"))
+					stop("The input argument should inherit from class STI")
+				#For all slots
+				for(J in 1:length(sltn)){
+					myslot = slot(eval((allinargs[[I]])),sltn[J])
+					if(class(myslot)[1]=="matrix"|class(myslot)[1]=="data.frame")
+						slot(outt,sltn[J])<- rbind(slot(outt,sltn[J]),myslot)
+					if(class(myslot)[1]=="logical"|class(myslot)[1]=="numeric"|
+							class(myslot)[1]=="character"|class(myslot)[1]=="POSIXct")
+						if(class(myslot)[1]=="POSIXct"){
+							mytz = attr(outt@endTime,"tzone")
+							slot(outt,sltn[J])<-as.POSIXct(as.POSIXlt(c(slot(outt,sltn[J]),myslot),tz=mytz))
+						}
+					if(class(myslot)[1]=="xts"){
+						slot(outt,sltn[J])<-c(slot(outt,sltn[J]),myslot)
+						slot(outt,sltn[J])<-xts(1:length(slot(outt,sltn[J])),time(slot(outt,sltn[J])))
+					}
+					if(class(myslot)[1]=="SpatialPoints"){
+						prj = slot(outt,sltn[J])@proj4string
+						if (!identical(prj@projargs,myslot@proj4string@projargs))
+							stop("proj4strings do not match!")
+						#rbind the coordinates
+						coords = rbind(coordinates(slot(outt,sltn[J])),coordinates(myslot))
+						#Create a SpatialPoints object
+						slot(outt,sltn[J])<-SpatialPoints(coords,proj4string=prj)
+					}
+				} #end for all slots
+			} #end for all input arguments			
+			validObject(outt)
+			return(outt) 
+		})
+
+#########################################################################
+# Method : spc.getwavelengths
 #########################################################################
 setGeneric (name= "spc.getwavelengths",
 		def=function(object){standardGeneric("spc.getwavelengths")})
@@ -275,7 +329,7 @@ setMethod("spc.getwavelengths", signature = "Spectra",
 			return(object@Wavelengths)
 		})
 #########################################################################
-# Method : SetWavelengths
+# Method : spc.setwavelengths
 #########################################################################
 setGeneric("spc.setwavelengths<-",function(object,value)
 		{standardGeneric("spc.setwavelengths<-")})
