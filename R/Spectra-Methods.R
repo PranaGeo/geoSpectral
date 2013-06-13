@@ -208,12 +208,16 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...){
 			#Check that all Wavelengths are equal
 			if(!all(apply(DFL,1,diff)==0))
 				stop("Wavelengths of all input Spectra objects should be the same")
-			
 			#Create the output variable
 			outt = ..1
+			
+			#Error if does not contain SpatialPoints
+			if(class(outt@sp)!="SpatialPoints")
+				stop("Only support ST* inherited object based on SpatialPoints")
+			
 			#Get a list of all input arguments
 			allinargs = aa=match.call(expand.dots = F)$...
-			
+
 			#For all input arguments
 			for(I in 2:length(allinargs)){
 				#Get the slot Names
@@ -266,7 +270,7 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...){
 		})
 
 #########################################################################
-# Method : Getwavelengths
+# Method : spc.getwavelengths
 #########################################################################
 setGeneric (name= "spc.getwavelengths",
 		def=function(object){standardGeneric("spc.getwavelengths")})
@@ -275,7 +279,7 @@ setMethod("spc.getwavelengths", signature = "Spectra",
 			return(object@Wavelengths)
 		})
 #########################################################################
-# Method : SetWavelengths
+# Method : spc.setwavelengths
 #########################################################################
 setGeneric("spc.setwavelengths<-",function(object,value)
 		{standardGeneric("spc.setwavelengths<-")})
