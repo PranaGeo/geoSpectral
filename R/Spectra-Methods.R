@@ -271,5 +271,5 @@ setMethod(f="spc.cname.construct", signature="Spectra",
 		definition=function(object,value){
 			if(missing(value))
 				value = object@ShortName
-			return(paste(value,spc.getwavelengths(object),sep="_"))
+			return(paste(value,round(spc.getwavelengths(object)),sep="_"))
 		})
