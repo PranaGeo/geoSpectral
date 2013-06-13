@@ -3,6 +3,17 @@
 # Author: acizmeli
 ###############################################################################
 
+#########################################################################
+# Method : spc.colnames
+#########################################################################
+setMethod("spc.colnames", signature = "Spectra", 
+		def = function (x){ return(colnames(x@Spectra)) })
+setReplaceMethod("spc.colnames", signature = "Spectra", def = function (x,value){
+			colnames(x@Spectra) = value
+			validObject(x)
+			return(x) 
+		})
+
 #Creates a STIDF function from longstable. If not provided, assumes LAT,LON and TIME columns as 1.
 Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,header,...){
 	longcol="";latcol="";timecol=""
