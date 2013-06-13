@@ -101,5 +101,11 @@ setValidity("Spectra", function(object){
 				if(length(object@SelectedIdx)!=nrow(object(Spectra)))
 					return("Selected index length should match the number of data rows")
 			}
+			if(length(object@ShortName)!=1)
+				return("The slot ShortName should have a length of 1")
+			if(length(object@LongName)!=1)
+				return("The slot LongName should have a length of 1")
+			if(length(object@Units)!=1)
+				return("The slot Units should have a length of 1")
 			return(TRUE)
 		})
