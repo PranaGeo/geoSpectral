@@ -6,8 +6,10 @@
 #########################################################################
 # Method : spc.colnames
 #########################################################################
+setGeneric("spc.colnames",function(x,Y,...){standardGeneric("spc.colnames")})
 setMethod("spc.colnames", signature = "Spectra", 
 		def = function (x){ return(colnames(x@Spectra)) })
+setGeneric("spc.colnames<-",function(x,Y,...){standardGeneric("spc.colnames")})
 setReplaceMethod("spc.colnames", signature = "Spectra", def = function (x,value){
 			colnames(x@Spectra) = value
 			validObject(x)
