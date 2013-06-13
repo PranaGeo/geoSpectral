@@ -350,3 +350,27 @@ setMethod(f="spc.cname.construct", signature="Spectra",
 				value = object@ShortName
 			return(paste(value,round(spc.getwavelengths(object)),sep="_"))
 		})
+
+#########################################################################
+#spc.make.stindex 
+#########################################################################
+#Takes a n-element list of Spectra objects and outputs an n-rows ST object. Each row 
+#of the ST object has a time interval that starts from the beginning of the first measurement
+#and ends at the endTime of the last measurement of the corresponding input list element. 
+spc.make.stindex = function(input) {
+	if(!inherits(input,"list"))
+		stop("The input dataset should inherit from a list (can also be a BiooList)")
+	input = lapply(input,as,"STI")
+	endTime = lapply(input,function(x) x@endTime[length(x@endTime)])
+	input = lapply(input,function(x){
+				x@sp@coords<-t(as.matrix(x@sp@coords[1,]))
+				x@time<-x@time[1]
+				x@endTime<-x@endTime[1]
+				x
+			})
+	input = lapply(1:length(input),function(x) {
+				input[[x]]@endTime = endTime[[x]]
+				input[[x]]
+			})
+	input = do.call(spc.rbind,input)
+}
