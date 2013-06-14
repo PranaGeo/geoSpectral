@@ -4,6 +4,91 @@
 ###############################################################################
 
 #########################################################################
+# Method : Conversions from and to data.frame
+#########################################################################
+setAs(from="Spectra", to="data.frame", def=function(from){
+			if(ncol(from@data)>0)
+				output = cbind(as.data.frame(from@Spectra),from@data)
+			
+			delidx = match(c("LON","LAT","TIME","ENDTIME"),names(output))
+			output = output[,-delidx[!is.na(delidx)]]
+			output$LON = from@sp@coords[,"LON"]
+			output$LAT = from@sp@coords[,"LAT"]
+			output$TIME=as.POSIXct(time(from@time))
+			output$ENDTIME=from@endTime
+			
+			attr(output,"ShortName") = from@ShortName
+			attr(output,"LongName") = from@LongName
+			attr(output,"Wavelengths") = from@Wavelengths
+			attr(output,"Units") = from@Units
+			attr(output,"header") = as(from@header,"list")
+			names(attr(output,"header")) = names(from@header)
+			
+			return(output)
+		})
+setAs(from="data.frame", to="Spectra", def=function(from){
+			#This function makes use of Spectral::Spectra()
+			if(!any(grepl("Wavelengths", names(attributes(from))))) 
+				stop("The required data.frame attribute was not found : Wavelengths")
+			
+			if(!any(grepl("Units", names(attributes(from)))))
+				stop("The required data.frame attribute was not found : Units")
+			
+			if(!any(grepl("ShortName", names(attributes(from)))))
+				stop("The required data.frame attribute was not found : ShortName")
+			
+			Wavelengths= attr(from, "Wavelengths") 
+			Units=attr(from,"Units") 
+			ShortName = attr(from, "ShortName")
+
+			if (any(grepl("LongName", names(attributes(from))))){
+				LongName = attr(from, "LongName")
+			} else {
+				LongName = ShortName
+			}
+			
+			#Create Spectra matrix
+			Spectra = as.matrix(from[,1:length(Wavelengths)])
+			if(prod(dim(Spectra))==0)
+				stop("The Spectra matrix is empty. Cannot create a spectra object")
+			if(!all(sapply(Spectra,class)=="numeric"))
+				stop(paste("Cannot create a numeric matrix from", length(Wavelengths),
+								"columns of the input data.frame. Cannot create a spectra object"))
+			
+			#Create ancillary data.frame
+			if (ncol(from)>length(Wavelengths)) {
+				myidx = (length(Wavelengths)+1):ncol(from)
+				data = from[myidx,drop=F]
+			} else {
+				data = data.frame(1:nrow(Spectra))
+			}
+			
+			#Extract the header
+			if(!is.null(attr(from,"header")))
+				header = as(attr(from,"header"),"BiooHeader")
+			else
+				header = new("BiooHeader")
+			
+			if(!is.timeBased(from$TIME))
+				stop("The TIME column does not contain time-based data")
+			TIME = as.xts(1:length(from$TIME), from$TIME)
+			if(!is.timeBased(from$ENDTIME)){
+				endTime = from$TIME
+			}else{
+				endTime = from$ENDTIME
+			}
+			outS =Spectral::Spectra(data,Spectra,Wavelengths,Units=Units,
+					header=header,ShortName=ShortName)
+#			outS = new("Spectra", time = TIME, endTime = endTime,
+#					Spectra=Spectra, data=data,
+#					Wavelengths=Wavelengths, Units=Units[1], 
+#					LongName = LongName, ShortName = ShortName,header=header)
+			
+			validObject(outS)
+			return(outS)
+		})
+
+#########################################################################
 # Method : dim
 #########################################################################
 setMethod("dim", signature = "Spectra", 
@@ -40,7 +125,7 @@ setReplaceMethod("spc.colnames", signature = "Spectra", def = function (x,value)
 		})
 
 #Creates a STIDF function from longstable. If not provided, assumes LAT,LON and TIME columns as 1.
-Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,header,...){
+Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...){
 	longcol="";latcol="";timecol=""
 	if(missing(space)){
 		if ("LAT" %in% names(inDF))
@@ -81,13 +166,22 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,header,...){
 		if ("TIME" %in% names(inDF))
 			timecol = "TIME"
 		if (!timecol %in% names(inDF)){
-			inDF$TIME=1
+			inDF$TIME=1:nrow(inDF)
 			timecol="TIME"
 			warning("Could not find a time column named either of : time or TIME. Assigning TIME=1.0 to all rows")
 		}
 	}
-	out = stConstruct(inDF,c(longcol,latcol),timecol)
-	
+	if(missing(endTime)){
+		if("ENDTIME" %in% names(inDF)){
+			endTime = inDF$ENDTIME
+		} else{
+			endTime = inDF$TIME
+		}
+	}
+
+	out = stConstruct(inDF,c(longcol,latcol),timecol,endTime=endTime)
+	#I think stConstruct does not take endTime into account. Force it again
+	out@endTime = endTime
 	#Extract Wavelengths from data frame attributes
 	if(missing(Wavelengths)){
 		Wavelengths = attr(inDF,"Wavelengths")
@@ -160,10 +254,13 @@ setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="
 			matplot(x@Wavelengths,t(x@Spectra[Xidx,]),#lab=x@Wavelengths,#xaxt="n",
 					ylab= "",xlab="",type=type, pch=19,cex=0.3,cex.axis=lab_cex,lwd=lwd,...)
 #			}
-			if(missing(ylab))
-				ylab = bquote(.(x@LongName[1])*", ["*.(x@Units[1])*"]")
-			#	ylab = "Scalar~quantum~irradiance~mu .mol.m^{-2}~s^{-1}"
-			
+			if(missing(ylab)){
+				if(x@LongName[1]=="spvar2 longname")
+					ylab = bquote(.(x@ShortName)*", ["*.(x@Units[1])*"]")
+				else
+					ylab = bquote(.(x@LongName[1])*", ["*.(x@Units[1])*"]")
+				#	ylab = "Scalar~quantum~irradiance~mu .mol.m^{-2}~s^{-1}"
+			}
 			if(missing(xlab))
 				xlab=bquote("Wavelength ["*.(x@WavelengthsUnit)*"]")
 			
@@ -217,7 +314,7 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...){
 			
 			#Get a list of all input arguments
 			allinargs = aa=match.call(expand.dots = F)$...
-
+			
 			#For all input arguments
 			for(I in 2:length(allinargs)){
 				#Get the slot Names
@@ -283,7 +380,7 @@ setMethod("spc.rbind", signature = "STI", def = function (...){
 			for(I in 2:length(allinargs)){
 				#Get the slot Names
 				sltn = slotNames(..1)
-
+				
 				#Error if does not inherit from STI or contain SpatialPoints 
 				if(class(eval(allinargs[[I]])@sp)!="SpatialPoints")
 					stop("Only support ST* inherited object based on SpatialPoints")				
