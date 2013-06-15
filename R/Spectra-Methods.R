@@ -484,8 +484,8 @@ spc.make.stindex = function(input) {
 		input@data = input@data[,-cidx]
 	
 	#Put the time and endTime slots as data columns
-	input@data = cbind(data.frame(TIME=as.character(time(input@time),usetz=T)),input@data)
 	input@data = cbind(data.frame(ENDTIME=as.character(input@endTime,usetz=T)),input@data)
+	input@data = cbind(data.frame(TIME=as.character(time(input@time),usetz=T)),input@data)
 	validObject(input)
 	return(input)
 }
