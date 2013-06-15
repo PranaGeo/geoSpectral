@@ -471,3 +471,18 @@ spc.make.stindex = function(input) {
 			})
 	input = do.call(spc.rbind,input)
 }
+
+#A version of spacetime::timeMatch that finds the nearest measurement 
+spc.timeMatch.nearest = function(master,searched,returnList = FALSE) {
+	if(!is.timeBased(master))
+		if(!(inherits(master,"ST")) & is.timeBased(master))
+			stop("Input argument needs to either inherit from spacetime::ST class or be a timeBased variable")
+	if(inherits(master,"ST"))
+		master = time(master)
+	if(!is.timeBased(searched))
+		if(!(inherits(searched,"ST")) & is.timeBased(master))
+			stop("Input argument needs to either inherit from spacetime::ST class or be a timeBased variable")
+	if(inherits(searched,"ST"))
+		searched = time(searched)
+	out = sapply(master,function(x){mymin = which.min(abs(searched-x))})
+}
