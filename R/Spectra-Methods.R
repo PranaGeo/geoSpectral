@@ -476,6 +476,16 @@ spc.make.stindex = function(input) {
 			})
 	#Call spc.rbind to convert the list of STIDF to one STIDF object 
 	input = do.call(spc.rbind,input)
+	
+	#Eliminate "LAT","LON","TIME" columns, if any
+	cidx = match(c("LAT","LON","TIME"), names(input@data))
+	cidx = cidx[!is.na(cidx)]
+	if(length(cidx)>0)
+		input@data = input@data[,-cidx]
+	
+	#Put the time and endTime slots as data columns
+	input@data = cbind(data.frame(TIME=as.character(time(input@time),usetz=T)),input@data)
+	input@data = cbind(data.frame(ENDTIME=as.character(input@endTime,usetz=T)),input@data)
 	validObject(input)
 	return(input)
 }
@@ -505,5 +515,6 @@ spc.timeMatch.nearest = function(master,searched,returnList=FALSE,report=FALSE) 
 #Reports the space and time distance of each row of the STI-inherited object
 #searched to the corresponding row of the STI-inherited object master
 spc.STI.stdistance = function(master,searched){
-	coordinates(Li.idx)[idxnrst1,]
+	coordinates(searched)
+	browser()
 }
