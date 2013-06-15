@@ -485,4 +485,7 @@ spc.timeMatch.nearest = function(master,searched,returnList = FALSE) {
 	if(inherits(searched,"ST"))
 		searched = time(searched)
 	out = sapply(master,function(x){mymin = which.min(abs(searched-x))})
+	
+	if(returnList)
+		out = lapply(out,function(x)x)
 }
