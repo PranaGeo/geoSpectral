@@ -369,7 +369,7 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...){
 #########################################################################
 # Method : spc.rbind
 #########################################################################
-setMethod("spc.rbind", signature = "STI", def = function (...){
+setMethod("spc.rbind", signature = "STIDF", def = function (...){
 			#Create the output variable
 			outt = ..1
 			
@@ -457,7 +457,9 @@ setMethod(f="spc.cname.construct", signature="Spectra",
 spc.make.stindex = function(input) {
 	if(!inherits(input,"list"))
 		stop("The input dataset should inherit from a list (can also be a BiooList)")
+	#Convert to to STIDF (dropping Spectral data, if any)
 	input = lapply(input,as,"STIDF")
+	#Save the endTime into a variable
 	endTime = lapply(input,function(x) x@endTime[length(x@endTime)])
 #	input = lapply(input,function(x){
 #				x@sp@coords<-t(as.matrix(x@sp@coords[1,]))
@@ -465,13 +467,17 @@ spc.make.stindex = function(input) {
 #				x@endTime<-x@endTime[1]
 #				x
 #			})
+	#Take only the first elements of the entire measurements
 	input = lapply(input,function(x){x[1]})
+	#Set the endTime of the row as the endTime of the last measurement
 	input = lapply(1:length(input),function(x) {
 				input[[x]]@endTime = endTime[[x]]
 				input[[x]]
 			})
+	#Call spc.rbind to convert the list of STIDF to one STIDF object 
 	input = do.call(spc.rbind,input)
 	validObject(input)
+	return(input)
 }
 ##############################################################################
 #Another version of spacetime::timeMatch(). It finds the nearest measurement 
