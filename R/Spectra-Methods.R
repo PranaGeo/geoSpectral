@@ -527,7 +527,7 @@ spc.STI.stdistance = function(master,searched){
 		searchedtime = time(searched)
 	if(is.timeBased(searched))
 		searchedtime = searched
-	output = data.frame(time2master = searchedtime - mastertime)
+	output = data.frame(time2master = as.numeric(searchedtime - mastertime))
 	
 	if(inherits(master,"STI") && inherits(searched,"STI"))
 		distn = sapply(1:length(master), function(x) {
