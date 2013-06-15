@@ -513,8 +513,25 @@ spc.timeMatch.nearest = function(master,searched,returnList=FALSE,report=FALSE) 
 }
 ##############################################################################
 #Reports the space and time distance of each row of the STI-inherited object
-#searched to the corresponding row of the STI-inherited object master
+#searched to the corresponding row of the STI-inherited object master. Outputs 
+#a data.frame, with two columns : time2master ("difftime", in seconds) and 
+#distance2master ("numeric", in meters) 
 spc.STI.stdistance = function(master,searched){
-	coordinates(searched)
-	browser()
+	stopifnot(length(master)==length(searched))
+	
+	if(inherits(master,"STI"))
+		mastertime = time(master)
+	if(is.timeBased(master))
+		mastertime = maste	
+	if(inherits(searched,"STI"))
+		searchedtime = time(searched)
+	if(is.timeBased(searched))
+		searchedtime = searched
+	output = data.frame(time2master = searchedtime - mastertime)
+	
+	if(inherits(master,"STI") && inherits(searched,"STI"))
+		distn = sapply(1:length(master), function(x) {
+					spDistsN1(t(as.matrix(coordinates(master)[x,])),t(as.matrix(coordinates(searched)[x,])))*1000
+				})
+	output = cbind(output,data.frame(distance2master=distn))
 }
