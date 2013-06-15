@@ -457,23 +457,25 @@ setMethod(f="spc.cname.construct", signature="Spectra",
 spc.make.stindex = function(input) {
 	if(!inherits(input,"list"))
 		stop("The input dataset should inherit from a list (can also be a BiooList)")
-	input = lapply(input,as,"STI")
+	input = lapply(input,as,"STIDF")
 	endTime = lapply(input,function(x) x@endTime[length(x@endTime)])
-	input = lapply(input,function(x){
-				x@sp@coords<-t(as.matrix(x@sp@coords[1,]))
-				x@time<-x@time[1]
-				x@endTime<-x@endTime[1]
-				x
-			})
+#	input = lapply(input,function(x){
+#				x@sp@coords<-t(as.matrix(x@sp@coords[1,]))
+#				x@time<-x@time[1]
+#				x@endTime<-x@endTime[1]
+#				x
+#			})
+	input = lapply(input,function(x){x[1]})
 	input = lapply(1:length(input),function(x) {
 				input[[x]]@endTime = endTime[[x]]
 				input[[x]]
 			})
 	input = do.call(spc.rbind,input)
+	validObject(input)
 }
-
-#A version of spacetime::timeMatch that finds the nearest measurement 
-spc.timeMatch.nearest = function(master,searched,returnList=FALSE) {
+##############################################################################
+#Another version of spacetime::timeMatch(). It finds the nearest measurement 
+spc.timeMatch.nearest = function(master,searched,returnList=FALSE,report=FALSE) {
 	if(!is.timeBased(master))
 		if(!(inherits(master,"ST")) & is.timeBased(master))
 			stop("Input argument needs to either inherit from spacetime::ST class or be a timeBased variable")
@@ -488,4 +490,14 @@ spc.timeMatch.nearest = function(master,searched,returnList=FALSE) {
 	
 	if(returnList)
 		out = lapply(out,function(x)x)
+	
+	if(report){
+		
+	}
+}
+##############################################################################
+#Reports the space and time distance of each row of the STI-inherited object
+#searched to the corresponding row of the STI-inherited object master
+spc.STI.stdistance = function(master,searched){
+	coordinates(Li.idx)[idxnrst1,]
 }
