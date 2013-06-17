@@ -503,13 +503,13 @@ spc.timeMatch.nearest = function(master,searched,returnList=FALSE,report=FALSE) 
 	if(inherits(searched,"ST"))
 		searched = time(searched)
 	out = sapply(master,function(x){mymin = which.min(abs(searched-x))})
-	
 	if(returnList)
 		out = lapply(out,function(x)x)
 	
 	if(report){
 		
 	}
+	return(out)
 }
 ##############################################################################
 #Reports the space and time distance of each row of the STI-inherited object
