@@ -26,7 +26,7 @@ setClass("Spectra", contains="STIDF",
 				Units="[ ]",
 				InvalidIdx=logical(),
 				SelectedIdx=logical()))
-if (1){
+if (0){
 	setMethod("initialize",
 			signature(.Object = "Spectra"),
 			function (.Object, ShortName, LongName, Wavelengths, WavelengthsUnit,

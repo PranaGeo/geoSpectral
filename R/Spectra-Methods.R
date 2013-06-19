@@ -40,7 +40,7 @@ setAs(from="data.frame", to="Spectra", def=function(from){
 			Wavelengths= attr(from, "Wavelengths") 
 			Units=attr(from,"Units") 
 			ShortName = attr(from, "ShortName")
-
+			
 			if (any(grepl("LongName", names(attributes(from))))){
 				LongName = attr(from, "LongName")
 			} else {
@@ -124,19 +124,23 @@ setMethod("show", "Spectra", function(object){
 				LbdStr = paste("[",min(object@Wavelengths),",",max(object@Wavelengths), "] ->",sep=" ")                    
 			}
 			bbx=bbox(object@sp)
-			period = paste(as.character(periodicity(object@time))[1],
-					as.character(periodicity(object@time))[5])
-
+			if (length(object@time)>1){
+				period = paste(as.character(periodicity(object@time))[1],
+						as.character(periodicity(object@time))[5])
+				timerange = as.character(range(time(object@time)),usetz=T)
+			} else { 
+				period = "Not enough data"
+				timerange = "NA"
+			}
 			cat("\n", paste(object@ShortName[1], ' : An object of class "Spectra"\n', 
 							length(object@Wavelengths),"spectral channels in columns and", nrow(object@data), 
 							"observations in rows"), "\n",
-					"LongNam: ", LongName, "\t",
-					"Units: ", Units, "\n",
+					"LongName: ", LongName, "\t", "Units: ", Units, "\n",
 					"Wavelengths : ", length(object@Wavelengths), "channels with units of",object@WavelengthsUnit,  LbdStr, head(object@Wavelengths)," ...\n",
 					"Spectra Columns: ", head(colnames(object@Spectra)), "...\n",
 					"Ancillary Columns: ", head(names(object@data)),"...\n",
 					"Bounding box:", "LON(",bbx[1,],") LAT(",bbx[2,],")\n",
-					"Time : periodicity of ", period, " between (", as.character(range(time(object@time)),usetz=T),")")			
+					"Time : periodicity of ", period, " between (", timerange,")")			
 		})		
 
 #########################################################################
@@ -206,7 +210,7 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
 			endTime = inDF$TIME
 		}
 	}
-
+	
 	out = stConstruct(inDF,c(longcol,latcol),timecol,endTime=endTime)
 	#I think stConstruct does not take endTime into account. Force it again
 	out@endTime = endTime
