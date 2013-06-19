@@ -6,7 +6,7 @@
 # Class : Spectra
 #########################################################################
 setClass("Spectra", contains="STIDF", 
-		representation(
+		representation=representation(
 				ShortName="character",
 				LongName="character",
 				Wavelengths="numeric", 
@@ -26,52 +26,55 @@ setClass("Spectra", contains="STIDF",
 				Units="[ ]",
 				InvalidIdx=logical(),
 				SelectedIdx=logical()))
-if (0){
-	
-setMethod("initialize",
-		signature(.Object = "Spectra"),
-		function (.Object, ShortName, LongName, Wavelengths, WavelengthsUnit,
-				Spectra,header,Units, ...) 
-		{
-			browser()
+if (1){
+	setMethod("initialize",
+			signature(.Object = "Spectra"),
+			function (.Object, ShortName, LongName, Wavelengths, WavelengthsUnit,
+					Spectra,header,Units, time, ...) 
+			{
 #			cat("---------Spectra::Initialize\n")
-			#Set defaults for ShortName
-			if (missing(Spectra))
-				Spectra <- matrix()
-			if (missing(Wavelengths))
-				Wavelengths <- numeric(ncol(Spectra))
-			if (missing(ShortName))
-				ShortName <- "spvar"				 
-			if (length(ShortName)!=1)
-				ShortName <- ShortName[1]				 							
-			#Set defaults for LongName
-			if (missing(LongName))
-				LongName <- "spvar longname"				 
-			if (length(LongName)==1)
-				LongName <- rep(LongName, ncol(Spectra))				 							
-			#Set the default for Units
-			if (missing(Units))
-				Units <- "[ ]"	
-			if (length(Units)==1)
-				Units<- rep(Units, ncol(Spectra))				 							
-			#Set the default header
-			if(missing(header))
-				header = .Object@header
-			if(missing(WavelengthsUnit))
-				WavelengthsUnit = "nm"
-
-			.Object@Wavelengths=Wavelengths
-			.Object@Units=Units
-			.Object@Spectra=Spectra
-			.Object@ShortName=ShortName
-			.Object@LongName=LongName
-			.Object@header=header
-			.Object@WavelengthsUnit = WavelengthsUnit
-			#			.Object=callNextMethod(.Object, data=data, ShortName=ShortName,
+				#Set defaults for ShortName
+				if (missing(Spectra))
+					Spectra <- matrix()
+				if (missing(Wavelengths))
+					Wavelengths <- numeric(ncol(Spectra))
+				if (missing(ShortName))
+					ShortName <- "spvar"				 
+				if (length(ShortName)!=1)
+					ShortName <- ShortName[1]				 							
+				#Set defaults for LongName
+				if (missing(LongName))
+					LongName <- "spvar longname"				 
+				if (length(LongName)==1)
+					LongName <- rep(LongName, ncol(Spectra))				 							
+				#Set the default for Units
+				if (missing(Units))
+					Units <- "[ ]"	
+				if (length(Units)==1)
+					Units<- rep(Units, ncol(Spectra))				 							
+				#Set the default header
+				if(missing(header))
+					header = .Object@header
+				if(missing(WavelengthsUnit))
+					WavelengthsUnit = "nm"
+				#Set the default time object
+				if(missing(time))
+					.Object@time = xts()
+				
+				.Object@Wavelengths=Wavelengths
+				.Object@Units=Units
+				.Object@Spectra=Spectra
+				.Object@ShortName=ShortName
+				.Object@LongName=LongName
+				.Object@header=header
+				.Object@WavelengthsUnit = WavelengthsUnit
+				#			.Object=callNextMethod(.Object, data=data, ShortName=ShortName,
 #					LongName=LongName,Wavelengths=Wavelengths,Units=Units,Ancillary=Ancillary)
-			#			.Object <- callNextMethod()			
-			return(.Object)
-		})
+				#			.Object <- callNextMethod()
+				browser()
+				validObject(.Object)
+				return(.Object)
+			})
 }
 
 setValidity("Spectra", function(object){
