@@ -110,6 +110,34 @@ setMethod("nrow", signature = "Spectra",
 #########################################################################
 setMethod("head", signature = "Spectra", 
 		def = function (x){  return(head(x@Spectra)) })
+#########################################################################
+# Method : show
+#########################################################################
+setMethod("show", "Spectra", function(object){
+			if(ncol(object)==0){
+				LongName = character()
+				Units = character()
+				LbdStr = character()
+			} else {
+				LongName = object@LongName[1]
+				Units = object@Units[1]
+				LbdStr = paste("[",min(object@Wavelengths),",",max(object@Wavelengths), "] ->",sep=" ")                    
+			}
+			bbx=bbox(object@sp)
+			period = paste(as.character(periodicity(object@time))[1],
+					as.character(periodicity(object@time))[5])
+
+			cat("\n", paste(object@ShortName[1], ' : An object of class "Spectra"\n', 
+							length(object@Wavelengths),"spectral channels in columns and", nrow(object@data), 
+							"observations in rows"), "\n",
+					"LongNam: ", LongName, "\t",
+					"Units: ", Units, "\n",
+					"Wavelengths : ", length(object@Wavelengths), "channels with units of",object@WavelengthsUnit,  LbdStr, head(object@Wavelengths)," ...\n",
+					"Spectra Columns: ", head(colnames(object@Spectra)), "...\n",
+					"Ancillary Columns: ", head(names(object@data)),"...\n",
+					"Bounding box:", "LON(",bbx[1,],") LAT(",bbx[2,],")\n",
+					"Time : periodicity of ", period, " between (", as.character(range(time(object@time)),usetz=T),")")			
+		})		
 
 #########################################################################
 # Method : spc.colnames
