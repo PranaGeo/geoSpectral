@@ -567,3 +567,58 @@ spc.STI.stdistance = function(master,searched){
 				})
 	output = cbind(output,data.frame(distance2master=distn))
 }
+
+#########################################################################
+# Method : spc.plot2
+#########################################################################
+setGeneric("spc.plot2",function(x,Y,...){standardGeneric("spc.plot2")})
+setMethod("spc.plot2", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="l",lwd=2,...){
+			library ( gWidgets )
+			window <- gwindow ( "Spectra plot" , visible = FALSE )
+			notebook <- gnotebook ( cont = window )
+#			group <- ggroup ( cont = window )
+			plot_device <- ggraphics (cont = notebook,label="graphics")
+			spc.plot(x)
+			Spectra <- gdf (x@Spectra, cont = notebook,label="Spectral data")
+			data <- gdf ( x@data, cont = notebook, label="Ancillary data")
+#			x <- mtcars$wt ; y <- mtcars$mpg
+			xx <- spc.getwavelengths(x) ; yy <- x@Spectra
+			addHandlerChanged(plot_device, handler=function(h, ... ) {
+						rx <- h$x ; ry <- h$y
+						browser()
+						if ( diff ( rx ) > diff ( range ( xx ) ) / 100 &&
+								diff ( ry ) > diff ( range ( yy ) ) / 100 ) {
+							ind <- rx [ 1 ] <= xx & xx <= rx [ 2 ] & ry [ 1 ] <=yy & yy <= ry [ 2 ]
+							ind2 = apply(ind,1,any)
+							if ( any ( ind ) )
+								print ( cbind ( xx = xx [ ind2 ] , yy = yy [ ind2, ] ) )
+						}
+					})
+			visible ( window ) <- TRUE
+		})
+
+#########################################################################
+# Method : Arith
+#########################################################################
+setMethod("Arith", signature(e1 = "Spectra", e2 = "Spectra"),function (e1, e2) {
+			result <- callGeneric(e1@Spectra, e2@Spectra)
+#			output <- new("Spectra",DF=result,Wavelengths=e1@Wavelengths,Units=e1@Units,
+#					ShortName = "Arith", LongName="Arith",inDF=spc.getinDF(e1))			
+			output = e1
+			output@Spectra = result
+			validObject(output)
+			return(output)
+		})
+
+#########################################################################
+# Method : Arith
+#########################################################################
+setMethod("Arith", signature(e1 = "Spectra", e2 = "numeric"),function (e1, e2) {
+			result <- callGeneric(e1@Spectra, e2)
+#			output <- new("Spectra",DF=result,Wavelengths=e1@Wavelengths,Units=e1@Units,
+#					ShortName = "Arith", LongName="Arith",inDF=spc.getinDF(e1))
+			output = e1
+			output@Spectra = result
+			validObject(output)
+			return(output)
+		})
