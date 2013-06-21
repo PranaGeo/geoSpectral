@@ -622,3 +622,8 @@ setMethod("Arith", signature(e1 = "Spectra", e2 = "numeric"),function (e1, e2) {
 			validObject(output)
 			return(output)
 		})
+setMethod("Math", signature("Spectra"),function (x) {
+			x@Spectra <- callGeneric(x@Spectra)
+			validObject(x)
+			return(x)
+		})
