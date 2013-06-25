@@ -627,3 +627,39 @@ setMethod("Math", signature("Spectra"),function (x) {
 			validObject(x)
 			return(x)
 		})
+setMethod("colMeans", signature("Spectra"),function (x) {
+			x@Spectra <- t(as.matrix(callGeneric(x@Spectra)))
+			x@data <- as.data.frame(t(callGeneric(x@data)))
+			#Find the mean time
+			meantime <- xts(1,mean(time(x@time)),tzone=attr(x@time,"tzone"))
+			#Find the row index closer in time to meantime
+			min.idx = which.min(abs(as.numeric(time(meantime)-time(x@time))))
+			x@sp <- x@sp[min.idx]
+			x@time <-x@time[min.idx]
+			x@endTime <- mean(x@endTime)
+			x@InvalidIdx <- logical()
+			x@SelectedIdx <- logical()
+			validObject(x)
+			return(x)
+		})
+
+#Constructs a rectangle of sp::Lines using the bounding box of a Spatial object
+setGeneric (name= "spc.bbox2lines",def=function(object){standardGeneric("spc.bbox2lines")})
+setMethod("spc.bbox2lines",signature="Spatial",definition=function(object){
+			bb = bbox(object)
+			pt = bb[,1]
+			pt = rbind(pt, c(bb[1,1],bb[2,2]))
+			pt = rbind(pt, c(bb[1,2],bb[2,2]))
+			pt = rbind(pt, c(bb[1,2],bb[2,1]))
+#				pt = rbind(pt, bb[,1])
+			row.names(pt)<-NULL
+			out = Lines(list(Line(pt[1:2,]),Line(pt[2:3,]),
+							Line(pt[3:4,]), Line(pt[c(4,1),])),ID="spc.bbox2lines")
+			return(out)
+		})
+setMethod("spc.bbox2lines",signature="STI",definition=function(object){
+			return(callGeneric(object@sp))
+		})
+setMethod("spc.bbox2lines",signature="Spectra",definition=function(object){
+			return(callGeneric(object@sp))
+		})
