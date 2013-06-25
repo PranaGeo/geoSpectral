@@ -97,11 +97,11 @@ setValidity("Spectra", function(object){
 				}
 			}
 			if(length(object@InvalidIdx)!=0){
-				if(length(object@InvalidIdx)!=nrow(object(Spectra)))
+				if(length(object@InvalidIdx)!=nrow(object@Spectra))
 					return("Invalid index length should match the number of data rows")
 			}
 			if(length(object@SelectedIdx)!=0){
-				if(length(object@SelectedIdx)!=nrow(object(Spectra)))
+				if(length(object@SelectedIdx)!=nrow(object@Spectra))
 					return("Selected index length should match the number of data rows")
 			}
 			if(length(object@ShortName)!=1)
