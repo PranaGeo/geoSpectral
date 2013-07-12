@@ -6,31 +6,31 @@
 #########################################################################
 # Method : Conversion from BiooList to Bioo
 #########################################################################
-setAs(from="BiooList", to="Bioo", def=function(from){		
-	dims = t(sapply(from,dim))[,2]
-	if(!all(dims==dims[1]))
-		stop("All BiooList elements should have the same number of rows (including Ancillary data for Spectra objects)")
-	nms = sapply(from,names)
-	if(!all(sapply(1:nrow(nms), function(x) all(nms[x,1]==nms[x,]))))
-		stop("All BiooList elements should have the same names (including Ancillary data for Spectra objects)")
-	
-	if (all(sapply(from,class)=="Spectra") |(all(sapply(from,class)=="Bioo"))) {
-		if (all(sapply(from,class)=="Spectra")){
-			DF = do.call(rbind, lapply(from,function(x) x@DF))
-			DFAnc = do.call(rbind, lapply(from,function(x) x@Ancillary@DF))
-			Anc = new("Bioo",DF=DFAnc,Units=from[[1]]@Ancillary@Units)
-			output = new("Spectra",DF=DF,Units=from[[1]]@Units,Wavelengths=from[[1]]@Wavelengths,
-					ShortName=from[[1]]@ShortName,LongName=from[[1]]@LongName,Ancillary=Anc)
-		}
-		if (all(sapply(from,class)=="Bioo")){
-			DF = do.call(rbind, lapply(from,function(x) x@DF))
-			output = new("Bioo",DF=DF,Units=from[[1]]@Ancillary@Units)
-		}
-	} else {
-		stop("All BiooList elements should be of class 'Spectra' of 'Bioo'")
-	}
-	return(output)
-})
+#setAs(from="BiooList", to="Bioo", def=function(from){		
+#	dims = t(sapply(from,dim))[,2]
+#	if(!all(dims==dims[1]))
+#		stop("All BiooList elements should have the same number of rows (including Ancillary data for Spectra objects)")
+#	nms = sapply(from,names)
+#	if(!all(sapply(1:nrow(nms), function(x) all(nms[x,1]==nms[x,]))))
+#		stop("All BiooList elements should have the same names (including Ancillary data for Spectra objects)")
+#	
+#	if (all(sapply(from,class)=="Spectra") |(all(sapply(from,class)=="Bioo"))) {
+#		if (all(sapply(from,class)=="Spectra")){
+#			DF = do.call(rbind, lapply(from,function(x) x@DF))
+#			DFAnc = do.call(rbind, lapply(from,function(x) x@Ancillary@DF))
+#			Anc = new("Bioo",DF=DFAnc,Units=from[[1]]@Ancillary@Units)
+#			output = new("Spectra",DF=DF,Units=from[[1]]@Units,Wavelengths=from[[1]]@Wavelengths,
+#					ShortName=from[[1]]@ShortName,LongName=from[[1]]@LongName,Ancillary=Anc)
+#		}
+#		if (all(sapply(from,class)=="Bioo")){
+#			DF = do.call(rbind, lapply(from,function(x) x@DF))
+#			output = new("Bioo",DF=DF,Units=from[[1]]@Ancillary@Units)
+#		}
+#	} else {
+#		stop("All BiooList elements should be of class 'Spectra' of 'Bioo'")
+#	}
+#	return(output)
+#})
 
 #########################################################################
 # Method : spc.plot.grid
@@ -257,9 +257,9 @@ BiooList = function (spclist){
 	new("BiooList", spclist)
 }
 #########################################################################
-# Method : bioo.invalid.detect
+# Method : spc.invalid.detect
 #########################################################################
-setMethod("bioo.invalid.detect", signature = "BiooList", def=function(source1){
+setMethod("spc.invalid.detect", signature = "BiooList", def=function(source1){
 			out = lapply(source1, function(x) {SetInvalidIdx(x)<-biooInvalidDetect(x)})
 			return(out)
 		})

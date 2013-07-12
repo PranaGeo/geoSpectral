@@ -314,7 +314,9 @@ setMethod("spc.lines",signature = "Spectra",definition = function(x,...){
 #########################################################################
 # Method : spc.rbind
 #########################################################################
-setMethod("spc.rbind", signature = "Spectra", def = function (...){
+setGeneric (name= "spc.rbind",def=function(...){standardGeneric("spc.rbind")})
+setMethod("spc.rbind", signature = "Spectra", def = function (a,...){
+			
 			#Check that column names match
 			DFL=sapply(list(...),function(x) names(x@data),simplify=F)
 			if(!all(sapply(1:length(DFL),function(x) all(DFL[[x]]==DFL[[1]]))))
@@ -640,4 +642,16 @@ setMethod("spc.bbox2lines",signature="STI",definition=function(object){
 		})
 setMethod("spc.bbox2lines",signature="Spectra",definition=function(object){
 			return(callGeneric(object@sp))
+		})
+
+#########################################################################
+# Method : spc.invalid.detect
+#########################################################################
+setGeneric(name= "spc.invalid.detect",
+		def=function(source1){standardGeneric("spc.invalid.detect")})
+setMethod("spc.invalid.detect", signature = "Spectra", def=function(source1){
+			out = apply(source1@DF, 2,is.na)
+			if(is.null(dim(out))& nrow(source1@DF)==1)
+				dim(out)<-c(1,ncol(source1@DF))
+			out = apply(out,1,all)
 		})
