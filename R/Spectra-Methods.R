@@ -637,14 +637,18 @@ setMethod("Math", signature("Spectra"),function (x) {
 			return(x)
 		})
 setMethod("colMeans", signature("Spectra"),function (x) {
+			#Computes the mean along the rows of Spectra (@Spectra). The method finds the measurement
+			#closest in time to the mean time and keeps the spatial/time attributes as well as Ancillary
+			#data table (@data) associated to that measurement as that of the mean spectra
 			x@Spectra <- t(as.matrix(callGeneric(x@Spectra)))
-			x@data <- as.data.frame(t(callGeneric(x@data)))
+#			x@data <- as.data.frame(t(callGeneric(x@data)))
 			#Find the mean time
 			meantime <- xts(1,mean(time(x@time)),tzone=attr(x@time,"tzone"))
 			#Find the row index closer in time to meantime
 			min.idx = which.min(abs(as.numeric(time(meantime)-time(x@time))))
 			x@sp <- x@sp[min.idx]
 			x@time <-x@time[min.idx]
+			x@data <- x@data[min.idx,]
 			x@endTime <- mean(x@endTime)
 			x@InvalidIdx <- logical()
 			x@SelectedIdx <- logical()
