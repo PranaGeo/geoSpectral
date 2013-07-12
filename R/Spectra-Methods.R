@@ -111,7 +111,7 @@ setMethod("nrow", signature = "Spectra",
 setMethod("names", signature = "Spectra", 
 		def = function (x){ 
 #			if(ncol(x@data)>1)
-				return(c(names(x@Spectra),names(x@data)))
+				return(c(colnames(x@Spectra),names(x@data)))
 #			else                
 #				return(names(x@data)) 
 		})
