@@ -155,6 +155,28 @@ setMethod("show", "Spectra", function(object){
 		})		
 
 #########################################################################
+# Method : $
+#########################################################################
+setMethod("$", signature="Spectra",
+		function(x, name) {
+			if (name %in% colnames(x@Spectra)){
+				Boutput = x@Spectra[,name]
+			} 
+			if (name %in% names(x@data)){
+				Boutput = x@data[,name]				
+			}
+			if(!exists("Boutput"))
+				stop("Could not match any Spectral or Ancillary (@data) columns")
+			return(Boutput)
+		})
+setReplaceMethod("$", signature = "Spectra", 
+		function(x, name, value) {
+			x[[name]]=value
+			#validObject(x) will be called by the [[ method
+			return(x)
+		})
+
+#########################################################################
 # Method : spc.colnames
 #########################################################################
 setGeneric("spc.colnames",function(x,Y,...){standardGeneric("spc.colnames")})
