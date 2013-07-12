@@ -4,15 +4,15 @@
 ###############################################################################
 	
 #########################################################################
-# Method : Conversion from BiooList to Bioo
+# Method : Conversion from SpcList to Bioo
 #########################################################################
-#setAs(from="BiooList", to="Bioo", def=function(from){		
+#setAs(from="SpcList", to="Bioo", def=function(from){		
 #	dims = t(sapply(from,dim))[,2]
 #	if(!all(dims==dims[1]))
-#		stop("All BiooList elements should have the same number of rows (including Ancillary data for Spectra objects)")
+#		stop("All SpcList elements should have the same number of rows (including Ancillary data for Spectra objects)")
 #	nms = sapply(from,names)
 #	if(!all(sapply(1:nrow(nms), function(x) all(nms[x,1]==nms[x,]))))
-#		stop("All BiooList elements should have the same names (including Ancillary data for Spectra objects)")
+#		stop("All SpcList elements should have the same names (including Ancillary data for Spectra objects)")
 #	
 #	if (all(sapply(from,class)=="Spectra") |(all(sapply(from,class)=="Bioo"))) {
 #		if (all(sapply(from,class)=="Spectra")){
@@ -27,7 +27,7 @@
 #			output = new("Bioo",DF=DF,Units=from[[1]]@Ancillary@Units)
 #		}
 #	} else {
-#		stop("All BiooList elements should be of class 'Spectra' of 'Bioo'")
+#		stop("All SpcList elements should be of class 'Spectra' of 'Bioo'")
 #	}
 #	return(output)
 #})
@@ -37,7 +37,7 @@
 #########################################################################
 setGeneric (name= "spc.plot.grid",
 		def=function(x,FUN, nnrow, nncol,...){standardGeneric("spc.plot.grid")})
-setMethod("spc.plot.grid", "BiooList", function (x,FUN, nnrow, nncol, mar=c(4,4.5,1,0.5), 
+setMethod("spc.plot.grid", "SpcList", function (x,FUN, nnrow, nncol, mar=c(4,4.5,1,0.5), 
 				oma = c(0,0,0,0), lab_cex, ...){
 			nb_spc = length(which(sapply(x, inherits, "Bioo")))
 			mypar = par()
@@ -56,8 +56,8 @@ setMethod("spc.plot.grid", "BiooList", function (x,FUN, nnrow, nncol, mar=c(4,4.
 			for (I in 1:length(x)) {
 				if(1){ #(nrow(x[[I]])>1){
 					if(x@by!="VariousVariables"){
-						#tit = paste(x@by, ":", as.character(bioo.getheader(x[[I]],x@by)))
-						tit = paste(as.character(bioo.getheader(x[[I]],x@by)))
+						#tit = paste(x@by, ":", as.character(spc.getheader(x[[I]],x@by)))
+						tit = paste(as.character(spc.getheader(x[[I]],x@by)))
 					}
 					else{
 						tit=""#paste(x[[I]]@ShortName)
@@ -80,7 +80,7 @@ setMethod("spc.plot.grid", "BiooList", function (x,FUN, nnrow, nncol, mar=c(4,4.
 #########################################################################
 setGeneric (name= "spc.plot.overlay",
 		def=function(object, ...){standardGeneric("spc.plot.overlay")})
-setMethod("spc.plot.overlay", "BiooList", function (object, lab_cex=1,leg_idx=T, type="l", lty=1,lwd=1, col, ...){
+setMethod("spc.plot.overlay", "SpcList", function (object, lab_cex=1,leg_idx=T, type="l", lty=1,lwd=1, col, ...){
 			if(missing(col))
 				col = 1:length(object)
 			if(length(leg_idx)==1)
@@ -111,8 +111,8 @@ setMethod("spc.plot.overlay", "BiooList", function (object, lab_cex=1,leg_idx=T,
 			
 			for (I in 1:length(object)) {
 				if(object@by!="VariousVariables"){
-					#tit[I] = paste(object@by, ":", as.character(bioo.getheader(object[[I]],object@by)))
-					tit[I] = paste(as.character(bioo.getheader(object[[I]],object@by)))
+					#tit[I] = paste(object@by, ":", as.character(spc.getheader(object[[I]],object@by)))
+					tit[I] = paste(as.character(spc.getheader(object[[I]],object@by)))
 				}
 				else{
 					if(all(!nms))
@@ -141,7 +141,7 @@ setMethod("spc.plot.overlay", "BiooList", function (object, lab_cex=1,leg_idx=T,
 #########################################################################
 setGeneric (name= "spc.plot.depth.overlay",
 		def=function(object,X,...){standardGeneric("spc.plot.depth.overlay")})
-setMethod("spc.plot.depth.overlay", "BiooList", function (object, X, lab_cex, ...){
+setMethod("spc.plot.depth.overlay", "SpcList", function (object, X, lab_cex, ...){
 			if(missing(lab_cex))
 				lab_cex = 1
 #			browser()
@@ -152,8 +152,8 @@ setMethod("spc.plot.depth.overlay", "BiooList", function (object, X, lab_cex, ..
 			tit=""
 			for (I in 1:length(object)) {
 				if(object@by!="VariousVariables"){
-					#tit[I] = paste(object@by, ":", as.character(bioo.getheader(object[[I]],object@by)))
-					tit[I] = paste(as.character(bioo.getheader(object[[I]],object@by)))
+					#tit[I] = paste(object@by, ":", as.character(spc.getheader(object[[I]],object@by)))
+					tit[I] = paste(as.character(spc.getheader(object[[I]],object@by)))
 				}
 				else{
 					tit[I]=as.character(I)#paste(object[[I]]@ShortName)
@@ -172,12 +172,12 @@ setMethod("spc.plot.depth.overlay", "BiooList", function (object, X, lab_cex, ..
 # Method : subset
 #########################################################################
 #The argument "select" is not implemented yet. Use "[]"
-setMethod("subset",  signature="BiooList",
+setMethod("subset",  signature="SpcList",
 		definition=function(x, subset, select, drop = FALSE, ...) {                   
 			
 			if(class(subset)=="list") { 
 				if(length(subset)>1 & length(subset)!=length(x))
-					stop('The argument "subset" should be a list of length one or the same length of the BiooList object')          
+					stop('The argument "subset" should be a list of length one or the same length of the SpcList object')          
 				
 				if(!missing(select)) 
 					temp = lapply(1:length(x), function(t) subset(x[[t]], subset=subset[[t]], select=select, drop=drop, ...))
@@ -195,10 +195,10 @@ setMethod("subset",  signature="BiooList",
 #########################################################################
 # Method : Arith
 #########################################################################
-#setMethod("Arith",signature(e1 = "BiooList", e2 = "BiooList"),function (e1, e2) {
+#setMethod("Arith",signature(e1 = "SpcList", e2 = "SpcList"),function (e1, e2) {
 #			browser()
 #			if(length(e1)!=length(e2))
-#				stop("Lengths of input BiooList object should match")
+#				stop("Lengths of input SpcList object should match")
 #			
 #			result <- callGeneric(e1[[1]], e2@DF[[1]])
 #			output <- new("Spectra",DF=result,Wavelengths=e1@Wavelengths,Units=e1@Units,
@@ -214,7 +214,7 @@ setMethod("subset",  signature="BiooList",
 #########################################################################
 # Method : names
 #########################################################################
-setMethod("names", "BiooList", function(x){
+setMethod("names", "SpcList", function(x){
 			sapply(x, function(mobject) {
 						if(class(mobject)=="Bioo") "Bioo"	else mobject@ShortName[1]
 					})
@@ -223,7 +223,7 @@ setMethod("names", "BiooList", function(x){
 #########################################################################
 # Method : $
 #########################################################################
-setMethod("$", signature = "BiooList", 
+setMethod("$", signature = "SpcList", 
 		function(x, name) {
 			myn = names(x)
 			if(any(grepl(name,myn))){
@@ -234,11 +234,11 @@ setMethod("$", signature = "BiooList",
 #########################################################################
 # Method : show
 #########################################################################
-setMethod("show", "BiooList", function(object){
+setMethod("show", "SpcList", function(object){
 			if(length(object)>0)
 				sapply(1:length(object), function(x) {
 							if(object@by!="VariousVariables") {
-								byName = paste(object@by, bioo.getheader(object[[x]],object@by), ":")								
+								byName = paste(object@by, spc.getheader(object[[x]],object@by), ":")								
 							}
 							else { 
 								byName = paste("Element", x, ":")								
@@ -247,35 +247,35 @@ setMethod("show", "BiooList", function(object){
 							cat(byName)
 							show(object[[x]])
 						})
-			else cat("Empty BiooList\n")
+			else cat("Empty SpcList\n")
 		})
 
 #########################################################################
-# Constructor function : BiooList()
+# Constructor function : SpcList()
 #########################################################################
-BiooList = function (spclist){
-	new("BiooList", spclist)
+SpcList = function (spclist){
+	new("SpcList", spclist)
 }
 #########################################################################
 # Method : spc.invalid.detect
 #########################################################################
-setMethod("spc.invalid.detect", signature = "BiooList", def=function(source1){
+setMethod("spc.invalid.detect", signature = "SpcList", def=function(source1){
 			out = lapply(source1, function(x) {SetInvalidIdx(x)<-biooInvalidDetect(x)})
 			return(out)
 		})
 
 #########################################################################
-# Method : bioo.getheader
+# Method : spc.getheader
 #########################################################################
-setMethod("bioo.getheader", signature = "BiooList", 
+setMethod("spc.getheader", signature = "SpcList", 
 		def = function (object,name){
-			sapply(object, bioo.getheader,name)
+			sapply(object, spc.getheader,name)
 		})
 
 #########################################################################
-# Method : bioo.setheader<-
+# Method : spc.setheader<-
 #########################################################################
-setReplaceMethod(f="bioo.setheader", signature="BiooList",
+setReplaceMethod(f="spc.setheader", signature="SpcList",
 		definition=function(object,value,...){
 			if(inherits(value,"Bioo"))
 				stop("It is forbidden to place in a BiooHeader object that inherit from the Bioo class")
@@ -284,7 +284,7 @@ setReplaceMethod(f="bioo.setheader", signature="BiooList",
 				value = rep(value,length(object))
 			
 			a=sapply(1:length(object), function(x) {
-						object[[x]] = bioo.setheader(object[[x]],value[x])
+						object[[x]] = spc.setheader(object[[x]],value[x])
 					})
 			
 			validObject(object)
@@ -292,18 +292,18 @@ setReplaceMethod(f="bioo.setheader", signature="BiooList",
 		})
 
 #########################################################################
-# Method : bioo.data2header
+# Method : spc.data2header
 #########################################################################
-setMethod("bioo.data2header", signature = "BiooList", 
+setMethod("spc.data2header", signature = "SpcList", 
 		def=function(object,headerfield,dataname,compress=TRUE,...){
-			temp = lapply(object, bioo.data2header, headerfield,dataname,compress,...)
+			temp = lapply(object, spc.data2header, headerfield,dataname,compress,...)
 			object@.Data=temp
 			return(object)
 		})
 #########################################################################
 # Method : sort
 #########################################################################
-setMethod("sort", signature="BiooList", definition= function (x, which.col, decreasing = FALSE, ...){
+setMethod("sort", signature="SpcList", definition= function (x, which.col, decreasing = FALSE, ...){
 		newdata = lapply(x, sort, which.col=which.col, decreasing=decreasing, ...)
 		x@.Data = newdata
 		return(x)
@@ -314,10 +314,10 @@ setMethod("sort", signature="BiooList", definition= function (x, which.col, decr
 #########################################################################
 setGeneric (name= "spc.lapply",
 		def=function(X, FUN,...){standardGeneric("spc.lapply")})
-setMethod("spc.lapply", signature="BiooList", definition= function (X, FUN, ...) {
+setMethod("spc.lapply", signature="SpcList", definition= function (X, FUN, ...) {
 			by = X@by
 			X = lapply(as(X,"list"),FUN,...)
-			X = as(X, "BiooList")
+			X = as(X, "SpcList")
 			X@by = by
 			validObject(X)
 			return(X)
@@ -327,7 +327,7 @@ setMethod("spc.lapply", signature="BiooList", definition= function (X, FUN, ...)
 #########################################################################
 # Method : subset
 #########################################################################
-#setMethod("subset",  signature="BiooList",
+#setMethod("subset",  signature="SpcList",
 #		definition=function(x, subset, select, drop = FALSE, ...) {
 ##			myby = x@by
 #			
@@ -338,6 +338,6 @@ setMethod("spc.lapply", signature="BiooList", definition= function (X, FUN, ...)
 #			}
 ##			x[[AA]] = subset(x[[AA]], subset,select,drop)
 #			x = lapply(x, subset, subset,select,drop,...)
-#			x = as(x, "BiooList")
+#			x = as(x, "SpcList")
 #			x@by = myby
 #		})

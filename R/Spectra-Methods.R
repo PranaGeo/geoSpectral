@@ -655,3 +655,118 @@ setMethod("spc.invalid.detect", signature = "Spectra", def=function(source1){
 				dim(out)<-c(1,ncol(source1@DF))
 			out = apply(out,1,all)
 		})
+#########################################################################
+# Method : spc.getheader
+#########################################################################
+setGeneric (name= "spc.getheader",
+		def=function(object,name){standardGeneric("spc.getheader")})
+setMethod("spc.getheader", signature = "Spectra", 
+		def = function (object,name){
+			if(missing(name)){
+				out = object@header
+			}else {
+				if(is.null(object@header[[name]])){
+					out = NA
+				}else{
+					out = object@header[[name]]
+				}
+				return(out)
+			}
+		})
+#########################################################################
+# Method : spc.setheader
+#########################################################################
+setGeneric (name="spc.setheader<-",
+		def=function(object,value,...){standardGeneric("spc.setheader<-")})
+setReplaceMethod(f="spc.setheader", signature="Spectra",
+		definition=function(object,value,...){
+			object@header<-value
+			validObject(object)
+			return(object)
+		})
+
+#########################################################################
+# Method : spc.updateheader
+#########################################################################
+setGeneric (name="spc.updateheader<-",
+		def=function(object,Name,value,...){standardGeneric("spc.updateheader<-")})
+setReplaceMethod(f="spc.updateheader", signature="Spectra",
+		definition=function(object,Name,value,...){
+			hdr=spc.getheader(object)
+			hdr[[Name]]=value
+			spc.setheader(object)<-hdr
+			validObject(object)
+			return(object)
+		})
+
+#########################################################################
+# Method : spc.getselected.idx
+#########################################################################
+setGeneric (name= "spc.getselected.idx",
+		def=function(object){standardGeneric("spc.getselected.idx")})
+setMethod("spc.getselected.idx", signature = "Spectra", 
+		def = function (object){
+			return(object@SelectedIdx)
+		})
+#########################################################################
+# Method : spc.setselected.idx	
+#########################################################################
+setGeneric("spc.setselected.idx<-",function(object,value)
+		{standardGeneric("spc.setselected.idx<-")})
+setReplaceMethod(f="spc.setselected.idx", signature="Spectra",
+		definition=function(object,value){
+			if(is.numeric(value)){
+				idx = spc.getinvalid.idx(object)
+				if(length(idx)==0)
+					idx = rep(FALSE,nrow(object))
+				idx[value]=TRUE
+				value=idx
+			}
+			object@SelectedIdx<-value
+			validObject(object)
+			return (object)
+		})
+
+#########################################################################
+# Method : spc.getinvalid.idx
+#########################################################################
+setGeneric (name= "spc.getinvalid.idx",
+		def=function(object){standardGeneric("spc.getinvalid.idx")})
+setMethod("spc.getinvalid.idx", signature = "Spectra", 
+		def = function (object){
+			return(object@InvalidIdx)
+		})
+#########################################################################
+# Method : spc.setinvalid.idx
+#########################################################################
+setGeneric("spc.setinvalid.idx<-",function(object,value)
+		{standardGeneric("spc.setinvalid.idx<-")})
+setReplaceMethod(f="spc.setinvalid.idx", signature="Spectra",
+		definition=function(object,value){
+			if(is.numeric(value)){
+				idx = spc.getinvalid.idx(object)
+				if(length(idx)==0)
+					idx = rep(FALSE,nrow(object))
+				idx[value]=TRUE
+				value=idx
+			}
+			object@InvalidIdx<-value
+			validObject(object)
+			return (object)
+		})
+
+#########################################################################
+# Method : spc.data2header
+#########################################################################
+setGeneric(name= "spc.data2header",
+		def=function(object,headerfield,dataname,compress,...){standardGeneric("spc.data2header")})
+setMethod("spc.data2header", signature = "Spectra", 
+		def=function(object,headerfield,dataname,compress=TRUE,...){
+			if(missing(headerfield))
+				headerfield = dataname
+			object@header[[headerfield]]=object[[dataname]]
+			if(compress )
+				object@header[[headerfield]]=object[[dataname]][1]
+			
+			return(object)
+		})
