@@ -582,8 +582,6 @@ setMethod("spc.plot2", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type=
 #########################################################################
 setMethod("Arith", signature(e1 = "Spectra", e2 = "Spectra"),function (e1, e2) {
 			result <- callGeneric(e1@Spectra, e2@Spectra)
-#			output <- new("Spectra",DF=result,Wavelengths=e1@Wavelengths,Units=e1@Units,
-#					ShortName = "Arith", LongName="Arith",inDF=spc.getinDF(e1))			
 			output = e1
 			output@Spectra = result
 			validObject(output)
@@ -595,8 +593,6 @@ setMethod("Arith", signature(e1 = "Spectra", e2 = "Spectra"),function (e1, e2) {
 #########################################################################
 setMethod("Arith", signature(e1 = "Spectra", e2 = "numeric"),function (e1, e2) {
 			result <- callGeneric(e1@Spectra, e2)
-#			output <- new("Spectra",DF=result,Wavelengths=e1@Wavelengths,Units=e1@Units,
-#					ShortName = "Arith", LongName="Arith",inDF=spc.getinDF(e1))
 			output = e1
 			output@Spectra = result
 			validObject(output)
@@ -650,9 +646,9 @@ setMethod("spc.bbox2lines",signature="Spectra",definition=function(object){
 setGeneric(name= "spc.invalid.detect",
 		def=function(source1){standardGeneric("spc.invalid.detect")})
 setMethod("spc.invalid.detect", signature = "Spectra", def=function(source1){
-			out = apply(source1@DF, 2,is.na)
-			if(is.null(dim(out))& nrow(source1@DF)==1)
-				dim(out)<-c(1,ncol(source1@DF))
+			out = apply(source1@Spectra, 2,is.na)
+			if(is.null(dim(out))& nrow(source1@Spectra)==1)
+				dim(out)<-c(1,ncol(source1@Spectra))
 			out = apply(out,1,all)
 		})
 #########################################################################

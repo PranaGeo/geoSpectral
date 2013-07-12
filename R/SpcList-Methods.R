@@ -16,14 +16,14 @@
 #	
 #	if (all(sapply(from,class)=="Spectra") |(all(sapply(from,class)=="Bioo"))) {
 #		if (all(sapply(from,class)=="Spectra")){
-#			DF = do.call(rbind, lapply(from,function(x) x@DF))
-#			DFAnc = do.call(rbind, lapply(from,function(x) x@Ancillary@DF))
+#			DF = do.call(rbind, lapply(from,function(x) x@Spectra))
+#			DFAnc = do.call(rbind, lapply(from,function(x) x@data))
 #			Anc = new("Bioo",DF=DFAnc,Units=from[[1]]@Ancillary@Units)
 #			output = new("Spectra",DF=DF,Units=from[[1]]@Units,Wavelengths=from[[1]]@Wavelengths,
 #					ShortName=from[[1]]@ShortName,LongName=from[[1]]@LongName,Ancillary=Anc)
 #		}
 #		if (all(sapply(from,class)=="Bioo")){
-#			DF = do.call(rbind, lapply(from,function(x) x@DF))
+#			DF = do.call(rbind, lapply(from,function(x) x@Spectra))
 #			output = new("Bioo",DF=DF,Units=from[[1]]@Ancillary@Units)
 #		}
 #	} else {
@@ -93,7 +93,7 @@ setMethod("spc.plot.overlay", "SpcList", function (object, lab_cex=1,leg_idx=T, 
 				type = rep(type,length(object))
 			
 			all_x = unlist(lapply(object,function(t) t@Wavelengths))
-			all_y = unlist(lapply(object,function(t) t@DF))
+			all_y = unlist(lapply(object,function(t) t@Spectra))
 #			browser()
 			xlim = range(all_x)
 			ylim = range(all_y)
@@ -146,7 +146,7 @@ setMethod("spc.plot.depth.overlay", "SpcList", function (object, X, lab_cex, ...
 				lab_cex = 1
 #			browser()
 			all_y = unlist(lapply(object,function(t) t$DEPTH))
-			all_x = unlist(lapply(object,function(t) t@DF[X]))
+			all_x = unlist(lapply(object,function(t) t@Spectra[X]))
 			xlim = range(all_x)
 			ylim = range(all_y)
 			tit=""
@@ -200,7 +200,7 @@ setMethod("subset",  signature="SpcList",
 #			if(length(e1)!=length(e2))
 #				stop("Lengths of input SpcList object should match")
 #			
-#			result <- callGeneric(e1[[1]], e2@DF[[1]])
+#			result <- callGeneric(e1[[1]], e2@Spectra[[1]])
 #			output <- new("Spectra",DF=result,Wavelengths=e1@Wavelengths,Units=e1@Units,
 #					ShortName = "Arith", LongName="Arith")			
 #			return(output)
@@ -208,7 +208,7 @@ setMethod("subset",  signature="SpcList",
 #
 #lapply(1:length(e1), function(x){
 #			browser()
-#			callGeneric(e1[[x]]@DF, e2[[x]]@DF)
+#			callGeneric(e1[[x]]@Spectra, e2[[x]]@Spectra)
 #		})
 
 #########################################################################
