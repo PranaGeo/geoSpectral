@@ -8,13 +8,12 @@ Author: Servet Cizmeli
 Maintainer: Servet Cizmeli <sac@arctus.ca>
 Description: This package provides S4 classes and basic manipulation methods for datasets 
 		frequently used in remote sensing, bio-optical oceanography and environmental and 
-		earth sciences. The package is based on the basic data type called Biooo which was
-		concieved for non-spectral data that can easily be represented with a data.frame. 
-		Several other classes extend Bioo to store spatial/temporal and spectral aspects 
+		earth sciences. The package is based on the data type called Spectra which extends
+		the STIDF class of package spacetime. Spatial/temporal and spectral aspects 
 		of Bio-Optical data that are regularly collected during Bio-Optical oceanography
-		campaigns. 
+		campaigns can be easily represented with the Spectra class.
 License: GPL
 LazyLoad: yes
-Collate: BiooHeader-Class.R BiooHeader-Methods.R BiooHeaderList-Methods.R
+Collate: SpcHeader-Class.R BiooHeader-Methods.RSpcoHeaderList-Methods.R
 		Spectra-Class.R Spectra-Methods.R  SpcList-Class.R SpcList-Methods.R 
 		
