@@ -106,6 +106,17 @@ setMethod("ncol", signature = "Spectra",
 setMethod("nrow", signature = "Spectra", 
 		def = function (x){  return(nrow(x@Spectra))  })
 #########################################################################
+# Method : names
+#########################################################################
+setMethod("names", signature = "Spectra", 
+		def = function (x){ 
+#			if(ncol(x@data)>1)
+				return(c(names(x@Spectra),names(x@data)))
+#			else                
+#				return(names(x@data)) 
+		})
+
+#########################################################################
 # Method : head
 #########################################################################
 setMethod("head", signature = "Spectra", 
