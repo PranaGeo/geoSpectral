@@ -19,9 +19,9 @@ setClass("Spectra", contains="STIDF",
 		prototype=prototype(
 				ShortName="spvar2",
 				LongName="spvar2 longname",
-				Wavelengths=0, 
+				Wavelengths=numeric(), 
 				WavelengthsUnit = "nm", 
-				Spectra=matrix(),
+				Spectra=matrix(NA,0,0),
 				header=new("BiooHeader"),
 				Units="[ ]",
 				InvalidIdx=logical(),
@@ -35,9 +35,9 @@ if (0){
 #			cat("---------Spectra::Initialize\n")
 				#Set defaults for ShortName
 				if (missing(Spectra))
-					Spectra <- matrix()
+					Spectra <- matrix(NA,0,0)
 				if (missing(Wavelengths))
-					Wavelengths <- numeric(ncol(Spectra))
+					Wavelengths <- numeric()
 				if (missing(ShortName))
 					ShortName <- "spvar"				 
 				if (length(ShortName)!=1)
