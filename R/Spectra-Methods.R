@@ -136,8 +136,8 @@ setMethod("show", "Spectra", function(object){
 			}
 			bbx=bbox(object@sp)
 			if (length(object@time)>1){
-				period = paste(as.character(periodicity(object@time))[1],
-						as.character(periodicity(object@time))[5])
+				period = paste(as.character(xts::periodicity(object@time))[1],
+						as.character(xts::periodicity(object@time))[5])
 				timerange = as.character(range(time(object@time)),usetz=T)
 			} else { 
 				period = "Not enough data"
@@ -151,7 +151,7 @@ setMethod("show", "Spectra", function(object){
 					"Spectra Columns: ", head(colnames(object@Spectra)), "...\n",
 					"Ancillary Columns: ", head(names(object@data)),"...\n",
 					"Bounding box:", "LON(",bbx[1,],") LAT(",bbx[2,],")\n",
-					"Time : periodicity of ", period, " between (", timerange,")")			
+					"Time : periodicity of ", period, " between (", timerange,")\n")			
 		})		
 
 #########################################################################
