@@ -259,7 +259,7 @@ SpcList = function (spclist){
 #########################################################################
 # Method : spc.invalid.detect
 #########################################################################
-setMethod("spc.invalid.detect", signature = "SpcList", def=function(source1){
+setMethod("spc.invalid.detect", signature = "list", def=function(source1){
 			out = lapply(source1, function(x) {SetInvalidIdx(x)<-biooInvalidDetect(x)})
 			return(out)
 		})
@@ -267,15 +267,14 @@ setMethod("spc.invalid.detect", signature = "SpcList", def=function(source1){
 #########################################################################
 # Method : spc.getheader
 #########################################################################
-setMethod("spc.getheader", signature = "SpcList", 
-		def = function (object,name){
+setMethod("spc.getheader", signature = "list", def = function (object,name){
 			sapply(object, spc.getheader,name)
 		})
 
 #########################################################################
 # Method : spc.setheader<-
 #########################################################################
-setReplaceMethod(f="spc.setheader", signature="SpcList",
+setReplaceMethod(f="spc.setheader", signature="list",
 		definition=function(object,value,...){
 			if(inherits(value,"Bioo"))
 				stop("It is forbidden to place in a BiooHeader object that inherit from the Bioo class")
@@ -294,7 +293,7 @@ setReplaceMethod(f="spc.setheader", signature="SpcList",
 #########################################################################
 # Method : spc.data2header
 #########################################################################
-setMethod("spc.data2header", signature = "SpcList", 
+setMethod("spc.data2header", signature = "list", 
 		def=function(object,headerfield,dataname,compress=TRUE,...){
 			temp = lapply(object, spc.data2header, headerfield,dataname,compress,...)
 			object@.Data=temp
@@ -303,14 +302,14 @@ setMethod("spc.data2header", signature = "SpcList",
 #########################################################################
 # Method : sort
 #########################################################################
-setMethod("sort", signature="SpcList", definition= function (x, which.col, decreasing = FALSE, ...){
+setMethod("sort", signature="list", definition= function (x, which.col, decreasing = FALSE, ...){
 		newdata = lapply(x, sort, which.col=which.col, decreasing=decreasing, ...)
 		x@.Data = newdata
 		return(x)
 		})
 
 #########################################################################
-# Method : lapply
+# Method : spc.lapply
 #########################################################################
 setGeneric (name= "spc.lapply",
 		def=function(X, FUN,...){standardGeneric("spc.lapply")})
