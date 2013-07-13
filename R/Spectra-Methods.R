@@ -636,11 +636,12 @@ setMethod("Math", signature("Spectra"),function (x) {
 			validObject(x)
 			return(x)
 		})
-setMethod("colMeans", signature("Spectra"),function (x) {
+setGeneric (name= "spc.colMeans",def=function(object){standardGeneric("spc.colMeans")})
+setMethod("spc.colMeans", signature("Spectra"),function (x) {
 			#Computes the mean along the rows of Spectra (@Spectra). The method finds the measurement
 			#closest in time to the mean time and keeps the spatial/time attributes as well as Ancillary
 			#data table (@data) associated to that measurement as that of the mean spectra
-			x@Spectra <- t(as.matrix(callGeneric(x@Spectra)))
+			x@Spectra <- t(as.matrix(colMeans(x@Spectra)))
 #			x@data <- as.data.frame(t(callGeneric(x@data)))
 			#Find the mean time
 			meantime <- xts(1,mean(time(x@time)),tzone=attr(x@time,"tzone"))
