@@ -2,7 +2,7 @@
 # 
 # Author: acizmeli
 ###############################################################################
-	
+
 #########################################################################
 # Method : Conversion from SpcList to Bioo
 #########################################################################
@@ -136,7 +136,7 @@ setMethod("spc.plot.overlay", "SpcList", function (object, lab_cex=1,leg_idx=T, 
 				legend("bottomright",tit[leg_idx],col=col[leg_idx],cex=lab_cex,bty="n",lty=lty[leg_idx],lwd=lwd[leg_idx])	
 			else
 				legend("bottomright",tit[leg_idx],col=col[leg_idx],fill=col[leg_idx],cex=lab_cex,bty="n")	
-			})
+		})
 
 #########################################################################
 setGeneric (name= "spc.plot.depth.overlay",
@@ -276,18 +276,32 @@ setMethod("spc.getheader", signature = "list", def = function (object,name){
 #########################################################################
 setReplaceMethod(f="spc.setheader", signature="list",
 		definition=function(object,value,...){
-#			if(inherits(value,"Bioo"))
-#				stop("It is forbidden to place in a BiooHeader object that inherit from the Bioo class")
-			
+			if(inherits(value,"Spectra"))
+				stop("It is forbidden to set a SpcHeader an object that inherits from the Spectra class")
 			if(length(value)==1)
 				value = rep(value,length(object))
-			
-			stopifnot(length(value)==length(object))
+			stopifnot(length(value)==length(object))			
 			
 			a=sapply(1:length(object), function(x) {
 						object[[x]] = spc.setheader(object[[x]],value[x])
 					})
+			validObject(object)
+			return(object)
+		})
+#########################################################################
+# Method : spc.updateheader<-
+#########################################################################
+setReplaceMethod(f="spc.updateheader", signature="list",
+		definition=function(object,Name,value,...){
+			if(inherits(value,"Spectra"))
+				stop("It is forbidden to place in a SpcHeader an object that inherits from the Spectra class")
+			if(length(value)==1)
+				value = rep(value,length(object))
+			stopifnot(length(value)==length(object))			
 			
+			for(xx in 1:length(object)){
+				spc.updateheader(object[[xx]],Name)<-value[xx]
+			}
 			validObject(object)
 			return(object)
 		})
@@ -305,9 +319,9 @@ setMethod("spc.data2header", signature = "list",
 # Method : sort
 #########################################################################
 setMethod("sort", signature="list", definition= function (x, which.col, decreasing = FALSE, ...){
-		newdata = lapply(x, sort, which.col=which.col, decreasing=decreasing, ...)
-		x@.Data = newdata
-		return(x)
+			newdata = lapply(x, sort, which.col=which.col, decreasing=decreasing, ...)
+			x@.Data = newdata
+			return(x)
 		})
 
 #########################################################################
@@ -323,8 +337,8 @@ setMethod("spc.lapply", signature="SpcList", definition= function (X, FUN, ...) 
 			validObject(X)
 			return(X)
 		})
-			
-	
+
+
 #########################################################################
 # Method : subset
 #########################################################################
