@@ -803,3 +803,33 @@ setMethod("spc.data2header", signature = "Spectra",
 			
 			return(object)
 		})
+
+
+setMethod("rep", signature(x = "Spectra"),
+		function(x, times, length.out, each, ...) {
+			if(!missing(length.out))
+				stop("The argument 'length.out' is not supported yet")
+			if(!missing(each))
+				stop("The argument 'each' is not supported yet")
+			SP = sapply(1:ncol(x), function(y) rep(x@Spectra[1,y], times))
+			
+			DT = as.data.frame(matrix(rep(matrix(NA,1,ncol(x@data)), times), ncol = ncol(x@data)))
+			for (I in 1:ncol(DT))
+				DT[,I] = rep(x@data[,I],times)
+			names(DT)<-names(x@data)
+			
+			if (length(x@InvalidIdx)>1)
+				x@InvalidIdx = rep(x@InvalidIdx,times)
+			
+			crds = matrix(rep(x@sp@coords,times),ncol=ncol(x@sp@coords),byrow=T)
+			colnames(crds)<-c("LON","LAT")
+			x@time = xts(rep(x@time,times),rep(time(x@time),times))
+			x@endTime = rep(x@endTime,times)
+			x@sp@coords <- crds
+			x@data = DT 
+			x@Spectra = SP	
+			x@SelectedIdx = logical()
+			validObject(x)
+			return(x)
+		})
+
