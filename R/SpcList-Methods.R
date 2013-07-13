@@ -39,7 +39,7 @@ setGeneric (name= "spc.plot.grid",
 		def=function(x,FUN, nnrow, nncol,...){standardGeneric("spc.plot.grid")})
 setMethod("spc.plot.grid", "SpcList", function (x,FUN, nnrow, nncol, mar=c(4,4.5,1,0.5), 
 				oma = c(0,0,0,0), lab_cex, ...){
-			nb_spc = length(which(sapply(x, inherits, "Bioo")))
+			nb_spc = length(which(sapply(x, inherits, "Spectra")))
 			mypar = par()
 			nrow = ceiling(nb_spc/nncol)
 			
@@ -216,7 +216,7 @@ setMethod("subset",  signature="SpcList",
 #########################################################################
 setMethod("names", "SpcList", function(x){
 			sapply(x, function(mobject) {
-						if(class(mobject)=="Bioo") "Bioo"	else mobject@ShortName[1]
+						if(class(mobject)=="Spectra") mobject@ShortName[1]	else class(mobject) 
 					})
 		})
 
@@ -260,7 +260,7 @@ SpcList = function (spclist){
 # Method : spc.invalid.detect
 #########################################################################
 setMethod("spc.invalid.detect", signature = "list", def=function(source1){
-			out = lapply(source1, function(x) {SetInvalidIdx(x)<-biooInvalidDetect(x)})
+			out = lapply(source1, function(x) {SetInvalidIdx(x)<-spc.invalid.detect(x)})
 			return(out)
 		})
 
@@ -276,11 +276,13 @@ setMethod("spc.getheader", signature = "list", def = function (object,name){
 #########################################################################
 setReplaceMethod(f="spc.setheader", signature="list",
 		definition=function(object,value,...){
-			if(inherits(value,"Bioo"))
-				stop("It is forbidden to place in a BiooHeader object that inherit from the Bioo class")
+#			if(inherits(value,"Bioo"))
+#				stop("It is forbidden to place in a BiooHeader object that inherit from the Bioo class")
 			
 			if(length(value)==1)
 				value = rep(value,length(object))
+			
+			stopifnot(length(value)==length(object))
 			
 			a=sapply(1:length(object), function(x) {
 						object[[x]] = spc.setheader(object[[x]],value[x])
