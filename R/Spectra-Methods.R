@@ -258,7 +258,7 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
 	#Extract Spectra from data frame attributes
 	if(missing(Spectra)){
 		Spectra = as.matrix(inDF[,1:length(Wavelengths)])
-		inDF = inDF[,-(1:length(Wavelengths))]
+		inDF = cbind(data.frame(idx=1:nrow(inDF)), inDF[,-(1:length(Wavelengths))])
 	}
 	
 	if(missing(Units)){
@@ -657,7 +657,7 @@ setMethod("spc.colMeans", signature("Spectra"),function (x) {
 			min.idx = which.min(abs(as.numeric(time(meantime)-time(x@time))))
 			x@sp <- x@sp[min.idx]
 			x@time <-x@time[min.idx]
-			x@data <- x@data[min.idx,]
+			x@data <- x@data[min.idx,,F]
 			x@endTime <- mean(x@endTime)
 			x@InvalidIdx <- logical()
 			x@SelectedIdx <- logical()
@@ -822,10 +822,12 @@ setMethod("rep", signature(x = "Spectra"),
 				stop("The argument 'each' is not supported yet")
 			SP = sapply(1:ncol(x), function(y) rep(x@Spectra[1,y], times))
 			
-			DT = as.data.frame(matrix(rep(matrix(NA,1,ncol(x@data)), times), ncol = ncol(x@data)))
-			for (I in 1:ncol(DT))
-				DT[,I] = rep(x@data[,I],times)
-			names(DT)<-names(x@data)
+			if(prod(dim(x@data))!=0){
+				DT = as.data.frame(matrix(rep(matrix(NA,1,ncol(x@data)), times), ncol = ncol(x@data)))
+				for (I in 1:ncol(DT))
+					DT[,I] = rep(x@data[,I],times)
+				names(DT)<-names(x@data)
+			}
 			
 			if (length(x@InvalidIdx)>1)
 				x@InvalidIdx = rep(x@InvalidIdx,times)
@@ -835,7 +837,8 @@ setMethod("rep", signature(x = "Spectra"),
 			x@time = xts(rep(x@time,times),rep(time(x@time),times))
 			x@endTime = rep(x@endTime,times)
 			x@sp@coords <- crds
-			x@data = DT 
+			if(prod(dim(x@data))!=0)
+				x@data = DT 
 			x@Spectra = SP	
 			x@SelectedIdx = logical()
 			validObject(x)
