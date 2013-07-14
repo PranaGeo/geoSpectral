@@ -189,7 +189,7 @@ setReplaceMethod("spc.colnames", signature = "Spectra", def = function (x,value)
 			return(x) 
 		})
 
-#Creates a STIDF function from longstable. If not provided, assumes LAT,LON and TIME columns as 1.
+#Creates a Spectra object from longtable (uses stConstruct()). If not provided, assumes LAT,LON and TIME columns as 1.
 Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...){
 	longcol="";latcol="";timecol=""
 	if(missing(space)){
@@ -244,9 +244,6 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
 		}
 	}
 	
-	out = stConstruct(inDF,c(longcol,latcol),timecol,endTime=endTime)
-	#I think stConstruct does not take endTime into account. Force it again
-	out@endTime = endTime
 	#Extract Wavelengths from data frame attributes
 	if(missing(Wavelengths)){
 		Wavelengths = attr(inDF,"Wavelengths")
@@ -255,13 +252,15 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
 		
 		#Extract Spectra from data frame attributes
 		if(missing(Spectra)){
-			Spectra = as.matrix(out@Spectra[,lbd.idx])		
-		}
-		if(missing(data)){
-			#Extract Ancillary data
-			data = out@Spectra[,-which(lbd.idx)]
+			Spectra = as.matrix(inDF[,lbd.idx])		
 		}
 	}
+	#Extract Spectra from data frame attributes
+	if(missing(Spectra)){
+		Spectra = as.matrix(inDF[,1:length(Wavelengths)])
+		inDF = inDF[,-(1:length(Wavelengths))]
+	}
+	
 	if(missing(Units)){
 		#Extract Units
 		Units = attr(inDF,"Units")[1]
@@ -270,6 +269,12 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
 		#Extract Units
 		header = new("BiooHeader")
 	}
+	
+	#First construct a STIDF object using stConstruct()
+	out = stConstruct(inDF,c(longcol,latcol),timecol,endTime=endTime)
+	
+	#I think stConstruct does not take endTime into account. Force it again
+	out@endTime = endTime
 	out = new("Spectra",out, Spectra=Spectra,Wavelengths=Wavelengths,Units=Units,header=header,...)
 	validObject(out)
 	return(out)
