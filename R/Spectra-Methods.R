@@ -139,9 +139,9 @@ setMethod("show", "Spectra", function(object){
 				period = paste(as.character(xts::periodicity(object@time))[1],
 						as.character(xts::periodicity(object@time))[5])
 				timerange = as.character(range(time(object@time)),usetz=T)
+				timestr = paste("Time : periodicity of ", period, " between (", timerange,")")
 			} else { 
-				period = "Not enough data"
-				timerange = "NA"
+				timestr = paste("Time : ", as.character(time(object@time),usetz=T))
 			}
 			cat("\n", paste(object@ShortName[1], ' : An object of class "Spectra"\n', 
 							length(object@Wavelengths),"spectral channels in columns and", nrow(object@data), 
@@ -151,7 +151,7 @@ setMethod("show", "Spectra", function(object){
 					"Spectra Columns: ", head(colnames(object@Spectra)), "...\n",
 					"Ancillary Columns: ", head(names(object@data)),"...\n",
 					"Bounding box:", "LON(",bbx[1,],") LAT(",bbx[2,],")\n",
-					"Time : periodicity of ", period, " between (", timerange,")\n")			
+					timestr, "\n")			
 		})		
 
 #########################################################################
