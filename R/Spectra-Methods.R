@@ -321,7 +321,10 @@ setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="
 #				matplot(x@Wavelengths,t(x@Spectra[Xidx,]),#lab=x@Wavelengths,#xaxt="n",
 #						ylab= "",xlab="", type="l", pch=19,cex=0.3, cex.axis=lab_cex, ...)
 #			} else {
-			matplot(x@Wavelengths,t(x@Spectra[Xidx,]),#lab=x@Wavelengths,#xaxt="n",
+			YY = x@Spectra[Xidx,]
+			if(class(YY)=="matrix" && nrow(YY)!=length(x@Wavelengths))
+				YY = t(YY)
+			matplot(x@Wavelengths,YY,#lab=x@Wavelengths,#xaxt="n",
 					ylab= "",xlab="",type=type, pch=19,cex=0.3,cex.axis=lab_cex,lwd=lwd,...)
 #			}
 			if(missing(ylab)){
