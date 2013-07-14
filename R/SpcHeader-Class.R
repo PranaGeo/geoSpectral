@@ -4,43 +4,43 @@
 ###############################################################################
 
 #########################################################################
-# Class : SpcHeader	
+# Class : BiooHeader	
 #########################################################################
-setClass("SpcHeader", contains="list",
+setClass("BiooHeader", contains="list",
 		prototype=prototype(list(Station=NA,Cruise=NA,Latitude=NA,Longitude=NA)))
 setMethod("initialize",
-		signature(.Object = "SpcHeader"),
+		signature(.Object = "BiooHeader"),
 		function (.Object, ...) 
 		{
-#			cat("---------SpcHeader::Initialize\n")						
+#			cat("---------BiooHeader::Initialize\n")						
 			.Object <- callNextMethod()
 			#			validObject(.Object)
 			return(.Object)
 		})
 
-setValidity("SpcHeader", function(object){
+setValidity("BiooHeader", function(object){
 #			cat("---------Bioo::setValidity\n")
 			return(TRUE)
 		})
 
 
 #########################################################################
-# Class : SpcHeaderList	
+# Class : BiooHeaderList	
 #########################################################################
-setClass("SpcHeaderList", contains="list",
-		prototype=prototype(list(new("SpcHeader"))))
+setClass("BiooHeaderList", contains="list",
+		prototype=prototype(list(new("BiooHeader"))))
 
 setMethod("initialize",
-		signature(.Object = "SpcHeaderList"),
+		signature(.Object = "BiooHeaderList"),
 		function (.Object, ...) 
 		{
-#			cat("---------SpcHeader::Initialize\n")						
+#			cat("---------BiooHeader::Initialize\n")						
 			.Object <- callNextMethod()
 			#			validObject(.Object)
 			return(.Object)
 		})
 
-setValidity("SpcHeaderList", function(object){
+setValidity("BiooHeaderList", function(object){
 #			cat("---------Bioo::setValidity\n")
 			return(TRUE)
 		})
