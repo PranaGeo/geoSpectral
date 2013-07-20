@@ -332,7 +332,7 @@ setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="
 					ylab= "",xlab="",type=type, pch=19,cex=0.3,cex.axis=lab_cex,lwd=lwd,...)
 #			}
 			if(missing(ylab)){
-				if(x@LongName[1]=="spvar2 longname")
+				if(1)#(x@LongName[1]=="spvar2 longname")
 					ylab = bquote(.(x@ShortName)*", ["*.(x@Units[1])*"]")
 				else
 					ylab = bquote(.(x@LongName[1])*", ["*.(x@Units[1])*"]")
