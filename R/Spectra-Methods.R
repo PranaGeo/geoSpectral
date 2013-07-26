@@ -288,7 +288,8 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
 # Method : spc.plot
 #########################################################################
 setGeneric("spc.plot",function(x,Y,...){standardGeneric("spc.plot")})
-setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="l",lwd=2,...){						
+setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="l",
+				pch=19,lwd=2,cex=0.3,...){						
 			if (length(x@InvalidIdx)==0)
 				x@InvalidIdx = rep(FALSE,nrow(x@Spectra))
 			
@@ -316,21 +317,14 @@ setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="
 			
 			if(missing(lab_cex))
 				lab_cex = 1
-#			if(missing(type))
-#				type="l"
-#			if(missing(lty))
-#				lty=1
-			
-#			if(any(grepl("col",names(match.call())))) {
-#				matplot(x@Wavelengths,t(x@Spectra[Xidx,]),#lab=x@Wavelengths,#xaxt="n",
-#						ylab= "",xlab="", type="l", pch=19,cex=0.3, cex.axis=lab_cex, ...)
-#			} else {
+
 			YY = x@Spectra[Xidx,]
 			if(class(YY)=="matrix" && nrow(YY)!=length(x@Wavelengths))
 				YY = t(YY)
+				
 			matplot(x@Wavelengths,YY,#lab=x@Wavelengths,#xaxt="n",
-					ylab= "",xlab="",type=type, pch=19,cex=0.3,cex.axis=lab_cex,lwd=lwd,...)
-#			}
+					ylab= "",xlab="",type=type, pch=pch,cex=cex,cex.axis=lab_cex,lwd=lwd,...)
+
 			if(missing(ylab)){
 				if(1)#(x@LongName[1]=="spvar2 longname")
 					ylab = bquote(.(x@ShortName)*", ["*.(x@Units[1])*"]")
