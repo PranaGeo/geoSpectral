@@ -843,3 +843,32 @@ setMethod("rep", signature(x = "Spectra"),
 			return(x)
 		})
 
+#########################################################################
+# Method : spc.interp.spectral
+#########################################################################
+setGeneric (name= "spc.interp.spectral",
+		def=function(source1,target_lbd,...){standardGeneric("spc.interp.spectral")})
+setMethod("spc.interp.spectral", signature = "Spectra", 
+		def = function (source1,target_lbd,show.plot=FALSE){
+			if(missing(target_lbd))
+				stop("The input argument 'target_lbd' is missing")
+			
+			out = source1
+			lbd_source1 = spc.getwavelengths(source1)
+			DF = matrix(nrow=nrow(source1),ncol=length(target_lbd))
+			my = list()
+			for(x in 1:nrow(DF)) {
+				my[[x]] = approx(lbd_source1, source1@Spectra[x,],xout=target_lbd,rule=2)
+				DF[x,] = t(my[[x]]$y)
+			}
+			if(show.plot){
+				plot(lbd_source1, source1@Spectra[1,],type="b",ylab=source1@LongName,xlab="Wavelength",pch="o")
+				points(my[[x]]$x,my[[x]]$y,col="green",cex=0.4)
+				grid(col="black")
+			}
+			out@Spectra = DF
+			out@Wavelengths = target_lbd
+			spc.colnames(out) <- spc.cname.construct(out)
+			validObject(out)
+			return(out)
+		})
