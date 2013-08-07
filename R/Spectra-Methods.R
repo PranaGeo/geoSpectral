@@ -878,7 +878,7 @@ setMethod("spc.interp.spectral", signature = "Spectra",
 #########################################################################
 setGeneric(name="spc.export.text",
 		def=function(input,filename,writeheader=TRUE,sep=";",...) {standardGeneric("spc.export.text")})
-setMethod("spc.export.text", signature="Spectra", definition=function(input, filename,writeheader,sep,...){
+setMethod("spc.export.text", signature="Spectra", definition=function(input,filename,writeheader,sep,...){
 			data = as(input@Spectra,"data.frame")
 			
 			idx.idx = which(colnames(data) == "idx")
@@ -888,11 +888,14 @@ setMethod("spc.export.text", signature="Spectra", definition=function(input, fil
 			data = cbind(data.frame(idx=1:nrow(data)),data)
 			clmnnames = colnames(data)
 			
-			if(writeheader)
-				spc.export.text(input@header, filename,append=F)
-			
 			LongName = paste("Spectra|LongName",sep,input@LongName,sep="")
-			write.table(LongName, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
+			if(writeheader){
+				spc.export.text(input@header,filename,append=F)
+				write.table(LongName, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
+			} else {
+				write.table(LongName, filename, row.names=F, col.names=F,append=F, quote=F,eol="\n")
+			}
+			
 			ShortName = paste("Spectra|ShortName",sep,input@ShortName,sep="")
 			write.table(ShortName, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
 			Units = paste("Spectra|Units",sep,input@Units,sep="")
@@ -1004,3 +1007,10 @@ spc.import.text = function(filename,sep=";",...){
 	return(Spec)
 }
 #aa=spc.import.text("test.txt")
+#########################################################################
+# Method : spc.export.xlsx
+#########################################################################
+setGeneric(name="spc.export.xlsx",
+		def=function(input,filename,writeheader=TRUE,sep=";",...) {standardGeneric("spc.export.xlsx")})
+setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,filename,writeheader,sep,...){
+		})
