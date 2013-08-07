@@ -111,7 +111,7 @@ setMethod("nrow", signature = "Spectra",
 setMethod("names", signature = "Spectra", 
 		def = function (x){ 
 #			if(ncol(x@data)>1)
-				return(c(colnames(x@Spectra),names(x@data)))
+			return(c(colnames(x@Spectra),names(x@data)))
 #			else                
 #				return(names(x@data)) 
 		})
@@ -317,14 +317,14 @@ setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="
 			
 			if(missing(lab_cex))
 				lab_cex = 1
-
+			
 			YY = x@Spectra[Xidx,]
 			if(class(YY)=="matrix" && nrow(YY)!=length(x@Wavelengths))
 				YY = t(YY)
-				
+			
 			matplot(x@Wavelengths,YY,#lab=x@Wavelengths,#xaxt="n",
 					ylab= "",xlab="",type=type, pch=pch,cex=cex,cex.axis=lab_cex,lwd=lwd,...)
-
+			
 			if(missing(ylab)){
 				if(1)#(x@LongName[1]=="spvar2 longname")
 					ylab = bquote(.(x@ShortName)*", ["*.(x@Units[1])*"]")
@@ -872,3 +872,142 @@ setMethod("spc.interp.spectral", signature = "Spectra",
 			validObject(out)
 			return(out)
 		})
+
+#########################################################################
+# Method : spc.export.text
+#########################################################################
+setGeneric(name="spc.export.text",
+		def=function(input,filename,writeheader=TRUE,sep=";",...) {standardGeneric("spc.export.text")})
+setMethod("spc.export.text", signature="Spectra", definition=function(input, filename,writeheader,sep,...){
+			data = as.data.frame(input@Spectra)
+			if(ncol(input@data)>0){
+				data = cbind(data,input@data)
+			}
+			
+			TIME = as.character(time(input@time),usetz=T)
+			ENDTIME = as.character(input@endTime,usetz=T)
+			data = cbind(data,data.frame(TIME=TIME,ENDTIME=ENDTIME),as.data.frame(input@sp@coords))
+			
+			idx.idx = which(colnames(data) == "idx")
+			if(length(idx.idx)>0){
+				data = data[,-idx.idx]
+			}
+			data = cbind(data.frame(idx=1:nrow(data)),data)
+			clmnnames = colnames(data)
+			
+			if(writeheader)
+				spc.export.text(input@header, filename,append=F)
+			
+			LongName = paste("Spectra|LongName",sep,input@LongName,sep="")
+			write.table(LongName, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
+			ShortName = paste("Spectra|ShortName",sep,input@ShortName,sep="")
+			write.table(ShortName, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
+			Units = paste("Spectra|Units",sep,input@Units,sep="")
+			write.table(Units, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
+			proj4string = paste("Spectra|proj4string",sep,input@sp@proj4string@projargs)
+			write.table(proj4string, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
+			lbd = paste("Spectra|WavelengthsUnit",sep,input@WavelengthsUnit,sep="")
+			write.table(lbd, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
+			lbd = paste("Spectra|Wavelengths",sep,paste(spc.getwavelengths(input),collapse = sep),sep="")
+			write.table(lbd, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")			
+			#Write column names
+			write.table(paste(clmnnames,collapse=sep), filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
+			#Write Spectra+Ancillary data
+			write.table(data, filename, sep=sep, row.names=F, col.names=F,append=T,quote=F)
+			print(paste("Wrote", filename ))
+		})
+setMethod("spc.export.text", signature="BiooHeader", definition=function(input,filename,append=F,sep=";",...){
+			nms = names(input)
+			nms = paste("Spectra|header",sep,nms,sep="")
+			out1 = as.data.frame(as.character(input))
+			row.names(out1)<-nms
+			write.table(out1,filename,row.names=T,col.names=F,append=append,quote=F,sep=sep)
+		})
+#spc.export.text(my[[1]]@Rrs,"test.txt")
+
+#########################################################################
+# Method : spc.import.text
+#########################################################################
+spc.import.text = function(filename,sep=";",...){
+	myT = readLines(con=filename)
+	
+	#Extract the header
+	header.idx = grep("Spectra\\|header",myT)
+	if(length(header.idx)>0){
+		hdr = strsplit(myT[header.idx],sep)
+		
+		nms = sapply(hdr,function(x)x[2])
+		vals = sapply(hdr,function(x)x[3])
+		header = t(data.frame(vals))
+		names(header)<- nms
+		row.names(header)<-NULL
+		#Suppress warnings for the below operation (as.numeric creates warnings)
+		header = as.list(header)
+		myWarn = options()$warn
+		options(warn=-1)
+		header = lapply(header,function(x) {
+					try(y<-as.numeric(x),silent=T)
+					if(!is.na(y))
+						x<-y
+					return(x)
+				})
+		header = lapply(header,function(x) {
+					try(y<-eval(parse(text=x)),silent=T)
+					if(exists("y"))
+						x<-y
+					return(x)
+				})
+		options(warn=myWarn)
+
+		if(any(grepl("StationType",nms)))
+			if(is.logical(header$StationType))
+				header$StationType = "T"
+		header = as(header,"BiooHeader")
+		myT = myT[-header.idx]
+		
+	} else {
+		header = new("BiooHeader")
+	}
+	#Extract the Spectra slots
+	Slots.idx = grep("Spectra\\|",myT)
+	if(length(Slots.idx)>0){
+		Slots = strsplit(myT[Slots.idx],sep)
+		idx = grep("LongName",Slots)
+		LongName = Slots[[idx]][2]
+		idx = grep("ShortName",Slots)
+		ShortName = Slots[[idx]][2]
+		idx = grep("Units",Slots)
+		Units= Slots[[idx]][2]
+		idx = grep("proj4string",Slots)
+		proj4string=Slots[[idx]][2]
+		if(grepl("NA",proj4string))
+			proj4string = NA
+		idx = grep("WavelengthsUnit",Slots)
+		WavelengthsUnit=Slots[[idx]][2]
+		idx = which("Spectra|Wavelengths"==sapply(Slots,function(x)x[1]))
+		try(Wavelengths<-as.numeric(Slots[[idx]][2:length(Slots[[idx]])]),silent=T)
+		if(!exists("Wavelengths"))
+			stop("Could not find Wavelength information")
+		myT = myT[-Slots.idx]
+		con = textConnection(myT)
+		Spec = read.table(con,header=T,sep=sep)
+		close(con)
+		
+		#Eliminate the first (idx) column
+		idx = which(names(Spec)=="idx")
+		if(length(idx)>0){
+			Spec = Spec[,-idx]
+		}
+		
+		Spec$TIME<-as.character(Spec$TIME)
+		tz = strsplit(Spec$TIME[1]," ")[[1]][3]
+		Spec$TIME<-as.POSIXct(strptime(Spec$TIME,"%Y-%m-%d %H:%M:%S",tz=tz))
+		Spec$ENDTIME<-as.character(Spec$ENDTIME)
+		Spec$ENDTIME<-as.POSIXct(strptime(Spec$TIME,"%Y-%m-%d %H:%M:%S",tz=tz))
+		Spec = Spectra(Spec,ShortName=ShortName,Wavelengths=Wavelengths,Units=Units,LongName=LongName)
+	} else {
+		stop("Cannot find information for Spectra object slots")
+	}
+	return(Spec)
+}
+#aa=spc.import.text("test.txt")
