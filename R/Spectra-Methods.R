@@ -879,14 +879,7 @@ setMethod("spc.interp.spectral", signature = "Spectra",
 setGeneric(name="spc.export.text",
 		def=function(input,filename,writeheader=TRUE,sep=";",...) {standardGeneric("spc.export.text")})
 setMethod("spc.export.text", signature="Spectra", definition=function(input, filename,writeheader,sep,...){
-			data = as.data.frame(input@Spectra)
-			if(ncol(input@data)>0){
-				data = cbind(data,input@data)
-			}
-			
-			TIME = as.character(time(input@time),usetz=T)
-			ENDTIME = as.character(input@endTime,usetz=T)
-			data = cbind(data,data.frame(TIME=TIME,ENDTIME=ENDTIME),as.data.frame(input@sp@coords))
+			data = as(input@Spectra,"data.frame")
 			
 			idx.idx = which(colnames(data) == "idx")
 			if(length(idx.idx)>0){
