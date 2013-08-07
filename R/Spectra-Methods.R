@@ -11,7 +11,10 @@ setAs(from="Spectra", to="data.frame", def=function(from){
 				output = cbind(as.data.frame(from@Spectra),from@data)
 			
 			delidx = match(c("LON","LAT","TIME","ENDTIME"),names(output))
-			output = output[,-delidx[!is.na(delidx)]]
+			delidx = delidx[-which(is.na(delidx))]
+			if(length(delidx)>0)
+				output = output[,-delidx[!is.na(delidx)]]
+
 			output$LON = from@sp@coords[,"LON"]
 			output$LAT = from@sp@coords[,"LAT"]
 			output$TIME=as.POSIXct(time(from@time))
@@ -879,14 +882,15 @@ setMethod("spc.interp.spectral", signature = "Spectra",
 setGeneric(name="spc.export.text",
 		def=function(input,filename,writeheader=TRUE,sep=";",...) {standardGeneric("spc.export.text")})
 setMethod("spc.export.text", signature="Spectra", definition=function(input,filename,writeheader,sep,...){
-			data = as(input@Spectra,"data.frame")
-			
+			data = as(input,"data.frame")
 			idx.idx = which(colnames(data) == "idx")
 			if(length(idx.idx)>0){
 				data = data[,-idx.idx]
 			}
 			data = cbind(data.frame(idx=1:nrow(data)),data)
 			clmnnames = colnames(data)
+			data$TIME = as.character(data$TIME,usetz=TRUE)
+			data$ENDTIME = as.character(data$ENDTIME,usetz=TRUE)
 			
 			LongName = paste("Spectra|LongName",sep,input@LongName,sep="")
 			if(writeheader){
