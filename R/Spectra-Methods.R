@@ -14,7 +14,7 @@ setAs(from="Spectra", to="data.frame", def=function(from){
 			delidx = delidx[-which(is.na(delidx))]
 			if(length(delidx)>0)
 				output = output[,-delidx[!is.na(delidx)]]
-
+			
 			output$LON = from@sp@coords[,"LON"]
 			output$LAT = from@sp@coords[,"LAT"]
 			output$TIME=as.POSIXct(time(from@time))
@@ -893,14 +893,28 @@ setMethod("spc.export.text", signature="Spectra", definition=function(input,file
 			data$ENDTIME = as.character(data$ENDTIME,usetz=TRUE)
 			
 			LongName = paste("Spectra|LongName",sep,input@LongName,sep="")
+			written=0
 			if(writeheader){
-				spc.export.text(input@header,filename,append=F)
+				spc.export.text(input@header,filename,append=F) #XXX
+				written=length(input@header)
 				write.table(LongName, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
 			} else {
 				write.table(LongName, filename, row.names=F, col.names=F,append=F, quote=F,eol="\n")
 			}
 			slotInfos = .spc.slot.infos(input,sep)
-			write.table(slotInfos, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")				
+			for(I in 1:length(slotInfos)){
+				if(length(slotInfos[[I]])==1)
+					mysl=paste(names(slotInfos)[I],slotInfos[[I]],sep=sep)
+				else
+					mysl = paste(names(slotInfos)[I],paste(slotInfos[[I]],collapse=sep),sep=sep)
+				if(written==0)
+					write.table(mysl,filename,row.names=F,col.names=F,append=F,quote=F)
+				else
+					write.table(mysl,filename,row.names=F,col.names=F,append=T,quote=F)
+				written = written+1
+			}
+			
+#			write.table(slotInfos, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")				
 #			write.table(ShortName, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
 #			write.table(Units, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
 #			write.table(proj4string, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
@@ -914,12 +928,11 @@ setMethod("spc.export.text", signature="Spectra", definition=function(input,file
 		})
 #spc.export.text(my[[1]]@Rrs,"test.txt")
 .spc.slot.infos = function(input,sep){
-	ShortName = paste("Spectra|ShortName",sep,input@ShortName,sep="")
-	Units = paste("Spectra|Units",sep,input@Units,sep="")
-	proj4string = paste("Spectra|proj4string",sep,input@sp@proj4string@projargs)
-	lbdunits = paste("Spectra|WavelengthsUnit",sep,input@WavelengthsUnit,sep="")
-	lbd = paste("Spectra|Wavelengths",sep,paste(spc.getwavelengths(input),collapse = sep),sep="")
-	return(rbind(ShortName,Units,proj4string,lbdunits,lbd))
+	out=list('Spectra|ShortName'=input@ShortName,
+			'Spectra|Unit'=input@Units,'Spectra|proj4string'=input@sp@proj4string@projargs,
+			'Spectra|WavelengthsUnit'=input@WavelengthsUnit,
+			'Spectra|Wavelengths'=spc.getwavelengths(input))
+	return(out)
 }
 setMethod("spc.export.text", signature="BiooHeader", definition=function(input,filename,append=F,sep=";",...){
 			nms = names(input)
@@ -945,24 +958,9 @@ spc.import.text = function(filename,sep=";",...){
 		header = t(data.frame(vals))
 		names(header)<- nms
 		row.names(header)<-NULL
-		#Suppress warnings for the below operation (as.numeric creates warnings)
-		header = as.list(header)
-		myWarn = options()$warn
-		options(warn=-1)
-		header = lapply(header,function(x) {
-					try(y<-as.numeric(x),silent=T)
-					if(!is.na(y))
-						x<-y
-					return(x)
-				})
-		header = lapply(header,function(x) {
-					try(y<-eval(parse(text=x)),silent=T)
-					if(exists("y"))
-						x<-y
-					return(x)
-				})
-		options(warn=myWarn)
-
+		header=as.list(header)
+		header = .spc.header.infos(header) 
+		
 		if(any(grepl("StationType",nms)))
 			if(is.logical(header$StationType))
 				header$StationType = "T"
@@ -1014,6 +1012,31 @@ spc.import.text = function(filename,sep=";",...){
 	}
 	return(Spec)
 }
+
+#This internal function takes as input the Spectra header as a list and 
+#1)converts its elements to numbers (when possible)
+#2)evals its elements in case the text contains some R code
+.spc.header.infos = function(header){ 
+	#Suppress warnings for the below operation (as.numeric creates warnings)
+	myWarn = options()$warn
+	options(warn=-1)
+	header = lapply(header,function(x) {
+				try(y<-as.numeric(x),silent=T)
+				if(!is.na(y))
+					x<-y
+				return(x)
+			})
+	header = lapply(1:length(header),function(x) {
+				if(names(header)[x]=="Rsky750")
+					browser()
+				try(y<-eval(parse(text=header[[x]])),silent=T)
+				if(exists("y"))
+					header[[x]]<-y
+				return(header[[x]])
+			})
+	options(warn=myWarn)
+	return(header)
+}
 #aa=spc.import.text("test.txt")
 #########################################################################
 # Method : spc.export.xlsx
@@ -1029,29 +1052,44 @@ setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,file
 			
 			if(missing(sheetName))
 				sheetName = input@ShortName
-
+			
 			data = as(input,"data.frame")
 			data$TIME = as.character(data$TIME,usetz=TRUE)
 			data$ENDTIME = as.character(data$ENDTIME,usetz=TRUE)
 			data = cbind(data.frame(idx=1:nrow(data)),data)
-			if(writeheader){
-				nms = names(input@header)
-				myHead = as.data.frame(as.character(input@header))
-				myHead = cbind("Spectra|header",nms,myHead)
-#				row.names(out1)<-nms
-#				write.xlsx2(myHead,file=filename,sheetName=sheetName,append=append,row.names=F,col.names=F)
-			}
-#			write.xlsx2(data,file=filename,sheetName=sheetName,append=T,row.names=F)
+			#Get the header as a list
+#			if(writeheader){
+#				browser()
+#				myHead = .spc.header.infos(input@header)
+##				nms = names(input@header)
+##				myHead = as.data.frame(as.character(input@header))
+##				myHead = cbind("Spectra|header",nms,myHead)
+#			}
+			
 			slotInfos = .spc.slot.infos(input,sep)
+			#Create an empty excel workbook and start writing into it
 			wb <- xlsx::createWorkbook()
 			sheet <- xlsx::createSheet(wb, sheetName=sheetName)
 			if(writeheader){
-				xlsx::addDataFrame(myHead, sheet,row.names=F,col.names=F)
-				written=nrow(myHead)
+				for(I in 1:length(input@header)){					
+					if(length(input@header[[I]])==1)
+						myH=cbind(names(input@header)[I],input@header[[I]])
+					else
+						myH = cbind(names(input@header)[I],t(input@header[[I]]))
+					xlsx::addDataFrame(myH, sheet,row.names=F,col.names=F,,startRow=I,startColumn=1)
+				}
 			}
-			xlsx::addDataFrame(slotInfos,sheet,row.names=F,col.names=F,startRow=written+1,startColumn=1)
-			written = written+nrow(slotInfos)
+			written = length(input@header)
+			for(I in 1:length(slotInfos)){
+				if(length(slotInfos[[I]])==1)
+					mysl=cbind(names(slotInfos)[I],slotInfos[[I]])
+				else
+					mysl = cbind(names(slotInfos)[I],t(slotInfos[[I]]))
+				xlsx::addDataFrame(mysl,sheet,row.names=F,col.names=F,startRow=written+1,startColumn=1)
+				written = written+1
+			}
 			xlsx::addDataFrame(data, sheet,row.names=F,startRow=written+1,startColumn=1)
 			xlsx::saveWorkbook(wb, filename)
+			print(paste("Wrote", filename ))
 		})
 #spc.export.xlsx(my[[1]]@Rrs,"test.xlsx")
