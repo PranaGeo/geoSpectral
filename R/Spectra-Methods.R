@@ -899,13 +899,13 @@ setMethod("spc.export.text", signature="Spectra", definition=function(input,file
 			} else {
 				write.table(LongName, filename, row.names=F, col.names=F,append=F, quote=F,eol="\n")
 			}
-			slot.infos = .spc.slot.infos(input)
-				browser()
-			write.table(ShortName, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
-			write.table(Units, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
-			write.table(proj4string, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
-			write.table(lbdunits, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
-			write.table(lbd, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")			
+			slotInfos = .spc.slot.infos(input,sep)
+			write.table(slotInfos, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")				
+#			write.table(ShortName, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
+#			write.table(Units, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
+#			write.table(proj4string, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
+#			write.table(lbdunits, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
+#			write.table(lbd, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")			
 			#Write column names
 			write.table(paste(clmnnames,collapse=sep), filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
 			#Write Spectra+Ancillary data
@@ -913,7 +913,7 @@ setMethod("spc.export.text", signature="Spectra", definition=function(input,file
 			print(paste("Wrote", filename ))			
 		})
 #spc.export.text(my[[1]]@Rrs,"test.txt")
-.spc.slot.infos = function(input){
+.spc.slot.infos = function(input,sep){
 	ShortName = paste("Spectra|ShortName",sep,input@ShortName,sep="")
 	Units = paste("Spectra|Units",sep,input@Units,sep="")
 	proj4string = paste("Spectra|proj4string",sep,input@sp@proj4string@projargs)
@@ -1028,7 +1028,7 @@ setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,file
 				stop(simpleError("spc.export.xlsx: Could not find the required package 'xlsx'. Aborting..."))
 			
 			if(missing(sheetName))
-				sheetName = "Spectra"
+				sheetName = input@ShortName
 
 			data = as(input,"data.frame")
 			data$TIME = as.character(data$TIME,usetz=TRUE)
@@ -1036,37 +1036,22 @@ setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,file
 			data = cbind(data.frame(idx=1:nrow(data)),data)
 			if(writeheader){
 				nms = names(input@header)
-				mhH = as.data.frame(as.character(input@header))
-				mhH = cbind("Spectra|header",nms,mhH)
+				myHead = as.data.frame(as.character(input@header))
+				myHead = cbind("Spectra|header",nms,myHead)
 #				row.names(out1)<-nms
-				write.xlsx2(mhH,file=filename,sheetName=sheetName,append=append,row.names=F,col.names=F)
+#				write.xlsx2(myHead,file=filename,sheetName=sheetName,append=append,row.names=F,col.names=F)
 			}
-			write.xlsx2(data,file=filename,sheetName=sheetName,append=T,row.names=F)
-			browser()
-			
+#			write.xlsx2(data,file=filename,sheetName=sheetName,append=T,row.names=F)
+			slotInfos = .spc.slot.infos(input,sep)
 			wb <- xlsx::createWorkbook()
 			sheet <- xlsx::createSheet(wb, sheetName=sheetName)
-			xlsx::addDataFrame(mhH, sheet,row.names=F)
-			xlsx::addDataFrame(data, sheet,row.names=F,startRow=nrow(mhH)+1,startColumn=1)
+			if(writeheader){
+				xlsx::addDataFrame(myHead, sheet,row.names=F,col.names=F)
+				written=nrow(myHead)
+			}
+			xlsx::addDataFrame(slotInfos,sheet,row.names=F,col.names=F,startRow=written+1,startColumn=1)
+			written = written+nrow(slotInfos)
+			xlsx::addDataFrame(data, sheet,row.names=F,startRow=written+1,startColumn=1)
 			xlsx::saveWorkbook(wb, filename)
 		})
 #spc.export.xlsx(my[[1]]@Rrs,"test.xlsx")
-
-
-wb <- createWorkbook()
-sheet <- createSheet(wb, sheetName="addDataFrame1")
-data <- data.frame(mon=month.abb[1:10], day=1:10, year=2000:2009,
-		date=seq(as.Date("1999-01-01"), by="1 year", length.out=10),
-		bool=c(TRUE, FALSE), log=log(1:10),
-		rnorm=10000*rnorm(10),
-		datetime=seq(as.POSIXct("2011-11-06 00:00:00", tz="GMT"), by="1 hour",
-				length.out=10))
-cs1 <- CellStyle(wb) + Font(wb, isItalic=TRUE) # rowcolumns
-cs2 <- CellStyle(wb) + Font(wb, color="blue")
-cs3 <- CellStyle(wb) + Font(wb, isBold=TRUE) + Border() # header
-addDataFrame(data, sheet, startRow=3, startColumn=2, colnamesStyle=cs3,
-		rownamesStyle=cs1, colStyle=list('2'=cs2, '3'=cs2))
-# Don’t forget to save the workbook ...
-saveWorkbook(wb, "test12.xls")
-
-
