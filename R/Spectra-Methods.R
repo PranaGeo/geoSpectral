@@ -879,6 +879,9 @@ setMethod("spc.interp.spectral", signature = "Spectra",
 #########################################################################
 # Method : spc.export.text
 #########################################################################
+#spc.export.text(out.Rrs[[5]]@Rrs,"test.txt")
+#aa=spc.import.text("test.txt")
+#dev.new();spc.plot(aa)
 setGeneric(name="spc.export.text",
 		def=function(input,filename,writeheader=TRUE,sep=";",...) {standardGeneric("spc.export.text")})
 setMethod("spc.export.text", signature="Spectra", definition=function(input,filename,writeheader,sep,...){
@@ -892,14 +895,10 @@ setMethod("spc.export.text", signature="Spectra", definition=function(input,file
 			data$TIME = as.character(data$TIME,usetz=TRUE)
 			data$ENDTIME = as.character(data$ENDTIME,usetz=TRUE)
 			
-			LongName = paste("Spectra|LongName",sep,input@LongName,sep="")
 			written=0
 			if(writeheader){
-				spc.export.text(input@header,filename,append=F) #XXX
+				spc.export.text(input@header,filename,append=F)
 				written=length(input@header)
-				write.table(LongName, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
-			} else {
-				write.table(LongName, filename, row.names=F, col.names=F,append=F, quote=F,eol="\n")
 			}
 			slotInfos = .spc.slot.infos(input,sep)
 			for(I in 1:length(slotInfos)){
@@ -914,22 +913,16 @@ setMethod("spc.export.text", signature="Spectra", definition=function(input,file
 				written = written+1
 			}
 			
-#			write.table(slotInfos, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")				
-#			write.table(ShortName, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
-#			write.table(Units, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
-#			write.table(proj4string, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
-#			write.table(lbdunits, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
-#			write.table(lbd, filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")			
 			#Write column names
 			write.table(paste(clmnnames,collapse=sep), filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
 			#Write Spectra+Ancillary data
 			write.table(data, filename, sep=sep, row.names=F, col.names=F,append=T,quote=F)
 			print(paste("Wrote", filename ))			
 		})
-#spc.export.text(my[[1]]@Rrs,"test.txt")
 .spc.slot.infos = function(input,sep){
 	out=list('Spectra|ShortName'=input@ShortName,
-			'Spectra|Unit'=input@Units,'Spectra|proj4string'=input@sp@proj4string@projargs,
+			'Spectra|LongName'=input@LongName,
+			'Spectra|Units'=input@Units,'Spectra|proj4string'=input@sp@proj4string@projargs,
 			'Spectra|WavelengthsUnit'=input@WavelengthsUnit,
 			'Spectra|Wavelengths'=spc.getwavelengths(input))
 	return(out)
@@ -937,9 +930,16 @@ setMethod("spc.export.text", signature="Spectra", definition=function(input,file
 setMethod("spc.export.text", signature="BiooHeader", definition=function(input,filename,append=F,sep=";",...){
 			nms = names(input)
 			nms = paste("Spectra|header",sep,nms,sep="")
-			out1 = as.data.frame(as.character(input))
-			row.names(out1)<-nms
-			write.table(out1,filename,row.names=T,col.names=F,append=append,quote=F,sep=sep)
+			out1 = lapply(input,function(x){
+						#If the separator character exists in the header, then eliminate it 
+						x<-gsub(sep,"",x)
+						if(length(x)>1)
+							x<-paste(x,collapse=sep)
+						else
+							x<-as.character(x)
+					})
+			out1 = cbind(nms,out1)
+			write.table(out1,filename,row.names=F,col.names=F,append=append,quote=F,sep=sep)
 		})
 
 #########################################################################
@@ -954,11 +954,14 @@ spc.import.text = function(filename,sep=";",...){
 		hdr = strsplit(myT[header.idx],sep)
 		
 		nms = sapply(hdr,function(x)x[2])
-		vals = sapply(hdr,function(x)x[3])
-		header = t(data.frame(vals))
+		header = sapply(hdr,function(x){
+					if(length(x)>2)
+						x[3:length(x)]
+					else
+						""
+				})
 		names(header)<- nms
-		row.names(header)<-NULL
-		header=as.list(header)
+#browser()
 		header = .spc.header.infos(header) 
 		
 		if(any(grepl("StationType",nms)))
@@ -1006,7 +1009,8 @@ spc.import.text = function(filename,sep=";",...){
 		Spec$TIME<-as.POSIXct(strptime(Spec$TIME,"%Y-%m-%d %H:%M:%S",tz=tz))
 		Spec$ENDTIME<-as.character(Spec$ENDTIME)
 		Spec$ENDTIME<-as.POSIXct(strptime(Spec$TIME,"%Y-%m-%d %H:%M:%S",tz=tz))
-		Spec = Spectra(Spec,ShortName=ShortName,Wavelengths=Wavelengths,Units=Units,LongName=LongName)
+		Spec = Spectra(Spec,ShortName=ShortName,Wavelengths=Wavelengths,Units=Units,
+				LongName=LongName,header=header)
 	} else {
 		stop("Cannot find information for Spectra object slots")
 	}
@@ -1026,21 +1030,20 @@ spc.import.text = function(filename,sep=";",...){
 					x<-y
 				return(x)
 			})
-	header = lapply(1:length(header),function(x) {
-				if(names(header)[x]=="Rsky750")
-					browser()
-				try(y<-eval(parse(text=header[[x]])),silent=T)
-				if(exists("y"))
-					header[[x]]<-y
-				return(header[[x]])
-			})
+#	header = lapply(1:length(header),function(x) {
+##				if(names(header)[x]=="Rsky750")
+#					try(y<-eval(parse(text=header[[x]])),silent=T)
+#				if(exists("y"))
+#					header[[x]]<-y
+#				return(header[[x]])
+#			})
 	options(warn=myWarn)
 	return(header)
 }
-#aa=spc.import.text("test.txt")
 #########################################################################
 # Method : spc.export.xlsx
 #########################################################################
+#spc.export.xlsx(out.Rrs[[5]]@Rrs,"test.xlsx")
 setGeneric(name="spc.export.xlsx",
 		def=function(input,filename,sheetName,writeheader=TRUE,append=F,sep=";",...) {standardGeneric("spc.export.xlsx")})
 setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,filename,sheetName,writeheader,append,sep,...){
@@ -1057,14 +1060,6 @@ setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,file
 			data$TIME = as.character(data$TIME,usetz=TRUE)
 			data$ENDTIME = as.character(data$ENDTIME,usetz=TRUE)
 			data = cbind(data.frame(idx=1:nrow(data)),data)
-			#Get the header as a list
-#			if(writeheader){
-#				browser()
-#				myHead = .spc.header.infos(input@header)
-##				nms = names(input@header)
-##				myHead = as.data.frame(as.character(input@header))
-##				myHead = cbind("Spectra|header",nms,myHead)
-#			}
 			
 			slotInfos = .spc.slot.infos(input,sep)
 			#Create an empty excel workbook and start writing into it
@@ -1073,9 +1068,9 @@ setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,file
 			if(writeheader){
 				for(I in 1:length(input@header)){					
 					if(length(input@header[[I]])==1)
-						myH=cbind(names(input@header)[I],input@header[[I]])
-					else
-						myH = cbind(names(input@header)[I],t(input@header[[I]]))
+						myH=cbind("Spectra|header",names(input@header)[I],input@header[[I]])
+					else		
+						myH = cbind("Spectra|header",names(input@header)[I],t(input@header[[I]]))
 					xlsx::addDataFrame(myH, sheet,row.names=F,col.names=F,,startRow=I,startColumn=1)
 				}
 			}
@@ -1092,4 +1087,3 @@ setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,file
 			xlsx::saveWorkbook(wb, filename)
 			print(paste("Wrote", filename ))
 		})
-#spc.export.xlsx(my[[1]]@Rrs,"test.xlsx")
