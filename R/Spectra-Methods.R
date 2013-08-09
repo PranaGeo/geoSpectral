@@ -1046,11 +1046,11 @@ spc.import.text = function(filename,sep=";",...){
 setGeneric(name="spc.export.xlsx",
 		def=function(input,filename,sheetName,writeheader=TRUE,append=F,sep=";",...) {standardGeneric("spc.export.xlsx")})
 setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,filename,sheetName,writeheader,append,sep,...){
-			require(xlsx)
-			if(any(grepl("xlsx",installed.packages()[,1])))
-				require(xlsx)
-			else
-				stop(simpleError("spc.export.xlsx: Could not find the required package 'xlsx'. Aborting..."))
+#			require(xlsx)
+#			if(any(grepl("xlsx",installed.packages()[,1])))
+#				require(xlsx)
+#			else
+#				stop(simpleError("spc.export.xlsx: Could not find the required package 'xlsx'. Aborting..."))
 			
 			if(missing(sheetName))
 				sheetName = input@ShortName
