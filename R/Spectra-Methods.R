@@ -813,7 +813,57 @@ setMethod("spc.data2header", signature = "Spectra",
 			
 			return(object)
 		})
+#########################################################################
+# Method : spc.header2data
+#########################################################################
+setGeneric(name= "spc.header2data",
+		def=function(object,headerfield,dataname,...){standardGeneric("spc.header2data")})
+setMethod("spc.header2data", signature = "Spectra", 
+		def=function(object,headerfield,dataname,compress=TRUE,...){
+			if(missing(dataname))
+				dataname = headerfield
+			if (headerfield %in% names(object@header))
+				object[[dataname]] = object@header[[headerfield]]
+			else
+				stop(simpleError("Could not match a header field"))
 
+			return(object)
+#			if(compress )
+#				object[[dataname]]=object@header[[headerfield]][1]
+		})
+#########################################################################
+# Method : [[
+#########################################################################
+setMethod("[[", signature=c("Spectra","character","missing"),
+		function(x, i, j, ...) {
+			if (i %in% colnames(x@Spectra)){
+				idx = which(i==colnames(x@Spectra))
+				Boutput = x@Spectra[,idx]
+			}
+			if (i %in% names(x@data)){
+				idx = which(i==names(x@data))
+				Boutput = x@data[[idx]]				
+			}
+			if(!exists("Boutput"))
+				stop("Could not match any Spectral or ancillary data columns")
+			
+			return(Boutput)
+		})
+setReplaceMethod("[[",  signature=c("Spectra","character","missing"), definition=function(x, i, j, value) {
+#			matched = 0
+			if(class(value)=="data.frame")
+				stop("The input variable 'value' cannot be a data.frame")
+			if (i %in% colnames(x@Spectra))
+				stop(simpleError("Matched a Spectra column. Use spc.add.channel() to add a spectral channel"))
+#			if (i %in% names(x@data)){
+#				matched = 1
+				x@data[[i]] <- value				
+#			}
+#			if(!matched)
+#				stop("Could not match any Spectral or ancillary data columns")
+			validObject(x)
+			return(x)
+		})
 
 setMethod("rep", signature(x = "Spectra"),
 		function(x, times, length.out, each, ...) {
@@ -1030,7 +1080,7 @@ spc.import.text = function(filename,sep=";",...){
 				return(x)
 			})
 #	header = lapply(1:length(header),function(x) {
-##				if(names(header)[x]=="Rsky750")
+	##				if(names(header)[x]=="Rsky750")
 #					try(y<-eval(parse(text=header[[x]])),silent=T)
 #				if(exists("y"))
 #					header[[x]]<-y
