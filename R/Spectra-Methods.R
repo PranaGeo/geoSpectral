@@ -1046,12 +1046,6 @@ spc.import.text = function(filename,sep=";",...){
 setGeneric(name="spc.export.xlsx",
 		def=function(input,filename,sheetName,writeheader=TRUE,append=F,sep=";",...) {standardGeneric("spc.export.xlsx")})
 setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,filename,sheetName,writeheader,append,sep,...){
-#			require(xlsx)
-#			if(any(grepl("xlsx",installed.packages()[,1])))
-#				require(xlsx)
-#			else
-#				stop(simpleError("spc.export.xlsx: Could not find the required package 'xlsx'. Aborting..."))
-			
 			if(missing(sheetName))
 				sheetName = input@ShortName
 			
@@ -1061,8 +1055,13 @@ setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,file
 			data = cbind(data.frame(idx=1:nrow(data)),data)
 			
 			slotInfos = .spc.slot.infos(input,sep)
-			#Create an empty excel workbook and start writing into it
-			wb <- xlsx::createWorkbook()
+			if(!append){
+				#Create an empty excel workbook and start writing into it
+				wb <- xlsx::createWorkbook()
+			}else{
+				#Create an empty excel workbook and start writing into it
+				wb <- xlsx::loadWorkbook(file=filename)
+			}
 			sheet <- xlsx::createSheet(wb, sheetName=sheetName)
 			if(writeheader){
 				for(I in 1:length(input@header)){					
@@ -1084,5 +1083,5 @@ setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,file
 			}
 			xlsx::addDataFrame(data, sheet,row.names=F,startRow=written+1,startColumn=1)
 			xlsx::saveWorkbook(wb, filename)
-			print(paste("Wrote", filename ))
+			print(paste("Wrote sheet", sheetName, "to", filename))
 		})
