@@ -961,7 +961,6 @@ spc.import.text = function(filename,sep=";",...){
 						""
 				})
 		names(header)<- nms
-#browser()
 		header = .spc.header.infos(header) 
 		
 		if(any(grepl("StationType",nms)))
