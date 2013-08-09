@@ -991,7 +991,7 @@ spc.import.text = function(filename,sep=";",...){
 		idx = which("Spectra|Wavelengths"==sapply(Slots,function(x)x[1]))
 		try(Wavelengths<-as.numeric(Slots[[idx]][2:length(Slots[[idx]])]),silent=T)
 		if(!exists("Wavelengths"))
-			stop("Could not find Wavelength information")
+			stop(simpleError("Could not find Wavelength information"))
 		myT = myT[-Slots.idx]
 		con = textConnection(myT)
 		Spec = read.table(con,header=T,sep=sep)
