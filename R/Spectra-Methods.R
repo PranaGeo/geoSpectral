@@ -1,8 +1,3 @@
-# TODO: names(), colnams()
-# 
-# Author: acizmeli
-###############################################################################
-
 #########################################################################
 # Method : Conversions from and to data.frame
 #########################################################################
@@ -533,18 +528,30 @@ setMethod(f="spc.cname.construct", signature="Spectra",
 spc.make.stindex = function(input) {
 	if(!inherits(input,"list"))
 		stop("The input dataset should inherit from a list (can also be a BiooList)")
+	browser()
 	#Convert to to STIDF (dropping Spectral data, if any)
-	input = lapply(input,as,"STIDF")
+	input = lapply(input,function(x){
+				if(nrow(x)>0)
+					as(x,"STIDF")
+				else
+					new("STIDF")
+			})
 	#Save the endTime into a variable
-	endTime = lapply(input,function(x) x@endTime[length(x@endTime)])
-#	input = lapply(input,function(x){
-#				x@sp@coords<-t(as.matrix(x@sp@coords[1,]))
-#				x@time<-x@time[1]
-#				x@endTime<-x@endTime[1]
-#				x
-#			})
+	endTime = lapply(input,function(x){
+				try(myO<-x@endTime[length(x@endTime)],silent=T)
+				if(!exists("myO"))
+					myO<-NULL
+				return(myO)
+			})
 	#Take only the first elements of the entire measurements
-	input = lapply(input,function(x){x[1]})
+	input = lapply(1:length(input),function(x){
+				print(x)
+				if(nrow(input[[x]]@data>0))
+					input[[x]][1]
+				else
+					input[[x]]
+			})
+	XXXX to be continued
 	#Set the endTime of the row as the endTime of the last measurement
 	input = lapply(1:length(input),function(x) {
 				input[[x]]@endTime = endTime[[x]]
