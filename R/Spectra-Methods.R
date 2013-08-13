@@ -353,7 +353,6 @@ setMethod("spc.lines",signature = "Spectra",definition = function(x,...){
 #########################################################################
 setGeneric (name= "spc.rbind",def=function(...){standardGeneric("spc.rbind")})
 setMethod("spc.rbind", signature = "Spectra", def = function (a,...){
-			
 			#Check that column names match
 			DFL=sapply(list(...),function(x) names(x@data),simplify=F)
 			if(!all(sapply(1:length(DFL),function(x) all(DFL[[x]]==DFL[[1]]))))
@@ -450,7 +449,7 @@ setMethod("spc.rbind", signature = "STIDF", def = function (...){
 			#For all input arguments
 			for(I in 2:length(allinargs)){
 				#Get the slot Names
-				sltn = slotNames(..1)
+				sltn = slotNames(outt)
 				
 				#Error if does not inherit from STI or contain SpatialPoints 
 				if(class(eval(allinargs[[I]])@sp)!="SpatialPoints")
@@ -524,51 +523,71 @@ setMethod(f="spc.cname.construct", signature="Spectra",
 #########################################################################
 #Takes a n-element list of Spectra objects and outputs an n-rows ST object. Each row 
 #of the ST object has a time interval that starts from the beginning of the first measurement
-#and ends at the endTime of the last measurement of the corresponding input list element. 
-spc.make.stindex = function(input) {
+#and ends at the endTime of the last measurement of the corresponding input list element.
+#Simplify : none, "spc.colMeans" or firstElement
+spc.make.stindex = function(input,what2include="",simplify="none") {
 	if(!inherits(input,"list"))
 		stop("The input dataset should inherit from a list (can also be a BiooList)")
+	
+	MyOutput = lapply(1:length(input),function(x){
+				if(nrow(input[[x]])>0){
+					try(what2include<-get("what2include",envir=parent.frame(2)),silent=T)
+#what2include=c("Rrs_805","INTTIME")					
+					w2i = list()
+					#Extract data to be included in the stindex
+					if(!(length(what2include)==1&what2include==""))
+						for(I in 1:length(what2include)){
+							if(what2include[I] %in% names(input[[x]]))
+								w2i = c(w2i,list(input[[x]][[what2include[I]]]))
+								
+						}
+					#Save the endTime into a variable
+					endTime<-input[[x]]@endTime
+					
+					#Convert to STIDF (dropping Spectral and Ancillary data, if any)
+					if(simplify=="spc.Colmeans"){
+						my = spc.colMeans(input[[x]])
+						my@endTime = endTime[length(endTime)]
+					}
+					if(simplify=="fistElement"){
+						my = input[[x]][1]
+						my@endTime = endTime[length(endTime)]
+					}
+					if(simplify=="none"){
+						my = input[[x]]
+					}
+					my<-as(my,"STIDF")
+					browser()
+					my[["Index"]]<-1:nrow(my)
+					my[["ListIndex"]]<-rep(x,nrow(my))
+					#Put the time and endTime slots as data columns
+					my[["TIME"]]=time(input[[x]]@time)
+					my[["ENDTIME"]]=input[[x]]@endTime
+					#my[["TIME"]]=as.character(time(input@time),usetz=T)
+					#my[["ENDTIME"]]=as.character(input@endTtime,usetz=T)
+				} else {
+					#Empty variable
+					my<-NA
+				}
+				return(my)
+			})
+#Eliminate NAs (invalid records, index kept in $ListIndex)
+	myWarn = options()$warn
+	options(warn=-1)
+	MyOutput = MyOutput[!sapply(MyOutput,is.na)]
+	options(warn=myWarn)
+	
+	#Call spc.rbind to convert the list of STIDF to one STIDF object  xxx
+	MyOutput = do.call(spc.rbind,MyOutput)
 	browser()
-	#Convert to to STIDF (dropping Spectral data, if any)
-	input = lapply(input,function(x){
-				if(nrow(x)>0)
-					as(x,"STIDF")
-				else
-					new("STIDF")
-			})
-	#Save the endTime into a variable
-	endTime = lapply(input,function(x){
-				try(myO<-x@endTime[length(x@endTime)],silent=T)
-				if(!exists("myO"))
-					myO<-NULL
-				return(myO)
-			})
-	#Take only the first elements of the entire measurements
-	input = lapply(1:length(input),function(x){
-				print(x)
-				if(nrow(input[[x]]@data>0))
-					input[[x]][1]
-				else
-					input[[x]]
-			})
-	XXXX to be continued
-	#Set the endTime of the row as the endTime of the last measurement
-	input = lapply(1:length(input),function(x) {
-				input[[x]]@endTime = endTime[[x]]
-				input[[x]]
-			})
-	#Call spc.rbind to convert the list of STIDF to one STIDF object 
-	input = do.call(spc.rbind,input)
 	
-	#Eliminate "LAT","LON","TIME" columns, if any
-	cidx = match(c("LAT","LON","TIME"), names(input@data))
-	cidx = cidx[!is.na(cidx)]
-	if(length(cidx)>0)
-		input@data = input@data[,-cidx]
+##Eliminate "LAT","LON","TIME" columns, if any
+#	cidx = match(c("LAT","LON","TIME"), names(MyOutput@data))
+#	cidx = cidx[!is.na(cidx)]
+#	if(length(cidx)>0)
+#		MyOutput@data = MyOutput@data[,-cidx]
 	
-	#Put the time and endTime slots as data columns
-	input@data = cbind(data.frame(ENDTIME=as.character(input@endTime,usetz=T)),input@data)
-	input@data = cbind(data.frame(TIME=as.character(time(input@time),usetz=T)),input@data)
+	
 	validObject(input)
 	return(input)
 }
@@ -833,7 +852,7 @@ setMethod("spc.header2data", signature = "Spectra",
 				object[[dataname]] = object@header[[headerfield]]
 			else
 				stop(simpleError("Could not match a header field"))
-
+			
 			return(object)
 #			if(compress )
 #				object[[dataname]]=object@header[[headerfield]][1]
@@ -846,6 +865,7 @@ setMethod("[[", signature=c("Spectra","character","missing"),
 			if (i %in% colnames(x@Spectra)){
 				idx = which(i==colnames(x@Spectra))
 				Boutput = x@Spectra[,idx]
+				names(Boutput)<-i
 			}
 			if (i %in% names(x@data)){
 				idx = which(i==names(x@data))
@@ -864,7 +884,7 @@ setReplaceMethod("[[",  signature=c("Spectra","character","missing"), definition
 				stop(simpleError("Matched a Spectra column. Use spc.add.channel() to add a spectral channel"))
 #			if (i %in% names(x@data)){
 #				matched = 1
-				x@data[[i]] <- value				
+			x@data[[i]] <- value				
 #			}
 #			if(!matched)
 #				stop("Could not match any Spectral or ancillary data columns")
