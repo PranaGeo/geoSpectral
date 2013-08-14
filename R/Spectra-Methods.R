@@ -525,7 +525,8 @@ setMethod(f="spc.cname.construct", signature="Spectra",
 #of the ST object has a time interval that starts from the beginning of the first measurement
 #and ends at the endTime of the last measurement of the corresponding input list element.
 #Simplify : none, "spc.colMeans" or firstElement
-spc.make.stindex = function(input,what2include="",simplify="none") {
+spc.make.stindex = function(input,what2include="",rowsimplify="none",
+		includeTIME=FALSE,includeLATLON=FALSE) {
 	if(!inherits(input,"list"))
 		stop("The input dataset should inherit from a list (can also be a BiooList)")
 	
@@ -533,36 +534,39 @@ spc.make.stindex = function(input,what2include="",simplify="none") {
 				if(nrow(input[[x]])>0){
 					try(what2include<-get("what2include",envir=parent.frame(2)),silent=T)
 #what2include=c("Rrs_805","INTTIME")					
-					w2i = list()
-					#Extract data to be included in the stindex
-					if(!(length(what2include)==1&what2include==""))
-						for(I in 1:length(what2include)){
-							if(what2include[I] %in% names(input[[x]]))
-								w2i = c(w2i,list(input[[x]][[what2include[I]]]))
-								
-						}
 					#Save the endTime into a variable
 					endTime<-input[[x]]@endTime
 					
 					#Convert to STIDF (dropping Spectral and Ancillary data, if any)
-					if(simplify=="spc.Colmeans"){
+					if(rowsimplify=="spc.Colmeans"){
 						my = spc.colMeans(input[[x]])
 						my@endTime = endTime[length(endTime)]
 					}
-					if(simplify=="fistElement"){
+					if(rowsimplify=="fistElement"){
 						my = input[[x]][1]
 						my@endTime = endTime[length(endTime)]
 					}
-					if(simplify=="none"){
+					if(rowsimplify=="none"){
 						my = input[[x]]
 					}
-					my<-as(my,"STIDF")
-					browser()
-					my[["Index"]]<-1:nrow(my)
-					my[["ListIndex"]]<-rep(x,nrow(my))
+					if(!(length(what2include)==1 && what2include==""))
+						w2i = input[[x]][[what2include]]
+					
+					w2i2 = data.frame(Index=1:nrow(my),ListIndex=rep(x,nrow(my)))
+					if(exists("w2i"))
+						w2i2 = cbind(w2i2,w2i)
+					my@data = w2i2
+					
+					my<-as(my,"STIDF")					
 					#Put the time and endTime slots as data columns
-					my[["TIME"]]=time(input[[x]]@time)
-					my[["ENDTIME"]]=input[[x]]@endTime
+					if(includeTIME){
+						my[["TIME"]]=time(my)
+						my[["ENDTIME"]]=my@endTime
+					}
+					if(includeLATLON){
+						my@data[["LON"]]=coordinates(my)[,"LON"]
+						my@data[["LAT"]]=coordinates(my)[,"LAT"]
+					}
 					#my[["TIME"]]=as.character(time(input@time),usetz=T)
 					#my[["ENDTIME"]]=as.character(input@endTtime,usetz=T)
 				} else {
@@ -579,17 +583,9 @@ spc.make.stindex = function(input,what2include="",simplify="none") {
 	
 	#Call spc.rbind to convert the list of STIDF to one STIDF object  xxx
 	MyOutput = do.call(spc.rbind,MyOutput)
-	browser()
 	
-##Eliminate "LAT","LON","TIME" columns, if any
-#	cidx = match(c("LAT","LON","TIME"), names(MyOutput@data))
-#	cidx = cidx[!is.na(cidx)]
-#	if(length(cidx)>0)
-#		MyOutput@data = MyOutput@data[,-cidx]
-	
-	
-	validObject(input)
-	return(input)
+	validObject(MyOutput)
+	return(MyOutput)
 }
 ##############################################################################
 #Another version of spacetime::timeMatch(). It finds the nearest measurement 
@@ -862,16 +858,24 @@ setMethod("spc.header2data", signature = "Spectra",
 #########################################################################
 setMethod("[[", signature=c("Spectra","character","missing"),
 		function(x, i, j, ...) {
-			if (i %in% colnames(x@Spectra)){
-				idx = which(i==colnames(x@Spectra))
-				Boutput = x@Spectra[,idx]
-				names(Boutput)<-i
+			Boutput = list()
+			for (II in 1:length(i)){
+				
+				if (i[II] %in% colnames(x@Spectra)){
+#					idx = which(i[II]==colnames(x@Spectra))
+					Boutput[[II]] = as.data.frame(x@Spectra[,i[II]])
+					names(Boutput[[II]])<-i[II]
+				}
+				if (i[II] %in% names(x@data)){
+#					idx = which(i[II]==names(x@data))
+					Boutput[[II]] = x@data[i[II]]				
+					names(Boutput[[II]])<-i[II]
+				}
 			}
-			if (i %in% names(x@data)){
-				idx = which(i==names(x@data))
-				Boutput = x@data[[idx]]				
-			}
-			if(!exists("Boutput"))
+			names(Boutput)<-i
+			Boutput = as.data.frame(Boutput)
+			row.names(Boutput)<-NULL
+			if(ncol(Boutput)==0)
 				stop("Could not match any Spectral or ancillary data columns")
 			
 			return(Boutput)
