@@ -556,7 +556,6 @@ spc.make.stindex = function(input,what2include="",rowSimplify="none",
 					if(rowSimplify=="none"){
 						my = input[[x]]
 					}
-					browser()
 					if(!(length(what2include)==1 && what2include==""))
 						w2i = input[[x]][[what2include]]
 					
