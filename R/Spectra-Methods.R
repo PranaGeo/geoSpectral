@@ -524,9 +524,13 @@ setMethod(f="spc.cname.construct", signature="Spectra",
 #Takes a n-element list of Spectra objects and outputs an n-rows ST object. Each row 
 #of the ST object has a time interval that starts from the beginning of the first measurement
 #and ends at the endTime of the last measurement of the corresponding input list element.
-#Simplify : none, "spc.colMeans" or firstElement
-spc.make.stindex = function(input,what2include="",rowsimplify="none",
+#rowSimplify : "none", "spc.colMeans","firstRow" or "lastRow"
+spc.make.stindex = function(input,what2include="",rowSimplify="none",
 		includeTIME=FALSE,includeLATLON=FALSE) {
+	
+	if(!(rowSimplify %in% c("spc.Colmeans","firstRow","lastRow","none")))
+		stop(simpleError(paste("rowSimplify should be one of",paste(c("spc.Colmeans","firstRow","lastRow","none"),collapse=","))))
+	
 	if(!inherits(input,"list"))
 		stop("The input dataset should inherit from a list (can also be a BiooList)")
 	
@@ -538,17 +542,21 @@ spc.make.stindex = function(input,what2include="",rowsimplify="none",
 					endTime<-input[[x]]@endTime
 					
 					#Convert to STIDF (dropping Spectral and Ancillary data, if any)
-					if(rowsimplify=="spc.Colmeans"){
+					if(rowSimplify=="spc.Colmeans"){
 						my = spc.colMeans(input[[x]])
 						my@endTime = endTime[length(endTime)]
 					}
-					if(rowsimplify=="fistElement"){
+					if(rowSimplify=="firstRow"){
 						my = input[[x]][1]
 						my@endTime = endTime[length(endTime)]
 					}
-					if(rowsimplify=="none"){
+					if(rowSimplify=="lastRow"){
+						my = input[[x]][nrow(input[[x]])]
+					}
+					if(rowSimplify=="none"){
 						my = input[[x]]
 					}
+					browser()
 					if(!(length(what2include)==1 && what2include==""))
 						w2i = input[[x]][[what2include]]
 					
