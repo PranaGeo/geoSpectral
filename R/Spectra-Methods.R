@@ -540,7 +540,7 @@ spc.make.stindex = function(input,what2include="",rowSimplify="none",
 #what2include=c("Rrs_805","INTTIME")					
 					#Save the endTime into a variable
 					endTime<-input[[x]]@endTime
-					
+
 					#Convert to STIDF (dropping Spectral and Ancillary data, if any)
 					if(rowSimplify=="spc.Colmeans"){
 						my = spc.colMeans(input[[x]])
@@ -590,7 +590,6 @@ spc.make.stindex = function(input,what2include="",rowSimplify="none",
 	
 	#Call spc.rbind to convert the list of STIDF to one STIDF object  xxx
 	MyOutput = do.call(spc.rbind,MyOutput)
-	
 	validObject(MyOutput)
 	return(MyOutput)
 }
@@ -859,6 +858,26 @@ setMethod("spc.header2data", signature = "Spectra",
 			return(object)
 #			if(compress )
 #				object[[dataname]]=object@header[[headerfield]][1]
+		})
+#########################################################################
+# Method : [[
+#########################################################################
+setMethod("[", signature=c("Spectra","numeric","missing"), function(x, i, j, ...) {
+			x@data<-x@data[i,]
+			x@sp<-x@sp[i,]
+			x@time<-x@time[i]
+			x@endTime<-x@endTime[i]
+			ttemp = x@Spectra[i,]
+			if(class(ttemp)!="matrix")
+				ttemp = t(as.matrix(ttemp))
+			x@Spectra = ttemp
+							
+			if(length(x@InvalidIdx)>0)
+				x@InvalidIdx = x@InvalidIdx[i]
+			if(length(x@SelectedIdx)>0)
+				x@SelectedIdx = x@SelectedIdx[i]
+			validObject(x)
+			return(x)
 		})
 #########################################################################
 # Method : [[
