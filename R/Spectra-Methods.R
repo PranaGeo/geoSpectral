@@ -352,7 +352,7 @@ setMethod("spc.lines",signature = "Spectra",definition = function(x,...){
 # Method : spc.rbind
 #########################################################################
 setGeneric (name= "spc.rbind",def=function(...){standardGeneric("spc.rbind")})
-setMethod("spc.rbind", signature = "Spectra", def = function (a,...){
+setMethod("spc.rbind", signature = "Spectra", def = function (...){
 			#Check that column names match
 			DFL=sapply(list(...),function(x) names(x@data),simplify=F)
 			if(!all(sapply(1:length(DFL),function(x) all(DFL[[x]]==DFL[[1]]))))
@@ -433,10 +433,10 @@ setMethod("spc.rbind", signature = "Spectra", def = function (a,...){
 						}
 					} #end for all slots
 				} #end for all input arguments
-		} #end for if(length(allinargs)>1)
-validObject(outt)
-return(outt) 
-})
+			} #end for if(length(allinargs)>1)
+			validObject(outt)
+			return(outt) 
+		})
 
 #########################################################################
 # Method : spc.rbind
