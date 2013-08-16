@@ -385,56 +385,58 @@ setMethod("spc.rbind", signature = "Spectra", def = function (a,...){
 			#Get a list of all input arguments
 			allinargs = aa=match.call(expand.dots = F)$...
 			
-			#For all input arguments
-			for(I in 2:length(allinargs)){
-				#Get the slot Names
-				sltn = slotNames(..1)
-				#Slots to omit in the rbind process 
-				sltn = sltn[sltn!="ShortName"]
-				sltn = sltn[sltn!="LongName"]
-				sltn = sltn[sltn!="Wavelengths"]
-				sltn = sltn[sltn!="WavelengthsUnit"]
-				sltn = sltn[sltn!="Units"]
-				if(!inherits(eval((allinargs[[I]])),"STI"))
-					stop("The input argument should inherit from class STI")
-				#For all slots
-				for(J in 1:length(sltn)){
-					myslot = slot(eval((allinargs[[I]])),sltn[J])
-					if(class(myslot)[1]=="BiooHeader"){
-						aa=as.data.frame(rbind(slot(outt,sltn[J]),myslot))
-						rownames(aa)=NULL
-						bb = as.list(aa)
-						bb = lapply(bb,function(x){names(x)<-NULL;x})
-						outt@header = as(bb,"BiooHeader")
-					}
+			if(length(allinargs)>1){
+				#For all input arguments
+				for(I in 2:length(allinargs)){
+					#Get the slot Names
+					sltn = slotNames(..1)
+					#Slots to omit in the rbind process 
+					sltn = sltn[sltn!="ShortName"]
+					sltn = sltn[sltn!="LongName"]
+					sltn = sltn[sltn!="Wavelengths"]
+					sltn = sltn[sltn!="WavelengthsUnit"]
+					sltn = sltn[sltn!="Units"]
+					if(!inherits(eval((allinargs[[I]])),"STI"))
+						stop("The input argument should inherit from class STI")
+					#For all slots
+					for(J in 1:length(sltn)){
+						myslot = slot(eval((allinargs[[I]])),sltn[J])
+						if(class(myslot)[1]=="BiooHeader"){
+							aa=as.data.frame(rbind(slot(outt,sltn[J]),myslot))
+							rownames(aa)=NULL
+							bb = as.list(aa)
+							bb = lapply(bb,function(x){names(x)<-NULL;x})
+							outt@header = as(bb,"BiooHeader")
+						}
 #					if (length(myslot)==0)
 #						myslot=NA
-					if(class(myslot)[1]=="matrix"|class(myslot)[1]=="data.frame")
-						slot(outt,sltn[J])<- rbind(slot(outt,sltn[J]),myslot)
-					if(class(myslot)[1]=="logical"|class(myslot)[1]=="numeric"|
-							class(myslot)[1]=="character"|class(myslot)[1]=="POSIXct")
-						if(class(myslot)[1]=="POSIXct"){
-							mytz = attr(outt@endTime,"tzone")
-							slot(outt,sltn[J])<-as.POSIXct(as.POSIXlt(c(slot(outt,sltn[J]),myslot),tz=mytz))
+						if(class(myslot)[1]=="matrix"|class(myslot)[1]=="data.frame")
+							slot(outt,sltn[J])<- rbind(slot(outt,sltn[J]),myslot)
+						if(class(myslot)[1]=="logical"|class(myslot)[1]=="numeric"|
+								class(myslot)[1]=="character"|class(myslot)[1]=="POSIXct")
+							if(class(myslot)[1]=="POSIXct"){
+								mytz = attr(outt@endTime,"tzone")
+								slot(outt,sltn[J])<-as.POSIXct(as.POSIXlt(c(slot(outt,sltn[J]),myslot),tz=mytz))
+							}
+						if(class(myslot)[1]=="xts"){
+							slot(outt,sltn[J])<-c(slot(outt,sltn[J]),myslot)
+							slot(outt,sltn[J])<-xts(1:length(slot(outt,sltn[J])),time(slot(outt,sltn[J])))
+						}	
+						if(class(myslot)[1]=="SpatialPoints"){
+							prj = slot(outt,sltn[J])@proj4string
+							if (!identical(prj@projargs,myslot@proj4string@projargs))
+								stop("proj4strings do not match!")
+							#rbind the coordinates
+							coords = rbind(coordinates(slot(outt,sltn[J])),coordinates(myslot))
+							#Create a SpatialPoints object
+							slot(outt,sltn[J])<-SpatialPoints(coords,proj4string=prj)
 						}
-					if(class(myslot)[1]=="xts"){
-						slot(outt,sltn[J])<-c(slot(outt,sltn[J]),myslot)
-						slot(outt,sltn[J])<-xts(1:length(slot(outt,sltn[J])),time(slot(outt,sltn[J])))
-					}	
-					if(class(myslot)[1]=="SpatialPoints"){
-						prj = slot(outt,sltn[J])@proj4string
-						if (!identical(prj@projargs,myslot@proj4string@projargs))
-							stop("proj4strings do not match!")
-						#rbind the coordinates
-						coords = rbind(coordinates(slot(outt,sltn[J])),coordinates(myslot))
-						#Create a SpatialPoints object
-						slot(outt,sltn[J])<-SpatialPoints(coords,proj4string=prj)
-					}
-				} #end for all slots
-			} #end for all input arguments			
-			validObject(outt)
-			return(outt) 
-		})
+					} #end for all slots
+				} #end for all input arguments
+		} #end for if(length(allinargs)>1)
+validObject(outt)
+return(outt) 
+})
 
 #########################################################################
 # Method : spc.rbind
@@ -540,7 +542,7 @@ spc.make.stindex = function(input,what2include="",rowSimplify="none",
 #what2include=c("Rrs_805","INTTIME")					
 					#Save the endTime into a variable
 					endTime<-input[[x]]@endTime
-
+					
 					#Convert to STIDF (dropping Spectral and Ancillary data, if any)
 					if(rowSimplify=="spc.Colmeans"){
 						my = spc.colMeans(input[[x]])
@@ -871,7 +873,7 @@ setMethod("[", signature=c("Spectra","numeric","missing"), function(x, i, j, ...
 			if(class(ttemp)!="matrix")
 				ttemp = t(as.matrix(ttemp))
 			x@Spectra = ttemp
-							
+			
 			if(length(x@InvalidIdx)>0)
 				x@InvalidIdx = x@InvalidIdx[i]
 			if(length(x@SelectedIdx)>0)
