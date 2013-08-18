@@ -337,7 +337,31 @@ setMethod("spc.lapply", signature="SpcList", definition= function (X, FUN, ...) 
 			validObject(X)
 			return(X)
 		})
+#########################################################################
+# Method : spc.header2data
+#########################################################################
+.h2d = function(object,headerfield,dataname,compress=TRUE,...) {
+	if(missing(dataname))
+		dataname=headerfield	
 
+	X = lapply(object,function(x,...){ #
+				if(headerfield %in% names(x@header))
+					x = spc.header2data(x,headerfield=headerfield,dataname=dataname,compress=compress,...)
+				else
+					x
+			})
+	return(X)
+}
+setMethod("spc.header2data", signature="list", definition=.h2d)
+setMethod("spc.header2data", signature="SpcList", 
+		definition=function(object,headerfield,dataname,compress=TRUE,...){
+			by = object@by	
+			X <- .h2d(object,headerfield=headerfield,dataname=dataname,compress=compress,...)
+			X <- as(X, "SpcList")
+			X@by = by
+			validObject(X)
+			return(X)
+		})
 
 #########################################################################
 # Method : subset
