@@ -147,15 +147,18 @@ setMethod("show", "Spectra", function(object){
 			if (length(object@time)==0) { 
 				timestr = paste("Time : NA")
 			}
-			cat("\n", paste(object@ShortName[1], ' : An object of class "Spectra"\n', 
-							length(object@Wavelengths),"spectral channels in columns and", nrow(object@data), 
-							"observations in rows"), "\n",
-					"LongName: ", LongName, "\t", "Units: ", Units, "\n",
-					"Wavelengths : ", length(object@Wavelengths), "channels with units of",object@WavelengthsUnit,  LbdStr, head(object@Wavelengths)," ...\n",
-					"Spectra Columns: ", head(colnames(object@Spectra)), "...\n",
-					"Ancillary Columns: ", head(names(object@data)),"...\n",
-					"Bounding box:", "LON(",bbx[1,],") LAT(",bbx[2,],")\n",
-					timestr, "\n")			
+			if(ncol(object)==0)
+				cat("\n","Empty Spectra object","\n")
+			else
+				cat("\n", paste(object@ShortName[1], ' : An object of class "Spectra"\n', 
+								length(object@Wavelengths),"spectral channels in columns and", nrow(object@data), 
+								"observations in rows"), "\n",
+						"LongName: ", LongName, "\t", "Units: ", Units, "\n",
+						"Wavelengths : ", length(object@Wavelengths), "channels with units of",object@WavelengthsUnit,  LbdStr, head(object@Wavelengths)," ...\n",
+						"Spectra Columns: ", head(colnames(object@Spectra)), "...\n",
+						"Ancillary Columns: ", head(names(object@data)),"...\n",
+						"Bounding box:", "LON(",bbx[1,],") LAT(",bbx[2,],")\n",
+						timestr, "\n")			
 		})		
 
 #########################################################################
