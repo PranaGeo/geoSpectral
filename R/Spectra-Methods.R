@@ -136,8 +136,10 @@ setMethod("show", "Spectra", function(object){
 			if (length(object@time)>1){
 				period = paste(as.character(xts::periodicity(object@time))[1],
 						as.character(xts::periodicity(object@time))[5])
-				timerange = as.character(range(time(object@time)),usetz=T)
-				timestr = paste("Time : periodicity of ", period, " between (", timerange,")")
+				timerange = as.character(range(time(object@time)),usetz=F)
+				tz = format(time(object@time[1]),format="%Z")
+				timestr = paste("Time : periodicity of ", period, " between (", 
+						timerange[1]," - ",timerange[2],"), tz=", tz ,sep="")
 			} 
 			if (length(object@time)==1) { 
 				timestr = paste("Time : ", as.character(time(object@time),usetz=T))
