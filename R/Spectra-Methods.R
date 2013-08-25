@@ -605,21 +605,25 @@ spc.make.stindex = function(input,what2include="",rowSimplify="none",
 #method="over" uses the simple over technique. Same as of spacetime::timeMatch().  
 #method="nearest" finds the nearest measurement. Matches only one data for all elements of master
 #method="within" finds the measurements that are within the interval limits=c(upper,lower) (in seconds)
+
+#setGeneric("spc.timeMatch",function(master,searched,returnList=FALSE,method="over",limits,report=FALSE)
+#		{standardGeneric("spc.timeMatch")})
+#setMethod(f="spc.timeMatch", signature=c("Spectra","Spectra"),
+#		definition=function(master,searched,returnList,method,limits,report){
+#		})
 spc.timeMatch = function(master,searched,returnList=FALSE,method="over",limits,report=FALSE) {
 	if(!is.timeBased(master))
 		if(!(inherits(master,"ST")) & is.timeBased(master))
 			stop("Input argument 'master' needs to either inherit from spacetime::ST class or be a timeBased variable")
-	if(inherits(master,"ST"))
-		master = time(master)
+	stopifnot(inherits(master,"ST"))
 	if(!is.timeBased(searched))
 		if(!(inherits(searched,"ST")) & is.timeBased(master))
 			stop("Input argument 'searched' needs to either inherit from spacetime::ST class or be a timeBased variable")
-	if(inherits(searched,"ST"))
-		searched = time(searched)
+	stopifnot(inherits(searched,"ST"))
 	if(method=="over")
 		out = spacetime::timeMatch(master,searched,returnList=returnList)
 	if(method=="nearest"){
-		out = sapply(time(master),function(x){mymin = which.min(abs(searched-x))})
+		out = sapply(time(master),function(x){mymin = which.min(abs(time(searched)-x))})
 		if(returnList)
 			out = lapply(out,function(x)x)
 	}
@@ -630,17 +634,11 @@ spc.timeMatch = function(master,searched,returnList=FALSE,method="over",limits,r
 			stop(simpleError("The input argument 'limits' needs to have a length of 1 or 2"))
 		if(length(limits)==1)
 			limits = c(limits,limits)
-		limits = c(limits[1]*60,limits[2]*60)
-		out = list()
-		for(AA in 1:length(master)){
-			out[[AA]] = which(searched>time(master)[1]-limits[1] & searched<master@endTime[length(master)]+limits[2])
-			print(paste(AA,master[1],master@endTime[length(master)],out[[AA]]))
-		}
-		browser()
+		out = which(time(searched)>time(master)[1]-limits[1] & 
+						time(searched)<master@endTime[length(master)]+limits[2])
 	}
-	
 	if(report){
-		
+		print(paste(time(master)[1],master@endTime[length(master)],paste(out,collapse=" ")))
 	}
 	return(out)
 }
