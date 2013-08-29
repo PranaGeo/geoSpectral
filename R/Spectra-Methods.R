@@ -528,10 +528,14 @@ setMethod(f="spc.cname.construct", signature="Spectra",
 #########################################################################
 #spc.make.stindex 
 #########################################################################
-#Takes a n-element list of Spectra objects and outputs an n-rows ST object. Each row 
-#of the ST object has a time interval that starts from the beginning of the first measurement
-#and ends at the endTime of the last measurement of the corresponding input list element.
+#Takes a n-element list of Spectra objects and outputs one STIDF object. Each row 
+#of the ST object has a time interval depending of the input argument rowSimplify.
 #rowSimplify : "none", "spc.colMeans","firstRow" or "lastRow"
+#none: length of the output object equals the sum of all rows of all elements of the input list object
+#spc.colMeans: length of the output object equals the number of rows of the input list object. 
+#This option returns the measurement nearest to the average time of the input list element
+#firstRow and lastRow : length of the output object equals the number of rows of the input list object.
+#These two options return the first and last measurements of the input list element
 spc.make.stindex = function(input,what2include="",rowSimplify="none",
 		includeTIME=FALSE,includeLATLON=FALSE) {
 	
