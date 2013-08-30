@@ -356,8 +356,9 @@ setMethod("spc.lines",signature = "Spectra",definition = function(x,...){
 #########################################################################
 # Method : spc.rbind
 #########################################################################
+#compressHeader=T Compress the header (make multiple all-equal header elements as ONE	
 setGeneric (name= "spc.rbind",def=function(...){standardGeneric("spc.rbind")})
-setMethod("spc.rbind", signature = "Spectra", def = function (...){
+setMethod("spc.rbind", signature = "Spectra", def = function (...,compressHeader=T){
 			#Check that column names match
 			DFL=sapply(list(...),function(x) names(x@data),simplify=F)
 			if(!all(sapply(1:length(DFL),function(x) all(DFL[[x]]==DFL[[1]]))))
@@ -439,6 +440,17 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...){
 					} #end for all slots
 				} #end for all input arguments
 			} #end for if(length(allinargs)>1)
+			
+			#Compress the header (make multiple all-equal header elements as ONE)
+			if(compressHeader){
+				for(J in names(outt@header)){
+					if(length(outt@header[[J]])>1){
+						myO = sapply(2:length(outt@header[[J]]),function(x)outt@header[[J]][x]==outt@header[[J]][x])
+						if(all(myO))
+							outt@header[[J]]=outt@header[[J]][1]
+					}
+				}
+			}
 			validObject(outt)
 			return(outt) 
 		})
