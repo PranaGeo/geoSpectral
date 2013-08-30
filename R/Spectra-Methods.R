@@ -393,6 +393,8 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...){
 			if(length(allinargs)>1){
 				#For all input arguments
 				for(I in 2:length(allinargs)){
+					if(!inherits(eval((allinargs[[I]])),"STI"))
+						stop("The input argument should inherit from class STI")
 					#Get the slot Names
 					sltn = slotNames(..1)
 					#Slots to omit in the rbind process 
@@ -401,13 +403,11 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...){
 					sltn = sltn[sltn!="Wavelengths"]
 					sltn = sltn[sltn!="WavelengthsUnit"]
 					sltn = sltn[sltn!="Units"]
-					if(!inherits(eval((allinargs[[I]])),"STI"))
-						stop("The input argument should inherit from class STI")
 					#For all slots
 					for(J in 1:length(sltn)){
 						myslot = slot(eval((allinargs[[I]])),sltn[J])
 						if(class(myslot)[1]=="BiooHeader"){
-							aa=as.data.frame(rbind(slot(outt,sltn[J]),myslot))
+							aa=rbind(as.data.frame(slot(outt,sltn[J]),stringsAsFactors=F), as.data.frame(myslot,,stringsAsFactors=F))
 							rownames(aa)=NULL
 							bb = as.list(aa)
 							bb = lapply(bb,function(x){names(x)<-NULL;x})
