@@ -446,7 +446,8 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...,compressHeader
 				for(J in names(outt@header)){
 					if(length(outt@header[[J]])>1){
 						myO = sapply(2:length(outt@header[[J]]),function(x)outt@header[[J]][x]==outt@header[[J]][x])
-						if(all(myO))
+						try(if(all(myO)) outt@header[[J]]=outt@header[[J]][1],silent=T)
+						if(all(is.na(outt@header[[J]])))
 							outt@header[[J]]=outt@header[[J]][1]
 					}
 				}
