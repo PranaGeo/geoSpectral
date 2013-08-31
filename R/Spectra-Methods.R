@@ -440,12 +440,12 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...,compressHeader
 					} #end for all slots
 				} #end for all input arguments
 			} #end for if(length(allinargs)>1)
-			
 			#Compress the header (make multiple all-equal header elements as ONE)
 			if(compressHeader){
 				for(J in names(outt@header)){
 					if(length(outt@header[[J]])>1){
-						myO = sapply(2:length(outt@header[[J]]),function(x)outt@header[[J]][x]==outt@header[[J]][x])
+						myO = sapply(2:length(outt@header[[J]]),function(x){
+									outt@header[[J]][x]==outt@header[[J]][1]})
 						try(if(all(myO)) outt@header[[J]]=outt@header[[J]][1],silent=T)
 						if(all(is.na(outt@header[[J]])))
 							outt@header[[J]]=outt@header[[J]][1]
@@ -675,7 +675,8 @@ spc.STI.stdistance = function(master,searched,report=F){
 		searchedtime = time(searched)
 	if(is.timeBased(searched))
 		searchedtime = searched
-	output = data.frame(time2master = as.numeric(searchedtime - mastertime))
+	output =  difftime(searchedtime,mastertime,units="secs")
+	output = data.frame(time2master = as.numeric(output))
 	
 	if(inherits(master,"STI") && inherits(searched,"STI"))
 		distn = sapply(1:length(master), function(x) {
@@ -688,6 +689,7 @@ spc.STI.stdistance = function(master,searched,report=F){
 		plot(master@sp)
 		lines(spc.bbox2lines(master@sp))
 	}	
+	return(output)
 }
 
 #########################################################################
