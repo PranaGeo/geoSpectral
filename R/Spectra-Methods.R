@@ -664,7 +664,7 @@ spc.timeMatch = function(master,searched,returnList=FALSE,method="over",limits,r
 #searched to the corresponding row of the STI-inherited object master. Outputs 
 #a data.frame, with two columns : time2master ("difftime", in seconds) and 
 #distance2master ("numeric", in meters) 
-spc.STI.stdistance = function(master,searched){
+spc.STI.stdistance = function(master,searched,report=F){
 	stopifnot(length(master)==length(searched))
 	
 	if(inherits(master,"STI"))
@@ -682,6 +682,12 @@ spc.STI.stdistance = function(master,searched){
 					spDistsN1(t(as.matrix(coordinates(master)[x,])),t(as.matrix(coordinates(searched)[x,])))*1000
 				})
 	output = cbind(output,data.frame(distance2master=distn))
+	
+	if(report){
+		a=hist(distn,breaks=50);a$breaks
+		plot(master@sp)
+		lines(spc.bbox2lines(master@sp))
+	}	
 }
 
 #########################################################################
