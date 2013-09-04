@@ -793,7 +793,7 @@ setMethod("spc.getheader", signature = "Spectra",
 				}else{
 					out = object@header[[name]]
 				}
-				if(is.na(out))
+				if(all(is.na(out)))
 					out=FALSE
 				return(out)
 			}
