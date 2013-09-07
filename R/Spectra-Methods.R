@@ -898,14 +898,21 @@ setMethod("spc.data2header", signature = "Spectra",
 #########################################################################
 # Method : spc.header2data
 #########################################################################
+#If header element has length >1, its type is checked. If it is "character",
+#its elements will be pasted using paste(...,collapse="|"). If it is another 
+#type, only the first element will be taken.  
 setGeneric(name= "spc.header2data",
 		def=function(object,headerfield,dataname,...){standardGeneric("spc.header2data")})
 setMethod("spc.header2data", signature = "Spectra", 
 		def=function(object,headerfield,dataname,compress=TRUE,...){
 			if(missing(dataname))
 				dataname = headerfield
-			if (headerfield %in% names(object@header))
-				object[[dataname]] = object@header[[headerfield]]
+			if (headerfield %in% names(object@header)){
+				if(class(object@header[[headerfield]])=="character")
+					object[[dataname]] = object@header[[headerfield]][1]
+				else
+					object[[dataname]] = paste(object@header[[headerfield]],collapse="|")
+			}
 			else
 				stop(simpleError("Could not match a header field"))
 			
