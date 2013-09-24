@@ -15,7 +15,8 @@ setClass("Spectra", contains="STIDF",
 				header="BiooHeader",
 				Units="character",
 				InvalidIdx="logical",
-				SelectedIdx="logical"), 
+				SelectedIdx="logical",
+				ClassVersion="numeric"), 
 		prototype=prototype(
 				ShortName="spvar2",
 				LongName="spvar2 longname",
@@ -25,7 +26,8 @@ setClass("Spectra", contains="STIDF",
 				header=new("BiooHeader"),
 				Units="[ ]",
 				InvalidIdx=logical(),
-				SelectedIdx=logical()))
+				SelectedIdx=logical(),
+				ClassVersion=0.1))
 if (0){
 	setMethod("initialize",
 			signature(.Object = "Spectra"),
