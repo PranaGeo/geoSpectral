@@ -161,6 +161,7 @@ setMethod("show", "Spectra", function(object){
 						timestr, "\n")
 			if(length(object@Wavelengths)==1)
 				Str = gsub(Str,"spectral channels","spectral channel")
+			cat(Str)
 		})		
 
 #########################################################################
