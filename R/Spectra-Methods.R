@@ -160,7 +160,7 @@ setMethod("show", "Spectra", function(object){
 						"Bounding box:", "LON(",bbx[1,],") LAT(",bbx[2,],")\n",
 						timestr, "\n")
 			if(length(object@Wavelengths)==1)
-				Str = gsub(Str,"spectral channels","spectral channel")
+				Str = gsub("channels","channel",Str)
 			cat(Str)
 		})		
 
