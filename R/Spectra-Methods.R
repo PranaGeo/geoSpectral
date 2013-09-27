@@ -148,9 +148,9 @@ setMethod("show", "Spectra", function(object){
 				timestr = paste("Time : NA")
 			}
 			if(ncol(object)==0)
-				cat("\n","Empty Spectra object","\n")
+				Str = c("\n","Empty Spectra object","\n")
 			else
-				cat("\n", paste(object@ShortName[1], ' : An object of class "Spectra"\n', 
+				Str = c("\n", paste(object@ShortName[1], ' : An object of class "Spectra"\n', 
 								length(object@Wavelengths),"spectral channels in columns and", nrow(object@data), 
 								"observations in rows"), "\n",
 						"LongName: ", LongName, "\t", "Units: ", Units, "\n",
@@ -158,7 +158,9 @@ setMethod("show", "Spectra", function(object){
 						"Spectra Columns: ", head(colnames(object@Spectra)), "...\n",
 						"Ancillary Columns: ", head(names(object@data)),"...\n",
 						"Bounding box:", "LON(",bbx[1,],") LAT(",bbx[2,],")\n",
-						timestr, "\n")			
+						timestr, "\n")
+			if(length(object@Wavelengths)==1)
+				Str = gsub(Str,"spectral channels","spectral channel")
 		})		
 
 #########################################################################
@@ -921,25 +923,81 @@ setMethod("spc.header2data", signature = "Spectra",
 #				object[[dataname]]=object@header[[headerfield]][1]
 		})
 #########################################################################
-# Method : [[
+# Method : [
 #########################################################################
-setMethod("[", signature=c("Spectra","numeric","missing"), function(x, i, j, ...) {
-			x@data<-x@data[i,]
-			x@sp<-x@sp[i,]
-			x@time<-x@time[i]
-			x@endTime<-x@endTime[i]
-			ttemp = x@Spectra[i,]
-			if(class(ttemp)!="matrix")
-				ttemp = t(as.matrix(ttemp))
-			x@Spectra = ttemp
+setMethod("[", signature(x = "Spectra"), function(x, i, j) {
+			OUT_ANC = 0
+			if(missing(i))
+				i =  1:nrow(x@Spectra)
+			if(missing(j))
+				j =  1:ncol(x@Spectra)
 			
-			if(length(x@InvalidIdx)>0)
-				x@InvalidIdx = x@InvalidIdx[i]
-			if(length(x@SelectedIdx)>0)
-				x@SelectedIdx = x@SelectedIdx[i]
-			validObject(x)
+			if (class(j)=="numeric" | class(j)=="character"){
+				if (class(j)=="numeric"){
+					j.new = match(j,x@Wavelengths)
+				}
+				if (class(j)=="character"){
+					if (!exists("j.new") & any(match(j, colnames(x@Spectra),nomatch=F))) {
+						j.new = match(j, names(x))
+					}
+					if (!exists("j.new") & any(match(j, names(x@data),nomatch=F))) {
+						OUT_ANC = 1
+						j.new = match(j, names(x@data))						
+					}
+					if (!exists("j.new") && length(j)==1 && grepl("::",j)) {					
+						#The requested input is in format lbd1::lbd2
+						temp = strsplit(j, "::")
+						mylower = as.numeric(temp[[1]][1])
+						myupper = as.numeric(temp[[1]][2])					
+						j.new = which(x@Wavelengths>=mylower & x@Wavelengths<=myupper)
+					}
+					if (!exists("j.new"))
+						stop("Could not recognize the wavelength selection format. Use the operator :: or provide spectra or inDF data column indexes or names")
+					
+				}			
+				if (all(is.na(j.new)))
+					stop("Could not find matching wavelengths or inDF data")
+				if (any(na.idx <-(is.na(j.new)))) {
+					j.new=j.new[!is.na(j.new)]
+#					warning(paste("Could not match wavelengths or inDF data :", j[which(na.idx)]))
+				}
+				if (!all(is.finite(j.new)))
+					stop("Could not find matching wavelengths or inDF data")
+				j = j.new
+			}
+			InvalidIdx = x@InvalidIdx
+			if (!OUT_ANC) {				
+				x@Spectra=x@Spectra[i,j,drop=F]
+				if(nrow(x@data)>0)
+					x@data=x@data[i,,drop=F]
+				x@Wavelengths = x@Wavelengths[j]
+			} else{
+				x@data = x@data[i,j,drop=F]				
+			}
+			if (length(x@InvalidIdx)>1)
+				x@InvalidIdx = x@InvalidIdx[i] 
+			
+			x@SelectedIdx = logical()			
 			return(x)
 		})
+
+#setMethod("[", signature=c("Spectra","numeric","missing"), function(x, i, j, ...) {
+#			x@data<-x@data[i,]
+#			x@sp<-x@sp[i,]
+#			x@time<-x@time[i]
+#			x@endTime<-x@endTime[i]
+#			ttemp = x@Spectra[i,]
+#			if(class(ttemp)!="matrix")
+#				ttemp = t(as.matrix(ttemp))
+#			x@Spectra = ttemp
+#			
+#			if(length(x@InvalidIdx)>0)
+#				x@InvalidIdx = x@InvalidIdx[i]
+#			if(length(x@SelectedIdx)>0)
+#				x@SelectedIdx = x@SelectedIdx[i]
+#			validObject(x)
+#			return(x)
+#		})
 #########################################################################
 # Method : [[
 #########################################################################
@@ -1252,4 +1310,58 @@ setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,file
 			xlsx::addDataFrame(data, sheet,row.names=F,startRow=written+1,startColumn=1)
 			xlsx::saveWorkbook(wb, filename)
 			print(paste("Wrote sheet", sheetName, "to", filename))
+		})
+
+#########################################################################
+# Method : subset
+#########################################################################
+setMethod("subset",  signature="Spectra",
+		definition=function(x, subset, select, drop = FALSE, ...) {
+			if (missing(subset)) 
+				mycall <- TRUE
+			else {
+				mycall <- substitute(subset)
+				if(any(sapply(as.character(mycall),function(y) {y %in% colnames(x@Spectra)})))
+					try(xidx <- eval(mycall, as.data.frame(x@Spectra), parent.frame()),silent=T)
+				if(any(sapply(as.character(mycall),function(y) {y %in% names(x@data)})))
+					try(xidx <- eval(mycall, x@data, parent.frame()),silent=T)		
+				if (!exists("xidx") || !is.logical(xidx)) 
+					simpleError(stop("'subset' must evaluate to logical"))				
+				xidx <- xidx & !is.na(xidx)
+				if (length(x@SelectedIdx)>0)
+					x@SelectedIdx = x@SelectedIdx[xidx]
+				if (length(x@InvalidIdx)>0)
+					x@InvalidIdx = x@InvalidIdx[xidx]
+				if (nrow(x@data)>0)
+					x@data = x@data[xidx,,drop=drop]
+				x@Spectra = x@Spectra[xidx,]
+				x@sp = x@sp[xidx,]
+				x@time= x@time[xidx,]
+				x@endTime= x@endTime[xidx]
+			}	
+			
+			if (missing(select)) 
+				vars <- TRUE
+			else {				
+				nl <- as.list(1:ncol(x@Spectra))
+				names(nl) <- colnames(x@Spectra)					
+				vars <- eval(substitute(select), nl, parent.frame())				
+				if(vars %in% colnames(x@Spectra)){
+					y_idx = as.integer(nl[vars])
+					
+					x@Wavelengths = x@Wavelengths[y_idx]
+					x@Spectra = x@Spectra[,y_idx,drop=F]
+				}					
+
+				nl <- as.list(1:ncol(x@data))
+				names(nl) <- colnames(x@data)
+				vars <- eval(substitute(select), nl, parent.frame())
+				if(vars %in% colnames(x@data)){
+					y_idx = as.integer(nl[vars])	
+					x@data = x@data[,y_idx,drop=F]
+				}
+			}
+			
+			validObject(x)
+			return(x)
 		})
