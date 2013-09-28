@@ -1009,25 +1009,30 @@ setMethod("[", signature(x = "Spectra"), function(x, i, j) {
 setMethod("[[", signature=c("Spectra","character","missing"),
 		function(x, i, j, ...) {
 			Boutput = list()
-			for (II in 1:length(i)){
-				
+			for (II in 1:length(i)){		
 				if (i[II] %in% colnames(x@Spectra)){
 #					idx = which(i[II]==colnames(x@Spectra))
-					Boutput[[II]] = as.data.frame(x@Spectra[,i[II]])
+					Boutput[[II]] = x@Spectra[,i[II]]
 					names(Boutput[[II]])<-i[II]
 				}
 				if (i[II] %in% names(x@data)){
 #					idx = which(i[II]==names(x@data))
-					Boutput[[II]] = x@data[i[II]]				
+					Boutput[[II]] = x@data[[i[II]]]				
 					names(Boutput[[II]])<-i[II]
 				}
 			}
-			names(Boutput)<-i
-			Boutput = as.data.frame(Boutput)
-			row.names(Boutput)<-NULL
-			if(ncol(Boutput)==0)
+			if(length(Boutput)==0)
 				stop("Could not match any Spectral or ancillary data columns")
 			
+			names(Boutput)<-i
+			if(length(i)>1){
+				Boutput = as.data.frame(Boutput)
+				row.names(Boutput)<-NULL
+			} else {
+				Boutput = Boutput[[1]]
+				names(Boutput)<-NULL				
+			}
+						
 			return(Boutput)
 		})
 setReplaceMethod("[[",  signature=c("Spectra","character","missing"), definition=function(x, i, j, value) {
@@ -1423,3 +1428,19 @@ setMethod("spc.select", signature = "Spectra",
 			#print(cbind(Sel, ExSel))
 			return(ExSel)
 		})
+
+#########################################################################
+# Method : Conversion from Spectra to SpcList using a data field (factor)
+#########################################################################
+#Later add the functionality with FUN (i.e. taking means)
+spc.makeSpcList = function(myobj, name,FUN){
+	if(length(name)!=1)
+		simpleError(stop("Argument 'name' should have a length of 1"))
+	#Get the indexes of each DF row :
+	idx = lapply(unique(myobj[[name]]),function(x) {which(x==myobj[[name]])})
+	#For each row index in the list, subset the DF, return a list
+	output = lapply(idx,function(x) myobj[x,])
+	output = as(output,"BiooList")
+	output@by = name
+	return(output)
+}
