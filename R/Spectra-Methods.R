@@ -56,7 +56,11 @@ setAs(from="data.frame", to="Spectra", def=function(from){
 			#Create ancillary data.frame
 			if (ncol(from)>length(Wavelengths)) {
 				myidx = (length(Wavelengths)+1):ncol(from)
+				#Suppress warnings for the below operation ("drop" creates warnings)
+				myWarn = options()$warn
+				options(warn=-1)
 				data = from[myidx,drop=F]
+				options(warn=myWarn)				
 			} else {
 				data = data.frame(1:nrow(Spectra))
 			}
@@ -67,10 +71,10 @@ setAs(from="data.frame", to="Spectra", def=function(from){
 			else
 				header = new("BiooHeader")
 			
-			if(!is.timeBased(from$TIME))
+			if(!xts::is.timeBased(from$TIME))
 				stop("The TIME column does not contain time-based data")
-			TIME = as.xts(1:length(from$TIME), from$TIME)
-			if(!is.timeBased(from$ENDTIME)){
+			TIME = xts::xts(1:length(from$TIME), from$TIME)
+			if(!xts::is.timeBased(from$ENDTIME)){
 				endTime = from$TIME
 			}else{
 				endTime = from$ENDTIME
