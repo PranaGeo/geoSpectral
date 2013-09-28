@@ -4,13 +4,13 @@
 setAs(from="Spectra", to="data.frame", def=function(from){
 			if(ncol(from@data)>0)
 				output = cbind(as.data.frame(from@Spectra),from@data)
-			
+
 			delidx = match(c("LON","LAT","TIME","ENDTIME"),names(output))
 			delidx = delidx[-which(is.na(delidx))]
 			if(length(delidx)>0)
 				output = output[,-delidx[!is.na(delidx)]]
 			
-			output$LON = from@sp@coords[,"LON"]
+			output$LON = from@sp@coords[,"LONG"]
 			output$LAT = from@sp@coords[,"LAT"]
 			output$TIME=as.POSIXct(time(from@time))
 			output$ENDTIME=from@endTime
@@ -1353,7 +1353,7 @@ setMethod("subset",  signature="Spectra",
 					x@Wavelengths = x@Wavelengths[y_idx]
 					x@Spectra = x@Spectra[,y_idx,drop=F]
 				}					
-
+				
 				nl <- as.list(1:ncol(x@data))
 				names(nl) <- colnames(x@data)
 				vars <- eval(substitute(select), nl, parent.frame())
@@ -1365,4 +1365,57 @@ setMethod("subset",  signature="Spectra",
 			
 			validObject(x)
 			return(x)
+		})
+
+#########################################################################
+# Method : spc.select Select Spectra with the help of the mouse
+#########################################################################
+mat_identify <- function(x, y, ...){
+	l <- locator(1)
+	if(all(x <= l$x) || all(x >= l$x)){
+		result=NULL
+	} else {
+		index <- max(which(x <= l$x))
+		f <- (l$x - x[index]) / diff(x[index+(0:1)])
+		
+		yi <- f * (y[index+1,] - y[index,] ) + y[index,]
+		result <- which.min(abs(yi-l$y))
+		lines(x, y[,result], lwd=2, col="red")
+	}
+#  text(l, label=colnames(y)[result])
+	return(result)
+}
+setGeneric (name= "spc.select",
+		def=function(object){standardGeneric("spc.select")})
+setMethod("spc.select", signature = "Spectra", 
+		def = function (object){
+			#Extract the existing selection Index
+			if(length(object@SelectedIdx)>0)
+				ExSel = object@SelectedIdx
+			else
+				ExSel = rep(FALSE, nrow(object@Spectra))			
+			Sel = rep(FALSE, nrow(object@Spectra))			
+			
+			lbd = spc.getwavelengths(object)
+			idx = mat_identify(lbd, t(object@Spectra))
+			print(paste("Selected row",idx))
+			oidx = idx
+			while(!is.null(idx)){
+				idx = mat_identify(lbd, t(object@Spectra))
+				print(paste("Selected row",idx))
+				oidx=c(oidx, idx)				
+			}
+			oidx = oidx[!is.null(oidx)]
+			Sel[oidx]=T
+			
+			TrueIdx = isTRUE(ExSel)
+			#Apply the XOR operator to Existing Index ExSel 
+			#(selecting again an already selected row unselcts it)
+			ExSel = xor(ExSel,Sel)
+			
+			#Update the slot SelectedIdx 
+#			object@SelectedIdx = ExSel
+			
+			#print(cbind(Sel, ExSel))
+			return(ExSel)
 		})
