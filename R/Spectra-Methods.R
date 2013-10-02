@@ -80,7 +80,7 @@ setAs(from="data.frame", to="Spectra", def=function(from){
 				endTime = from$ENDTIME
 			}
 			outS =Spectral::Spectra(data,Spectra,Wavelengths,Units=Units,
-					header=header,ShortName=ShortName)
+					header=header,ShortName=ShortName,LongName=LongName)
 #			outS = new("Spectra", time = TIME, endTime = endTime,
 #					Spectra=Spectra, data=data,
 #					Wavelengths=Wavelengths, Units=Units[1], 
@@ -563,7 +563,7 @@ spc.make.stindex = function(input,what2include="",rowSimplify="none",
 		stop(simpleError(paste("rowSimplify should be one of",paste(c("spc.Colmeans","firstRow","lastRow","none"),collapse=","))))
 	
 	if(!inherits(input,"list"))
-		stop("The input dataset should inherit from a list (can also be a BiooList)")
+		stop("The input dataset should inherit from a list (can also be a SpcList)")
 	
 	MyOutput = lapply(1:length(input),function(x){
 				if(nrow(input[[x]])>0){
@@ -1440,7 +1440,185 @@ spc.makeSpcList = function(myobj, name,FUN){
 	idx = lapply(unique(myobj[[name]]),function(x) {which(x==myobj[[name]])})
 	#For each row index in the list, subset the DF, return a list
 	output = lapply(idx,function(x) myobj[x,])
-	output = as(output,"BiooList")
+	output = SpcList(output)
 	output@by = name
 	return(output)
 }
+
+#########################################################################
+# Method : spc.plot.time
+#########################################################################
+setGeneric (name= "spc.plot.time",
+		def=function(object, ...){standardGeneric("spc.plot.time")})
+setMethod("spc.plot.time", signature="Spectra", function (object,Y,maxSp=50,lab_cex,lwd=2, ...){
+			idx = as(1:ncol(object@DF), "logical")
+			
+			if (length(object@InvalidIdx)==0)
+				object@InvalidIdx = rep(FALSE,nrow(object@DF))		
+			
+			x = 1:nrow(object)
+			xlb = "Observation number"
+			
+			if(missing(Y)){
+				if(!missing(maxSp) && ncol(object)>maxSp)
+					Y = seq(1,ncol(object),length.out=maxSp)
+				else
+					Y = names(object)
+			}
+			if(missing(lab_cex))
+				lab_cex = 1
+			
+			matplot(x[!object@InvalidIdx], 
+					object@DF[!object@InvalidIdx,Y], type="l", pch=19,cex=0.3,xlab="",ylab="",lwd=lwd,...)
+			
+			grid(col="black")
+			
+			#Draw the legend
+			if(class(Y)=="numeric")
+				Y = names(object)[Y]
+			
+			if(length(Y)>1&length(Y)<=10) {
+				legend("bottomright",Y,col=1:length(Y),fill=1:length(Y),bty="n",cex=lab_cex)
+				ylb = bquote(.(object@LongName[1])*", ["*.(object@Units[1])*"]")	
+			}
+			else{
+				if(length(Y)==1)
+					ylb = Y
+				else
+					ylb = bquote(.(object@LongName[1])*", ["*.(object@Units[1])*"]")	
+			}
+			mtext(xlb,side=1,line=2,cex=lab_cex)
+			mtext(ylb,side=2,line=2,cex=lab_cex)
+			
+			#Draw the legend
+			if(length(Y)>1 & length(Y)<=10)
+				legend("bottomright",Y,col=1:length(Y),lty=1:length(Y),bty="n",lwd=2,cex=lab_cex)
+		})
+
+#########################################################################
+# Method : spc.plot.depth
+#########################################################################
+setGeneric (name= "spc.plot.depth",
+		def=function(object, ...){standardGeneric("spc.plot.depth")})
+setMethod("spc.plot.depth", signature="Spectra", function (object,X,maxSp=10,lab_cex,
+				title, add=FALSE, xlab=NULL, ylab=NULL, ylim=NULL,xlim=NULL,lwd=2,...){
+			idx = as(1:ncol(object@Spectra), "logical")
+			depth=object$DEPTH
+			if(length(is.finite(depth))<1)
+				stop("Could not find the column DEPTH")
+			
+			if (length(object@InvalidIdx)==0)
+				object@InvalidIdx = rep(FALSE,nrow(object))		
+			
+			if(missing(X)){
+				if(ncol(object)>maxSp)
+					X = round(seq(1,ncol(object),length.out=maxSp))
+				else
+					X = names(object)
+			}
+			if (is.numeric(X))
+				X = names(object)[X]
+			
+			if(missing(ylab))
+				ylab = "Depth [m]"
+			
+			if(missing(xlab)) {
+				if (class(object)=="Spectra") {
+					xlab = bquote(.(object@LongName[1])*", ["*.(object@Units[1])*"]")				
+				} else {
+					if(length(X)==1)
+						xlab =  bquote(.(X)*", ["*.(object@Units[1])*"]")	
+					else{
+						xlab = bquote(.(object@LongName[1])*", ["*.(object@Units[1])*"]")
+					}
+				}
+			}
+			if(missing(ylim)){
+				ylim = rev(range(pretty(depth[!object@InvalidIdx],n=10)))
+				ylim[2]=-0.1	
+			}
+			#If any, do not draw these parameters
+			X = gsub("DEPTH","",X,fixed=T)
+			X = gsub("VOLTAGE","",X,fixed=T)
+			X = gsub("TIME","",X,fixed=T)
+			X=X[X!=""]
+			
+			myunits = object@Units[match(X,names(object))]
+			mynames = names(object@Spectra)[match(X,names(object))]
+			u_units = unique(myunits)
+			my_sides = rep(c(1,3), ceiling(length(u_units)/2))
+			
+			#Extract the data to plot
+			myX = object@Spectra[!object@InvalidIdx,X,drop=F]
+			myY = depth[!object@InvalidIdx]
+			#Sort with respect to depth
+			d_idx = sort.int(myY,index.return = TRUE)
+			myY = d_idx$x
+			myX = myX[d_idx$ix,,drop=F]
+			#Eliminate rows full with zeros
+			idx = !apply(myX==0,1,all)
+			myY = myY[idx]
+			myX = myX[idx,,drop=F]
+			#Eliminate NAs in depth
+			idx = !is.na(myY)
+			myY = myY[idx]
+			myX = myX[idx,,drop=F]
+			
+			if(missing(lab_cex))
+				lab_cex=1
+			if (!all(diff(myY)==0) & !(length(myY)<2)) {
+				if(length(u_units)==1){	
+					#All columns to be plotted have the same unit 
+					if(add)
+						matlines(myX,myY,type="l",xlab="",ylab="",ylim=ylim,...)
+					else{
+						if (all(is.finite(xlim)))
+							matplot(myX,myY,type="l",cex.axis=lab_cex,xlab="",ylab="",ylim=ylim,xlim=xlim,lwd=lwd,...)
+						else
+							matplot(myX,myY,type="l",cex.axis=lab_cex,xlab="",ylab="",ylim=ylim,lwd=lwd,...)						
+					}
+					matpoints(myX,myY,xlab="",ylab="",pch=19,cex=0.4,ylim=ylim,...)					
+					
+					mtext(ylab,side=2,line=2,cex=lab_cex)
+					mtext(xlab,side=1,line=2,cex=lab_cex)
+					grid(col="black")		
+					#Draw the legend
+					if(length(X)>1 & !add & length(X)<=10)
+						legend("bottomright",X,col=1:length(X),lty=1:length(X),bty="n",lwd=2,cex=lab_cex)
+					
+				}else{
+					#All columns to be plotted have different units 
+#					for (I in 1:length(u_units)){
+					for (I in 1:2){
+						if (I!=1)
+							par(new=T)
+						browser()
+						col_idx = which(u_units[I]==myunits)
+						xlab = bquote(.(object@LongName[1])*", ["*.(object@Units[1])*"]")
+						
+						matplot(myX[,col_idx],myY,type="l", axes=F,pch=19,cex=0.3, ylim=ylim,col=I,xlab="",ylab="",lwd=lwd,...)
+						mtext(my_sides[I],text=xlab,line=2,cex=lab_cex)
+						axis(my_sides[I], col=I, pretty(range(myX[,col_idx]),10))
+						if (I==1){
+							box(); 	
+							cols = rep(1, length(X))
+						}
+						else {
+							cols[col_idx] = I
+						}
+					}
+					grid(col="black")
+					axis(2,pretty(range(myY),10))
+					mtext(2, text=ylab,line=2)
+					#Draw the legend
+					if(length(X)>1 & !add & length(X)<=10)
+						legend("bottomright",X,col=cols,lty=cols,bty="n",lwd=2,cex=lab_cex)
+					
+				}
+				#Draw the title if provided from the call
+				if(!missing(title))
+					title(title)
+			} else{
+				return(0)
+			}
+		})
