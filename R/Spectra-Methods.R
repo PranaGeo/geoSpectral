@@ -1558,15 +1558,28 @@ setMethod("spc.plot.depth", signature="Spectra", function (object,X,maxSp=10,lab
 #Sort with respect to depth
 			d_idx = sort.int(myY,index.return = TRUE)
 			myY = d_idx$x
-			myX = myX[d_idx$ix,,drop=F]
-			#Eliminate rows full with zeros
-			idx = !apply(myX==0,1,all)
-			myY = myY[idx]
-			myX = myX[idx,,drop=F]
-			#Eliminate NAs in depth
-			idx = !is.na(myY)
-			myY = myY[idx]
-			myX = myX[idx,,drop=F]
+			if(class(myX)=="data.frame"){
+				myX = myX[d_idx$ix,,drop=F]
+				#Eliminate rows full with zeros
+				idx = !apply(myX==0,1,all)
+				myY = myY[idx]
+				myX = myX[idx,,drop=F]
+				#Eliminate NAs in depth
+				idx = !is.na(myY)
+				myY = myY[idx]
+				myX = myX[idx,,drop=F]
+			}
+			else{
+				myX = myX[d_idx$ix]
+				#Eliminate rows full with zeros
+				idx = myX!=0
+				myY = myY[idx]
+				myX = myX[idx]
+				#Eliminate NAs in depth
+				idx = !is.na(myY)
+				myY = myY[idx]
+				myX = myX[idx]
+			}
 			
 			if(missing(lab_cex))
 				lab_cex=1
