@@ -1,10 +1,11 @@
+
 #########################################################################
 # Method : Conversions from and to data.frame
 #########################################################################
 setAs(from="Spectra", to="data.frame", def=function(from){
 			if(ncol(from@data)>0)
 				output = cbind(as.data.frame(from@Spectra),from@data)
-
+			
 			delidx = match(c("LON","LAT","TIME","ENDTIME"),names(output))
 			delidx = delidx[-which(is.na(delidx))]
 			if(length(delidx)>0)
@@ -1032,7 +1033,7 @@ setMethod("[[", signature=c("Spectra","character","missing"),
 				Boutput = Boutput[[1]]
 				names(Boutput)<-NULL				
 			}
-						
+			
 			return(Boutput)
 		})
 setReplaceMethod("[[",  signature=c("Spectra","character","missing"), definition=function(x, i, j, value) {
@@ -1284,7 +1285,6 @@ setGeneric(name="spc.export.xlsx",
 setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,filename,sheetName,writeheader,append,sep,...){
 			if(missing(sheetName))
 				sheetName = input@ShortName
-			
 			data = as(input,"data.frame")
 			data$TIME = as.character(data$TIME,usetz=TRUE)
 			data$ENDTIME = as.character(data$ENDTIME,usetz=TRUE)
@@ -1543,15 +1543,19 @@ setMethod("spc.plot.depth", signature="Spectra", function (object,X,maxSp=10,lab
 			X = gsub("TIME","",X,fixed=T)
 			X=X[X!=""]
 			
-			myunits = object@Units[match(X,names(object))]
-			mynames = names(object@Spectra)[match(X,names(object))]
-			u_units = unique(myunits)
+			mynames = spc.colnames(object)[match(X,names(object))]
+			u_units = object@Units 
+			colidx = match(X,spc.colnames(object))
+			if(any(is.na(colidx)))
+				u_units = c(u_units, "unknown") #For now, we can only add unknown units XXX
 			my_sides = rep(c(1,3), ceiling(length(u_units)/2))
-			
+
 			#Extract the data to plot
-			myX = object@Spectra[!object@InvalidIdx,X,drop=F]
-			myY = depth[!object@InvalidIdx]
-			#Sort with respect to depth
+#			myX = object[!object@InvalidIdx,X,drop=F]
+#			myY = depth[!object@InvalidIdx]
+			myX = object[[X]]
+			myY = depth
+#Sort with respect to depth
 			d_idx = sort.int(myY,index.return = TRUE)
 			myY = d_idx$x
 			myX = myX[d_idx$ix,,drop=F]
@@ -1592,20 +1596,20 @@ setMethod("spc.plot.depth", signature="Spectra", function (object,X,maxSp=10,lab
 					for (I in 1:2){
 						if (I!=1)
 							par(new=T)
-						browser()
-						col_idx = which(u_units[I]==myunits)
+#						col_idx = which(u_units[I]==myunits)
 						xlab = bquote(.(object@LongName[1])*", ["*.(object@Units[1])*"]")
 						
-						matplot(myX[,col_idx],myY,type="l", axes=F,pch=19,cex=0.3, ylim=ylim,col=I,xlab="",ylab="",lwd=lwd,...)
+						matplot(object[[X[[I]]]],myY,type="l", axes=F,pch=19,cex=0.3, ylim=ylim,col=I,xlab="",ylab="",lwd=lwd,...)
 						mtext(my_sides[I],text=xlab,line=2,cex=lab_cex)
-						axis(my_sides[I], col=I, pretty(range(myX[,col_idx]),10))
+						axis(my_sides[I], col=I, pretty(range(object[[X[[I]]]]),10))
 						if (I==1){
 							box(); 	
 							cols = rep(1, length(X))
 						}
 						else {
-							cols[col_idx] = I
-						}
+#							cols[col_idx] = I
+							cols[I] = I
+			}
 					}
 					grid(col="black")
 					axis(2,pretty(range(myY),10))
