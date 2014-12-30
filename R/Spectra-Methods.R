@@ -1451,25 +1451,25 @@ spc.makeSpcList = function(myobj, name,FUN){
 setGeneric (name= "spc.plot.time",
 		def=function(object, ...){standardGeneric("spc.plot.time")})
 setMethod("spc.plot.time", signature="Spectra", function (object,Y,maxSp=50,lab_cex,lwd=2, ...){
-			idx = as(1:ncol(object@DF), "logical")
+			idx = as(1:ncol(object@data), "logical")
 			
 			if (length(object@InvalidIdx)==0)
-				object@InvalidIdx = rep(FALSE,nrow(object@DF))		
+				object@InvalidIdx = rep(FALSE,nrow(object@data))		
 			
 			x = 1:nrow(object)
 			xlb = "Observation number"
 			
 			if(missing(Y)){
-				if(!missing(maxSp) && ncol(object)>maxSp)
-					Y = seq(1,ncol(object),length.out=maxSp)
-				else
-					Y = names(object)
+			  Y = spc.colnames(object)
 			}
-			if(missing(lab_cex))
-				lab_cex = 1
+			if(ncol(object)>maxSp)
+			  Y = Y[seq(1,ncol(object),length.out=maxSp)]
 			
-			matplot(x[!object@InvalidIdx], 
-					object@DF[!object@InvalidIdx,Y], type="l", pch=19,cex=0.3,xlab="",ylab="",lwd=lwd,...)
+      if(missing(lab_cex))
+				lab_cex = 1
+
+      matplot(x[!object@InvalidIdx], 
+					object[[Y]][!object@InvalidIdx,], type="l", pch=19,cex=0.3,xlab="",ylab="",lwd=lwd,...)
 			
 			grid(col="black")
 			
