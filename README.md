@@ -16,3 +16,5 @@ First install the *devtools* package using *install.packages()* and then :
 require(devtools)
 install_github("PranaGeo/Spectral")
 ```
+##Usage
+The R code is not documented yet. Sorry. But you can consult the documentation [wiki](https://github.com/PranaGeo/Spectral/wiki) to learn how to use the package. Your comments are contributions are welcome.
