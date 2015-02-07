@@ -11,7 +11,7 @@ install.packages(c("rgdal","spacetime","xlsx"),dep=T)
 ```
 
 ##Installation
-First install the *devtools* package and then :
+First install the *devtools* package using *install.packages()* and then :
 ```
 require(devtools)
 install_github("PranaGeo/Spectral")
