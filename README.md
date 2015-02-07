@@ -8,6 +8,7 @@ It provides the S4 classes: **_Spectra_** (stores spatial/temporal/spectral aspe
 **Spectral** depends on R packages *rgdal*, *spacetime* and *xlsx*.
 
 ##Installation
+First install the *devtools* package and then :
 ```
 require(devtools)
 install_github("PranaGeo/Spectral")
