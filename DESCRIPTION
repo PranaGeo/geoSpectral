@@ -14,5 +14,4 @@ Description: This package provides S4 classes and basic manipulation methods for
 		campaigns can be easily represented with the Spectra class.
 License: GPL
 LazyLoad: yes
-Collate: SpcHeader-Class.R SpcHeader-Methods.R SpcHeaderList-Methods.R
-		Spectra-Class.R Spectra-Methods.R  SpcList-Class.R SpcList-Methods.R 
+Collate: SpcHeader-Class.R SpcHeader-Methods.R Spectra-Class.R Spectra-Methods.R  SpcList-Class.R SpcList-Methods.R 
