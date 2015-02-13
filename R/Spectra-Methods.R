@@ -1474,11 +1474,11 @@ setMethod("spc.plot.time", signature="Spectra", function (object,Y,maxSp=50,xdat
     x = time(object)
     x = x[!object@InvalidIdx]
     xlb = "Time"
-    YY = zoo(Y,time(object@time))
-    plot(YY,screens = 1,xlab="",ylab="",lwd=lwd,col=tsCol, ...) # xaxt = "n",...)
-#     axis(1, at=time(YY), labels=xts::axTicksByTime(YY))
-#     browser()
-    
+    XX = xts::xts(Y,time(object@time))
+    plot.new()
+    #xts::plot.xts(XX,screens=1) #,xlab="",ylab="",lwd=lwd,col=tsCol, ...)
+    #xtsExtra::plot.xts(XX,screens=1, xlab="",ylab="",lwd=lwd,col=tsCol, ...)#Problem: does not plot inside the function
+    zoo::plot.zoo(XX,screens=1,xlab="",ylab="",lwd=lwd,col=tsCol, ...)
   }
   if (xdata == "observations") {
     x = 1:nrow(object)
@@ -1507,7 +1507,10 @@ setMethod("spc.plot.time", signature="Spectra", function (object,Y,maxSp=50,xdat
     if(length(Y)==1)
       ylb = Y
     else
-      ylb = bquote(.(object@LongName[1])*", ["*.(object@Units[1])*"]")	
+      if(object@LongName=="spvar2 longname")
+        ylb = bquote(.(object@ShortName)*", ["*.(object@Units[1])*"]")  
+      else
+        ylb = bquote(.(object@LongName[1])*", ["*.(object@Units[1])*"]")  
   }
   mtext(xlb,side=1,line=2,cex=lab_cex)
   mtext(ylb,side=2,line=2,cex=lab_cex)
@@ -1546,13 +1549,13 @@ setMethod("spc.plot.depth", signature="Spectra", function (object,X,maxSp=10,lab
   
   if(missing(xlab)) {
     if (class(object)=="Spectra") {
-      xlab = bquote(.(object@LongName[1])*", ["*.(object@Units[1])*"]")				
+      if(object@LongName=="spvar2 longname")
+        xlab = bquote(.(object@ShortName)*", ["*.(object@Units[1])*"]")  
+      else
+        xlab = bquote(.(object@LongName[1])*", ["*.(object@Units[1])*"]")          
     } else {
       if(length(X)==1)
         xlab =  bquote(.(X)*", ["*.(object@Units[1])*"]")	
-      else{
-        xlab = bquote(.(object@LongName[1])*", ["*.(object@Units[1])*"]")
-      }
     }
   }
   if(missing(ylim)){
