@@ -734,7 +734,7 @@ setMethod("Math", signature("Spectra"),function (x) {
   return(x)
 })
 setGeneric (name= "spc.colMeans",def=function(object){standardGeneric("spc.colMeans")})
-setMethod("spc.colMeans", signature("Spectra"),function (x) {
+setMethod("spc.colMeans", signature("Spectra"),function (object) {
   #Computes the mean along the rows of Spectra (@Spectra). The method finds the measurement
   #closest in time to the mean time and keeps the spatial/time attributes as well as Ancillary
   #data table (@data) associated to that measurement as that of the mean spectra
