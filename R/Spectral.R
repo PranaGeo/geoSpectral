@@ -1,13 +1,25 @@
-#' Manipulation of spectral (radiometric) data
+#' @title Manipulation of spectral (radiometric) data
 #'
+#' @description 
 #' \pkg{Spectral} is an R package providing a new data type for R that stores
 #'  spectral,temporal and spatial attributes of measurement data as well as methods for 
 #' accessing and manipulating the spectral (and non-spectral) data.
 #' with code.
 #'
-#' The only function you're likely to need from \pkg{Spectral} is
-#' \code{\link{roxygenize}}. Otherwise refer to the vignettes to see
-#' how to format the documentation.
+#' @details This package provides the following S4 classes: 
+#' \itemize{
+#'   \item \code{Spectra} (stores spatial/temporal/spectral aspects of data)
+#'   \item \code{SpcHeader} (stores metadata in an R list object)
+#'   \item \code{SpcList} (makes a collection of Spectra objects in an R list)
+#' }
+#' as well as basic data access and manipulation methods for importing, acessing and
+#' subsetting, converting into R objects, analyzing, plotting and exporting to other scientific
+#' data formats. 
+#'
+#' @author Servet Cizmeli <sa.cizmeli@@usherbrooke.ca>
+#' 
+#' @references
+#' There is a tutorial for \pkg{Spectral} at the package GitHub page: \url{https://github.com/PranaGeo/Spectral/wiki/RPackage_Spectral_Tutorial}.
 #'
 #' @docType package
 #' @name Spectral

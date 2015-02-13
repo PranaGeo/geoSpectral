@@ -204,7 +204,57 @@ setReplaceMethod("spc.colnames", signature = "Spectra", def = function (x,value)
   return(x) 
 })
 
-#Creates a Spectra object from longtable (uses stConstruct()). If not provided, assumes LAT,LON and TIME columns as 1.
+#' Constructor function for the class \code{Spectra}.
+#'
+#'@description
+#' \code{Spectra} Creates an instance of class \code{Spectra}.
+#'
+#' @param inDF a long-format \code{data.frame} containing LAT,LON and TIME columns as well as Ancillary data.
+#' See \code{\link{spacetime::stConstruct}} for more information on long DF format.
+#' @param Spectra \code{matrix} containing spectral data. Channels are in columns, observations are in rows.
+#' If \code{Spectra} is missing, the first \code{length(Wavelengths)} columns of inDF will be taken
+#' as spectral data.
+#' @param Wavelengths \code{numeric} vector containing wavelengths of spectral channels.
+#' @param Units \code{character} defining the units of the wavelengths.
+#' @param space a character or integer holding the 
+#' column index in inDF where the spatial coordinates are (if length(space)==2) or where the ID of 
+#' the spatial location is (if (length(space)==1). If \code{space} is not provided, inDF columns are
+#' searched to match one of the following : LAT,lat,latitude,LATITUDE,LON,LONG,lon,long,longitude,LONGITUDE
+#' If LAT & LON are not found, they set the dummy value of 1.
+#' @param time  \code{character} or \code{integer} indicating the column in inDF containg time-based
+#' data values. if \code{time} is missing, it is set the dummy integer sequential vector of {1:nrow(Spectra)}.
+#' @param endTime if the temporal measurements are performed over an interval, \code{endtime} contains
+#' the time for the end of intervals. \code{length(endtime)==nrow(inDF)}. If the temporal measurements are performed over an time-instance, 
+#' \code{endTime==inDF$TIME} 
+#' @param header \code{SpcHeader} object containing metadata
+#' @inheritParams spacetime::stConstruct
+#' 
+#'@details
+#' This constructor function uses The function \code{Spectra()} calls \code{spacetime::stConstruct()}
+#' that is the construtor of the \code{STIDF} class using an input \code{data.frame} object of long-table format.
+#'
+#' \code{length{@@Wavelengths}==ncol(@@Spectra)}. The default @@WavelengthsUnit is nm^{-1}.
+#' 
+#' @return Returns an object of class \code{Spectra}.
+#'
+#' @examples
+#' fnm = file.path(base::system.file(package = "Spectral"), "inst","test_data","particulate_absorption.csv.gz")
+#' abs = read.table(fnm,sep=",",header=T)
+#' abs$STATION=factor(abs$STATION)
+#' abs[1:2,1:17] #Display only the first 2 rows and first 17 columns if the data frame
+#' lbd = as.numeric(gsub("X","",colnames(abs)[14:514]))
+#' Units="1/m"
+#' colnames(abs)= gsub("X",paste("anap","_",sep=""), colnames(abs))
+#' colnames(abs)= gsub("PRES","DEPTH", colnames(abs))
+#' abs = abs[,c(14:514,1:13)] #Rearrange so that Spectra columns come first
+#' tz<-strsplit(as.character(abs$TIME)," ")[[1]][[3]] #Extract the timezone
+#' abs$TIME = as.POSIXct(as.character(abs$TIME),tz=tz) #Compute the time
+#' 
+#' #Space and time columns are automatically found in the column names of inDF
+#' myS<-Spectra(abs,Wavelengths=lbd,Units=Units,ShortName="a_nap")
+#'
+#' #Space and time columns are explicitly chosen from inDF columns
+#' myS<-Spectra(abs,Wavelengths=lbd, space=c("LONG","LAT"), time="TIME",Units=Units,ShortName="a_nap")
 Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...){
   longcol="";latcol="";timecol=""
   if(missing(space)){
@@ -239,6 +289,7 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
       latcol="LAT"
       warning("Could not find a latitude column named either of: lat,LAT,latitude,LATITUDE. Assigning LAT=1.0 to all rows")
     }
+    space=c(longcol,latcol)
   }
   if(missing(time)){
     if ("time" %in% names(inDF))
@@ -250,6 +301,7 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
       timecol="TIME"
       warning("Could not find a time column named either of : time or TIME. Assigning TIME=1.0 to all rows")
     }
+    time=timecol
   }
   if(missing(endTime)){
     if("ENDTIME" %in% names(inDF)){
@@ -259,18 +311,18 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
     }
   }
   
-  #Extract Wavelengths from data frame attributes
+  #Extract Wavelengths from data frame columns
   if(missing(Wavelengths)){
     Wavelengths = attr(inDF,"Wavelengths")
     lbd.idx = !is.na(Wavelengths)
     Wavelengths = Wavelengths[lbd.idx]
     
-    #Extract Spectra from data frame attributes
+    #Extract Spectra from data frame columns
     if(missing(Spectra)){
       Spectra = as.matrix(inDF[,lbd.idx])		
     }
   }
-  #Extract Spectra from data frame attributes
+  #Extract Spectra from data frame columns
   if(missing(Spectra)){
     Spectra = as.matrix(inDF[,1:length(Wavelengths)])
     inDF = cbind(data.frame(idx=1:nrow(inDF)), inDF[,-(1:length(Wavelengths))])
@@ -286,7 +338,7 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
   }
   
   #First construct a STIDF object using stConstruct()
-  out = stConstruct(inDF,c(longcol,latcol),timecol,endTime=endTime)
+  out = stConstruct(x=inDF,space=space,time=time,endTime=endTime)
   
   #I think stConstruct does not take endTime into account. Force it again
   out@endTime = endTime
