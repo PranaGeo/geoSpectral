@@ -57,7 +57,7 @@ colnames(abs)= gsub("PRES","DEPTH", colnames(abs))
 abs = abs[,c(14:514,1:13)] #Rearrange so that Spectra columns come first
 tz<-strsplit(as.character(abs$TIME)," ")[[1]][[3]] #Extract the timezone
 abs$TIME = as.POSIXct(as.character(abs$TIME),tz=tz) #Compute the time
-#
+
 #Space and time columns are automatically found in the column names of inDF
 myS<-Spectra(abs,Wavelengths=lbd,Units=Units,ShortName="a_nap")
 

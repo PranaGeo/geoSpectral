@@ -6,7 +6,8 @@
 #' accessing and manipulating the spectral (and non-spectral) data.
 #' with code.
 #'
-#' @details This package provides the following S4 classes: 
+#' @details 
+#' This package provides the following S4 classes: 
 #' \itemize{
 #'   \item \code{Spectra} (stores spatial/temporal/spectral aspects of data)
 #'   \item \code{SpcHeader} (stores metadata in an R list object)
@@ -14,13 +15,17 @@
 #' }
 #' as well as basic data access and manipulation methods for importing, acessing and
 #' subsetting, converting into R objects, analyzing, plotting and exporting to other scientific
-#' data formats. 
+#' data formats. Have a look at the constructor function by typing \code{?Spectra} to get started.
 #'
 #' @author Servet Cizmeli <sa.cizmeli@@usherbrooke.ca>
 #' 
 #' @references
 #' There is a tutorial for \pkg{Spectral} at the package GitHub page: \url{https://github.com/PranaGeo/Spectral/wiki/RPackage_Spectral_Tutorial}.
 #'
+#'@concept Spectral Wavelength
+#'@seealso See also the packages \code{\pkg{spacetime}}, \code{\pkg{rgdal}}, 
+#'\code{\pkg{sp}}, \code{\pkg{xts}}
+
 #' @docType package
 #' @name Spectral
 NULL
