@@ -22,4 +22,10 @@ install_github("PranaGeo/Spectral")
 ##Usage
 The R code documentation is very incomplete. Sorry. After installing the package, you can try from the R prompt : ```?Spectral``` to consult the brief documentation of the package or ```?Spectra``` to  see the help of the constructor function the main class : *Spectra()*.
 
-You can view the documentation [wiki](https://github.com/PranaGeo/Spectral/wiki) to learn how to use the package. Your comments,suggestions and contributions are very welcome.
+You can view the documentation [wiki](https://github.com/PranaGeo/Spectral/wiki) to learn how to use the package. 
+
+##Contributions
+Your comments,suggestions and contributions are very welcome. Please feel free to open issues [here](https://github.com/PranaGeo/Spectral/issues).
+
+###Help the development
+If you would like to contribute to the development, get a GitHub account, fork the *dev* branch of this project to your GitHub account, clone it to your local machine, work on it, commit your changes, push your changes to your GitHub fork and send us a pull request and we will discuss. For more information, visit the [fork & pull development model page.](https://help.github.com/articles/using-pull-requests/#fork--pull)
