@@ -20,4 +20,6 @@ require(devtools)
 install_github("PranaGeo/Spectral")
 ```
 ##Usage
-The R code is not documented yet. Sorry. But you can consult the documentation [wiki](https://github.com/PranaGeo/Spectral/wiki) to learn how to use the package. Your comments,suggestions and contributions are very welcome.
+The R code documentation is very incomplete. Sorry. After installing the package, you can try from the R prompt : ```?Spectral``` to consult the brief documentation of the package or ```?Spectra``` to  consult the help of the constructor function of the main class *Spectra*.
+
+You can view the documentation [wiki](https://github.com/PranaGeo/Spectral/wiki) to learn how to use the package. Your comments,suggestions and contributions are very welcome.
