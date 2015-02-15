@@ -221,11 +221,14 @@ setReplaceMethod("spc.colnames", signature = "Spectra", def = function (x,value)
 #' the spatial location is (if (length(space)==1). If \code{space} is not provided, inDF columns are
 #' searched to match one of the following : LAT,lat,latitude,LATITUDE,LON,LONG,lon,long,longitude,LONGITUDE
 #' If LAT & LON are not found, they set the dummy value of 1.
-#' @param time  \code{character} or \code{integer} indicating the column in inDF containg time-based
+#' @param time \code{character} or \code{integer} indicating the column in inDF containing POSIXct TIME
 #' data values. if \code{time} is missing, it is set the dummy integer sequential vector of {1:nrow(Spectra)}.
-#' @param endTime if the temporal measurements are performed over an interval, \code{endtime} contains
-#' the time for the end of intervals. \code{length(endtime)==nrow(inDF)}. If the temporal measurements are performed over an time-instance, 
-#' \code{endTime==inDF$TIME} 
+#' @param endTime \code{character} or \code{integer} indicating the column in inDF containing POSIXct
+#' ENDTIME data values. If the temporal measurements are performed over an interval, \code{time} and \code{endtime} 
+#' contain the time for the start and end of intervals respectively. If the temporal measurements are performed over 
+#' a time-instance, then \code{endTime==TIME}. If \code{endTime} is not provided, inDF columns are searched to match 
+#' ENDTIME. If none found, then it is assumed that data are time-instance measurements. For more information, see the
+#'  documentation of \code{\pkg{spacetime}}.
 #' @param header \code{SpcHeader} object containing metadata
 #' @inheritParams spacetime::stConstruct
 #' 
@@ -307,7 +310,7 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
     if("ENDTIME" %in% names(inDF)){
       endTime = inDF$ENDTIME
     } else{
-      endTime = inDF$TIME
+      endTime = inDF[time]
     }
   }
   
