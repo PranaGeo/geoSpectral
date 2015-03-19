@@ -14,6 +14,9 @@ setClass("Spectra", contains="STIDF",
 				Spectra="matrix",
 				header="BiooHeader",
 				Units="character",
+        UnitsAnc="character",
+				ShortNameAnc="character",
+				LongNameAnc="character",
 				InvalidIdx="logical",
 				SelectedIdx="logical",
 				ClassVersion="numeric"), 
@@ -25,6 +28,9 @@ setClass("Spectra", contains="STIDF",
 				Spectra=matrix(NA,0,0),
 				header=new("BiooHeader"),
 				Units="[ ]",
+        UnitsAnc=character(0),
+				ShortNameAnc=character(0),
+				LongNameAnc=character(0),
 				InvalidIdx=logical(),
 				SelectedIdx=logical(),
 				ClassVersion=0.1))
@@ -82,7 +88,7 @@ if (0){
 setValidity("Spectra", function(object){
 #			cat("---------Spectra::setValidity\n")
 			if(!all(sapply(object@Spectra, class)=="numeric")){
-				return("Spectral data should be a data.frame object with numeric columns")
+				return("Spectral data should be a matrix object with numeric columns")
 			}
 			if(length(object@Wavelengths)!= ncol(object@Spectra)){
 				return("Number of Spectral channels is not equal the number of data columns")
@@ -91,7 +97,7 @@ setValidity("Spectra", function(object){
 				return("All the wavelengths should be numeric and finite")
 			}
 			if(any(diff(object@Wavelengths)<=0)){
-				return("Wavelength should be increasing and without replicates.")
+				return("Wavelength values should be increasing and be without replicates.")
 			}
 			if(nrow(object@data)!=0){
 				if(nrow(object@data)!=nrow(object@Spectra)){
@@ -112,5 +118,11 @@ setValidity("Spectra", function(object){
 				return("The slot LongName should have a length of 1")
 			if(length(object@Units)!=1)
 				return("The slot Units should have a length of 1")
+			if(!(length(object@UnitsAnc)==0 | length(object@UnitsAnc)==ncol(object@data)))
+			  return("The slot UnitsAnc should have a length of 1 or ncol(object@data)")
+			if(!(length(object@LongNameAnc)==0 | length(object@LongNameAnc)==ncol(object@data)))
+			  return("The length of slot LongNameAnc should be equal to ncol(object@data)")
+			if(!(length(object@ShortNameAnc)==0 | length(object@ShortNameAnc)==ncol(object@data)))
+			  return("The length of slot ShortNameAnc should be equal to ncol(object@data)")
 			return(TRUE)
-		})
+})

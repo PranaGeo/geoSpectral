@@ -8,7 +8,7 @@ Spectra(inDF, Spectra, Wavelengths, Units, space, time, endTime, header, ...)
 }
 \arguments{
 \item{inDF}{a long-format \code{data.frame} containing LAT,LON and TIME columns as well as Ancillary data.
-See \code{\link{spacetime::stConstruct}} for more information on long DF format.}
+See \code{"\link{stConstruct}"} for more information on long DF format.}
 
 \item{Spectra}{\code{matrix} containing spectral data. Channels are in columns, observations are in rows.
 If \code{Spectra} is missing, the first \code{length(Wavelengths)} columns of inDF will be taken
@@ -32,9 +32,11 @@ ENDTIME data values. If the temporal measurements are performed over an interval
 contain the time for the start and end of intervals respectively. If the temporal measurements are performed over
 a time-instance, then \code{endTime==TIME}. If \code{endTime} is not provided, inDF columns are searched to match
 ENDTIME. If none found, then it is assumed that data are time-instance measurements. For more information, see the
- documentation of \code{\pkg{spacetime}}.}
+ documentation of \pkg{spacetime}.}
 
 \item{header}{\code{SpcHeader} object containing metadata}
+
+\item{...}{other input arguments to be passedto}
 }
 \value{
 Returns an object of class \code{Spectra}.
@@ -50,7 +52,7 @@ that is the construtor of the \code{STIDF} class using an input \code{data.frame
 }
 \examples{
 fnm = file.path(base::system.file(package = "Spectral"),"test_data","particulate_absorption.csv.gz")
-abs = read.table(fnm,sep=",",header=T)
+abs = read.table(fnm,sep=",",header=TRUE)
 abs$STATION=factor(abs$STATION)
 abs[1:2,1:17] #Display only the first 2 rows and first 17 columns if the data frame
 lbd = as.numeric(gsub("X","",colnames(abs)[14:514]))
