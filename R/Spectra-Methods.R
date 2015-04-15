@@ -1331,10 +1331,43 @@ spc.import.text = function(filename,sep=";",...){
   options(warn=myWarn)
   return(header)
 }
-#########################################################################
-# Method : spc.export.xlsx
-#########################################################################
-#spc.export.xlsx(out.Rrs[[5]]@Rrs,"test.xlsx")
+
+#' Exports a \code{Spectra} object into Excel format.
+#'
+#'@description
+#' Exorts a \code{Spectra} object into Excel format.
+#' 
+#' @param sheetName The \code{Spectra} object to be output.
+#' @param writeheader A boolean, indicating whether or not the metadata (contents of the 
+#' slot \code{header}) is to be included in the excel file. Default : TRUE
+#' @param append A boolean, indicating whether or not to append the contents of the \code{Spectra} object
+#' into the existing file. Default : FALSE (overwrites the existing Excel file if it exists.)
+#' @param sep Not used.
+#' @param ... Not used.
+#' 
+#'@details
+#' \code{spc.export.xlsx()} calls functions from package \code{xlsx} to write the contents of 
+#' a \code{Spectra} object into an Excel file.
+#' 
+#' @return None. Simply creates an Excel file on disk.
+#'
+#' @examples
+#' fnm = file.path(base::system.file(package = "Spectral"), "test_data","particulate_absorption.csv.gz")
+#' abs = read.table(fnm,sep=",",header=T)
+#' abs$STATION=factor(abs$STATION)
+#' abs[1:2,1:17] #Display only the first 2 rows and first 17 columns if the data frame
+#' lbd = as.numeric(gsub("X","",colnames(abs)[14:514]))
+#' Units="1/m"
+#' colnames(abs)= gsub("X",paste("anap","_",sep=""), colnames(abs))
+#' colnames(abs)= gsub("PRES","DEPTH", colnames(abs))
+#' abs = abs[,c(14:514,1:13)] #Rearrange so that Spectra columns come first
+#' tz<-strsplit(as.character(abs$TIME)," ")[[1]][[3]] #Extract the timezone
+#' abs$TIME = as.POSIXct(as.character(abs$TIME),tz=tz) #Compute the time
+#' 
+#' #Space and time columns are automatically found in the column names of inDF
+#' myS<-Spectra(abs,Wavelengths=lbd,Units=Units,ShortName="a_nap")
+#' 
+#' spc.export.xlsx(myS,"test.xlsx")
 setGeneric(name="spc.export.xlsx",
            def=function(input,filename,sheetName,writeheader=TRUE,append=F,sep=";",...) {standardGeneric("spc.export.xlsx")})
 setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,filename,sheetName,writeheader,append,sep,...){
