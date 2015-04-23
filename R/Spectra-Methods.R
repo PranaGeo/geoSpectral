@@ -868,6 +868,7 @@ setGeneric (name="spc.setheader<-",
             def=function(object,value,...){standardGeneric("spc.setheader<-")})
 setReplaceMethod(f="spc.setheader", signature="Spectra",
                  definition=function(object,value,...){
+                   stopifnot(class(value)!="BiooHeader")
                    object@header<-value
                    validObject(object)
                    return(object)
