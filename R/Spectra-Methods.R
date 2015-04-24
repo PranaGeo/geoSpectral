@@ -1036,30 +1036,18 @@ setMethod("[", signature(x = "Spectra"), function(x, i, j) {
   } else{
     x@data = x@data[i,j,drop=F]				
   }
+  x@sp = x@sp[i]
+  x@time = x@time[i]
+  
   if (length(x@InvalidIdx)>1)
     x@InvalidIdx = x@InvalidIdx[i] 
   
-  x@SelectedIdx = logical()			
+  x@SelectedIdx = logical()
+  validObject(x)
   return(x)
 })
 
-#setMethod("[", signature=c("Spectra","numeric","missing"), function(x, i, j, ...) {
-#			x@data<-x@data[i,]
-#			x@sp<-x@sp[i,]
-#			x@time<-x@time[i]
-#			x@endTime<-x@endTime[i]
-#			ttemp = x@Spectra[i,]
-#			if(class(ttemp)!="matrix")
-#				ttemp = t(as.matrix(ttemp))
-#			x@Spectra = ttemp
-#			
-#			if(length(x@InvalidIdx)>0)
-#				x@InvalidIdx = x@InvalidIdx[i]
-#			if(length(x@SelectedIdx)>0)
-#				x@SelectedIdx = x@SelectedIdx[i]
-#			validObject(x)
-#			return(x)
-#		})
+
 #########################################################################
 # Method : [[
 #########################################################################
@@ -1089,7 +1077,7 @@ setMethod("[[", signature=c("Spectra","character","missing"),
               Boutput = Boutput[[1]]
               names(Boutput)<-NULL				
             }
-            
+            validObject(Boutput)            
             return(Boutput)
           })
 setReplaceMethod("[[",  signature=c("Spectra","character","missing"), definition=function(x, i, j, value) {
