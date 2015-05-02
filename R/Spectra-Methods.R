@@ -793,20 +793,20 @@ setMethod("spc.colMeans", signature("Spectra"),function (object) {
   #Computes the mean along the rows of Spectra (@Spectra). The method finds the measurement
   #closest in time to the mean time and keeps the spatial/time attributes as well as Ancillary
   #data table (@data) associated to that measurement as that of the mean spectra
-  x@Spectra <- t(as.matrix(colMeans(x@Spectra)))
-  #			x@data <- as.data.frame(t(callGeneric(x@data)))
+  object@Spectra <- t(as.matrix(colMeans(object@Spectra)))
+  #			object@data <- as.data.frame(t(callGeneric(object@data)))
   #Find the mean time
-  meantime <- xts(1,mean(time(x@time)),tzone=attr(x@time,"tzone"))
+  meantime <- xts(1,mean(time(object@time)),tzone=attr(object@time,"tzone"))
   #Find the row index closer in time to meantime
-  min.idx = which.min(abs(as.numeric(time(meantime)-time(x@time))))
-  x@sp <- x@sp[min.idx]
-  x@time <-x@time[min.idx]
-  x@data <- x@data[min.idx,,F]
-  x@endTime <- mean(x@endTime)
-  x@InvalidIdx <- logical()
-  x@SelectedIdx <- logical()
-  validObject(x)
-  return(x)
+  min.idx = which.min(abs(as.numeric(time(meantime)-time(object@time))))
+  object@sp <- object@sp[min.idx]
+  object@time <-object@time[min.idx]
+  object@data <- object@data[min.idx,,F]
+  object@endTime <- mean(object@endTime)
+  object@InvalidIdx <- logical()
+  object@SelectedIdx <- logical()
+  validObject(object)
+  return(object)
 })
 
 #Constructs a rectangle of sp::Lines using the bounding box of a Spatial object
@@ -868,7 +868,7 @@ setGeneric (name="spc.setheader<-",
             def=function(object,value,...){standardGeneric("spc.setheader<-")})
 setReplaceMethod(f="spc.setheader", signature="Spectra",
                  definition=function(object,value,...){
-                   stopifnot(class(value)!="BiooHeader")
+                   stopifnot(class(value)=="BiooHeader")
                    object@header<-value
                    validObject(object)
                    return(object)
@@ -1037,7 +1037,8 @@ setMethod("[", signature(x = "Spectra"), function(x, i, j) {
     x@data = x@data[i,j,drop=F]				
   }
   x@sp = x@sp[i]
-  x@time = x@time[i]
+  x@time = x@time[i,]
+  x@endTime = x@endTime[i]
   
   if (length(x@InvalidIdx)>1)
     x@InvalidIdx = x@InvalidIdx[i] 
