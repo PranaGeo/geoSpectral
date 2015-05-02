@@ -1037,7 +1037,7 @@ setMethod("[", signature(x = "Spectra"), function(x, i, j) {
     x@data = x@data[i,j,drop=F]				
   }
   x@sp = x@sp[i]
-  x@time = x@time[i]
+  x@time = x@time[i,]
   x@endTime = x@endTime[i]
   
   if (length(x@InvalidIdx)>1)
