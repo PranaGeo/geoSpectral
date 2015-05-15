@@ -264,6 +264,11 @@ setMethod("names", signature = "Spectra",
             #				return(names(x@data)) 
           })
 
+setGeneric("endTime",function(x){standardGeneric("endTime")})
+setMethod("endTime", signature = "Spectra", def = function (x){  
+  return(x@endTime)
+})
+
 #########################################################################
 # Method : head
 #########################################################################
