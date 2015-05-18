@@ -8,7 +8,7 @@ Spectra(inDF, Spectra, Wavelengths, Units, space, time, endTime, header, ...)
 }
 \arguments{
 \item{inDF}{a long-format \code{data.frame} containing LAT,LON and TIME columns as well as Ancillary data.
-See \code{"\link{stConstruct}"} for more information on long DF format.}
+See \code{\link{stConstruct}} for more information on long DF format.}
 
 \item{Spectra}{\code{matrix} containing spectral data. Channels are in columns, observations are in rows.
 If \code{Spectra} is missing, the first \code{length(Wavelengths)} columns of inDF will be taken

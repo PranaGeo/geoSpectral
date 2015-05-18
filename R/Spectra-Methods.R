@@ -54,6 +54,24 @@
 #' myS<-Spectra(abs,Wavelengths=lbd, space=c("LONG","LAT"), time="TIME",Units=Units,ShortName="a_nap")
 Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...){
   longcol="";latcol="";timecol=""
+  
+  #Extract Wavelengths from data frame columns
+  if(missing(Wavelengths)){
+    Wavelengths = attr(inDF,"Wavelengths")
+    lbd.idx = !is.na(Wavelengths)
+    Wavelengths = Wavelengths[lbd.idx]
+    
+    #Extract Spectra from data frame columns
+    if(missing(Spectra)){
+      Spectra = as.matrix(inDF[,lbd.idx])  	
+    }
+  }
+  #Extract Spectra from data frame columns
+  if(missing(Spectra)){
+    Spectra = as.matrix(inDF[,1:length(Wavelengths)])
+    inDF = cbind(data.frame(idx=1:nrow(inDF)), inDF[,-(1:length(Wavelengths))])
+  }
+  
   if(missing(space)){
     if ("LAT" %in% names(inDF))
       latcol = "LAT"
@@ -86,7 +104,7 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
       latcol="LAT"
       warning("Could not find a latitude column named either of: lat,LAT,latitude,LATITUDE. Assigning LAT=1.0 to all rows")
     }
-    space=c(longcol,latcol)
+    space=c( which(longcol==names(inDF)), which(latcol==names(inDF)))    
   }
   if(missing(time)){
     if ("time" %in% names(inDF))
@@ -107,24 +125,6 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
       endTime = inDF[,time]
     }
   }
-  
-  #Extract Wavelengths from data frame columns
-  if(missing(Wavelengths)){
-    Wavelengths = attr(inDF,"Wavelengths")
-    lbd.idx = !is.na(Wavelengths)
-    Wavelengths = Wavelengths[lbd.idx]
-    
-    #Extract Spectra from data frame columns
-    if(missing(Spectra)){
-      Spectra = as.matrix(inDF[,lbd.idx])  	
-    }
-  }
-  #Extract Spectra from data frame columns
-  if(missing(Spectra)){
-    Spectra = as.matrix(inDF[,1:length(Wavelengths)])
-    inDF = cbind(data.frame(idx=1:nrow(inDF)), inDF[,-(1:length(Wavelengths))])
-  }
-  
   if(missing(Units)){
     #Extract Units
     Units = attr(inDF,"Units")[1]
@@ -133,7 +133,7 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
     #Extract Units
     header = new("BiooHeader")
   }
-  
+
   #First construct a STIDF object using stConstruct()
   out = stConstruct(x=inDF,space=space,time=time,endTime=endTime)
   
