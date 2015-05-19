@@ -156,8 +156,8 @@ setAs(from="Spectra", to="data.frame", def=function(from){
   if(length(delidx)>0)
     output = output[,-delidx[!is.na(delidx)]]
   
-  output$LON = from@sp@coords[,"LONG"]
-  output$LAT = from@sp@coords[,"LAT"]
+  output$LON = from@sp@coords[,1]
+  output$LAT = from@sp@coords[,2]
   output$TIME=as.POSIXct(time(from@time))
   output$ENDTIME=from@endTime
   
