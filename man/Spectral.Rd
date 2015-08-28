@@ -29,8 +29,8 @@ Servet Cizmeli <sa.cizmeli@usherbrooke.ca>
 There is a tutorial for \pkg{Spectral} at the package GitHub page: \url{https://github.com/PranaGeo/Spectral/wiki/RPackage_Spectral_Tutorial}.
 }
 \seealso{
-See also the packages \code{\pkg{spacetime}}, \code{\pkg{rgdal}},
-\code{\pkg{sp}}, \code{\pkg{xts}}
+See also the packages \pkg{spacetime}, \pkg{rgdal},
+\pkg{sp}, \pkg{xts}
 }
 \concept{
 Spectral Wavelength
