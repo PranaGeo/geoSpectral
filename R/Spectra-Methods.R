@@ -312,7 +312,7 @@ setMethod("show", "Spectra", function(object){
             "Wavelengths : ", length(object@Wavelengths), "channels with units of",object@WavelengthsUnit,  LbdStr, head(object@Wavelengths)," ...\n",
             "Spectra Columns: ", head(colnames(object@Spectra)), "...\n",
             "Ancillary Columns: ", head(names(object@data)),"...\n",
-            "Bounding box:", "LON(",format(bbx[1,],digits = 7),") LAT(",format(bbx[1,],digits = 7),")\n",
+            "Bounding box:", "LON(",format(bbx[1,],digits = 7),") LAT(",format(bbx[2,],digits = 7),")\n",
             timestr, "\n")
   if(length(object@Wavelengths)==1)
     Str = gsub("channels","channel",Str)
