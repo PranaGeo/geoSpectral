@@ -96,8 +96,8 @@ setValidity("Spectra", function(object){
 			if(!all(is.finite(object@Wavelengths))){
 				return("All the wavelengths should be numeric and finite")
 			}
-			if(any(diff(object@Wavelengths)<=0)){
-				return("Wavelength values should be increasing and be without replicates.")
+			if (anyDuplicated(object@Wavelengths)!=0) {
+				return("Wavelength values should be without replicates.")
 			}
 			if(nrow(object@data)!=0){
 				if(nrow(object@data)!=nrow(object@Spectra)){

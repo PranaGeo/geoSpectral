@@ -393,8 +393,12 @@ setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="
   if(class(YY)=="matrix" && nrow(YY)!=length(x@Wavelengths))
     YY = t(YY)
   
+  xlim = range(x@Wavelengths)
+  if (x@WavelengthsUnit=="cm-1")
+      xlim = rev(xlim)
+  
   matplot(x@Wavelengths,YY,#lab=x@Wavelengths,#xaxt="n",
-          ylab= "",xlab="",type=type, pch=pch,cex=cex,cex.axis=lab_cex,lwd=lwd,...)
+          ylab= "",xlab="",type=type,xlim=xlim,pch=pch,cex=cex,cex.axis=lab_cex,lwd=lwd,...)
   
   if(missing(ylab)){
     if(1)#(x@LongName[1]=="spvar2 longname")
