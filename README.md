@@ -10,7 +10,7 @@ The package is issued with a [GPLv3](http://www.gnu.org/copyleft/gpl.html) licen
 ##Requirements
 **geoSpectral** depends on the R packages *rgdal*, *spacetime* and *xlsx*. You need to install them before you can install **geoSpectral**. If you don't have them already, try :
 ```
-install.packages(c("rgdal","spacetime","xlsx"),dep=T)
+install.packages(c("rgdal","spacetime"),dep=T)
 ```
 
 ##Installation
