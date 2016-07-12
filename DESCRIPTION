@@ -1,17 +1,29 @@
-Package: Spectral
+Package: geoSpectral
 Type: Package
 Title: Classes and methods for spectral (optical) data
 Version: 0.1
 Date: 2012-07-02
-Depends: R (>= 2.10.0), methods, rgdal, spacetime
+Depends:
+    R (>= 2.10.0),
+    methods,
+    rgdal,
+    spacetime
 Author: Servet Cizmeli
-Maintainer: Servet Cizmeli <sac@arctus.ca>
-Description: This package provides S4 classes and basic manipulation methods for datasets 
-		frequently used in remote sensing, bio-optical oceanography and environmental and 
-		earth sciences. The package is based on the data type called Spectra which extends
-		the STIDF class of package spacetime. Spatial/temporal and spectral aspects 
-		of Bio-Optical data that are regularly collected during Bio-Optical oceanography
-		campaigns can be easily represented with the Spectra class.
+Maintainer: Servet Cizmeli <ahmet@pranageo.com>
+Description: This package provides S4 classes and basic manipulation methods
+    for datasets frequently used in remote sensing, bio-optical oceanography and
+    environmental and earth sciences. The package is based on the data type called
+    Spectra which extends the STIDF class of package spacetime. Spatial/temporal and
+    spectral aspects of Bio-Optical data that are regularly collected during Bio-
+    Optical oceanography campaigns can be easily represented with the Spectra class.
 License: GPL
 LazyLoad: yes
-Collate: SpcHeader-Class.R SpcHeader-Methods.R Spectra-Class.R Spectra-Methods.R SpcList-Class.R SpcList-Methods.R Spectral.R
+Collate:
+    SpcHeader-Class.R
+    SpcHeader-Methods.R
+    Spectra-Class.R
+    Spectra-Methods.R
+    SpcList-Class.R
+    SpcList-Methods.R
+    geoSpectral.R
+RoxygenNote: 5.0.1
