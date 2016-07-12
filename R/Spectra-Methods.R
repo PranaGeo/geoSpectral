@@ -498,7 +498,7 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...,compressHeader
           }
         if(class(myslot)[1]=="xts"){
           slot(outt,sltn[J])<-c(slot(outt,sltn[J]),myslot)
-          slot(outt,sltn[J])<-xts(1:length(slot(outt,sltn[J])),time(slot(outt,sltn[J])))
+          slot(outt,sltn[J])<-xts::xts(1:length(slot(outt,sltn[J])),time(slot(outt,sltn[J])))
         }	
         if(class(myslot)[1]=="SpatialPoints"){
           prj = slot(outt,sltn[J])@proj4string
