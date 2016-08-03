@@ -171,7 +171,7 @@ setAs(from="Spectra", to="data.frame", def=function(from){
   return(output)
 })
 setAs(from="data.frame", to="Spectra", def=function(from){
-  #This function makes use of Spectral::Spectra()
+  #This function makes use of geoSpectral::Spectra()
   if(!any(grepl("Wavelengths", names(attributes(from))))) 
     stop("The required data.frame attribute was not found : Wavelengths")
   
@@ -225,7 +225,7 @@ setAs(from="data.frame", to="Spectra", def=function(from){
   }else{
     endTime = from$ENDTIME
   }
-  outS =Spectral::Spectra(data,Spectra,Wavelengths,Units=Units,
+  outS =geoSpectral::Spectra(data,Spectra,Wavelengths,Units=Units,
                           header=header,ShortName=ShortName,LongName=LongName)
   #			outS = new("Spectra", time = TIME, endTime = endTime,
   #					Spectra=Spectra, data=data,
