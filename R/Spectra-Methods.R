@@ -1485,7 +1485,9 @@ setGeneric (name= "spc.select",
             def=function(object){standardGeneric("spc.select")})
 setMethod("spc.select", signature = "Spectra", 
           def = function (object){
-            #Extract the existing selection Index
+            print("Click on graph to select Spectra, click Esc to quit ")
+            
+             #Extract the existing selection Index
             if(length(object@SelectedIdx)>0)
               ExSel = object@SelectedIdx
             else
