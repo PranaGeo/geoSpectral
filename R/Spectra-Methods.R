@@ -35,7 +35,8 @@
 #' @return Returns an object of class \code{Spectra}.
 #'
 #' @examples
-#' fnm = file.path(base::system.file(package = "geoSpectral"),"test_data","particulate_absorption.csv.gz")
+#' fnm = file.path(base::system.file(package = "geo
+#' Spectral"),"test_data","particulate_absorption.csv.gz")
 #' abs = read.table(fnm,sep=",",header=TRUE)
 #' abs$STATION=factor(abs$STATION)
 #' abs[1:2,1:17] #Display only the first 2 rows and first 17 columns if the data frame
@@ -257,6 +258,28 @@ setMethod("dim", signature = "Spectra",
 #########################################################################
 # Method : ncol
 #########################################################################
+#' The Number of Columns  of a Spectra object
+#'
+#'@description
+#' \code{nrow} and \code{ncol} return the number of rows or columns present in a Spectra object 
+#'  
+#'    
+#'
+#' 
+#' 
+#' @usage 
+#'  
+#' nrow(x)
+#'
+#' @param  x a Spectra object 
+#'
+#' @examples
+#' x <- spc.example_spectra() 
+#' ncol(x)  #501 
+#' nrow(x)  #26
+#' 
+#' 
+#' 
 setMethod("ncol", signature = "Spectra", 
           def = function (x){  return(ncol(x@Spectra))  })
 ########################################################################
