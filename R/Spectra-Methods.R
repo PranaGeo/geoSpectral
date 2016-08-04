@@ -24,7 +24,7 @@
 #' ENDTIME. If none found, then it is assumed that data are time-instance measurements. For more information, see the
 #'  documentation of \pkg{spacetime}.
 #' @param header \code{SpcHeader} object containing metadata
-#' @param ... other input arguments to be passedto 
+#' @param ... other input arguments to be passed to the new() function 
 #' 
 #'@details
 #' This constructor function uses The function \code{Spectra()} calls \code{spacetime::stConstruct()}
