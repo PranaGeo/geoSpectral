@@ -36,7 +36,7 @@ ENDTIME. If none found, then it is assumed that data are time-instance measureme
 
 \item{header}{\code{SpcHeader} object containing metadata}
 
-\item{...}{other input arguments to be passedto}
+\item{...}{other input arguments to be passed to the new() function}
 }
 \value{
 Returns an object of class \code{Spectra}.

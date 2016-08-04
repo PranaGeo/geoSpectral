@@ -236,9 +236,20 @@ setAs(from="data.frame", to="Spectra", def=function(from){
   return(outS)
 })
 
-#########################################################################
-# Method : dim
-#########################################################################
+#' Dimensions of a \code{Spectra} object.
+#'
+#'@description
+#' \code{Spectra} Creates an instance of class \code{Spectra}.
+#'
+#' @param x  a \code{Spectra} objectlong-format \code{data.frame} 
+#' 
+#'@details
+#' This 
+#' 
+#' @return Returns a numeric vector containing \code{nrow} and \code{ncol} of the \code{Spectra} object.
+#'
+#' @examples
+#' fnm = file.path(base::system.file(package = "Spectral"),"test_data","particulate_absorption.csv.gz")
 setMethod("dim", signature = "Spectra", 
           def = function (x){
             return(dim(x@Spectra))  
@@ -1753,3 +1764,4 @@ setMethod("spc.plot.depth", signature="Spectra", function (object,X,maxSp=10,lab
     return(0)
   }
 })
+
