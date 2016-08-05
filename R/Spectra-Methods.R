@@ -785,6 +785,22 @@ setMethod("spc.rbind", signature = "STIDF", def = function (...){
 #########################################################################
 # Method : spc.getwavelengths
 #########################################################################
+#' Getting wave lenghts in a spectral object
+#'
+#'@description
+#'Function get wave lenghts insade of  a spectral object
+#'
+#'@usage 
+#' spc.getwavelengths(...)
+#'
+#' @param ... spectra object
+#' 
+#' 
+#'
+#' @examples
+#'  x <- spc.example_spectra()
+#'  spc.getwavelengths(x)
+#' 
 setGeneric (name= "spc.getwavelengths",
             def=function(object){standardGeneric("spc.getwavelengths")})
 setMethod("spc.getwavelengths", signature = "Spectra", 
