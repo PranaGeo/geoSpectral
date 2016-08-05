@@ -510,6 +510,23 @@ setReplaceMethod("spc.colnames", signature = "Spectra", def = function (x,value)
 #########################################################################
 # Method : spc.plot
 #########################################################################
+#'  Plotting spectra object
+#'
+#'@description
+#' Generating plot of the contents of a spectra object
+#'
+#' 
+#' @usage 
+#' spc.plot(x,...)
+#' @param x	 a spectral data 
+#' 
+#'
+#' @examples
+#' x <- spc.example_spectra()
+#' spc.plot(x)
+#' 
+#' 
+
 setGeneric("spc.plot",function(x,Y,...){standardGeneric("spc.plot")})
 setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="l",
                                            pch=19,lwd=2,cex=0.3,...){						
