@@ -526,7 +526,6 @@ setReplaceMethod("spc.colnames", signature = "Spectra", def = function (x,value)
 #' spc.plot(x)
 #' 
 #' 
-
 setGeneric("spc.plot",function(x,Y,...){standardGeneric("spc.plot")})
 setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="l",
                                            pch=19,lwd=2,cex=0.3,...){						
@@ -588,6 +587,21 @@ setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="
 #########################################################################
 # Method : spc.lines
 #########################################################################
+#'  Add Connected Line Segments to a Plot
+#'
+#'@description
+#' A spectral function taking coordinates given in various ways and joining the corresponding points with line segments.
+#'
+#' 
+#' @usage 
+#' spc.lines(x,...)
+#' @param x	 a spectral vector of points to join plot
+#' 
+#'
+#' 
+
+
+
 setGeneric("spc.lines",function(x,...){standardGeneric("spc.lines")})
 setMethod("spc.lines",signature = "Spectra",definition = function(x,...){
   a=sapply(1:nrow(x@Spectra), function(S) {
