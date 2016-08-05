@@ -311,6 +311,25 @@ setMethod("nrow", signature = "Spectra",
 #########################################################################
 # Method : names
 #########################################################################
+#' The Names of a Spectra object
+#'
+#'@description
+#'  Function to get or set the names of a Spectra object 
+#'  
+#'@usage 
+#'  
+#' names(x)
+#'
+#'@param  x a Spectra object 
+#'@param  value	a character vector of up to the same length as x, or NULL.
+#'
+#'@examples
+#' 
+#' x <- spc.example_spectra() 
+#' names(x)
+#' 
+#' 
+#' 
 setMethod("names", signature = "Spectra", 
           def = function (x){ 
             #			if(ncol(x@data)>1)
