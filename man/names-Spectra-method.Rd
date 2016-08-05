@@ -9,11 +9,9 @@ names(x)
 }
 \arguments{
 \item{x}{a Spectra object}
-
-\item{value}{a character vector of up to the same length as x, or NULL.}
 }
 \description{
-Function to get or set the names of a Spectra object
+Function to get  the names of a Spectra object
 }
 \examples{
 
