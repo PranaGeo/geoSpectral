@@ -285,6 +285,27 @@ setMethod("ncol", signature = "Spectra",
 ########################################################################
 # Method : nrow
 #########################################################################
+#' The Number of rows  of a Spectra object
+#'
+#'@description
+#' \code{nrow} and \code{ncol} return the number of rows or columns present in a Spectra object 
+#'  
+#'    
+#'
+#' 
+#' 
+#' @usage 
+#'  
+#' ncol(x)
+#'
+#' @param  x a Spectra object 
+#'
+#' @examples
+#' x <- spc.example_spectra() 
+#' ncol(x)  #501 
+#' nrow(x)  #26
+#' 
+#' 
 setMethod("nrow", signature = "Spectra", 
           def = function (x){  return(nrow(x@Spectra))  })
 #########################################################################
