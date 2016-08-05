@@ -369,6 +369,26 @@ setMethod("head", signature = "Spectra",
 #########################################################################
 # Method : show
 #########################################################################
+#' Show a spectra object
+#'
+#'@description
+#' Display the objects, by printing,plotting and so on. 
+#'This function will be invoked for automatic pirinting
+#' @usage 
+#' show(x)
+#' 
+#' @param x a spectral object 
+#' @return  show returns an invisible \code{NULL}
+#'
+#' 
+#' 
+#'
+#' @examples
+#' x <- spc.example_spectra()
+#' show(x)
+#' 
+#' 
+#' 
 setMethod("show", "Spectra", function(object){
   if(ncol(object)==0){
     LongName = character()
