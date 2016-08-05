@@ -479,6 +479,23 @@ setReplaceMethod("$", signature = "Spectra",
 #########################################################################
 # Method : spc.colnames
 #########################################################################
+#' Column names
+#'
+#'@description
+#' Retrieve  column names of a matrix-like spectra object.
+#'
+#' 
+#' @usage 
+#' spc.colnames(x)
+#' @param x  a matrix-like spectra object, with at least two dimensions for colnames.
+#' 
+#' @return Returns the names of an object of class \code{Spectra}.
+#'
+#' @examples
+#' x <- spc.example_spectra()
+#' spc.colnames(x)
+#' 
+#' 
 setGeneric("spc.colnames",function(x,Y,...){standardGeneric("spc.colnames")})
 setMethod("spc.colnames", signature = "Spectra", 
           def = function (x){ return(colnames(x@Spectra)) })
