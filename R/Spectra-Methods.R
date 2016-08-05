@@ -611,6 +611,27 @@ setMethod("spc.lines",signature = "Spectra",definition = function(x,...){
 #########################################################################
 # Method : spc.rbind
 #########################################################################
+#' Combine spectra Objects by Rows
+#'
+#'@description
+#'Take a spectral objects and combine by rows
+#'
+#'@usage 
+#' spc.cbind(...)
+#' spc.rbind(...)
+#'
+#' @param ... spectra object
+#' 
+#' 
+#'
+#' @examples
+#' x <- spc.example_spectra()
+#'nrow(x)  #[1] 26
+#'x2 <- spc.rbind(x,x)
+#'nrow(x2)  #[1] 52
+#' 
+#' 
+#' 
 #compressHeader=T Compress the header (make multiple all-equal header elements as ONE	
 setGeneric (name= "spc.rbind",def=function(...){standardGeneric("spc.rbind")})
 setMethod("spc.rbind", signature = "Spectra", def = function (...,compressHeader=T){
