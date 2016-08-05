@@ -346,6 +346,24 @@ setMethod("endTime", signature = "Spectra", def = function (x){
 #########################################################################
 # Method : head
 #########################################################################
+#' Return the first or last part of a Spectra object
+#'
+#'@description
+#' Return the first or last parts of a spectral object such as vector, matrix, table, data frame.
+#'
+#' @param  x a specrtal object
+#' @param ... arguments to be passed to or from other methods 
+#'  
+#' 
+#' @usage 
+#' head(x)
+#' @return Returns an object of class \code{Spectra}.
+#'
+#' @examples
+#' x <- spc.example_spectra()
+#' head(x)
+#' 
+#'  
 setMethod("head", signature = "Spectra", 
           def = function (x){  return(head(x@Spectra)) })
 #########################################################################
