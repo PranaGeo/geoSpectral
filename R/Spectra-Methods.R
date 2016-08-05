@@ -434,6 +434,28 @@ setMethod("show", "Spectra", function(object){
 #########################################################################
 # Method : $
 #########################################################################
+# use  help("$,Spectra-method") to get code
+#' Extract or replace parts of a spectra object
+#'
+#'@description
+#' Operators acting on  spectral objects such as vectors, matrices, arrays and lists to extract or replace parts
+#' 
+#' @usage 
+#'  x[i] <- spc.example_spectra()
+#' x[i, j, ...] <- spc.example_spectra()
+#' x[[i]] <- spc.example_spectra()
+#' x$i <- spc.example_spectra()
+#'
+#' 
+#' @param Spectra object from which to extract element(s) or in which to replace element(s)
+#' 
+#' 
+#'
+#' @examples
+#'  
+#'  
+#' 
+#' 
 setMethod("$", signature="Spectra",
           function(x, name) {
             if (name %in% colnames(x@Spectra)){
