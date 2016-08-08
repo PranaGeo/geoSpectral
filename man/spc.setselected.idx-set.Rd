@@ -12,6 +12,6 @@ spc.setselected.idx(x,value)
 \item{x}{spectra object}
 }
 \description{
-Function set or change  index inside of  a spectra object and show it
+Function set or change  index inside of  a spectra object
 }
 

@@ -10,6 +10,6 @@ spc.getselected.idx(x)
 \item{x}{spectra object}
 }
 \description{
-Function extracts index selected insade of a spectra object and show it
+Function extracts index selected insade of a spectra object
 }
 

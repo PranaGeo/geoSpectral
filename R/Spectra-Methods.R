@@ -1272,7 +1272,7 @@ setReplaceMethod(f="spc.updateheader", signature="Spectra",
 #########################################################################
 #' Extract index inside of a spectra object
 #' @description
-#' Function extracts index selected insade of a spectra object and show it 
+#' Function extracts index selected insade of a spectra object  
 #'
 #'@usage 
 #' spc.getselected.idx(x)
@@ -1293,8 +1293,7 @@ setMethod("spc.getselected.idx", signature = "Spectra",
 #########################################################################
 #' Set index to a spectra object
 #' @description
-#' Function set or change  index inside of  a spectra object and show it 
-#'
+#' Function set or change  index inside of  a spectra object 
 #' @usage 
 #' spc.setselected.idx(x,value)
 #'
@@ -1303,13 +1302,7 @@ setMethod("spc.getselected.idx", signature = "Spectra",
 #' @param x spectra object 
 #' @param value index for spectra object
 #' 
-#' @example 
-#' x <- spc.example_spectra()
-#' idx=rep(FALSE,nrow(x)); 
-#' idx[1:5]=TRUE
-#' spc.setselected.idx(x)<-idx 
-#' spc.setinvalid.idx(x)<-spc.getselected.idx(x)
-#' spc.plot(x)
+#' 
 #' 
 #' 
 setGeneric("spc.setselected.idx<-",function(object,value)
@@ -1340,6 +1333,20 @@ setMethod("spc.getinvalid.idx", signature = "Spectra",
 #########################################################################
 # Method : spc.setinvalid.idx
 #########################################################################
+#' Set the selected spectra as invalid
+#' @description
+#' Function  stores the indexes as invaild variable
+#'
+#' @usage 
+#' spc.setinvalid.idx(x)
+#'
+#' 
+#' 
+#' @param x spectra object 
+#' 
+#' 
+#
+#' 
 setGeneric("spc.setinvalid.idx<-",function(object,value)
 {standardGeneric("spc.setinvalid.idx<-")})
 setReplaceMethod(f="spc.setinvalid.idx", signature="Spectra",
