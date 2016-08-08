@@ -1324,6 +1324,19 @@ setReplaceMethod(f="spc.setselected.idx", signature="Spectra",
 #########################################################################
 # Method : spc.getinvalid.idx
 #########################################################################
+#' Get the selected spectra as invalid
+#' @description
+#' Function  extract the indexes stored as invaild variable
+#'
+#' @usage 
+#' spc.getinvalid.idx(x)
+#'
+#' 
+#' 
+#' @param x spectra object 
+#' 
+#' 
+#
 setGeneric (name= "spc.getinvalid.idx",
             def=function(object){standardGeneric("spc.getinvalid.idx")})
 setMethod("spc.getinvalid.idx", signature = "Spectra", 
