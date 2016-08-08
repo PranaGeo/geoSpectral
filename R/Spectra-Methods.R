@@ -1303,6 +1303,15 @@ setMethod("spc.getselected.idx", signature = "Spectra",
 #' @param x spectra object 
 #' @param value index for spectra object
 #' 
+#' @example 
+#' x <- spc.example_spectra()
+#' idx=rep(FALSE,nrow(x)); 
+#' idx[1:5]=TRUE
+#' spc.setselected.idx(x)<-idx 
+#' spc.setinvalid.idx(x)<-spc.getselected.idx(x)
+#' spc.plot(x)
+#' 
+#' 
 setGeneric("spc.setselected.idx<-",function(object,value)
 {standardGeneric("spc.setselected.idx<-")})
 setReplaceMethod(f="spc.setselected.idx", signature="Spectra",
