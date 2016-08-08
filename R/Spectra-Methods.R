@@ -1719,6 +1719,18 @@ setMethod("spc.export.text", signature="BiooHeader", definition=function(input,f
 #########################################################################
 # Method : spc.import.text
 #########################################################################
+#' Importing  text into R
+#' @description
+#' Texts can be imported back into R with this function 
+#'
+#' @usage 
+#' spc.import.text(...)
+#' 
+#' 
+#'
+#' 
+#' @param ... name of text
+#' 
 spc.import.text = function(filename,sep=";",...){
   myT = readLines(con=filename)
   
