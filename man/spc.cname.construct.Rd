@@ -4,7 +4,7 @@
 \alias{spc.cname.construct}
 \title{Generating column names for a spectra object}
 \usage{
-spc.cname(...)
+spc.cname.construct(...)
 }
 \arguments{
 \item{...}{spectra object}
