@@ -1462,7 +1462,8 @@ setMethod("spc.header2data", signature = "Spectra",
 #' These operators are generic. You can write methods to handle indexing of specific classes of objects
 #' 
 #' 
-#' 
+#' @rdname 
+#' [[
 #' 
 #' 
 #' 
