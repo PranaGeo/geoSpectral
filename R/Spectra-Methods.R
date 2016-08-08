@@ -1184,6 +1184,19 @@ setMethod("spc.invalid.detect", signature = "Spectra", def=function(source1){
 #########################################################################
 # Method : spc.getheader
 #########################################################################
+#' Extract the first or last part of column of named of a Spectra object
+#' @description
+#' Function extracts the first or last part of column acording to mentioned name insade of  a Spectra object 
+#'
+#'@usage 
+#' spc.getheader(x,name)
+#'
+#' @rdname spc.getheader
+#' 
+#' @param x spectra object 
+#' @param name name of spactra object
+#' 
+#' 
 setGeneric (name= "spc.getheader",
             def=function(object,name){standardGeneric("spc.getheader")})
 setMethod("spc.getheader", signature = "Spectra", 
