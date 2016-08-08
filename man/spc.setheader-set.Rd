@@ -14,6 +14,6 @@ spc.setheader(x,name,...)
 \item{name}{name of spactra object}
 }
 \description{
-Function sets or changes the first or last part of column acording to mentioned name insade of  a spectra object
+Function sets or changes the first or last part of column acording to mentioned name in  a spectra object
 }
 

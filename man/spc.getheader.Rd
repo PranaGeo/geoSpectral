@@ -12,6 +12,6 @@ spc.getheader(x,name)
 \item{x}{spectra object}
 }
 \description{
-Function extracts the first or last part of column acording to mentioned name insade of  a spectra object
+Function extracts the first or last part of column acording to mentioned name in  a spectra object
 }
 
