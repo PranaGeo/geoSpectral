@@ -860,6 +860,20 @@ setReplaceMethod(f="spc.setwavelengths", signature="Spectra",
 #########################################################################
 # Method : spc.cname.construct
 #########################################################################
+#' Generating column names for a spectra object
+#' @description
+#'Function for a spectra object generates column names and it is combination of shortName  and Wavelenght
+#'
+#'@usage 
+#' spc.cname(...)
+#'
+#'
+#' @param ... spectra object
+#' 
+#' 
+#' 
+#' 
+#'
 #generating colmn names for a spectra object + combination of @shortName @Wavelenght
 setGeneric("spc.cname.construct",function(object,value)
 {standardGeneric("spc.cname.construct")})
