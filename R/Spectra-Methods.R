@@ -1398,8 +1398,8 @@ setReplaceMethod(f="spc.setinvalid.idx", signature="Spectra",
 #'we can compress the column (taking only the first element from data column into the header.
 #' 
 #' 
-#' 
-#' 
+#' @rdname 
+#' spc.data2header
 #' 
 #' 
 #' 
