@@ -887,6 +887,31 @@ setMethod(f="spc.cname.construct", signature="Spectra",
 #########################################################################
 #spc.make.stindex 
 #########################################################################
+#' Extracting an element of spectral objects and returning the first and last measurements
+#' @description
+#'Take an element of spectral objects and outputs one STIDF object.
+#'Returning the first and last measurements of the input list element acrording to a time interval depending of the input argument
+#'
+#'@usage 
+#' spc.make.stindex (...,value)
+#'
+#'
+#' @param ...  spectra object
+#' @param value  outputs one STIDF object
+#' 
+#' @details 
+#' Takes a n-element list of Spectra objects and outputs one STIDF object. Each row 
+#' of the ST object has a time interval depending of the input argument rowSimplify.
+#' rowSimplify : "none", "spc.colMeans","firstRow" or "lastRow"
+#' none: length of the output object equals the sum of all rows of all elements of the input list object
+#' spc.colMeans: length of the output object equals the number of rows of the input list object. 
+#' This option returns the measurement nearest to the average time of the input list element
+#' firstRow and lastRow : length of the output object equals the number of rows of the input list object.
+#' These two options return the first and last measurements of the input list element
+#' 
+#' 
+#' 
+#' 
 #Takes a n-element list of Spectra objects and outputs one STIDF object. Each row 
 #of the ST object has a time interval depending of the input argument rowSimplify.
 #rowSimplify : "none", "spc.colMeans","firstRow" or "lastRow"
