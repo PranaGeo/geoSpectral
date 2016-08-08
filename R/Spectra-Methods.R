@@ -735,6 +735,26 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...,compressHeader
 #########################################################################
 # Method : spc.rbind
 #########################################################################
+#' Combine spectra Objects by Rows
+#'
+#'@description
+#'Take a spectral objects and combine by rows
+#'
+#'@usage 
+#' spc.cbind(...)
+#' spc.rbind(...)
+#'
+#' @param ... spectra object
+#' 
+#' 
+#'
+#' @examples
+#' x <- spc.example_spectra()
+#'nrow(x)  #[1] 26
+#'x2 <- spc.rbind(x,x)
+#'nrow(x2)  #[1] 52
+#' 
+#' 
 setMethod("spc.rbind", signature = "STIDF", def = function (...){
   #Create the output variable
   outt = ..1
@@ -821,6 +841,7 @@ setReplaceMethod(f="spc.setwavelengths", signature="Spectra",
 #########################################################################
 # Method : spc.cname.construct
 #########################################################################
+#generating colmn names for a spectra object + combination of @shortName @Wavelenght
 setGeneric("spc.cname.construct",function(object,value)
 {standardGeneric("spc.cname.construct")})
 setMethod(f="spc.cname.construct", signature="Spectra",
