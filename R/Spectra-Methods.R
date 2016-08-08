@@ -1191,7 +1191,7 @@ setMethod("spc.invalid.detect", signature = "Spectra", def=function(source1){
 #'@usage 
 #' spc.getheader(x,name)
 #'
-#' @rdname spc.getheader
+#' 
 #' 
 #' @param x spectra object 
 #' @param name name of spactra object
@@ -1217,6 +1217,19 @@ setMethod("spc.getheader", signature = "Spectra",
 #########################################################################
 # Method : spc.setheader
 #########################################################################
+#' Set the first or last part of column of named of a Spectra object
+#' @description
+#' Function sets or changes the first or last part of column acording to mentioned name insade of  a Spectra object 
+#'
+#'@usage 
+#' spc.setheader(x,name,...)
+#'
+#' 
+#' 
+#' @param x spectra object 
+#' @param name name of spactra object
+#' @param ... new elements of spectra object 
+#' 
 setGeneric (name="spc.setheader<-",
             def=function(object,value,...){standardGeneric("spc.setheader<-")})
 setReplaceMethod(f="spc.setheader", signature="Spectra",
