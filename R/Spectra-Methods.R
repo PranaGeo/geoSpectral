@@ -1445,6 +1445,27 @@ setMethod("spc.header2data", signature = "Spectra",
 #########################################################################
 # Method : [
 #########################################################################
+#' Extract or replace parts of a spectra object
+#' @description
+#' Operators acting on spectra object and spectra lists to extract or replace parts.
+#'
+#' @usage 
+#' x[i]
+#' 
+#'
+#' 
+#' @paramx x  object from which to extract element(s) or in which to replace element(s). 
+#' 
+#' 
+#'  
+#' @details 
+#' These operators are generic. You can write methods to handle indexing of specific classes of objects
+#' 
+#' 
+#' 
+#' 
+#' 
+#' 
 setMethod("[", signature(x = "Spectra"), function(x, i, j) {
   OUT_ANC = 0
   if(missing(i))
