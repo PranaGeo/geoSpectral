@@ -993,7 +993,6 @@ spc.make.stindex = function(input,what2include="",rowSimplify="none",
 #method="over" uses the simple over technique. Same as of spacetime::timeMatch().  
 #method="nearest" finds the nearest measurement. Matches only one data for all elements of master
 #method="within" finds the measurements that are within the interval limits=c(upper,lower) (in seconds)
-
 #setGeneric("spc.timeMatch",function(master,searched,returnList=FALSE,method="over",limits,report=FALSE)
 #		{standardGeneric("spc.timeMatch")})
 #setMethod(f="spc.timeMatch", signature=c("Spectra","Spectra"),
@@ -1035,6 +1034,24 @@ spc.timeMatch = function(master,searched,returnList=FALSE,method="over",limits,r
 #searched to the corresponding row of the STI-inherited object master. Outputs 
 #a data.frame, with two columns : time2master ("difftime", in seconds) and 
 #distance2master ("numeric", in meters) 
+#' Reports the space and time distance of each row of the STI-inherited object
+#' @description
+#'Function for a spectra object reports the space and time distance of each row of the STI-inherited object
+#'searched to the corresponding row of the STI-inherited object master
+#'
+#'@usage 
+#' spc.STI.stdistance(...,searched)
+#'
+#'
+#' @param ...  STI-inherited object master
+#' @param searched      a data.frame
+#' 
+#' @details 
+#' Reports the space and time distance of each row of the STI-inherited object
+#' searched to the corresponding row of the STI-inherited object master. Outputs 
+#' a data.frame, with two columns : time2master ("difftime", in seconds) and 
+#' distance2master ("numeric", in meters) 
+#' 
 spc.STI.stdistance = function(master,searched,report=F){
   stopifnot(length(master)==length(searched))
   
