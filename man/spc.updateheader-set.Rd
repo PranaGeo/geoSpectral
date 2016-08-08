@@ -2,18 +2,22 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.updateheader<-}
 \alias{spc.updateheader<-}
-\title{Update the first or last part of column of named of a spectra object}
+\title{Update a field of the @header slot of a spectra object}
 \usage{
-spc.updateheader(x,name,...)
+spc.updateheader(x,name)<-value
 }
 \arguments{
-\item{...}{new elements of spectra object}
+\item{x}{spectra objec}
 
-\item{x}{spectra object}
-
-\item{name}{name of spactra object}
+\item{name}{of the header field to be updated}
 }
 \description{
-Function updates or changes the first or last part of column acording to mentioned name in  a spectra object
+updates or changes the value of a field in the header slot of spectra object
+}
+\examples{
+sp=spc.example_spectra()
+sp@header
+spc.updateheader(sp,"Station")<-11
+sp@header
 }
 

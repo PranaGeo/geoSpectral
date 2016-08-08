@@ -1090,21 +1090,23 @@ setMethod("spc.plot2", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type=
 #########################################################################
 # Method : Arith
 #########################################################################
-#' Group Generic Functions 
+#' Apply arithmetic operations on/between Spectra objects
 #' @description
-#' Function takes out of a spectra objects from one to another one or from spectra object to numeric objects 
+#' Methods definig Arithmetic operations between two Spectra objects e1 and e2 or one
+#' Spectra object e1 and a numeric value.
 #'
 #'@usage 
-#' Arith(x, ...)
+#' Arith(e1, e2)
+#' e1 * e2
+#' e1 + 0.5
 #'
-#' @rdname Arith
-#' @param ... spectra or numeric objec
-#' @param x spectra object 
+#' @param e1 spectra object 
+#' @param e2 spectra object 
 #' 
 #' @details 
-#' Constructs a rectangle of sp::Lines using the bounding box of a Spatial object
+#' These methods allow performing arithmetic operations involving Spectra objects.
 #' 
-#'
+#' @seealso \code{\link{Arith}}
 setMethod("Arith", signature(e1 = "Spectra", e2 = "Spectra"),function (e1, e2) {
   result <- callGeneric(e1@Spectra, e2@Spectra)
   output = e1
@@ -1123,6 +1125,7 @@ setMethod("Arith", signature(e1 = "Spectra", e2 = "numeric"),function (e1, e2) {
   validObject(output)
   return(output)
 })
+
 setMethod("Math", signature("Spectra"),function (x) {
   x@Spectra <- callGeneric(x@Spectra)
   validObject(x)
@@ -1243,23 +1246,24 @@ setReplaceMethod(f="spc.setheader", signature="Spectra",
 #########################################################################
 # Method : spc.updateheader
 #########################################################################
-#' Update the first or last part of column of named of a spectra object
+#' Update a field of the @header slot of a spectra object
 #' @description
-#' Function updates or changes the first or last part of column acording to mentioned name in  a spectra object 
+#'  updates or changes the value of a field in the header slot of spectra object 
 #'
-#'@usage 
-#' spc.updateheader(x,name,...)
+#' @usage 
+#' spc.updateheader(x,name)<-value
 #'
-#' 
-#' 
-#' @param x spectra object 
-#' @param name name of spactra object
-#' @param ... new elements of spectra object 
-#' 
+#' @param x spectra objec 
+#' @param name of the header field to be updated
+#' @examples 
+#' sp=spc.example_spectra()
+#' sp@header
+#' spc.updateheader(sp,"Station")<-11
+#' sp@header
 setGeneric (name="spc.updateheader<-",
             def=function(object,Name,value,...){standardGeneric("spc.updateheader<-")})
 setReplaceMethod(f="spc.updateheader", signature="Spectra",
-                 definition=function(object,Name,value,...){
+                 definition=function(object,Name,value){
                    hdr=spc.getheader(object)
                    hdr[[Name]]=value
                    spc.setheader(object)<-hdr
@@ -1272,8 +1276,8 @@ setReplaceMethod(f="spc.updateheader", signature="Spectra",
 #########################################################################
 #' Extract index inside of a spectra object
 #' @description
-#' Function extracts index selected insade of a spectra object  
-#'
+#' extracts index of rows marked as selected
+#' 
 #'@usage 
 #' spc.getselected.idx(x)
 #'
@@ -1293,7 +1297,7 @@ setMethod("spc.getselected.idx", signature = "Spectra",
 #########################################################################
 #' Set index to a spectra object
 #' @description
-#' Function set or change  index inside of  a spectra object 
+#' Function set or change selection row index of a spectra object 
 #' @usage 
 #' spc.setselected.idx(x,value)
 #'
@@ -1454,7 +1458,7 @@ setMethod("spc.header2data", signature = "Spectra",
 #' 
 #'
 #' 
-#' @paramx x  object from which to extract element(s) or in which to replace element(s). 
+#' @param x  object from which to extract element(s) or in which to replace element(s). 
 #' 
 #' 
 #'  
