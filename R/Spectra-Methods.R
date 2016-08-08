@@ -1379,6 +1379,32 @@ setReplaceMethod(f="spc.setinvalid.idx", signature="Spectra",
 #########################################################################
 # Method : spc.data2header
 #########################################################################
+#' Set or cahenge data in header
+#' @description
+#' Function  populates  the header of each element  with a column
+#'
+#' @usage 
+#' spc.data2header(x,headerfield,dataname, compress )
+#'
+#' 
+#' @param dataname list spectra object
+#' @param x spectra object 
+#' @param compress true or false
+#' @param headerfield  data column
+#' 
+#' @details 
+#' The function  can be used to populate  the header of each element  with a column.
+#'Since we are certain that all the columns of all individuals elements are the same,
+#'we can compress the column (taking only the first element from data column into the header.
+#' 
+#' 
+#' 
+#' 
+#' 
+#' 
+#' 
+#' 
+#' 
 setGeneric(name= "spc.data2header",
            def=function(object,headerfield,dataname,compress,...){standardGeneric("spc.data2header")})
 setMethod("spc.data2header", signature = "Spectra", 
