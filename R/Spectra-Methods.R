@@ -830,6 +830,25 @@ setMethod("spc.getwavelengths", signature = "Spectra",
 #########################################################################
 # Method : spc.setwavelengths
 #########################################################################
+#' Setting wavelenghts in a spectral object
+#'
+#'@description
+#'Function  to change or set wavelenghts insade of  a spectral object
+#'
+#'@usage 
+#' spc.setwavelengths(...)
+#'
+#'
+#' @param ... spectra object
+#' 
+#' 
+#' 
+#' 
+#'
+#' @examples
+#'  x <- spc.example_spectra()
+#'  spc.setwavelengths(x) <- 300:800
+#'  show(x)
 setGeneric("spc.setwavelengths<-",function(object,value)
 {standardGeneric("spc.setwavelengths<-")})
 setReplaceMethod(f="spc.setwavelengths", signature="Spectra",
