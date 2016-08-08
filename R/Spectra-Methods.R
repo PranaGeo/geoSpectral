@@ -1907,6 +1907,24 @@ setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,file
 #########################################################################
 # Method : subset
 #########################################################################
+#' Subsetting for spectra and spcList classes
+#' @description
+#' Subsetting can be achieved using the implementation of the R function subset() for Spectra and SpcList classes
+#'It is possible to perform a row-wise selection
+#'
+#' @usage 
+#' subset(x,y,select)
+#' 
+#' 
+#'
+#' 
+#' @param x spectra object 
+#' @param y subset
+#' @param  select condition selected
+#' 
+#' 
+#' 
+#' 
 setMethod("subset",  signature="Spectra",
           definition=function(x, subset, select, drop = FALSE, ...) {
             if (missing(subset)) 
