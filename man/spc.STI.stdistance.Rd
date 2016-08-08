@@ -2,7 +2,7 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.STI.stdistance}
 \alias{spc.STI.stdistance}
-\title{Reports the space and time distance of each row of the STI-inherited object}
+\title{Report the space and time distance of each row of the STI-inherited object}
 \usage{
 spc.STI.stdistance(...,searched)
 }

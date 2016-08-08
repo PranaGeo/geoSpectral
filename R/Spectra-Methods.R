@@ -1034,7 +1034,7 @@ spc.timeMatch = function(master,searched,returnList=FALSE,method="over",limits,r
 #searched to the corresponding row of the STI-inherited object master. Outputs 
 #a data.frame, with two columns : time2master ("difftime", in seconds) and 
 #distance2master ("numeric", in meters) 
-#' Reports the space and time distance of each row of the STI-inherited object
+#' Report the space and time distance of each row of the STI-inherited object
 #' @description
 #'Function for a spectra object reports the space and time distance of each row of the STI-inherited object
 #'searched to the corresponding row of the STI-inherited object master
@@ -1090,6 +1090,21 @@ setMethod("spc.plot2", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type=
 #########################################################################
 # Method : Arith
 #########################################################################
+#' Group Generic Functions 
+#' @description
+#' Function takes out of a spectra objects from one to another one or from spectra object to numeric objects 
+#'
+#'@usage 
+#' Arith(x, ...)
+#'
+#' @rdname Arith
+#' @param ... spectra or numeric objec
+#' @param x spectra object 
+#' 
+#' @details 
+#' Constructs a rectangle of sp::Lines using the bounding box of a Spatial object
+#' 
+#'
 setMethod("Arith", signature(e1 = "Spectra", e2 = "Spectra"),function (e1, e2) {
   result <- callGeneric(e1@Spectra, e2@Spectra)
   output = e1
