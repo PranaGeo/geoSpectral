@@ -1184,9 +1184,9 @@ setMethod("spc.invalid.detect", signature = "Spectra", def=function(source1){
 #########################################################################
 # Method : spc.getheader
 #########################################################################
-#' Extract the first or last part of column of named of a Spectra object
+#' Extract the first or last part of column of named of a spectra object
 #' @description
-#' Function extracts the first or last part of column acording to mentioned name insade of  a Spectra object 
+#' Function extracts the first or last part of column acording to mentioned name insade of  a spectra object 
 #'
 #'@usage 
 #' spc.getheader(x,name)
@@ -1217,9 +1217,9 @@ setMethod("spc.getheader", signature = "Spectra",
 #########################################################################
 # Method : spc.setheader
 #########################################################################
-#' Set the first or last part of column of named of a Spectra object
+#' Set the first or last part of column of named of a spectra object
 #' @description
-#' Function sets or changes the first or last part of column acording to mentioned name insade of  a Spectra object 
+#' Function sets or changes the first or last part of column acording to mentioned name insade of  a spectra object 
 #'
 #'@usage 
 #' spc.setheader(x,name,...)
@@ -1243,9 +1243,9 @@ setReplaceMethod(f="spc.setheader", signature="Spectra",
 #########################################################################
 # Method : spc.updateheader
 #########################################################################
-#' Update the first or last part of column of named of a Spectra object
+#' Update the first or last part of column of named of a spectra object
 #' @description
-#' Function updates or changes the first or last part of column acording to mentioned name insade of  a Spectra object 
+#' Function updates or changes the first or last part of column acording to mentioned name insade of  a spectra object 
 #'
 #'@usage 
 #' spc.updateheader(x,name,...)
@@ -1270,6 +1270,18 @@ setReplaceMethod(f="spc.updateheader", signature="Spectra",
 #########################################################################
 # Method : spc.getselected.idx
 #########################################################################
+#' Extract index insade of a spectra object
+#' @description
+#' Function extracts index selected insade of a spectra object and show it 
+#'
+#'@usage 
+#' spc.getselected.idx(x,name,...)
+#'
+#' 
+#' 
+#' @param x spectra object 
+#' 
+#' 
 setGeneric (name= "spc.getselected.idx",
             def=function(object){standardGeneric("spc.getselected.idx")})
 setMethod("spc.getselected.idx", signature = "Spectra", 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.updateheader<-}
 \alias{spc.updateheader<-}
-\title{Update the first or last part of column of named of a Spectra object}
+\title{Update the first or last part of column of named of a spectra object}
 \usage{
 spc.updateheader(x,name,...)
 }
@@ -14,6 +14,6 @@ spc.updateheader(x,name,...)
 \item{name}{name of spactra object}
 }
 \description{
-Function updates or changes the first or last part of column acording to mentioned name insade of  a Spectra object
+Function updates or changes the first or last part of column acording to mentioned name insade of  a spectra object
 }
 

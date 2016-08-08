@@ -2,7 +2,7 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.setheader<-}
 \alias{spc.setheader<-}
-\title{Set the first or last part of column of named of a Spectra object}
+\title{Set the first or last part of column of named of a spectra object}
 \usage{
 spc.setheader(x,name,...)
 }
@@ -14,6 +14,6 @@ spc.setheader(x,name,...)
 \item{name}{name of spactra object}
 }
 \description{
-Function sets or changes the first or last part of column acording to mentioned name insade of  a Spectra object
+Function sets or changes the first or last part of column acording to mentioned name insade of  a spectra object
 }
 
