@@ -1641,6 +1641,18 @@ setMethod("spc.interp.spectral", signature = "Spectra",
 #########################################################################
 # Method : spc.export.text
 #########################################################################
+#' Exporting into text format
+#' @description
+#' Save the spectra object on disk and Text files can be  saved with  this function 
+#'
+#' @usage 
+#' spc.export.text(x,filename)
+#' 
+#'
+#' 
+#' @param x  a spectra object 
+#' @param  filename text name  
+#' 
 #spc.export.text(out.Rrs[[5]]@Rrs,"test.txt")
 #aa=spc.import.text("test.txt")
 #dev.new();spc.plot(aa)
