@@ -1243,6 +1243,19 @@ setReplaceMethod(f="spc.setheader", signature="Spectra",
 #########################################################################
 # Method : spc.updateheader
 #########################################################################
+#' Update the first or last part of column of named of a Spectra object
+#' @description
+#' Function updates or changes the first or last part of column acording to mentioned name insade of  a Spectra object 
+#'
+#'@usage 
+#' spc.updateheader(x,name,...)
+#'
+#' 
+#' 
+#' @param x spectra object 
+#' @param name name of spactra object
+#' @param ... new elements of spectra object 
+#' 
 setGeneric (name="spc.updateheader<-",
             def=function(object,Name,value,...){standardGeneric("spc.updateheader<-")})
 setReplaceMethod(f="spc.updateheader", signature="Spectra",
