@@ -2,16 +2,23 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.getheader}
 \alias{spc.getheader}
-\title{Extract the first or last part of column of named of a spectra object}
+\title{Extract a field of the @header slot of a spectra object}
 \usage{
 spc.getheader(x,name)
 }
 \arguments{
-\item{name}{name of spactra object}
+\item{name}{of the header field to be extracted}
 
 \item{x}{spectra object}
 }
 \description{
-Function extracts the first or last part of column acording to mentioned name in  a spectra object
+Function extracts the value of a field in the header slot of spectra object
+}
+\examples{
+sp=spc.example_spectra()
+sp@header
+spc.getheader(sp,"Latitude")
+
+
 }
 
