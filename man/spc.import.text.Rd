@@ -13,8 +13,8 @@ spc.import.text(...)
 Texts can be imported back into R with this function
 }
 \examples{
-
-
-
+spc.export.text(x,filename="anap.txt")
+aa=spc.import.text("anap.txt")
+spc.plot(aa)
 }
 

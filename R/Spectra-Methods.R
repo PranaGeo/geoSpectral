@@ -1751,9 +1751,9 @@ setMethod("spc.export.text", signature="BiooHeader", definition=function(input,f
 #' @param ... name of text
 #' 
 #' @examples 
-#' 
-#' 
-#' 
+#' spc.export.text(x,filename="anap.txt")
+#' aa=spc.import.text("anap.txt")
+#' spc.plot(aa)
 spc.import.text = function(filename,sep=";",...){
   myT = readLines(con=filename)
   
