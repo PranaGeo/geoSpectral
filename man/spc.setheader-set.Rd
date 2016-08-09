@@ -2,18 +2,16 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.setheader<-}
 \alias{spc.setheader<-}
-\title{Set the first or last part of column of named of a spectra object}
+\title{Set a field of the @header slot of a spectra object}
 \usage{
-spc.setheader(x,name,...)
+spc.setheader(x,name)<-value
 }
 \arguments{
-\item{...}{new elements of spectra object}
-
 \item{x}{spectra object}
 
-\item{name}{name of spactra object}
+\item{name}{of the header field to be setted}
 }
 \description{
-Function sets or changes the first or last part of column acording to mentioned name in  a spectra object
+Function sets or changes the value of a field in the header slot of spectra object
 }
 

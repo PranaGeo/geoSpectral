@@ -1220,18 +1220,20 @@ setMethod("spc.getheader", signature = "Spectra",
 #########################################################################
 # Method : spc.setheader
 #########################################################################
-#' Set the first or last part of column of named of a spectra object
+#' Set a field of the @header slot of a spectra object
 #' @description
-#' Function sets or changes the first or last part of column acording to mentioned name in  a spectra object 
+#' Function sets or changes the value of a field in the header slot of spectra object
 #'
 #'@usage 
-#' spc.setheader(x,name,...)
+#' spc.setheader(x,name)<-value
 #'
 #' 
 #' 
 #' @param x spectra object 
-#' @param name name of spactra object
-#' @param ... new elements of spectra object 
+#' @param name of the header field to be setted
+#' 
+#' 
+#' 
 #' 
 setGeneric (name="spc.setheader<-",
             def=function(object,value,...){standardGeneric("spc.setheader<-")})
