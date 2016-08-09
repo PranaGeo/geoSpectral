@@ -14,4 +14,10 @@ spc.export.text(x,filename)
 \description{
 Save the spectra object on disk and Text files can be  saved with  this function
 }
+\examples{
+spc.export.text(x,filename="anap.txt")
+aa=spc.import.text("anap.txt")
+dev.new()
+spc.plot(aa)
+}
 

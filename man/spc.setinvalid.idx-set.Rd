@@ -12,13 +12,4 @@ spc.setinvalid.idx(x)
 \description{
 Function  stores the indexes as invaild variable
 }
-\examples{
-x <- spc.example_spectra()
-idx=rep(FALSE,nrow(x)); 
-idx[1:5]=TRUE
-spc.setselected.idx(x)<-idx 
-spc.plot(x)
-
-
-}
 

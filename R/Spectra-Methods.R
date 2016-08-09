@@ -1313,6 +1313,12 @@ setMethod("spc.getselected.idx", signature = "Spectra",
 #' @param x spectra object 
 #' @param value index for spectra object
 #' 
+#' @examples 
+#' x <- spc.example_spectra()
+#' idx=rep(FALSE,nrow(x)); 
+#' idx[1:5]=TRUE
+#' spc.setselected.idx(x)<-idx 
+#' spc.plot(x)
 #' 
 #' 
 #' 
@@ -1367,12 +1373,6 @@ setMethod("spc.getinvalid.idx", signature = "Spectra",
 #' 
 #' 
 #' @param x spectra object 
-#' @examples 
-#' x <- spc.example_spectra()
-#' idx=rep(FALSE,nrow(x)); 
-#' idx[1:5]=TRUE
-#' spc.setselected.idx(x)<-idx 
-#' spc.plot(x)
 #' 
 #
 #' 
@@ -1666,10 +1666,15 @@ setMethod("spc.interp.spectral", signature = "Spectra",
 #' 
 #' @param x  a spectra object 
 #' @param  filename text name  
-#' 
+#' @examples 
+#' spc.export.text(x,filename="anap.txt")
+#' aa=spc.import.text("anap.txt")
+#' dev.new()
+#' spc.plot(aa)
 #spc.export.text(out.Rrs[[5]]@Rrs,"test.txt")
-#aa=spc.import.text("test.txt")
-#dev.new();spc.plot(aa)
+#   aa=spc.import.text("test.txt")
+#dev.new()
+# spc.plot(aa)
 setGeneric(name="spc.export.text",
            def=function(input,filename,writeheader=TRUE,sep=";",...) {standardGeneric("spc.export.text")})
 setMethod("spc.export.text", signature="Spectra", definition=function(input,filename,writeheader,sep,...){
