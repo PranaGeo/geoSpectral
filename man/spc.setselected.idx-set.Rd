@@ -14,4 +14,14 @@ spc.setselected.idx(x,value)
 \description{
 Function set or change selection row index of a spectra object
 }
+\examples{
+x <- spc.example_spectra()
+idx=rep(FALSE,nrow(x)); 
+idx[1:5]=TRUE
+spc.setselected.idx(x)<-idx 
+spc.plot(x)
+
+
+
+}
 

@@ -12,4 +12,9 @@ spc.import.text(...)
 \description{
 Texts can be imported back into R with this function
 }
+\examples{
+
+
+
+}
 

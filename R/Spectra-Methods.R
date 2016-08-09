@@ -1367,7 +1367,12 @@ setMethod("spc.getinvalid.idx", signature = "Spectra",
 #' 
 #' 
 #' @param x spectra object 
-#' 
+#' @examples 
+#' x <- spc.example_spectra()
+#' idx=rep(FALSE,nrow(x)); 
+#' idx[1:5]=TRUE
+#' spc.setselected.idx(x)<-idx 
+#' spc.plot(x)
 #' 
 #
 #' 
@@ -1473,8 +1478,6 @@ setMethod("spc.header2data", signature = "Spectra",
 #' These operators are generic. You can write methods to handle indexing of specific classes of objects
 #' 
 #' 
-#' @rdname 
-#' [[
 #' 
 #' 
 #' 
@@ -1741,6 +1744,10 @@ setMethod("spc.export.text", signature="BiooHeader", definition=function(input,f
 #'
 #' 
 #' @param ... name of text
+#' 
+#' @examples 
+#' 
+#' 
 #' 
 spc.import.text = function(filename,sep=";",...){
   myT = readLines(con=filename)
