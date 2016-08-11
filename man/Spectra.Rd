@@ -36,7 +36,7 @@ ENDTIME. If none found, then it is assumed that data are time-instance measureme
 
 \item{header}{\code{SpcHeader} object containing metadata}
 
-\item{...}{other input arguments to be passedto}
+\item{...}{other input arguments to be passed to the new() function}
 }
 \value{
 Returns an object of class \code{Spectra}.
@@ -51,7 +51,8 @@ that is the construtor of the \code{STIDF} class using an input \code{data.frame
 \code{length{@Wavelengths}==ncol(@Spectra)}. The default @WavelengthsUnit is nm^{-1}.
 }
 \examples{
-fnm = file.path(base::system.file(package = "Spectral"),"test_data","particulate_absorption.csv.gz")
+fnm = file.path(base::system.file(package = "geo
+Spectral"),"test_data","particulate_absorption.csv.gz")
 abs = read.table(fnm,sep=",",header=TRUE)
 abs$STATION=factor(abs$STATION)
 abs[1:2,1:17] #Display only the first 2 rows and first 17 columns if the data frame

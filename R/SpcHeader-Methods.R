@@ -66,6 +66,24 @@ setMethod("biooHeaderAdd", signature="BiooHeader", function(object,Name,Value){
 #########################################################################
 # Method : show	
 #########################################################################
+#' Show a spectra object
+#' @description
+#' Display the object, by printing, plotting 
+#'
+#' @usage 
+#' show(object)
+#' 
+#' 
+#'
+#' 
+#' @param  object of spectra 
+#' @seealso http://127.0.0.1:41556/help/library/methods/help/showMethods
+#' 
+#' @examples 
+#' x=spc.example_spectra()
+#' show(x)
+#' 
+#' 
 setMethod("show", signature="BiooHeader", function(object){
 			fieldnames = names(object)
 			sapply(1:length(fieldnames), function(x) cat(paste(fieldnames[x], " : ", 

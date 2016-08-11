@@ -5,6 +5,29 @@
 #########################################################################
 # Class : Spectra
 #########################################################################
+#' Create a spectra class definition
+#' @description
+#' Create a spectra class definition, specifying the representation (the slots) and/or the classes contained in this one (the superclasses),
+#' plus other optional details. As a side effect, the class definition is stored in the specified environment
+#'
+#' @usage 
+#' setClass(class, contains,pepresentation,prototype)
+#' 
+#' 
+#'
+#' 
+#' @param  contains STIDF 
+#' @param class  character string name for the class.
+#' @param  pepresentation avoided
+#' @param  prototype n object providing the default data for the slots in this class
+#' 
+#' 
+#' 
+#' 
+#' 
+#' 
+#' 
+#' 
 setClass("Spectra", contains="STIDF", 
 		representation=representation(
 				ShortName="character",
