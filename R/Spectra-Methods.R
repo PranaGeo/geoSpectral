@@ -584,6 +584,22 @@ setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="
   abline(h=0)
   grid(col="black")
 })
+
+#'sp = spc.example_spectra()
+#'spc.plot.plotly(sp)
+spc.plot.plotly = function(sp){
+  
+  library(reshape2)
+  
+  lbd = spc.getwavelengths(sp)
+  kk = data.frame(Wavelength=lbd,t(sp@Spectra))
+  kk=melt(kk,id.vars=1)
+  p <- plot_ly(kk, x=~Wavelength, y=~value, type="scatter", mode="lines",color = ~variable,
+               colors="Spectral", opacity=0.5, line=list(width = 1)) #,evaluate = FALSE) #, colors=pal,line = list(opacity=0.1))
+  p
+}
+
+
 #########################################################################
 # Method : spc.lines
 #########################################################################
