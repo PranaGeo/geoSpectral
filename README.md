@@ -20,7 +20,7 @@ require(devtools)
 install_github("PranaGeo/geoSpectral")
 ```
 ##Usage
-The R code documentation is very incomplete. Sorry. After installing the package, you can try from the R prompt : ```?geoSpectral``` to consult the brief documentation of the package or ```?Spectra``` to  see the help of the constructor function the main class : *Spectra()*.
+After installing the package, you can try from the R prompt : ```?geoSpectral``` to consult the brief documentation of the package or ```?Spectra``` to  see the help of the constructor function the main class : *Spectra()*.
 
 You can view the documentation [wiki](https://github.com/PranaGeo/geoSpectral/wiki) to learn how to use the package. 
 
