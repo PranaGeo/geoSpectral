@@ -8,15 +8,13 @@
 head(x)
 }
 \arguments{
-\item{x}{a specrtal object}
-
-\item{...}{arguments to be passed to or from other methods}
+\item{x}{a specrta object}
 }
 \value{
-Returns an object of class \code{Spectra}.
+Returns a matrix (Spectral data)
 }
 \description{
-Return the first or last parts of a spectral object such as vector, matrix, table, data frame.
+Return the first or last parts of a spectral object
 }
 \examples{
 x <- spc.example_spectra()

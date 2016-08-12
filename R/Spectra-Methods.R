@@ -316,8 +316,7 @@ setMethod("nrow", signature = "Spectra",
 #'@description
 #'  Function to get  the names of a Spectra object 
 #'  
-#'@usage 
-#'  
+#' @usage 
 #' names(x)
 #'
 #'@param  x  a Spectra object
@@ -350,15 +349,15 @@ setMethod("endTime", signature = "Spectra", def = function (x){
 #' Return the first or last part of a Spectra object
 #'
 #'@description
-#' Return the first or last parts of a spectral object such as vector, matrix, table, data frame.
+#' Return the first or last parts of a spectral object 
 #'
-#' @param  x a specrtal object
-#' @param ... arguments to be passed to or from other methods 
+#' @param  x a specrta object
+#' 
 #'  
 #' 
 #' @usage 
 #' head(x)
-#' @return Returns an object of class \code{Spectra}.
+#' @return Returns a matrix (Spectral data)
 #'
 #' @examples
 #' x <- spc.example_spectra()
