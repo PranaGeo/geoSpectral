@@ -10,6 +10,6 @@ spc.getselected.idx(x)
 \item{x}{spectra object}
 }
 \description{
-extracts index of rows marked as selected
+Extracts index of rows marked as selected
 }
 

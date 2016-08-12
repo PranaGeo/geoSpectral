@@ -1299,7 +1299,7 @@ setReplaceMethod(f="spc.updateheader", signature="Spectra",
 #########################################################################
 #' Extract index inside of a spectra object
 #' @description
-#' extracts index of rows marked as selected
+#' Extracts index of rows marked as selected
 #' 
 #'@usage 
 #' spc.getselected.idx(x)
