@@ -369,14 +369,15 @@ setMethod("head", signature = "Spectra",
 #########################################################################
 # Method : show
 #########################################################################
-#' Show a spectra object
+#' Show a Spectra object
 #'
 #'@description
-#' Display the objects, by printing,plotting and so on. 
-#'This function will be invoked for automatic pirinting
+#' Display a Spectra object 
+#'
 #' @usage 
 #' show(x)
-#' 
+#' # or 
+#' x
 #' @param x a spectral object 
 #' @return  show returns an invisible \code{NULL}
 #'
