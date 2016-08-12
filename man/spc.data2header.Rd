@@ -16,7 +16,7 @@ spc.data2header(x,headerfield,dataname, compress )
 \item{x}{spectra object}
 }
 \description{
-Function  populates  the header of each element  with a column
+Populates  the header of each element  with a column
 }
 \details{
 The function  can be used to populate  the header of each element  with a column.

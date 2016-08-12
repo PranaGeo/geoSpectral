@@ -1413,7 +1413,7 @@ setReplaceMethod(f="spc.setinvalid.idx", signature="Spectra",
 #########################################################################
 #' Set or cahenge data in header
 #' @description
-#' Function  populates  the header of each element  with a column
+#' Populates  the header of each element  with a column
 #'
 #' @usage 
 #' spc.data2header(x,headerfield,dataname, compress )
