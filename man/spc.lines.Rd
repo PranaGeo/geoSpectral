@@ -10,6 +10,6 @@ spc.lines(x,...)
 \item{x}{a spectral vector of points to join plot}
 }
 \description{
-A spectral function taking coordinates given in various ways and joining the corresponding points with line segments.
+sTaking coordinates given in various ways and joining the corresponding points with line segments.
 }
 
