@@ -11,7 +11,7 @@ names(x)
 \item{x}{a Spectra object}
 }
 \description{
-Function to get  the names of a Spectra object
+Retrieve  the names of a Spectra object
 }
 \examples{
 
