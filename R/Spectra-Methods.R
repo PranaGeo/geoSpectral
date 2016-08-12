@@ -1381,7 +1381,7 @@ setMethod("spc.getinvalid.idx", signature = "Spectra",
 #########################################################################
 #' Set the selected spectra as invalid
 #' @description
-#' Function  stores the indexes as invaild variable
+#' Stores the indexes as invaild variable
 #'
 #' @usage 
 #' spc.setinvalid.idx(x)

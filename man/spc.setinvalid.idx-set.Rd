@@ -10,6 +10,6 @@ spc.setinvalid.idx(x)
 \item{x}{spectra object}
 }
 \description{
-Function  stores the indexes as invaild variable
+Stores the indexes as invaild variable
 }
 
