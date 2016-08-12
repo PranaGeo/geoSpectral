@@ -1320,7 +1320,7 @@ setMethod("spc.getselected.idx", signature = "Spectra",
 #########################################################################
 #' Set index to a spectra object
 #' @description
-#' Function set or change selection row index of a spectra object 
+#' Set or change selection row index of a spectra object 
 #' @usage 
 #' spc.setselected.idx(x,value)
 #'
