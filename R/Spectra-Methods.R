@@ -606,7 +606,7 @@ spc.plot.plotly = function(sp){
 #'  Add Connected Line Segments to a Plot
 #'
 #'@description
-#' A spectral function taking coordinates given in various ways and joining the corresponding points with line segments.
+#' Taking coordinates given in various ways and joining the corresponding points with line segments.
 #'
 #' 
 #' @usage 
