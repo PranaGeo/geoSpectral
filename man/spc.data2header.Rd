@@ -2,7 +2,7 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.data2header}
 \alias{spc.data2header}
-\title{Set or cahenge data in header}
+\title{Set or chenge data in header}
 \usage{
 spc.data2header(x,headerfield,dataname, compress )
 }
