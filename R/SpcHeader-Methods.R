@@ -66,9 +66,9 @@ setMethod("biooHeaderAdd", signature="BiooHeader", function(object,Name,Value){
 #########################################################################
 # Method : show	
 #########################################################################
-#' Show a spectra object
+#' Show a bioo object
 #' @description
-#' Display the object, by printing, plotting 
+#' Display  bioo object
 #'
 #' @usage 
 #' show(object)
@@ -76,8 +76,8 @@ setMethod("biooHeaderAdd", signature="BiooHeader", function(object,Name,Value){
 #' 
 #'
 #' 
-#' @param  object of spectra 
-#' @seealso http://127.0.0.1:41556/help/library/methods/help/showMethods
+#' @param  object of bioo 
+#' @seealso \code{\link{http://127.0.0.1:41556/help/library/methods/help/showMethods}}
 #' 
 #' @examples 
 #' x=spc.example_spectra()

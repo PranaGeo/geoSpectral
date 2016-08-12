@@ -3,15 +3,15 @@
 \docType{methods}
 \name{show,BiooHeader-method}
 \alias{show,BiooHeader-method}
-\title{Show a spectra object}
+\title{Show a bioo object}
 \usage{
 show(object)
 }
 \arguments{
-\item{object}{of spectra}
+\item{object}{of bioo}
 }
 \description{
-Display the object, by printing, plotting
+Display  bioo object
 }
 \examples{
 x=spc.example_spectra()
@@ -20,6 +20,6 @@ show(x)
 
 }
 \seealso{
-http://127.0.0.1:41556/help/library/methods/help/showMethods
+\code{\link{http://127.0.0.1:41556/help/library/methods/help/showMethods}}
 }
 
