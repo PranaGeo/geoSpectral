@@ -240,17 +240,17 @@ setAs(from="data.frame", to="Spectra", def=function(from){
 #' Dimensions of a \code{Spectra} object.
 #'
 #'@description
-#' \code{Spectra} Creates an instance of class \code{Spectra}.
+#' Gives numer of dimesion of a Spectra object
 #'
-#' @param x  a \code{Spectra} objectlong-format \code{data.frame} 
+#' @param x  Spectra object
 #' 
-#'@details
-#' This 
+#'
 #' 
 #' @return Returns a numeric vector containing \code{nrow} and \code{ncol} of the \code{Spectra} object.
 #'
 #' @examples
-#' fnm = file.path(base::system.file(package = "Spectral"),"test_data","particulate_absorption.csv.gz")
+#' sp<-spc.example_spectra()
+#' dim(sp)
 setMethod("dim", signature = "Spectra", 
           def = function (x){
             return(dim(x@Spectra))  
@@ -454,8 +454,10 @@ setMethod("show", "Spectra", function(object){
 #'
 #' @examples
 #'  sp<-spc.example_spectra()
+#'  # spc.colnames() is used to show that anap_300 or anap_345 is colon ,  
 #'  spc.colnames(sp)
 #'  sp$anap_300
+#'  sp["anap_345"]
 #' 
 #' 
 setMethod("$", signature="Spectra",
