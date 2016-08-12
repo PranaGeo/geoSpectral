@@ -824,7 +824,7 @@ setMethod("spc.rbind", signature = "STIDF", def = function (...){
 #' Getting wave lenghts in a spectral object
 #'
 #'@description
-#'Function get wave lenghts insade of  a spectral object
+#'Get wave lenghts insade of  a spectral object
 #'
 #'@usage 
 #' spc.getwavelengths(...)

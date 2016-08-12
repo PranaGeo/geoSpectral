@@ -10,7 +10,7 @@ spc.getwavelengths(...)
 \item{...}{spectra object}
 }
 \description{
-Function get wave lenghts insade of  a spectral object
+Get wave lenghts insade of  a spectral object
 }
 \examples{
  x <- spc.example_spectra()
