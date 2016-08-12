@@ -1359,7 +1359,7 @@ setReplaceMethod(f="spc.setselected.idx", signature="Spectra",
 #########################################################################
 #' Get the selected spectra as invalid
 #' @description
-#' Function  extract the indexes stored as invaild variable
+#' Extract the indexes stored as invaild variable
 #'
 #' @usage 
 #' spc.getinvalid.idx(x)

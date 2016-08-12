@@ -12,7 +12,7 @@ spc.setselected.idx(x,value)
 \item{x}{spectra object}
 }
 \description{
-Function set or change selection row index of a spectra object
+Set or change selection row index of a spectra object
 }
 \examples{
 x <- spc.example_spectra()

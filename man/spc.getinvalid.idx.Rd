@@ -10,6 +10,6 @@ spc.getinvalid.idx(x)
 \item{x}{spectra object}
 }
 \description{
-Function  extract the indexes stored as invaild variable
+Extract the indexes stored as invaild variable
 }
 
