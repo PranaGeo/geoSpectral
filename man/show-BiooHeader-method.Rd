@@ -20,6 +20,6 @@ show(x)
 
 }
 \seealso{
-\code{\link{http://127.0.0.1:41556/help/library/methods/help/showMethods}}
+\code{\link{show {methods}}}
 }
 

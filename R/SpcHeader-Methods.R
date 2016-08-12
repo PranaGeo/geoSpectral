@@ -77,7 +77,7 @@ setMethod("biooHeaderAdd", signature="BiooHeader", function(object,Name,Value){
 #'
 #' 
 #' @param  object of bioo 
-#' @seealso \code{\link{http://127.0.0.1:41556/help/library/methods/help/showMethods}}
+#' @seealso \code{\link{show {methods}}}
 #' 
 #' @examples 
 #' x=spc.example_spectra()
