@@ -296,7 +296,7 @@ setMethod("ncol", signature = "Spectra",
 #' 
 #' @usage 
 #'  
-#' ncol(x)
+#' nrow(x)
 #'
 #' @param  x a Spectra object 
 #'
