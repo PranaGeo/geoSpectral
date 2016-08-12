@@ -439,7 +439,7 @@ setMethod("show", "Spectra", function(object){
 #' Extract or replace parts of a spectra object
 #'
 #'@description
-#' Operators acting on  spectral objects such as vectors, matrices, arrays and lists to extract or replace parts
+#' Operators acting on  spectral objects  to extract or replace parts
 #' 
 #' @usage 
 #'  x[i] <- spc.example_spectra()
@@ -453,8 +453,9 @@ setMethod("show", "Spectra", function(object){
 #' 
 #'
 #' @examples
-#'  
-#'  
+#'  sp<-spc.example_spectra()
+#'  spc.colnames(sp)
+#'  sp$anap_300
 #' 
 #' 
 setMethod("$", signature="Spectra",

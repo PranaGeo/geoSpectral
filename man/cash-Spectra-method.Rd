@@ -14,11 +14,12 @@ x$i <- spc.example_spectra()
 \item{Spectra}{object from which to extract element(s) or in which to replace element(s)}
 }
 \description{
-Operators acting on  spectral objects such as vectors, matrices, arrays and lists to extract or replace parts
+Operators acting on  spectral objects  to extract or replace parts
 }
 \examples{
- 
- 
+ sp<-spc.example_spectra()
+ spc.colnames(sp)
+ sp$anap_300
 
 
 }
