@@ -458,6 +458,7 @@ setMethod("show", "Spectra", function(object){
 #'  spc.colnames(sp)
 #'  sp$anap_300
 #'  sp["anap_345"]
+#'  
 #' 
 #' 
 setMethod("$", signature="Spectra",
@@ -497,6 +498,10 @@ setReplaceMethod("$", signature = "Spectra",
 #' @examples
 #' x <- spc.example_spectra()
 #' spc.colnames(x)
+#' # or 
+#' spc.colnames(x) <-spc.cnames.construct(x)
+#' 
+#' @seealso \code{\link{spc.cnames.construct()}}
 #' 
 #' 
 setGeneric("spc.colnames",function(x,Y,...){standardGeneric("spc.colnames")})
@@ -890,7 +895,9 @@ setReplaceMethod(f="spc.setwavelengths", signature="Spectra",
 #' @param object of Spectra
 #' 
 #' @return vector of character
-#' 
+#' @examples 
+#' sp <- spc.example_spectra()
+#' spc.cname.construct(sp)
 #' 
 #'
 #generating colmn names for a spectra object + combination of @shortName @Wavelenght

@@ -18,7 +18,11 @@ Retrieve  column names of a matrix-like spectra object.
 \examples{
 x <- spc.example_spectra()
 spc.colnames(x)
+# or 
+spc.colnames(x) <-spc.cnames.construct(x)
 
-
+}
+\seealso{
+\code{\link{spc.cnames.construct()}}
 }
 

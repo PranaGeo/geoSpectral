@@ -17,4 +17,10 @@ vector of character
 \description{
 Function for a spectra object generates that  column names and it is made of  combination of @shortName  and @Wavelenght
 }
+\examples{
+sp <- spc.example_spectra()
+spc.cname.construct(sp)
+
+
+}
 

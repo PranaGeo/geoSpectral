@@ -22,6 +22,7 @@ Operators acting on  spectral objects  to extract or replace parts
  spc.colnames(sp)
  sp$anap_300
  sp["anap_345"]
+ 
 
 
 }
