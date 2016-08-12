@@ -4,12 +4,17 @@
 \alias{spc.cname.construct}
 \title{Generating column names for a spectra object}
 \usage{
-spc.cname.construct(...)
+spc.cname.construct(object, value)
 }
 \arguments{
-\item{...}{spectra object}
+\item{object}{of Spectra}
+
+\item{value}{ShortName}
+}
+\value{
+vector of character
 }
 \description{
-Function for a spectra object generates column names and it is combination of shortName  and Wavelenght
+Function for a spectra object generates that  column names and it is made of  combination of @shortName  and @Wavelenght
 }
 

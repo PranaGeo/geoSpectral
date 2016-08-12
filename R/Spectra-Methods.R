@@ -881,15 +881,15 @@ setReplaceMethod(f="spc.setwavelengths", signature="Spectra",
 #########################################################################
 #' Generating column names for a spectra object
 #' @description
-#'Function for a spectra object generates column names and it is combination of shortName  and Wavelenght
+#'Function for a spectra object generates that  column names and it is made of  combination of @shortName  and @Wavelenght
 #'
 #'@usage 
-#' spc.cname.construct(...)
+#'spc.cname.construct(object, value)
 #'
-#'
-#' @param ... spectra object
+#' @param  value ShortName
+#' @param object of Spectra
 #' 
-#' 
+#' @return vector of character
 #' 
 #' 
 #'
