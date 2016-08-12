@@ -1271,7 +1271,7 @@ setReplaceMethod(f="spc.setheader", signature="Spectra",
 #########################################################################
 #' Update a field of the @header slot of a spectra object
 #' @description
-#'  updates or changes the value of a field in the header slot of spectra object 
+#'  Updates or changes the value of a field in the header slot of spectra object 
 #'
 #' @usage 
 #' spc.updateheader(x,name)<-value

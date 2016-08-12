@@ -12,7 +12,7 @@ spc.updateheader(x,name)<-value
 \item{name}{of the header field to be updated}
 }
 \description{
-updates or changes the value of a field in the header slot of spectra object
+Updates or changes the value of a field in the header slot of spectra object
 }
 \examples{
 sp=spc.example_spectra()
