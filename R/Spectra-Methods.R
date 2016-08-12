@@ -261,7 +261,7 @@ setMethod("dim", signature = "Spectra",
 #' The Number of Columns  of a Spectra object
 #'
 #'@description
-#' \code{nrow} and \code{ncol} return the number of rows or columns present in a Spectra object 
+#' \code{nrow} and \code{ncol} return the number of rows or columns of a Spectra object 
 #'  
 #'    
 #'
@@ -269,7 +269,7 @@ setMethod("dim", signature = "Spectra",
 #' 
 #' @usage 
 #'  
-#' nrow(x)
+#' ncol(x)
 #'
 #' @param  x a Spectra object 
 #'

@@ -5,13 +5,13 @@
 \alias{ncol,Spectra-method}
 \title{The Number of Columns  of a Spectra object}
 \usage{
-nrow(x)
+ncol(x)
 }
 \arguments{
 \item{x}{a Spectra object}
 }
 \description{
-\code{nrow} and \code{ncol} return the number of rows or columns present in a Spectra object
+\code{nrow} and \code{ncol} return the number of rows or columns of a Spectra object
 }
 \examples{
 x <- spc.example_spectra() 
