@@ -132,7 +132,7 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
   }
   if(missing(header)){
     #Extract Units
-    header = new("BiooHeader")
+    header = new("SpcHeader")
   }
 
   #First construct a STIDF object using stConstruct()
@@ -214,9 +214,9 @@ setAs(from="data.frame", to="Spectra", def=function(from){
   
   #Extract the header
   if(!is.null(attr(from,"header")))
-    header = as(attr(from,"header"),"BiooHeader")
+    header = as(attr(from,"header"),"SpcHeader")
   else
-    header = new("BiooHeader")
+    header = new("SpcHeader")
   
   if(!xts::is.timeBased(from$TIME))
     stop("The TIME column does not contain time-based data")
@@ -378,7 +378,7 @@ setMethod("head", signature = "Spectra",
 #' show(x)
 #' # or 
 #' x
-#' @param x a spectral object 
+#' @param x a Spectra object 
 #' @return  show returns an invisible \code{NULL}
 #'
 #' 
@@ -435,21 +435,21 @@ setMethod("show", "Spectra", function(object){
 #########################################################################
 # Method : $
 #########################################################################
-# use  help("$,Spectra-method") to get code
 #' Extract or replace parts of a spectra object
 #'
-#'@description
+#' @description
 #' Operators acting on  spectral objects  to extract or replace parts
 #' 
 #' @usage 
-#'  x[i] <- spc.example_spectra()
-#' x[i, j, ...] <- spc.example_spectra()
-#' x[[i]] <- spc.example_spectra()
-#' x$i <- spc.example_spectra()
-#'
+#' x[i] 
+#' x[i, j] 
+#' x[[i]] 
+#' x$i #More usage cases to be added
+#' 
 #' 
 #' @param Spectra object from which to extract element(s) or in which to replace element(s)
-#' 
+#' @param i A numeric (row index) variable
+#' @param j A character (column name) or a numeric (column index) variable
 #' 
 #'
 #' @examples
@@ -486,12 +486,12 @@ setReplaceMethod("$", signature = "Spectra",
 #' Column names
 #'
 #'@description
-#' Retrieve  column names of a matrix-like spectra object.
+#' Retrieve  column names of a \code{Spectra} object
 #'
 #' 
 #' @usage 
 #' spc.colnames(x)
-#' @param x  a matrix-like spectra object, with at least two dimensions for colnames.
+#' @param x  A \code{Spectra} object
 #' 
 #' @return Returns the names of an object of class \code{Spectra}.
 #'
@@ -499,9 +499,9 @@ setReplaceMethod("$", signature = "Spectra",
 #' x <- spc.example_spectra()
 #' spc.colnames(x)
 #' # or 
-#' spc.colnames(x) <-spc.cnames.construct(x)
+#' spc.colnames(x) <-spc.cname.construct(x)
 #' 
-#' @seealso \code{\link{spc.cnames.construct()}}
+#' @seealso \code{\link{spc.cname.construct}}
 #' 
 #' 
 setGeneric("spc.colnames",function(x,Y,...){standardGeneric("spc.colnames")})
@@ -707,12 +707,12 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...,compressHeader
       #For all slots
       for(J in 1:length(sltn)){
         myslot = slot(eval((allinargs[[I]])),sltn[J])
-        if(class(myslot)[1]=="BiooHeader"){
+        if(class(myslot)[1]=="SpcHeader"){
           aa=rbind(as.data.frame(slot(outt,sltn[J]),stringsAsFactors=F), as.data.frame(myslot,,stringsAsFactors=F))
           rownames(aa)=NULL
           bb = as.list(aa)
           bb = lapply(bb,function(x){names(x)<-NULL;x})
-          outt@header = as(bb,"BiooHeader")
+          outt@header = as(bb,"SpcHeader")
         }
         #					if (length(myslot)==0)
         #						myslot=NA
@@ -886,19 +886,22 @@ setReplaceMethod(f="spc.setwavelengths", signature="Spectra",
 #########################################################################
 #' Generating column names for a spectra object
 #' @description
-#'Function for a spectra object generates that  column names and it is made of  combination of @shortName  and @Wavelenght
+#'Function for a spectra object that generates column names made of a 
+#'combination of @shortName and @Wavelenght slots. If \code{value} is 
+#'ommitted, the @ShortName slot is used.
 #'
-#'@usage 
-#'spc.cname.construct(object, value)
+#' @usage 
+#' spc.cname.construct(object)
+#' spc.cname.construct(object, value)
 #'
-#' @param  value ShortName
-#' @param object of Spectra
+#' @param value A character object
+#' @param object A variable of class \code{Spectra}
 #' 
-#' @return vector of character
+#' @return vector of characters
 #' @examples 
 #' sp <- spc.example_spectra()
 #' spc.cname.construct(sp)
-#' 
+#' spc.cname.construct(sp,"Newvar")
 #'
 #generating colmn names for a spectra object + combination of @shortName @Wavelenght
 setGeneric("spc.cname.construct",function(object,value)
@@ -1270,7 +1273,7 @@ setGeneric (name="spc.setheader<-",
             def=function(object,value,...){standardGeneric("spc.setheader<-")})
 setReplaceMethod(f="spc.setheader", signature="Spectra",
                  definition=function(object,value,...){
-                   stopifnot(class(value)=="BiooHeader")
+                   stopifnot(class(value)=="SpcHeader")
                    object@header<-value
                    validObject(object)
                    return(object)
@@ -1747,7 +1750,7 @@ setMethod("spc.export.text", signature="Spectra", definition=function(input,file
            'Spectra|Wavelengths'=spc.getwavelengths(input))
   return(out)
 }
-setMethod("spc.export.text", signature="BiooHeader", definition=function(input,filename,append=F,sep=";",...){
+setMethod("spc.export.text", signature="SpcHeader", definition=function(input,filename,append=F,sep=";",...){
   nms = names(input)
   nms = paste("Spectra|header",sep,nms,sep="")
   out1 = lapply(input,function(x){
@@ -1803,11 +1806,11 @@ spc.import.text = function(filename,sep=";",...){
     if(any(grepl("StationType",nms)))
       if(is.logical(header$StationType))
         header$StationType = "T"
-    header = as(header,"BiooHeader")
+    header = as(header,"SpcHeader")
     myT = myT[-header.idx]
     
   } else {
-    header = new("BiooHeader")
+    header = new("SpcHeader")
   }
   #Extract the Spectra slots
   Slots.idx = grep("Spectra\\|",myT)

@@ -4,23 +4,26 @@
 \alias{spc.cname.construct}
 \title{Generating column names for a spectra object}
 \usage{
+spc.cname.construct(object)
 spc.cname.construct(object, value)
 }
 \arguments{
-\item{object}{of Spectra}
+\item{object}{A variable of class \code{Spectra}}
 
-\item{value}{ShortName}
+\item{value}{A character object}
 }
 \value{
-vector of character
+vector of characters
 }
 \description{
-Function for a spectra object generates that  column names and it is made of  combination of @shortName  and @Wavelenght
+Function for a spectra object that generates column names made of a 
+combination of @shortName and @Wavelenght slots. If \code{value} is 
+ommitted, the @ShortName slot is used.
 }
 \examples{
 sp <- spc.example_spectra()
 spc.cname.construct(sp)
-
+spc.cname.construct(sp,"Newvar")
 
 }
 

@@ -4,9 +4,9 @@
 ###############################################################################
 
 #########################################################################
-# Method : Conversion from SpcList to Bioo
+# Method : Conversion from SpcList to Spc
 #########################################################################
-#setAs(from="SpcList", to="Bioo", def=function(from){		
+#setAs(from="SpcList", to="Spc", def=function(from){		
 #	dims = t(sapply(from,dim))[,2]
 #	if(!all(dims==dims[1]))
 #		stop("All SpcList elements should have the same number of rows (including Ancillary data for Spectra objects)")
@@ -14,20 +14,20 @@
 #	if(!all(sapply(1:nrow(nms), function(x) all(nms[x,1]==nms[x,]))))
 #		stop("All SpcList elements should have the same names (including Ancillary data for Spectra objects)")
 #	
-#	if (all(sapply(from,class)=="Spectra") |(all(sapply(from,class)=="Bioo"))) {
+#	if (all(sapply(from,class)=="Spectra") |(all(sapply(from,class)=="Spc"))) {
 #		if (all(sapply(from,class)=="Spectra")){
 #			DF = do.call(rbind, lapply(from,function(x) x@Spectra))
 #			DFAnc = do.call(rbind, lapply(from,function(x) x@data))
-#			Anc = new("Bioo",DF=DFAnc,Units=from[[1]]@Ancillary@Units)
+#			Anc = new("Spc",DF=DFAnc,Units=from[[1]]@Ancillary@Units)
 #			output = new("Spectra",DF=DF,Units=from[[1]]@Units,Wavelengths=from[[1]]@Wavelengths,
 #					ShortName=from[[1]]@ShortName,LongName=from[[1]]@LongName,Ancillary=Anc)
 #		}
-#		if (all(sapply(from,class)=="Bioo")){
+#		if (all(sapply(from,class)=="Spc")){
 #			DF = do.call(rbind, lapply(from,function(x) x@Spectra))
-#			output = new("Bioo",DF=DF,Units=from[[1]]@Ancillary@Units)
+#			output = new("Spc",DF=DF,Units=from[[1]]@Ancillary@Units)
 #		}
 #	} else {
-#		stop("All SpcList elements should be of class 'Spectra' of 'Bioo'")
+#		stop("All SpcList elements should be of class 'Spectra' of 'Spc'")
 #	}
 #	return(output)
 #})

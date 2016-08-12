@@ -10,7 +10,7 @@ show(x)
 x
 }
 \arguments{
-\item{x}{a spectral object}
+\item{x}{a Spectra object}
 }
 \value{
 show returns an invisible \code{NULL}

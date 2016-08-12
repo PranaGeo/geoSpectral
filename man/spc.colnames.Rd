@@ -7,22 +7,22 @@
 spc.colnames(x)
 }
 \arguments{
-\item{x}{a matrix-like spectra object, with at least two dimensions for colnames.}
+\item{x}{A \code{Spectra} object}
 }
 \value{
 Returns the names of an object of class \code{Spectra}.
 }
 \description{
-Retrieve  column names of a matrix-like spectra object.
+Retrieve  column names of a \code{Spectra} object
 }
 \examples{
 x <- spc.example_spectra()
 spc.colnames(x)
 # or 
-spc.colnames(x) <-spc.cnames.construct(x)
+spc.colnames(x) <-spc.cname.construct(x)
 
 }
 \seealso{
-\code{\link{spc.cnames.construct()}}
+\code{\link{spc.cname.construct}}
 }
 
