@@ -240,9 +240,9 @@ setAs(from="data.frame", to="Spectra", def=function(from){
 #' Dimensions of a \code{Spectra} object.
 #'
 #'@description
-#' Gives numer of dimesion of a Spectra object
+#' Gives number of dimension of a Spectra object
 #'
-#' @param x  Spectra object
+#' @param x a \code{Spectra} object
 #' 
 #'
 #' 

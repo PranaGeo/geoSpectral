@@ -8,13 +8,13 @@
 \S4method{dim}{Spectra}(x)
 }
 \arguments{
-\item{x}{Spectra object}
+\item{x}{a \code{Spectra} object}
 }
 \value{
 Returns a numeric vector containing \code{nrow} and \code{ncol} of the \code{Spectra} object.
 }
 \description{
-Gives numer of dimesion of a Spectra object
+Gives number of dimension of a Spectra object
 }
 \examples{
 sp<-spc.example_spectra()
