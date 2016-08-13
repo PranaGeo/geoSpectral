@@ -2,17 +2,17 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.setselected.idx<-}
 \alias{spc.setselected.idx<-}
-\title{Set index to a spectra object}
+\title{Set index to a \code{Spectra} object}
 \usage{
 spc.setselected.idx(x,value)
 }
 \arguments{
-\item{value}{index for spectra object}
+\item{value}{index for a \code{Spectra} object}
 
-\item{x}{spectra object}
+\item{x}{A \code{Spectra} object}
 }
 \description{
-Set or change selection row index of a spectra object
+Set or change selection row index of a \code{Spectra} object
 }
 \examples{
 x <- spc.example_spectra()

@@ -8,10 +8,10 @@
 ncol(x)
 }
 \arguments{
-\item{x}{a Spectra object}
+\item{x}{a \code{Spectra} object}
 }
 \description{
-\code{nrow} and \code{ncol} return the number of rows or columns of a Spectra object
+\code{nrow} and \code{ncol} return the number of rows or columns of a \code{Spectra}object
 }
 \examples{
 x <- spc.example_spectra() 

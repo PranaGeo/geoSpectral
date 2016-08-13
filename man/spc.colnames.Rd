@@ -2,7 +2,7 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.colnames}
 \alias{spc.colnames}
-\title{Column names}
+\title{Column names of \code{Spectra} object}
 \usage{
 spc.colnames(x)
 }

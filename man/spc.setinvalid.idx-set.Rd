@@ -2,12 +2,14 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.setinvalid.idx<-}
 \alias{spc.setinvalid.idx<-}
-\title{Set the selected spectra as invalid}
+\title{Set the selected \code{Spectra} as invalid}
 \usage{
-spc.setinvalid.idx(x)
+spc.setinvalid.idx(object,value)
 }
 \arguments{
-\item{x}{spectra object}
+\item{value}{Numeric}
+
+\item{x}{A \code{Spectra} object}
 }
 \description{
 Stores the indexes as invaild variable

@@ -3,15 +3,15 @@
 \docType{methods}
 \name{[,Spectra-method}
 \alias{[,Spectra-method}
-\title{Extract or replace parts of a spectra object}
+\title{Extract or replace parts of a \code{Spectra} object}
 \usage{
 x[i]
 }
 \arguments{
-\item{x}{object from which to extract element(s) or in which to replace element(s).}
+\item{x}{A \code{Spectra} object from which to extract element(s) or in which to replace element(s).}
 }
 \description{
-Operators acting on spectra object and spectra lists to extract or replace parts.
+Operators acting on \code{Spectra} object and \code{Spectra} lists to extract or replace parts.
 }
 \details{
 These operators are generic. You can write methods to handle indexing of specific classes of objects

@@ -240,7 +240,7 @@ setAs(from="data.frame", to="Spectra", def=function(from){
 #' Dimensions of a \code{Spectra} object.
 #'
 #'@description
-#' Gives number of dimension of a Spectra object
+#' Gives number of dimension of a \code{Spectra} object
 #'
 #' @param x a \code{Spectra} object
 #' 
@@ -261,7 +261,7 @@ setMethod("dim", signature = "Spectra",
 #' The Number of Columns  of a Spectra object
 #'
 #'@description
-#' \code{nrow} and \code{ncol} return the number of rows or columns of a Spectra object 
+#' \code{nrow} and \code{ncol} return the number of rows or columns of a \code{Spectra}object 
 #'  
 #'    
 #'
@@ -271,7 +271,7 @@ setMethod("dim", signature = "Spectra",
 #'  
 #' ncol(x)
 #'
-#' @param  x a Spectra object 
+#' @param  x a \code{Spectra} object 
 #'
 #' @examples
 #' x <- spc.example_spectra() 
@@ -285,10 +285,10 @@ setMethod("ncol", signature = "Spectra",
 ########################################################################
 # Method : nrow
 #########################################################################
-#' The Number of rows  of a Spectra object
+#' The Number of rows  of a \code{Spectra} object
 #'
 #'@description
-#' \code{nrow} and \code{ncol} return the number of rows or columns present in a Spectra object 
+#' \code{nrow} and \code{ncol} return the number of rows or columns present in a \code{Spectra} object 
 #'  
 #'    
 #'
@@ -298,7 +298,7 @@ setMethod("ncol", signature = "Spectra",
 #'  
 #' nrow(x)
 #'
-#' @param  x a Spectra object 
+#' @param  x a \code{Spectra} object 
 #'
 #' @examples
 #' x <- spc.example_spectra() 
@@ -311,15 +311,15 @@ setMethod("nrow", signature = "Spectra",
 #########################################################################
 # Method : names
 #########################################################################
-#' The Names of a Spectra object
+#' The Names of a \code{Spectra} object
 #'
 #'@description
-#'  Retrieve  the names of a Spectra object 
+#'  Retrieve  the names of \code{Spectra} object 
 #'  
 #' @usage 
 #' names(x)
 #'
-#'@param  x  a Spectra object
+#'@param  x  a \code{Spectra} object
 # 
 #'
 #'
@@ -346,18 +346,18 @@ setMethod("endTime", signature = "Spectra", def = function (x){
 #########################################################################
 # Method : head
 #########################################################################
-#' Return the first or last part of a Spectra object
+#' Return the first or last part of a \code{Spectra} object
 #'
 #'@description
-#' Return the first or last parts of a spectral object 
+#' Return the first or last parts of a \code{Spectra} object 
 #'
-#' @param  x a specrta object
+#' @param  x a \code{Spectra} object
 #' 
 #'  
 #' 
 #' @usage 
 #' head(x)
-#' @return Returns a matrix (Spectral data)
+#' @return Returns a matrix (\code{Spectra} data)
 #'
 #' @examples
 #' x <- spc.example_spectra()
@@ -369,16 +369,16 @@ setMethod("head", signature = "Spectra",
 #########################################################################
 # Method : show
 #########################################################################
-#' Show a Spectra object
+#' Show a \code{Spectra} object
 #'
 #'@description
-#' Display a Spectra object 
+#' Display a \code{Spectra} object 
 #'
 #' @usage 
 #' show(x)
 #' # or 
 #' x
-#' @param x a Spectra object 
+#' @param x a \code{Spectra} object 
 #' @return  show returns an invisible \code{NULL}
 #'
 #' 
@@ -435,10 +435,10 @@ setMethod("show", "Spectra", function(object){
 #########################################################################
 # Method : $
 #########################################################################
-#' Extract or replace parts of a spectra object
+#' Extract or replace parts of a \code{Spectra} object
 #'
 #' @description
-#' Operators acting on  spectral objects  to extract or replace parts
+#' Operators acting on  \code{Spectra} objects  to extract or replace parts
 #' 
 #' @usage 
 #' x[i] 
@@ -447,7 +447,7 @@ setMethod("show", "Spectra", function(object){
 #' x$i #More usage cases to be added
 #' 
 #' 
-#' @param Spectra object from which to extract element(s) or in which to replace element(s)
+#' @param \code{Spectra} object from which to extract element(s) or in which to replace element(s)
 #' @param i A numeric (row index) variable
 #' @param j A character (column name) or a numeric (column index) variable
 #' 
@@ -483,7 +483,7 @@ setReplaceMethod("$", signature = "Spectra",
 #########################################################################
 # Method : spc.colnames
 #########################################################################
-#' Column names
+#' Column names of \code{Spectra} object
 #'
 #'@description
 #' Retrieve  column names of a \code{Spectra} object
@@ -518,15 +518,15 @@ setReplaceMethod("spc.colnames", signature = "Spectra", def = function (x,value)
 #########################################################################
 # Method : spc.plot
 #########################################################################
-#'  Plotting spectra object
+#'  Plotting \code{Spectra} object
 #'
 #'@description
-#' Generating plot of the contents of a spectra object
+#' Generating plot of the contents of a \code{Spectra} object
 #'
 #' 
 #' @usage 
 #' spc.plot(x,...)
-#' @param x	 a spectral data 
+#' @param x	 a \code{Spectra} data 
 #' 
 #'
 #' @examples
@@ -619,13 +619,10 @@ spc.plot.plotly = function(sp){
 #' 
 #' @usage 
 #' spc.lines(x,...)
-#' @param x	 a spectral vector of points to join plot
+#' @param x	 a \code{Spectra} vector of points to join plot
 #' 
 #'
 #' 
-
-
-
 setGeneric("spc.lines",function(x,...){standardGeneric("spc.lines")})
 setMethod("spc.lines",signature = "Spectra",definition = function(x,...){
   a=sapply(1:nrow(x@Spectra), function(S) {
@@ -635,16 +632,16 @@ setMethod("spc.lines",signature = "Spectra",definition = function(x,...){
 #########################################################################
 # Method : spc.rbind
 #########################################################################
-#' Combine spectra Objects by Rows
+#' Combine \code{Spectra} Objects by Rows
 #'
 #'@description
-#'Take a spectral objects and combine by rows
+#'Take a \code{Spectra} objects and combine by rows
 #'
 #'@usage 
 #' spc.cbind(...)
 #' spc.rbind(...)
 #'
-#' @param ... spectra object
+#' @param ... \code{Spectra} object
 #' 
 #' 
 #'
@@ -759,16 +756,16 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...,compressHeader
 #########################################################################
 # Method : spc.rbind
 #########################################################################
-#' Combine spectra Objects by Rows
+#' Combine \code{Spectra} objects by Rows
 #'
 #'@description
-#'Take a spectral objects and combine by rows
+#'Take a \code{Spectra} objects and combine by rows
 #'
 #'@usage 
 #' spc.cbind(...)
 #' spc.rbind(...)
 #'
-#' @param ... spectra object
+#' @param ... \code{Spectra} object
 #' 
 #' 
 #'
@@ -829,15 +826,15 @@ setMethod("spc.rbind", signature = "STIDF", def = function (...){
 #########################################################################
 # Method : spc.getwavelengths
 #########################################################################
-#' Getting wave lenghts in a spectral object
+#' Getting wave lenghts in a \code{Spectra} object
 #'
 #'@description
-#'Get wave lenghts insade of  a spectral object
+#'Get wave lenghts insade of  a \code{Spectra} object
 #'
 #'@usage 
-#' spc.getwavelengths(...)
+#' spc.getwavelengths(object)
 #'
-#' @param ... spectra object
+#' @param object A \code{Spectra} object
 #' 
 #' 
 #'
@@ -854,16 +851,17 @@ setMethod("spc.getwavelengths", signature = "Spectra",
 #########################################################################
 # Method : spc.setwavelengths
 #########################################################################
-#' Setting wavelenghts in a spectral object
+#' Setting wavelenghts in a \code{Spectra} object
 #'
 #'@description
-#'Function  to change or set wavelenghts insade of  a spectral object
+#'Function  to change or set wavelenghts insade of  a \code{Spectra} object
 #'
 #'@usage 
-#' spc.setwavelengths(...)
+#' spc.setwavelengths(object,value)
 #'
 #'
-#' @param ... spectra object
+#' @param object A \code{Spectra} object
+#' @param value Numeric 
 #' 
 #' 
 #' 
@@ -884,9 +882,9 @@ setReplaceMethod(f="spc.setwavelengths", signature="Spectra",
 #########################################################################
 # Method : spc.cname.construct
 #########################################################################
-#' Generating column names for a spectra object
+#' Generating column names for a \code{Spectra} object
 #' @description
-#'Function for a spectra object that generates column names made of a 
+#'Function for a \code{Spectra} object that generates column names made of a 
 #'combination of @shortName and @Wavelenght slots. If \code{value} is 
 #'ommitted, the @ShortName slot is used.
 #'
@@ -916,9 +914,9 @@ setMethod(f="spc.cname.construct", signature="Spectra",
 #########################################################################
 #spc.make.stindex 
 #########################################################################
-#' Extracting an element of spectral objects and returning the first and last measurements
+#' Extracting an element of \code{Spectra} objects and returning the first and last measurements
 #' @description
-#'Take an element of spectral objects and outputs one STIDF object.
+#'Take an element of \code{Spectra} objects and outputs one STIDF object.
 #'Returning the first and last measurements of the input list element acrording to a time interval depending of the input argument
 #'
 #'@usage 
@@ -929,7 +927,7 @@ setMethod(f="spc.cname.construct", signature="Spectra",
 #' @param value  outputs one STIDF object
 #' 
 #' @details 
-#' Takes a n-element list of Spectra objects and outputs one STIDF object. Each row 
+#' Takes a n-element list of \code{Spectra} objects and outputs one STIDF object. Each row 
 #' of the ST object has a time interval depending of the input argument rowSimplify.
 #' rowSimplify : "none", "spc.colMeans","firstRow" or "lastRow"
 #' none: length of the output object equals the sum of all rows of all elements of the input list object
@@ -1119,10 +1117,10 @@ setMethod("spc.plot2", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type=
 #########################################################################
 # Method : Arith
 #########################################################################
-#' Apply arithmetic operations on/between Spectra objects
+#' Apply arithmetic operations on/between \code{Spectra} objects
 #' @description
-#' Methods definig Arithmetic operations between two Spectra objects e1 and e2 or one
-#' Spectra object e1 and a numeric value.
+#' Methods definig Arithmetic operations between two \code{Spectra} objects e1 and e2 or one
+#' \code{Spectra} object e1 and a numeric value.
 #'
 #'@usage 
 #' Arith(e1, e2)
@@ -1133,7 +1131,7 @@ setMethod("spc.plot2", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type=
 #' @param e2 spectra object 
 #' 
 #' @details 
-#' These methods allow performing arithmetic operations involving Spectra objects.
+#' These methods allow performing arithmetic operations involving \code{Spectra} objects.
 #' 
 #' @seealso \code{\link{Arith}}
 setMethod("Arith", signature(e1 = "Spectra", e2 = "Spectra"),function (e1, e2) {
@@ -1216,16 +1214,16 @@ setMethod("spc.invalid.detect", signature = "Spectra", def=function(source1){
 #########################################################################
 # Method : spc.getheader
 #########################################################################
-#' Extract a field of the @header slot of a spectra object
+#' Extract a field of the @header slot of a \code{Spectra} object
 #' @description
-#' Function extracts the value of a field in the header slot of spectra object
+#' Function extracts the value of a field in the header slot of \code{Spectra} object
 #'
 #'@usage 
 #' spc.getheader(x,name)
 #'
 #' 
 #' 
-#' @param x spectra object 
+#' @param x  A \code{Spectra} object 
 #' @param name of the header field to be extracted
 #' 
 #' @examples 
@@ -1254,16 +1252,16 @@ setMethod("spc.getheader", signature = "Spectra",
 #########################################################################
 # Method : spc.setheader
 #########################################################################
-#' Set a field of the @header slot of a spectra object
+#' Set a field of the @header slot of a \code{Spectra} object
 #' @description
-#' Function sets or changes the value of a field in the header slot of spectra object
+#' Function sets or changes the value of a field in the header slot of \code{Spectra} object
 #'
 #'@usage 
 #' spc.setheader(x,name)<-value
 #'
 #' 
 #' 
-#' @param x spectra object 
+#' @param x A \code{Spectra} object 
 #' @param name of the header field to be setted
 #' 
 #' 
@@ -1282,14 +1280,14 @@ setReplaceMethod(f="spc.setheader", signature="Spectra",
 #########################################################################
 # Method : spc.updateheader
 #########################################################################
-#' Update a field of the @header slot of a spectra object
+#' Update a field of the @header slot of a \code{Spectra} object
 #' @description
-#'  Updates or changes the value of a field in the header slot of spectra object 
+#'  Updates or changes the value of a field in the header slot of \code{Spectra} object 
 #'
 #' @usage 
 #' spc.updateheader(x,name)<-value
 #'
-#' @param x spectra objec 
+#' @param x A \code{Spectra} objec 
 #' @param name of the header field to be updated
 #' @examples 
 #' sp=spc.example_spectra()
@@ -1310,7 +1308,7 @@ setReplaceMethod(f="spc.updateheader", signature="Spectra",
 #########################################################################
 # Method : spc.getselected.idx
 #########################################################################
-#' Extract index inside of a spectra object
+#' Extract index inside of a \code{Spectra} object
 #' @description
 #' Extracts index of rows marked as selected
 #' 
@@ -1319,7 +1317,7 @@ setReplaceMethod(f="spc.updateheader", signature="Spectra",
 #'
 #' 
 #' 
-#' @param x spectra object 
+#' @param x A \code{Spectra} object 
 #' 
 #' 
 setGeneric (name= "spc.getselected.idx",
@@ -1331,16 +1329,16 @@ setMethod("spc.getselected.idx", signature = "Spectra",
 #########################################################################
 # Method : spc.setselected.idx	
 #########################################################################
-#' Set index to a spectra object
+#' Set index to a \code{Spectra} object
 #' @description
-#' Set or change selection row index of a spectra object 
+#' Set or change selection row index of a \code{Spectra} object 
 #' @usage 
 #' spc.setselected.idx(x,value)
 #'
 #' 
 #' 
-#' @param x spectra object 
-#' @param value index for spectra object
+#' @param x A \code{Spectra} object 
+#' @param value index for a \code{Spectra} object
 #' 
 #' @examples 
 #' x <- spc.example_spectra()
@@ -1370,16 +1368,16 @@ setReplaceMethod(f="spc.setselected.idx", signature="Spectra",
 #########################################################################
 # Method : spc.getinvalid.idx
 #########################################################################
-#' Get the selected spectra as invalid
+#' Get the selected \code{Spectra} as invalid
 #' @description
 #' Extract the indexes stored as invaild variable
 #'
 #' @usage 
-#' spc.getinvalid.idx(x)
+#' spc.getinvalid.idx(object)
 #'
 #' 
 #' 
-#' @param x spectra object 
+#' @param object A \code{Spectra} object 
 #' 
 #' 
 #
@@ -1392,17 +1390,17 @@ setMethod("spc.getinvalid.idx", signature = "Spectra",
 #########################################################################
 # Method : spc.setinvalid.idx
 #########################################################################
-#' Set the selected spectra as invalid
+#' Set the selected \code{Spectra} as invalid
 #' @description
 #' Stores the indexes as invaild variable
 #'
 #' @usage 
-#' spc.setinvalid.idx(x)
+#' spc.setinvalid.idx(object,value)
 #'
 #' 
 #' 
-#' @param x spectra object 
-#' 
+#' @param x A \code{Spectra} object 
+#' @param value Numeric
 #
 #' 
 setGeneric("spc.setinvalid.idx<-",function(object,value)
@@ -1490,16 +1488,16 @@ setMethod("spc.header2data", signature = "Spectra",
 #########################################################################
 # Method : [
 #########################################################################
-#' Extract or replace parts of a spectra object
+#' Extract or replace parts of a \code{Spectra} object
 #' @description
-#' Operators acting on spectra object and spectra lists to extract or replace parts.
+#' Operators acting on \code{Spectra} object and \code{Spectra} lists to extract or replace parts.
 #'
 #' @usage 
 #' x[i]
 #' 
 #'
 #' 
-#' @param x  object from which to extract element(s) or in which to replace element(s). 
+#' @param x A \code{Spectra} object from which to extract element(s) or in which to replace element(s). 
 #' 
 #' 
 #'  
@@ -1686,15 +1684,15 @@ setMethod("spc.interp.spectral", signature = "Spectra",
 #########################################################################
 #' Exporting into text format
 #' @description
-#' Save the spectra object on disk and Text files can be  saved with  this function 
+#' Save the \code{Spectra} object on disk and Text files can be  saved with  this function 
 #'
 #' @usage 
 #' spc.export.text(x,filename)
 #' 
 #'
 #' 
-#' @param x  a spectra object 
-#' @param  filename text name  
+#' @param x  A \code{Spectra} object 
+#' @param  filename Text name  
 #' @examples 
 #' x=spc.example_spectra()
 #' spc.export.text(x,filename="anap.txt")
@@ -1961,9 +1959,9 @@ setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,file
 #########################################################################
 # Method : subset
 #########################################################################
-#' Subsetting for spectra and spcList classes
+#' Subsetting for a \code{Spectra} and spcList classes
 #' @description
-#' Subsetting can be achieved using the implementation of the R function subset() for Spectra and SpcList classes
+#' Subsetting can be achieved using the implementation of the R function subset() for \code{Spectra} and SpcList classes
 #'It is possible to perform a row-wise selection
 #'
 #' @usage 
@@ -1972,9 +1970,9 @@ setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,file
 #' 
 #'
 #' 
-#' @param x spectra object 
-#' @param y subset
-#' @param  select condition selected
+#' @param x A \code{Spectra} object 
+#' @param y Subset
+#' @param  select Condition selected
 #' @examples 
 #' fnm = file.path(system.file(package = "geoSpectral"), "test_data","particulate_absorption.csv.gz")
 #' abs = read.table(fnm,sep=",",header=T)

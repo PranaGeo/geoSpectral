@@ -2,15 +2,15 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.getwavelengths}
 \alias{spc.getwavelengths}
-\title{Getting wave lenghts in a spectral object}
+\title{Getting wave lenghts in a \code{Spectra} object}
 \usage{
-spc.getwavelengths(...)
+spc.getwavelengths(object)
 }
 \arguments{
-\item{...}{spectra object}
+\item{object}{A \code{Spectra} object}
 }
 \description{
-Get wave lenghts insade of  a spectral object
+Get wave lenghts insade of  a \code{Spectra} object
 }
 \examples{
  x <- spc.example_spectra()

@@ -7,7 +7,7 @@
 spc.lines(x,...)
 }
 \arguments{
-\item{x}{a spectral vector of points to join plot}
+\item{x}{a \code{Spectra} vector of points to join plot}
 }
 \description{
 Taking coordinates given in various ways and joining the corresponding points with line segments.

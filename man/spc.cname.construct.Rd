@@ -2,7 +2,7 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.cname.construct}
 \alias{spc.cname.construct}
-\title{Generating column names for a spectra object}
+\title{Generating column names for a \code{Spectra} object}
 \usage{
 spc.cname.construct(object)
 spc.cname.construct(object, value)
@@ -16,7 +16,7 @@ spc.cname.construct(object, value)
 vector of characters
 }
 \description{
-Function for a spectra object that generates column names made of a 
+Function for a \code{Spectra} object that generates column names made of a 
 combination of @shortName and @Wavelenght slots. If \code{value} is 
 ommitted, the @ShortName slot is used.
 }

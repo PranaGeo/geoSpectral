@@ -2,7 +2,7 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.make.stindex}
 \alias{spc.make.stindex}
-\title{Extracting an element of spectral objects and returning the first and last measurements}
+\title{Extracting an element of \code{Spectra} objects and returning the first and last measurements}
 \usage{
 spc.make.stindex (...,value)
 }
@@ -12,11 +12,11 @@ spc.make.stindex (...,value)
 \item{value}{outputs one STIDF object}
 }
 \description{
-Take an element of spectral objects and outputs one STIDF object.
+Take an element of \code{Spectra} objects and outputs one STIDF object.
 Returning the first and last measurements of the input list element acrording to a time interval depending of the input argument
 }
 \details{
-Takes a n-element list of Spectra objects and outputs one STIDF object. Each row 
+Takes a n-element list of \code{Spectra} objects and outputs one STIDF object. Each row 
 of the ST object has a time interval depending of the input argument rowSimplify.
 rowSimplify : "none", "spc.colMeans","firstRow" or "lastRow"
 none: length of the output object equals the sum of all rows of all elements of the input list object

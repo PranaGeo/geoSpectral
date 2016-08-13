@@ -3,20 +3,20 @@
 \docType{methods}
 \name{show,Spectra-method}
 \alias{show,Spectra-method}
-\title{Show a Spectra object}
+\title{Show a \code{Spectra} object}
 \usage{
 show(x)
 # or 
 x
 }
 \arguments{
-\item{x}{a Spectra object}
+\item{x}{a \code{Spectra} object}
 }
 \value{
 show returns an invisible \code{NULL}
 }
 \description{
-Display a Spectra object
+Display a \code{Spectra} object
 }
 \examples{
 x <- spc.example_spectra()

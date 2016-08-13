@@ -3,18 +3,18 @@
 \docType{methods}
 \name{head,Spectra-method}
 \alias{head,Spectra-method}
-\title{Return the first or last part of a Spectra object}
+\title{Return the first or last part of a \code{Spectra} object}
 \usage{
 head(x)
 }
 \arguments{
-\item{x}{a specrta object}
+\item{x}{a \code{Spectra} object}
 }
 \value{
-Returns a matrix (Spectral data)
+Returns a matrix (\code{Spectra} data)
 }
 \description{
-Return the first or last parts of a spectral object
+Return the first or last parts of a \code{Spectra} object
 }
 \examples{
 x <- spc.example_spectra()

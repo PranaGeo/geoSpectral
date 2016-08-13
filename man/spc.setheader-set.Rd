@@ -2,16 +2,16 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.setheader<-}
 \alias{spc.setheader<-}
-\title{Set a field of the @header slot of a spectra object}
+\title{Set a field of the @header slot of a \code{Spectra} object}
 \usage{
 spc.setheader(x,name)<-value
 }
 \arguments{
-\item{x}{spectra object}
+\item{x}{A \code{Spectra} object}
 
 \item{name}{of the header field to be setted}
 }
 \description{
-Function sets or changes the value of a field in the header slot of spectra object
+Function sets or changes the value of a field in the header slot of \code{Spectra} object
 }
 

@@ -7,12 +7,12 @@
 spc.export.text(x,filename)
 }
 \arguments{
-\item{filename}{text name}
+\item{filename}{Text name}
 
-\item{x}{a spectra object}
+\item{x}{A \code{Spectra} object}
 }
 \description{
-Save the spectra object on disk and Text files can be  saved with  this function
+Save the \code{Spectra} object on disk and Text files can be  saved with  this function
 }
 \examples{
 x=spc.example_spectra()

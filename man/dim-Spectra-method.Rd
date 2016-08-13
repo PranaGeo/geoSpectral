@@ -14,7 +14,7 @@
 Returns a numeric vector containing \code{nrow} and \code{ncol} of the \code{Spectra} object.
 }
 \description{
-Gives number of dimension of a Spectra object
+Gives number of dimension of a \code{Spectra} object
 }
 \examples{
 sp<-spc.example_spectra()

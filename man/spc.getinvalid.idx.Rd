@@ -2,12 +2,12 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.getinvalid.idx}
 \alias{spc.getinvalid.idx}
-\title{Get the selected spectra as invalid}
+\title{Get the selected \code{Spectra} as invalid}
 \usage{
-spc.getinvalid.idx(x)
+spc.getinvalid.idx(object)
 }
 \arguments{
-\item{x}{spectra object}
+\item{object}{A \code{Spectra} object}
 }
 \description{
 Extract the indexes stored as invaild variable
