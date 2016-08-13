@@ -1223,7 +1223,7 @@ setMethod("spc.invalid.detect", signature = "Spectra", def=function(source1){
 #'
 #' 
 #' 
-#' @param x  A \code{Spectra} object 
+#' @param x  A  \code{Spectra} object 
 #' @param name of the header field to be extracted
 #' 
 #' @examples 

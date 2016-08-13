@@ -9,7 +9,7 @@ spc.getheader(x,name)
 \arguments{
 \item{name}{of the header field to be extracted}
 
-\item{x}{A \code{Spectra} object}
+\item{x}{A  \code{Spectra} object}
 }
 \description{
 Function extracts the value of a field in the header slot of \code{Spectra} object
