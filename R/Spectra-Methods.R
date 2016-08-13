@@ -261,7 +261,7 @@ setMethod("dim", signature = "Spectra",
 #' The Number of Columns  of a Spectra object
 #'
 #'@description
-#' \code{nrow} and \code{ncol} return the number of rows or columns of a \code{Spectra}object 
+#' \code{nrow} and \code{ncol} return the number of rows or columns of a \code{Spectra} object 
 #'  
 #'    
 #'
@@ -271,7 +271,7 @@ setMethod("dim", signature = "Spectra",
 #'  
 #' ncol(x)
 #'
-#' @param  x a \code{Spectra} object 
+#' @param  x A \code{Spectra} object 
 #'
 #' @examples
 #' x <- spc.example_spectra() 
