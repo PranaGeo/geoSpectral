@@ -8,7 +8,7 @@
 \S4method{dim}{Spectra}(x)
 }
 \arguments{
-\item{x}{a \code{Spectra} object}
+\item{x}{A \code{Spectra} object}
 }
 \value{
 Returns a numeric vector containing \code{nrow} and \code{ncol} of the \code{Spectra} object.
