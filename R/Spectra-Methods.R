@@ -1441,11 +1441,7 @@ setReplaceMethod(f="spc.setinvalid.idx", signature="Spectra",
 #'we can compress the column (taking only the first element from data column into the header.
 #' 
 #' 
-#' @rdname 
-#' spc.data2header
-#' 
-#' 
-#' 
+
 #' 
 #' 
 setGeneric(name= "spc.data2header",
@@ -1463,6 +1459,23 @@ setMethod("spc.data2header", signature = "Spectra",
 #########################################################################
 # Method : spc.header2data
 #########################################################################
+#' Set or chenge header for data
+#' @description
+#' Get  the header for data of each element  with a column
+#'
+#' @usage 
+#' spc.data2header(object,headerfield,dataname )
+#'
+#' 
+#' @param dataname list \code{Spectra} object
+#' @param object A \code{Spectra} object 
+#' @param headerfield  data column
+#' 
+#' @details 
+#' If header element has length >1, its type is checked. If it is "character",
+#' its elements will be pasted using paste(...,collapse="|"). If it is another 
+#' type, only the first element will be taken.  
+#' 
 #If header element has length >1, its type is checked. If it is "character",
 #its elements will be pasted using paste(...,collapse="|"). If it is another 
 #type, only the first element will be taken.  
