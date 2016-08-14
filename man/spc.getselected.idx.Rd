@@ -4,10 +4,10 @@
 \alias{spc.getselected.idx}
 \title{Extract index inside of a \code{Spectra} object}
 \usage{
-spc.getselected.idx(x)
+spc.getselected.idx(object)
 }
 \arguments{
-\item{x}{A \code{Spectra} object}
+\item{object}{A \code{Spectra} object}
 }
 \description{
 Extracts index of rows marked as selected

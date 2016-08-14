@@ -1313,11 +1313,11 @@ setReplaceMethod(f="spc.updateheader", signature="Spectra",
 #' Extracts index of rows marked as selected
 #' 
 #'@usage 
-#' spc.getselected.idx(x)
+#' spc.getselected.idx(object)
 #'
 #' 
 #' 
-#' @param x A \code{Spectra} object 
+#' @param object  A \code{Spectra} object 
 #' 
 #' 
 setGeneric (name= "spc.getselected.idx",
