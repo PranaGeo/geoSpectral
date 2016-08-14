@@ -1697,7 +1697,7 @@ setMethod("spc.interp.spectral", signature = "Spectra",
 #########################################################################
 #' Exporting into text format
 #' @description
-#' Save the \code{Spectra} object on disk and Text files can be  saved with  this function 
+#' Save the \code{Spectra} object on disk and Text files can be  saved 
 #'
 #' @usage 
 #' spc.export.text(x,filename)
@@ -2016,7 +2016,6 @@ setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,file
 #' subset(myS,DEPTH<=30) #Subsetting rows with respect to the value of Ancillary data
 #' subset(myS,anap_440<=0.01) #Subsetting rows with respect to the value of Spectral data
 #' subset(myS,subset=DEPTH<=30,select="CAST") #Selecting Ancillary data columns, leaving Spectral columns intact
-#' showMethods(subset,classes="Spectra",includeDefs=T) 
 #' 
 #' 
 setMethod("subset",  signature="Spectra",

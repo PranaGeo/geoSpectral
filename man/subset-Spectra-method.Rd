@@ -48,7 +48,6 @@ head(myS[[c("Snap","Offset")]]) #Returns data.frame
 subset(myS,DEPTH<=30) #Subsetting rows with respect to the value of Ancillary data
 subset(myS,anap_440<=0.01) #Subsetting rows with respect to the value of Spectral data
 subset(myS,subset=DEPTH<=30,select="CAST") #Selecting Ancillary data columns, leaving Spectral columns intact
-showMethods(subset,classes="Spectra",includeDefs=T) 
 
 
 }
