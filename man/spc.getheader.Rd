@@ -12,7 +12,7 @@ spc.getheader(x,name)
 \item{x}{A  \code{Spectra} object}
 }
 \description{
-Function extracts the value of a field in the header slot of \code{Spectra} object
+Extracts the value of a field in the header slot of \code{Spectra} object
 }
 \examples{
 sp=spc.example_spectra()

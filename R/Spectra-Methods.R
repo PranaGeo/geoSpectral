@@ -1216,7 +1216,7 @@ setMethod("spc.invalid.detect", signature = "Spectra", def=function(source1){
 #########################################################################
 #' Extract a field of the @header slot of a \code{Spectra} object
 #' @description
-#' Function extracts the value of a field in the header slot of \code{Spectra} object
+#' Extracts the value of a field in the header slot of \code{Spectra} object
 #'
 #'@usage 
 #' spc.getheader(x,name)
