@@ -2,7 +2,7 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.header2data}
 \alias{spc.header2data}
-\title{Set or chenge header for data}
+\title{Get header for data}
 \usage{
 spc.data2header(object,headerfield,dataname )
 }

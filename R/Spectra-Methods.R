@@ -1459,7 +1459,7 @@ setMethod("spc.data2header", signature = "Spectra",
 #########################################################################
 # Method : spc.header2data
 #########################################################################
-#' Set or chenge header for data
+#' Get header for data
 #' @description
 #' Get  the header for data of each element  with a column
 #'
