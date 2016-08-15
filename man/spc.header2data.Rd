@@ -13,6 +13,9 @@ spc.data2header(object,headerfield,dataname )
 
 \item{dataname}{list \code{Spectra} object}
 }
+\value{
+object of class \code{Spectra}
+}
 \description{
 Get  the header for data of each element  with a column
 }

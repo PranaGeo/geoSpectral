@@ -10,7 +10,7 @@ spc.colnames(x)
 \item{x}{A \code{Spectra} object}
 }
 \value{
-Returns the names of an object of class \code{Spectra}.
+Returns the coulmn names of an object of class \code{Spectra} as a charecter vector.
 }
 \description{
 Retrieve  column names of a \code{Spectra} object

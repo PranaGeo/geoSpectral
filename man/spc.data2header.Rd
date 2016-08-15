@@ -2,26 +2,42 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.data2header}
 \alias{spc.data2header}
-\title{Set or chenge data in header}
+\title{Populate fields of header slot using data from data slot}
 \usage{
-spc.data2header(x,headerfield,dataname, compress )
+spc.data2header(object,dataname,headerfield,compress)
 }
 \arguments{
-\item{headerfield}{data column}
+\item{object}{\code{Spectra} object}
 
-\item{dataname}{list \code{Spectra} object}
+\item{dataname}{A character object specifying the name of @data column to be used}
+
+\item{headerfield}{A character object specifying the name of the @header field to be changed}
 
 \item{compress}{true or false}
-
-\item{x}{\code{Spectra} object}
+}
+\value{
+object of class \code{Spectra}
 }
 \description{
-Populates  the header of each element  with a column
+Populates a field of @header with a column data from @data slot.
 }
 \details{
-The function  can be used to populate  the header of each element  with a column.
-Since we are certain that all the columns of all individuals elements are the same,
-we can compress the column (taking only the first element from data column into the header.
-If compress does not exist, it is going to be default veriable.
+This function extracts data from a column of the @data slot (specified by dataname)  
+and creates a new @header field with it. If headerfield is not provided, the name 
+of the new header field will be the same as dataname. 
+The name of the new header field can be overwritten by providing headerfield.
+If all the incoming data rows (dataname) are the same, information put into the header 
+can be compressed by selecting compress=TRUE (default is FALSE). This would take only the first element 
+from the @data column.
+}
+\examples{
+sp=spc.example_spectra()
+sp=spc.data2header(sp,"CAST")
+sp@header
+sp=spc.data2header(sp,"CAST","ProjectCast")
+sp@header
+sp$CAST=rep(33, nrow(sp))
+sp=spc.data2header(sp,"CAST","ProjectCast", compress=T)
+sp@header
 }
 

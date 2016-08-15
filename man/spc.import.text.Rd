@@ -2,19 +2,22 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.import.text}
 \alias{spc.import.text}
-\title{Importing  text into R}
+\title{Importing  spectral data from a text file}
 \usage{
-spc.import.text(...)
+spc.import.text(filename, sep)
 }
 \arguments{
-\item{...}{name of text}
+\item{filename}{Name of input text file}
+
+\item{sep}{Field delimiter to be used}
 }
 \description{
-Texts can be imported back into R with this function
+Spectral data already saved by spc.export.text() can be imported back 
+as a \code{Spectral} object.
 }
 \examples{
 x=spc.example_spectra()
- spc.export.text(x,filename="anap.txt")
+spc.export.text(x,filename="anap.txt")
 aa=spc.import.text("anap.txt")
 spc.plot(aa)
 }

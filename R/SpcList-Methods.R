@@ -1,7 +1,3 @@
-# TODO: Add comment
-# 
-# Author: acizmeli
-###############################################################################
 
 #########################################################################
 # Method : Conversion from SpcList to Spc
@@ -380,3 +376,110 @@ setMethod("spc.header2data", signature="SpcList",
 #			x = as(x, "SpcList")
 #			x@by = myby
 #		})
+
+#' Create a spatio-temporal index based on a list of \code{Spectra} objects
+#' @description
+#' Given a list of \code{Spectra} objects, this function creates a STIDF object summarizing the
+#' spatial and temporal variability of the input dataset. Upon request, it also includes
+#' data columns.
+#'
+#' @param input  An object of class \code{spectra}
+#' @param what2include A character variable giving the data columns to be included in the output
+#' @param rowSimplify  Either of "none", "spc.colMeans","firstRow" or "lastRow". Default is "none"
+#' @param includeTIME  Logical. Whether of not to include TIME data in the output STIDF object. Default is FALSE.
+#' @param includeLATLON Logical. Whether of not to include LAT&LON data in the output STIDF object. Default is FALSE.
+#' 
+#' @details 
+#' This function accepts a list of \code{Spectra} objects and outputs one STIDF object summarizing 
+#' spatial and temporal variation of the input dataset. 
+#' 
+#' If rowSimplify="none", length of the output object will be equal to the sum of all rows of 
+#' all elements of the input list object.
+#' 
+#' If rowSimplify="spc.colMeans", length of the output object will be equal to the number of rows of 
+#' the input list object. 
+#' This option returns the measurement nearest to the average time of each element of the input list.
+#' 
+#' firstRow and lastRow : length of the output object equals the number of rows of the input list object.
+#' These two options return the first and last measurements of the input list element
+#' 
+#' @return An object of class \code{STIDF}. Each row of the output object has a space and time 
+#' characteristics depending of the input argument \code{rowSimplify}.
+#' @seealso \code{\link{spc.makeSpcList}}
+#' @examples 
+#' sp = spc.example_spectra()
+#' BL = spc.makeSpcList(sp,"STATION")
+#' stidx = spc.make.stindex(BL)
+#' dim(stidx)
+#' stidx = spc.make.stindex(BL, what2include = "CAST")
+#' head(stidx@data)
+#' stidx = spc.make.stindex(BL, rowSimplify="spc.colMeans")
+#' dim(stidx)
+spc.make.stindex = function(input,what2include="",rowSimplify="none",
+                            includeTIME=FALSE,includeLATLON=FALSE) {
+  
+  if(!(rowSimplify %in% c("spc.colMeans","firstRow","lastRow","none")))
+    stop(simpleError(paste("rowSimplify should be one of",paste(c("spc.colMeans","firstRow","lastRow","none"),collapse=","))))
+  
+  if(!inherits(input,"list"))
+    stop("The input dataset should inherit from a list (can also be a SpcList)")
+  
+  MyOutput = lapply(1:length(input),function(x){
+    if(nrow(input[[x]])>0){
+      try(what2include<-get("what2include",envir=parent.frame(2)),silent=T)
+      #what2include=c("Rrs_805","INTTIME")					
+      #Save the endTime into a variable
+      endTime<-input[[x]]@endTime
+      
+      #Convert to STIDF (dropping Spectral and Ancillary data, if any)
+      if(rowSimplify=="spc.colMeans"){
+        my = spc.colMeans(input[[x]])
+        my@endTime = endTime[length(endTime)]
+      }
+      if(rowSimplify=="firstRow"){
+        my = input[[x]][1]
+        my@endTime = endTime[length(endTime)]
+      }
+      if(rowSimplify=="lastRow"){
+        my = input[[x]][nrow(input[[x]])]
+      }
+      if(rowSimplify=="none"){
+        my = input[[x]]
+      }
+      if(!(length(what2include)==1 && what2include==""))
+        w2i = input[[x]][[what2include]]
+      
+      w2i2 = data.frame(Index=1:nrow(my),ListIndex=rep(x,nrow(my)))
+      if(exists("w2i"))
+        w2i2[[what2include]] = w2i
+      my@data = w2i2
+      
+      my<-as(my,"STIDF")					
+      #Put the time and endTime slots as data columns
+      if(includeTIME){
+        my[["TIME"]]=time(my)
+        my[["ENDTIME"]]=my@endTime
+      }
+      if(includeLATLON){
+        my@data[["LON"]]=coordinates(my)[,"LON"]
+        my@data[["LAT"]]=coordinates(my)[,"LAT"]
+      }
+      #my[["TIME"]]=as.character(time(input@time),usetz=T)
+      #my[["ENDTIME"]]=as.character(input@endTtime,usetz=T)
+    } else {
+      #Empty variable
+      my<-NA
+    }
+    return(my)
+  })
+  #Eliminate NAs (invalid records, index kept in $ListIndex)
+  myWarn = options()$warn
+  options(warn=-1)
+  MyOutput = MyOutput[!sapply(MyOutput,is.na)]
+  options(warn=myWarn)
+  
+  #Call spc.rbind to convert the list of STIDF to one STIDF object  xxx
+  MyOutput = do.call(spc.rbind,MyOutput)
+  validObject(MyOutput)
+  return(MyOutput)
+}

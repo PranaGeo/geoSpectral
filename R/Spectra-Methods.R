@@ -528,7 +528,7 @@ setReplaceMethod("spc.colnames", signature = "Spectra", def = function (x,value)
 #' spc.plot(x,...)
 #' @param x	 a \code{Spectra} data 
 #' 
-#'
+#' @seealso \code{\link{spc.lines}}
 #' @examples
 #' x <- spc.example_spectra()
 #' spc.plot(x)
@@ -602,7 +602,7 @@ spc.plot.plotly = function(sp){
   lbd = spc.getwavelengths(sp)
   kk = data.frame(Wavelength=lbd,t(sp@Spectra))
   kk=melt(kk,id.vars=1)
-  p <- plot_ly(kk, x=~Wavelength, y=~value, type="scatter", mode="lines",color = ~variable,
+  p <- plotly::plot_ly(kk, x=~Wavelength, y=~value, type="scatter", mode="lines",color = ~variable,
                colors="Spectral", opacity=0.5, line=list(width = 1)) #,evaluate = FALSE) #, colors=pal,line = list(opacity=0.1))
   p
 }
@@ -611,18 +611,22 @@ spc.plot.plotly = function(sp){
 #########################################################################
 # Method : spc.lines
 #########################################################################
-#'  Add Connected Line Segments to a Plot
+#'  Add spectra to an existing plot
 #'
 #'@description
-#' Taking coordinates given in various ways and joining the corresponding points with line segments.
+#' Adds spectra to an existing plot created by spc.plot() using lines()
 #'
 #' 
 #' @usage 
 #' spc.lines(x,...)
-#' @param x	 a \code{Spectra} vector of points to join plot
+#' @param x	 An object of class \code{Spectra}
+#' @param ... Additional input arguments to be passed to lines()
 #' 
-#'
-#' 
+#' @seealso \code{\link{spc.plot}}
+#' @examples 
+#' sp = spc.example_spectra()
+#' spc.plot(sp[2,])
+#' spc.lines(sp[3,],col="red")
 setGeneric("spc.lines",function(x,...){standardGeneric("spc.lines")})
 setMethod("spc.lines",signature = "Spectra",definition = function(x,...){
   a=sapply(1:nrow(x@Spectra), function(S) {
@@ -806,7 +810,7 @@ setMethod("spc.rbind", signature = "STIDF", def = function (...){
         }
       if(class(myslot)[1]=="xts"){
         slot(outt,sltn[J])<-c(slot(outt,sltn[J]),myslot)
-        slot(outt,sltn[J])<-xts(1:length(slot(outt,sltn[J])),time(slot(outt,sltn[J])))
+        slot(outt,sltn[J])<-xts::xts(1:length(slot(outt,sltn[J])),time(slot(outt,sltn[J])))
       }
       if(class(myslot)[1]=="SpatialPoints"){
         prj = slot(outt,sltn[J])@proj4string
@@ -911,110 +915,6 @@ setMethod(f="spc.cname.construct", signature="Spectra",
             return(paste(value,round(spc.getwavelengths(object)),sep="_"))
           })
 
-#########################################################################
-#spc.make.stindex 
-#########################################################################
-#' Extracting an element of \code{Spectra} objects and returning the first and last measurements
-#' @description
-#'Take an element of \code{Spectra} objects and outputs one STIDF object.
-#'Returning the first and last measurements of the input list element acrording to a time interval depending of the input argument
-#'
-#'@usage 
-#' spc.make.stindex (...,value)
-#'
-#'
-#' @param ...  spectra object
-#' @param value  outputs one STIDF object
-#' 
-#' @details 
-#' Takes a n-element list of \code{Spectra} objects and outputs one STIDF object. Each row 
-#' of the ST object has a time interval depending of the input argument rowSimplify.
-#' rowSimplify : "none", "spc.colMeans","firstRow" or "lastRow"
-#' none: length of the output object equals the sum of all rows of all elements of the input list object
-#' spc.colMeans: length of the output object equals the number of rows of the input list object. 
-#' This option returns the measurement nearest to the average time of the input list element
-#' firstRow and lastRow : length of the output object equals the number of rows of the input list object.
-#' These two options return the first and last measurements of the input list element
-#' 
-#' 
-#' 
-#' 
-#Takes a n-element list of Spectra objects and outputs one STIDF object. Each row 
-#of the ST object has a time interval depending of the input argument rowSimplify.
-#rowSimplify : "none", "spc.colMeans","firstRow" or "lastRow"
-#none: length of the output object equals the sum of all rows of all elements of the input list object
-#spc.colMeans: length of the output object equals the number of rows of the input list object. 
-#This option returns the measurement nearest to the average time of the input list element
-#firstRow and lastRow : length of the output object equals the number of rows of the input list object.
-#These two options return the first and last measurements of the input list element
-spc.make.stindex = function(input,what2include="",rowSimplify="none",
-                            includeTIME=FALSE,includeLATLON=FALSE) {
-  
-  if(!(rowSimplify %in% c("spc.Colmeans","firstRow","lastRow","none")))
-    stop(simpleError(paste("rowSimplify should be one of",paste(c("spc.Colmeans","firstRow","lastRow","none"),collapse=","))))
-  
-  if(!inherits(input,"list"))
-    stop("The input dataset should inherit from a list (can also be a SpcList)")
-  
-  MyOutput = lapply(1:length(input),function(x){
-    if(nrow(input[[x]])>0){
-      try(what2include<-get("what2include",envir=parent.frame(2)),silent=T)
-      #what2include=c("Rrs_805","INTTIME")					
-      #Save the endTime into a variable
-      endTime<-input[[x]]@endTime
-      
-      #Convert to STIDF (dropping Spectral and Ancillary data, if any)
-      if(rowSimplify=="spc.Colmeans"){
-        my = spc.colMeans(input[[x]])
-        my@endTime = endTime[length(endTime)]
-      }
-      if(rowSimplify=="firstRow"){
-        my = input[[x]][1]
-        my@endTime = endTime[length(endTime)]
-      }
-      if(rowSimplify=="lastRow"){
-        my = input[[x]][nrow(input[[x]])]
-      }
-      if(rowSimplify=="none"){
-        my = input[[x]]
-      }
-      if(!(length(what2include)==1 && what2include==""))
-        w2i = input[[x]][[what2include]]
-      
-      w2i2 = data.frame(Index=1:nrow(my),ListIndex=rep(x,nrow(my)))
-      if(exists("w2i"))
-        w2i2 = cbind(w2i2,w2i)
-      my@data = w2i2
-      
-      my<-as(my,"STIDF")					
-      #Put the time and endTime slots as data columns
-      if(includeTIME){
-        my[["TIME"]]=time(my)
-        my[["ENDTIME"]]=my@endTime
-      }
-      if(includeLATLON){
-        my@data[["LON"]]=coordinates(my)[,"LON"]
-        my@data[["LAT"]]=coordinates(my)[,"LAT"]
-      }
-      #my[["TIME"]]=as.character(time(input@time),usetz=T)
-      #my[["ENDTIME"]]=as.character(input@endTtime,usetz=T)
-    } else {
-      #Empty variable
-      my<-NA
-    }
-    return(my)
-  })
-  #Eliminate NAs (invalid records, index kept in $ListIndex)
-  myWarn = options()$warn
-  options(warn=-1)
-  MyOutput = MyOutput[!sapply(MyOutput,is.na)]
-  options(warn=myWarn)
-  
-  #Call spc.rbind to convert the list of STIDF to one STIDF object  xxx
-  MyOutput = do.call(spc.rbind,MyOutput)
-  validObject(MyOutput)
-  return(MyOutput)
-}
 ##############################################################################
 #Another version of spacetime::timeMatch(). 
 #method="over" uses the simple over technique. Same as of spacetime::timeMatch().  
@@ -1056,27 +956,21 @@ spc.timeMatch = function(master,searched,returnList=FALSE,method="over",limits,r
   }
   return(out)
 }
-##############################################################################
-#Reports the space and time distance of each row of the STI-inherited object
-#searched to the corresponding row of the STI-inherited object master. Outputs 
-#a data.frame, with two columns : time2master ("difftime", in seconds) and 
-#distance2master ("numeric", in meters) 
-#' Report the space and time distance of each row of the STI-inherited object
+#' Report the space and time distance of each row of an STI-inherited object
 #' @description
-#'Function for a spectra object reports the space and time distance of each row of the STI-inherited object
-#'searched to the corresponding row of the STI-inherited object master
+#' Function that reports the space and time distance of each 
+#' row of the STI-inherited object \code{searched} to the corresponding row of the 
+#' STI-inherited object \code{master}
 #'
-#'@usage 
-#' spc.STI.stdistance(...,searched)
-#'
-#'
-#' @param ...  STI-inherited object master
-#' @param searched      a data.frame
+#' @param master  An STI-inherited object
+#' @param searched An STI-inherited object
+#' @param report Logical. Default value is FALSE
 #' 
 #' @details 
 #' Reports the space and time distance of each row of the STI-inherited object
-#' searched to the corresponding row of the STI-inherited object master. Outputs 
-#' a data.frame, with two columns : time2master ("difftime", in seconds) and 
+#' \code{searched} to the corresponding row of the STI-inherited object \code{master}. 
+#' 
+#' @return Outputs a data.frame, with two columns : time2master ("difftime", in seconds) and 
 #' distance2master ("numeric", in meters) 
 #' 
 spc.STI.stdistance = function(master,searched,report=F){
@@ -1166,7 +1060,7 @@ setMethod("spc.colMeans", signature("Spectra"),function (object) {
   object@Spectra <- t(as.matrix(colMeans(object@Spectra)))
   #			object@data <- as.data.frame(t(callGeneric(object@data)))
   #Find the mean time
-  meantime <- xts(1,mean(time(object@time)),tzone=attr(object@time,"tzone"))
+  meantime <- xts::xts(1,mean(time(object@time)),tzone=attr(object@time,"tzone"))
   #Find the row index closer in time to meantime
   min.idx = which.min(abs(as.numeric(time(meantime)-time(object@time))))
   object@sp <- object@sp[min.idx]
@@ -1368,19 +1262,19 @@ setReplaceMethod(f="spc.setselected.idx", signature="Spectra",
 #########################################################################
 # Method : spc.getinvalid.idx
 #########################################################################
-#' Get the selected \code{Spectra} as invalid
+#' Get index of \code{Spectra} rows marked as invalid
 #' @description
-#' Extract the indexes stored as invaild variable
+#' Extract the row indexes stored as invaild 
 #'
 #' @usage 
 #' spc.getinvalid.idx(object)
 #'
-#' 
-#' 
 #' @param object A \code{Spectra} object 
+#' @return Logical vector 
+#' @examples 
+#' sp= spc.example_spectra()
+#' spc.getinvalid.idx(sp) #No invalid rows
 #' 
-#' 
-#
 setGeneric (name= "spc.getinvalid.idx",
             def=function(object){standardGeneric("spc.getinvalid.idx")})
 setMethod("spc.getinvalid.idx", signature = "Spectra", 
@@ -1390,9 +1284,9 @@ setMethod("spc.getinvalid.idx", signature = "Spectra",
 #########################################################################
 # Method : spc.setinvalid.idx
 #########################################################################
-#' Set the selected \code{Spectra} as invalid
+#' Set rows of \code{Spectra} as invalid
 #' @description
-#' Stores the indexes as invaild variable
+#' Stores the row indexes as invaild
 #'
 #' @usage 
 #' spc.setinvalid.idx(object,value)
@@ -1400,8 +1294,13 @@ setMethod("spc.getinvalid.idx", signature = "Spectra",
 #' 
 #' 
 #' @param x A \code{Spectra} object 
-#' @param value Numeric
-#
+#' @param value Logical vector 
+#' @examples  
+#' sp = spc.example_spectra()
+#' spc.getinvalid.idx(sp) #No invalid rows
+#' vld = rep(TRUE,26)
+#' vld[1:5]<-FALSE
+#' spc.setinvalid.idx(sp)<-vld #Mark the first 5 rows as invalid
 #' 
 setGeneric("spc.setinvalid.idx<-",function(object,value)
 {standardGeneric("spc.setinvalid.idx<-")})
@@ -1422,29 +1321,38 @@ setReplaceMethod(f="spc.setinvalid.idx", signature="Spectra",
 #########################################################################
 # Method : spc.data2header
 #########################################################################
-#' Populate fields of @header slot using data from @data slot 
+#' Populate fields of header slot using data from data slot 
 #' @description
-#' Populates  the header of each element  with a column
+#' Populates a field of @header with a column data from @data slot.
 #'
 #' @usage 
-#' spc.data2header(x,dataname,headerfield,compress)
+#' spc.data2header(object,dataname,headerfield,compress)
 #'
 #' 
-#' @param dataname list \code{Spectra} object
-#' @param x \code{Spectra} object 
+#' @param dataname A character object specifying the name of @data column to be used
+#' @param object \code{Spectra} object 
 #' @param compress true or false
-#' @param headerfield  data column
-#' 
+#' @param headerfield A character object specifying the name of the @header field to be changed
+#'  
 #' @return object of class \code{Spectra}
 #' @details 
-#' The function  can be used to populate  the header of each element  with a column.
-#'Since we are certain that all the columns of all individuals elements are the same,
-#'we can compress the column (taking only the first element from data column into the header.
-#' If compress does not exist, it is going to be default veriable. 
+#' This function extracts data from a column of the @data slot (specified by dataname)  
+#' and creates a new @header field with it. If headerfield is not provided, the name 
+#' of the new header field will be the same as dataname. 
+#' The name of the new header field can be overwritten by providing headerfield.
+#' If all the incoming data rows (dataname) are the same, information put into the header 
+#' can be compressed by selecting compress=TRUE (default is FALSE). This would take only the first element 
+#' from the @data column.
 #' 
-
-#' 
-#' 
+#' @examples 
+#' sp=spc.example_spectra()
+#' sp=spc.data2header(sp,"CAST")
+#' sp@header
+#' sp=spc.data2header(sp,"CAST","ProjectCast")
+#' sp@header
+#' sp$CAST=rep(33, nrow(sp))
+#' sp=spc.data2header(sp,"CAST","ProjectCast", compress=T)
+#' sp@header
 setGeneric(name= "spc.data2header",
            def=function(object,dataname,headerfield,compress=FALSE,...){standardGeneric("spc.data2header")})
 setMethod("spc.data2header", signature = "Spectra", 
@@ -1698,25 +1606,19 @@ setMethod("spc.interp.spectral", signature = "Spectra",
 #########################################################################
 #' Exporting into text format
 #' @description
-#' Save the \code{Spectra} object on disk and Text files can be  saved 
+#' Save the \code{Spectra} object on disk in text format
 #'
 #' @usage 
 #' spc.export.text(x,filename)
-#' 
 #'
-#' 
 #' @param x  A \code{Spectra} object 
-#' @param  filename Text name  
+#' @param  filename Name of the output text file  
 #' @examples 
 #' x=spc.example_spectra()
 #' spc.export.text(x,filename="anap.txt")
 #' aa=spc.import.text("anap.txt")
 #' dev.new()
 #' spc.plot(aa)
-#spc.export.text(out.Rrs[[5]]@Rrs,"test.txt")
-#   aa=spc.import.text("test.txt")
-#dev.new()
-# spc.plot(aa)
 setGeneric(name="spc.export.text",
            def=function(input,filename,writeheader=TRUE,sep=";",...) {standardGeneric("spc.export.text")})
 setMethod("spc.export.text", signature="Spectra", definition=function(input,filename,writeheader,sep,...){
@@ -1780,21 +1682,20 @@ setMethod("spc.export.text", signature="SpcHeader", definition=function(input,fi
 #########################################################################
 # Method : spc.import.text
 #########################################################################
-#' Importing  text into R
+#' Importing  spectral data from a text file
 #' @description
-#' Texts can be imported back into R with this function 
+#' Spectral data already saved by spc.export.text() can be imported back 
+#' as a \code{Spectral} object.
 #'
 #' @usage 
-#' spc.import.text(...)
+#' spc.import.text(filename, sep)
 #' 
 #' 
-#'
-#' 
-#' @param ... name of text
-#' 
+#' @param filename Name of input text file
+#' @param sep Field delimiter to be used
 #' @examples 
-#'x=spc.example_spectra()
-#'  spc.export.text(x,filename="anap.txt")
+#' x=spc.example_spectra()
+#' spc.export.text(x,filename="anap.txt")
 #' aa=spc.import.text("anap.txt")
 #' spc.plot(aa)
 spc.import.text = function(filename,sep=";",...){
@@ -1912,22 +1813,9 @@ spc.import.text = function(filename,sep=";",...){
 #' @return None. Simply creates an Excel file on disk.
 #'
 #' @examples
-#' fnm = file.path(base::system.file(package = "Spectral"), "test_data","particulate_absorption.csv.gz")
-#' abs = read.table(fnm,sep=",",header=T)
-#' abs$STATION=factor(abs$STATION)
-#' abs[1:2,1:17] #Display only the first 2 rows and first 17 columns if the data frame
-#' lbd = as.numeric(gsub("X","",colnames(abs)[14:514]))
-#' Units="1/m"
-#' colnames(abs)= gsub("X",paste("anap","_",sep=""), colnames(abs))
-#' colnames(abs)= gsub("PRES","DEPTH", colnames(abs))
-#' abs = abs[,c(14:514,1:13)] #Rearrange so that Spectra columns come first
-#' tz<-strsplit(as.character(abs$TIME)," ")[[1]][[3]] #Extract the timezone
-#' abs$TIME = as.POSIXct(as.character(abs$TIME),tz=tz) #Compute the time
-#' 
-#' #Space and time columns are automatically found in the column names of inDF
-#' myS<-Spectra(abs,Wavelengths=lbd,Units=Units,ShortName="a_nap")
-#' 
-#' spc.export.xlsx(myS,"test.xlsx")
+#' sp=spc.example_spectra()
+#' if("xlsx" %in% installed.packages())
+#'    spc.export.xlsx(sp,"test.xlsx")
 setGeneric(name="spc.export.xlsx",
            def=function(input,filename,sheetName,writeheader=TRUE,append=F,sep=";",...) {standardGeneric("spc.export.xlsx")})
 setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,filename,sheetName,writeheader,append,sep,...){
