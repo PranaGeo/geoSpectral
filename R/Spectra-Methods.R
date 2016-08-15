@@ -1430,8 +1430,8 @@ setReplaceMethod(f="spc.setinvalid.idx", signature="Spectra",
 #' spc.data2header(x,headerfield,dataname, compress )
 #'
 #' 
-#' @param dataname list spectra object
-#' @param x spectra object 
+#' @param dataname list \code{Spectra} object
+#' @param x \code{Spectra} object 
 #' @param compress true or false
 #' @param headerfield  data column
 #' 

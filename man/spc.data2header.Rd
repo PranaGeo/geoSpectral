@@ -9,11 +9,11 @@ spc.data2header(x,headerfield,dataname, compress )
 \arguments{
 \item{headerfield}{data column}
 
-\item{dataname}{list spectra object}
+\item{dataname}{list \code{Spectra} object}
 
 \item{compress}{true or false}
 
-\item{x}{spectra object}
+\item{x}{\code{Spectra} object}
 }
 \description{
 Populates  the header of each element  with a column
