@@ -1439,7 +1439,7 @@ setReplaceMethod(f="spc.setinvalid.idx", signature="Spectra",
 #' The function  can be used to populate  the header of each element  with a column.
 #'Since we are certain that all the columns of all individuals elements are the same,
 #'we can compress the column (taking only the first element from data column into the header.
-#' 
+#' If compress does not exist, it is going to be default veriable. 
 #' 
 
 #' 
