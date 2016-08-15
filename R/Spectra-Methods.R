@@ -493,7 +493,7 @@ setReplaceMethod("$", signature = "Spectra",
 #' spc.colnames(x)
 #' @param x  A \code{Spectra} object
 #' 
-#' @return Returns the names of an object of class \code{Spectra}.
+#' @return Returns the coulmn names of an object of class \code{Spectra} as a charecter vector.
 #'
 #' @examples
 #' x <- spc.example_spectra()
@@ -1422,12 +1422,12 @@ setReplaceMethod(f="spc.setinvalid.idx", signature="Spectra",
 #########################################################################
 # Method : spc.data2header
 #########################################################################
-#' Set or chenge data in header
+#' Populate fields of @header slot using data from @data slot 
 #' @description
 #' Populates  the header of each element  with a column
 #'
 #' @usage 
-#' spc.data2header(x,headerfield,dataname, compress )
+#' spc.data2header(x,dataname,headerfield,compress)
 #'
 #' 
 #' @param dataname list \code{Spectra} object
@@ -1435,6 +1435,7 @@ setReplaceMethod(f="spc.setinvalid.idx", signature="Spectra",
 #' @param compress true or false
 #' @param headerfield  data column
 #' 
+#' @return object of class \code{Spectra}
 #' @details 
 #' The function  can be used to populate  the header of each element  with a column.
 #'Since we are certain that all the columns of all individuals elements are the same,
@@ -1445,9 +1446,9 @@ setReplaceMethod(f="spc.setinvalid.idx", signature="Spectra",
 #' 
 #' 
 setGeneric(name= "spc.data2header",
-           def=function(object,headerfield,dataname,compress,...){standardGeneric("spc.data2header")})
+           def=function(object,dataname,headerfield,compress=FALSE,...){standardGeneric("spc.data2header")})
 setMethod("spc.data2header", signature = "Spectra", 
-          def=function(object,headerfield,dataname,compress=TRUE,...){
+          def=function(object,dataname, headerfield,compress,...){
             if(missing(headerfield))
               headerfield = dataname
             object@header[[headerfield]]=object[[dataname]]
@@ -1470,7 +1471,7 @@ setMethod("spc.data2header", signature = "Spectra",
 #' @param dataname list \code{Spectra} object
 #' @param object A \code{Spectra} object 
 #' @param headerfield  data column
-#' 
+#' @return object of class \code{Spectra}
 #' @details 
 #' If header element has length >1, its type is checked. If it is "character",
 #' its elements will be pasted using paste(...,collapse="|"). If it is another 
