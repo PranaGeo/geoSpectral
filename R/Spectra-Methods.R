@@ -1502,11 +1502,11 @@ setMethod("[", signature(x = "Spectra"), function(x, i, j) {
 #' @details 
 #' These operators are generic. You can write methods to handle indexing of specific classes of objects
 #' 
-#'  @examples 
+#' @examples 
 #' sp=spc.example_spectra()
 #' sp #501 spectral channels in columns and 26 observations in rows 
 #' sp[1] #501 spectral channels in columns and 1 observations in rows 
-#' sp[[1]]
+#' sp[[1]] # The first column of the @data slot
 #' 
 #' 
 setMethod("[[", signature=c("Spectra","character","missing"),
