@@ -2264,7 +2264,12 @@ setMethod("spc.plot.depth", signature="Spectra", function (object,X,maxSp=10,lab
 })
 
 spc.example_spectra = function(){
+  #Search in the package installation directory
   fnm = file.path(base::system.file(package = "geoSpectral"),"test_data","particulate_absorption.csv.gz")
+  #If the previous search fails, search the file in the source code directory
+  if(!file.exists(fnm))
+    fnm = file.path(base::system.file(package = "geoSpectral"),"inst","test_data","particulate_absorption.csv.gz")
+  
   abs = read.table(fnm,sep=",",header=TRUE)
   abs$STATION=factor(abs$STATION)
   abs[1:2,1:17] #Display only the first 2 rows and first 17 columns if the data frame

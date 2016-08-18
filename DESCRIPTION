@@ -28,3 +28,4 @@ Collate:
     SpcList-Methods.R
     geoSpectral.R
 RoxygenNote: 5.0.1
+Suggests: testthat
