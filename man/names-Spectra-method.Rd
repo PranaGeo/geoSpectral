@@ -18,7 +18,5 @@ Retrieve  the names of \code{Spectra} object
 x <- spc.example_spectra() 
 names(x)
 
-
-
 }
 

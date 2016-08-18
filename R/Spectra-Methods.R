@@ -236,10 +236,9 @@ setAs(from="data.frame", to="Spectra", def=function(from){
   validObject(outS)
   return(outS)
 })
-
 #' Dimensions of a \code{Spectra} object.
 #'
-#'@description
+#' @description
 #' Gives number of dimension of a \code{Spectra} object
 #'
 #' @param x A \code{Spectra} object
@@ -262,9 +261,6 @@ setMethod("dim", signature = "Spectra",
 #'
 #'@description
 #' \code{nrow} and \code{ncol} return the number of rows or columns of a \code{Spectra} object 
-#'  
-#'    
-#'
 #' 
 #' 
 #' @usage 
@@ -290,10 +286,6 @@ setMethod("ncol", signature = "Spectra",
 #'@description
 #' \code{nrow} and \code{ncol} return the number of rows or columns present in a \code{Spectra} object 
 #'  
-#'    
-#'
-#' 
-#' 
 #' @usage 
 #'  
 #' nrow(x)
@@ -313,22 +305,17 @@ setMethod("nrow", signature = "Spectra",
 #########################################################################
 #' The Names of a \code{Spectra} object
 #'
-#'@description
+#' @description
 #'  Retrieve  the names of \code{Spectra} object 
 #'  
 #' @usage 
 #' names(x)
 #'
-#'@param  x  a \code{Spectra} object
-# 
-#'
-#'
-#'@examples
+#' @param  x  a \code{Spectra} object
+#' @examples
 #' 
 #' x <- spc.example_spectra() 
 #' names(x)
-#' 
-#' 
 #' 
 setMethod("names", signature = "Spectra", 
           def = function (x){ 
@@ -348,7 +335,7 @@ setMethod("endTime", signature = "Spectra", def = function (x){
 #########################################################################
 #' Return the first or last part of a \code{Spectra} object
 #'
-#'@description
+#' @description
 #' Return the first or last parts of a \code{Spectra} object 
 #'
 #' @param  x a \code{Spectra} object
@@ -371,7 +358,7 @@ setMethod("head", signature = "Spectra",
 #########################################################################
 #' Show a \code{Spectra} object
 #'
-#'@description
+#' @description
 #' Display a \code{Spectra} object 
 #'
 #' @usage 
@@ -485,7 +472,7 @@ setReplaceMethod("$", signature = "Spectra",
 #########################################################################
 #' Column names of \code{Spectra} object
 #'
-#'@description
+#' @description
 #' Retrieve  column names of a \code{Spectra} object
 #'
 #' 
@@ -520,7 +507,7 @@ setReplaceMethod("spc.colnames", signature = "Spectra", def = function (x,value)
 #########################################################################
 #'  Plotting \code{Spectra} object
 #'
-#'@description
+#' @description
 #' Generating plot of the contents of a \code{Spectra} object
 #'
 #' 
@@ -613,7 +600,7 @@ spc.plot.plotly = function(sp){
 #########################################################################
 #'  Add spectra to an existing plot
 #'
-#'@description
+#' @description
 #' Adds spectra to an existing plot created by spc.plot() using lines()
 #'
 #' 
