@@ -2,14 +2,25 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.setinvalid.idx<-}
 \alias{spc.setinvalid.idx<-}
-\title{Set the selected spectra as invalid}
+\title{Set rows of \code{Spectra} as invalid}
 \usage{
-spc.setinvalid.idx(x)
+spc.setinvalid.idx(object,value)
 }
 \arguments{
-\item{x}{spectra object}
+\item{value}{Logical vector}
+
+\item{x}{A \code{Spectra} object}
 }
 \description{
-Function  stores the indexes as invaild variable
+Stores the row indexes as invaild
+}
+\examples{
+ 
+sp = spc.example_spectra()
+spc.getinvalid.idx(sp) #No invalid rows
+vld = rep(TRUE,26)
+vld[1:5]<-FALSE
+spc.setinvalid.idx(sp)<-vld #Mark the first 5 rows as invalid
+
 }
 

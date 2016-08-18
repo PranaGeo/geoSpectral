@@ -2,14 +2,24 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.lines}
 \alias{spc.lines}
-\title{Add Connected Line Segments to a Plot}
+\title{Add spectra to an existing plot}
 \usage{
 spc.lines(x,...)
 }
 \arguments{
-\item{x}{a spectral vector of points to join plot}
+\item{x}{An object of class \code{Spectra}}
+
+\item{...}{Additional input arguments to be passed to lines()}
 }
 \description{
-A spectral function taking coordinates given in various ways and joining the corresponding points with line segments.
+Adds spectra to an existing plot created by spc.plot() using lines()
+}
+\examples{
+sp = spc.example_spectra()
+spc.plot(sp[2,])
+spc.lines(sp[3,],col="red")
+}
+\seealso{
+\code{\link{spc.plot}}
 }
 

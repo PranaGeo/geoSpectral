@@ -3,19 +3,19 @@
 \docType{methods}
 \name{subset,Spectra-method}
 \alias{subset,Spectra-method}
-\title{Subsetting for spectra and spcList classes}
+\title{Subsetting for a \code{Spectra} and spcList classes}
 \usage{
 subset(x,y,select)
 }
 \arguments{
-\item{x}{spectra object}
+\item{x}{A \code{Spectra} object}
 
-\item{select}{condition selected}
+\item{select}{Condition selected}
 
-\item{y}{subset}
+\item{y}{Subset}
 }
 \description{
-Subsetting can be achieved using the implementation of the R function subset() for Spectra and SpcList classes
+Subsetting can be achieved using the implementation of the R function subset() for \code{Spectra} and SpcList classes
 It is possible to perform a row-wise selection
 }
 \examples{
@@ -48,7 +48,6 @@ head(myS[[c("Snap","Offset")]]) #Returns data.frame
 subset(myS,DEPTH<=30) #Subsetting rows with respect to the value of Ancillary data
 subset(myS,anap_440<=0.01) #Subsetting rows with respect to the value of Spectral data
 subset(myS,subset=DEPTH<=30,select="CAST") #Selecting Ancillary data columns, leaving Spectral columns intact
-showMethods(subset,classes="Spectra",includeDefs=T) 
 
 
 }
