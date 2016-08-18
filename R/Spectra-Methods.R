@@ -1420,19 +1420,16 @@ setMethod("spc.header2data", signature = "Spectra",
 #'
 #' @usage 
 #' x[i]
-#' 
-#'
-#' 
+#' x[i,j]
 #' @param x A \code{Spectra} object from which to extract element(s) or in which to replace element(s). 
-#' 
-#' 
-#'  
+#' @param i,j indices specifying elements to extract or replace. Indices are numeric or character vectors 
 #' @details 
 #' These operators are generic. You can write methods to handle indexing of specific classes of objects
 #' 
-#' 
-#' 
-#' 
+#' @examples 
+#' sp=spc.example_spectra()
+#' sp #501 spectral channels in columns and 26 observations in rows 
+#' sp[1] #501 spectral channels in columns and 1 observations in rows 
 #' 
 setMethod("[", signature(x = "Spectra"), function(x, i, j) {
   OUT_ANC = 0
@@ -1499,6 +1496,29 @@ setMethod("[", signature(x = "Spectra"), function(x, i, j) {
 #########################################################################
 # Method : [[
 #########################################################################
+#' Extract or replace parts of a \code{Spectra} object
+#' @description
+#' Operators acting on \code{Spectra} object and \code{Spectra} lists to extract or replace parts.
+#'
+#' @usage 
+#' x[[i]]
+#' x[[i,j]]
+#'
+#' 
+#' @param x A \code{Spectra} object from which to extract element(s) or in which to replace element(s). 
+#' @param i,j indices specifying elements to extract or replace. Indices are numeric or character vectors 
+#' 
+#'  
+#' @details 
+#' These operators are generic. You can write methods to handle indexing of specific classes of objects
+#' 
+#'  @examples 
+#' sp=spc.example_spectra()
+#' sp #501 spectral channels in columns and 26 observations in rows 
+#' sp[1] #501 spectral channels in columns and 1 observations in rows 
+#' sp[[1]]
+#' 
+#' 
 setMethod("[[", signature=c("Spectra","character","missing"),
           function(x, i, j, ...) {
             Boutput = list()
