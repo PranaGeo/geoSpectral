@@ -21,4 +21,7 @@ spc.export.text(x,filename="anap.txt")
 aa=spc.import.text("anap.txt")
 spc.plot(aa)
 }
+\seealso{
+\code{\link{spc.export.text}}
+}
 

@@ -7,15 +7,22 @@
 spc.getselected.idx(object)
 }
 \arguments{
-\item{object}{A \code{Spectra} object 
- @examples 
+\item{object}{A \code{Spectra} object}
+}
+\value{
+\code{Spectra} object
+}
+\description{
+Extracts index of rows marked as selected
+}
+\examples{
 x <- spc.example_spectra()
 idx=rep(FALSE,nrow(x)); 
 idx[1:5]=TRUE
 spc.setselected.idx(x)<-idx 
-spc.getselected.idx(x)}
+spc.getselected.idx(x)
 }
-\description{
-Extracts index of rows marked as selected
+\seealso{
+\code{\link{spc.setselected.idx}}
 }
 

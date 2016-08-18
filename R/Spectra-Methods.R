@@ -638,8 +638,8 @@ setMethod("spc.lines",signature = "Spectra",definition = function(x,...){
 #########################################################################
 #' Combine \code{Spectra} Objects by Rows
 #'
-#'@description
-#'Take a \code{Spectra} objects and combine by rows
+#' @description
+#' Take a \code{Spectra} objects and combine by rows
 #'
 #'@usage 
 #' spc.cbind(...)
@@ -647,13 +647,13 @@ setMethod("spc.lines",signature = "Spectra",definition = function(x,...){
 #'
 #' @param ... \code{Spectra} object
 #' 
-#' 
-#'
+#' @seealso \code{\link{spc.cbind}}
+#' @return  \code{Spectra} object 
 #' @examples
 #' x <- spc.example_spectra()
-#'nrow(x)  #[1] 26
-#'x2 <- spc.rbind(x,x)
-#'nrow(x2)  #[1] 52
+#' nrow(x)  #[1] 26
+#' x2 <- spc.rbind(x,x)
+#' nrow(x2)  #[1] 52
 #' 
 #' 
 #' 
@@ -762,22 +762,22 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...,compressHeader
 #########################################################################
 #' Combine \code{Spectra} objects by Rows
 #'
-#'@description
-#'Take a \code{Spectra} objects and combine by rows
+#' @description
+#' Take a \code{Spectra} objects and combine by rows
 #'
-#'@usage 
+#' @usage 
 #' spc.cbind(...)
 #' spc.rbind(...)
 #'
 #' @param ... \code{Spectra} object
 #' 
-#' 
+#' @seealso \code{\link{spc.cbind}}
 #'
 #' @examples
 #' x <- spc.example_spectra()
-#'nrow(x)  #[1] 26
-#'x2 <- spc.rbind(x,x)
-#'nrow(x2)  #[1] 52
+#' nrow(x)  #[1] 26
+#' x2 <- spc.rbind(x,x)
+#' nrow(x2)  #[1] 52
 #' 
 #' 
 setMethod("spc.rbind", signature = "STIDF", def = function (...){
@@ -830,18 +830,18 @@ setMethod("spc.rbind", signature = "STIDF", def = function (...){
 #########################################################################
 # Method : spc.getwavelengths
 #########################################################################
-#' Getting wave lenghts in a \code{Spectra} object
+#' Extract wave lenghts of a \code{Spectra} object
 #'
-#'@description
-#'Get wave lenghts insade of  a \code{Spectra} object
+#' @description
+#' Get wave lenghts insade of  a \code{Spectra} object
 #'
-#'@usage 
+#' @usage 
 #' spc.getwavelengths(object)
 #'
 #' @param object A \code{Spectra} object
 #' 
-#' 
-#'
+#' @return numeric vector of  wave lenghts
+#' @seealso \code{\link{spc.setwavelengths}}
 #' @examples
 #'  x <- spc.example_spectra()
 #'  spc.getwavelengths(x)
@@ -868,7 +868,7 @@ setMethod("spc.getwavelengths", signature = "Spectra",
 #' @param value Numeric 
 #' 
 #' 
-#' 
+#' @seealso \code{\link{spc.getwavelengths}}
 #' 
 #'
 #' @examples
@@ -1112,10 +1112,10 @@ setMethod("spc.invalid.detect", signature = "Spectra", def=function(source1){
 #' @description
 #' Extracts the value of a field in the header slot of \code{Spectra} object
 #'
-#'@usage 
+#' @usage 
 #' spc.getheader(x,name)
 #'
-#' 
+#' @seealso \code{\link{spc.setheader}}
 #' 
 #' @param x  A  \code{Spectra} object 
 #' @param name of the header field to be extracted
@@ -1153,13 +1153,12 @@ setMethod("spc.getheader", signature = "Spectra",
 #'@usage 
 #' spc.setheader(x,name)<-value
 #'
-#' 
+#' @seealso \code{\link{spc.getheader}}
 #' 
 #' @param x A \code{Spectra} object 
 #' @param name of the header field to be setted
 #' 
-#' 
-#' 
+#'  
 #' 
 setGeneric (name="spc.setheader<-",
             def=function(object,value,...){standardGeneric("spc.setheader<-")})
@@ -1209,10 +1208,11 @@ setReplaceMethod(f="spc.updateheader", signature="Spectra",
 #'@usage 
 #' spc.getselected.idx(object)
 #'
-#' 
+#' @seealso \code{\link{spc.setselected.idx}}
 #' 
 #' @param object  A \code{Spectra} object 
-#'  @examples 
+#' @return \code{Spectra} object
+#' @examples 
 #' x <- spc.example_spectra()
 #' idx=rep(FALSE,nrow(x)); 
 #' idx[1:5]=TRUE
@@ -1237,14 +1237,14 @@ setMethod("spc.getselected.idx", signature = "Spectra",
 #' 
 #' @param x A \code{Spectra} object 
 #' @param value index for a \code{Spectra} object
-#' 
+#' @seealso \code{\link{spc.getselected.idx}}
 #' @examples 
 #' x <- spc.example_spectra()
 #' idx=rep(FALSE,nrow(x)); 
 #' idx[1:5]=TRUE
 #' spc.setselected.idx(x)<-idx 
 #' spc.plot(x)
-#' 
+#' @return \code{Spectra} object
 #' 
 #' 
 setGeneric("spc.setselected.idx<-",function(object,value)
@@ -1614,7 +1614,7 @@ setMethod("spc.interp.spectral", signature = "Spectra",
 #'
 #' @usage 
 #' spc.export.text(x,filename)
-#'
+#' @seealso \code{\link{spc.import.text}}
 #' @param x  A \code{Spectra} object 
 #' @param  filename Name of the output text file  
 #' @examples 
@@ -1690,7 +1690,7 @@ setMethod("spc.export.text", signature="SpcHeader", definition=function(input,fi
 #' @description
 #' Spectral data already saved by spc.export.text() can be imported back 
 #' as a \code{Spectral} object.
-#'
+#' @seealso \code{\link{spc.export.text}}
 #' @usage 
 #' spc.import.text(filename, sep)
 #' 

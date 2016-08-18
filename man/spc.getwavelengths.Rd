@@ -2,12 +2,15 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.getwavelengths}
 \alias{spc.getwavelengths}
-\title{Getting wave lenghts in a \code{Spectra} object}
+\title{Extract wave lenghts of a \code{Spectra} object}
 \usage{
 spc.getwavelengths(object)
 }
 \arguments{
 \item{object}{A \code{Spectra} object}
+}
+\value{
+numeric vector of  wave lenghts
 }
 \description{
 Get wave lenghts insade of  a \code{Spectra} object
@@ -16,5 +19,8 @@ Get wave lenghts insade of  a \code{Spectra} object
  x <- spc.example_spectra()
  spc.getwavelengths(x)
 
+}
+\seealso{
+\code{\link{spc.setwavelengths}}
 }
 

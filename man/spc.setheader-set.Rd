@@ -14,4 +14,7 @@ spc.setheader(x,name)<-value
 \description{
 Function sets or changes the value of a field in the header slot of \code{Spectra} object
 }
+\seealso{
+\code{\link{spc.getheader}}
+}
 

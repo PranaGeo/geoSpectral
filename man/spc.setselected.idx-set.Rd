@@ -11,6 +11,9 @@ spc.setselected.idx(x,value)
 
 \item{x}{A \code{Spectra} object}
 }
+\value{
+\code{Spectra} object
+}
 \description{
 Set or change selection row index of a \code{Spectra} object
 }
@@ -20,8 +23,8 @@ idx=rep(FALSE,nrow(x));
 idx[1:5]=TRUE
 spc.setselected.idx(x)<-idx 
 spc.plot(x)
-
-
-
+}
+\seealso{
+\code{\link{spc.getselected.idx}}
 }
 

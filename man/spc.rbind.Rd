@@ -10,6 +10,9 @@ spc.rbind(...)
 \arguments{
 \item{...}{\code{Spectra} object}
 }
+\value{
+\code{Spectra} object
+}
 \description{
 Take a \code{Spectra} objects and combine by rows
 }
@@ -21,5 +24,8 @@ nrow(x2)  #[1] 52
 
 
 
+}
+\seealso{
+\code{\link{spc.cbind}}
 }
 
