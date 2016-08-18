@@ -1141,12 +1141,15 @@ setMethod("spc.getheader", signature = "Spectra",
 #' spc.setheader(x,name)<-value
 #'
 #' @seealso \code{\link{spc.getheader}}
-#' 
+#' @param value Object of class SpcHeader
 #' @param x A \code{Spectra} object 
 #' @param name of the header field to be setted
-#' 
-#'  
-#' 
+#' @examples 
+#' sp=spc.example_spectra()
+#' a=new("SpcHeader") # create new SpcHeader class
+#' a$Longitude=123 
+#' spc.setheader(sp,"Station") <- a
+#' sp@header
 setGeneric (name="spc.setheader<-",
             def=function(object,value,...){standardGeneric("spc.setheader<-")})
 setReplaceMethod(f="spc.setheader", signature="Spectra",
