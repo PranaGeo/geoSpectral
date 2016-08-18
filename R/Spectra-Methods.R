@@ -1212,8 +1212,12 @@ setReplaceMethod(f="spc.updateheader", signature="Spectra",
 #' 
 #' 
 #' @param object  A \code{Spectra} object 
-#' 
-#' 
+#'  @examples 
+#' x <- spc.example_spectra()
+#' idx=rep(FALSE,nrow(x)); 
+#' idx[1:5]=TRUE
+#' spc.setselected.idx(x)<-idx 
+#' spc.getselected.idx(x)
 setGeneric (name= "spc.getselected.idx",
             def=function(object){standardGeneric("spc.getselected.idx")})
 setMethod("spc.getselected.idx", signature = "Spectra", 

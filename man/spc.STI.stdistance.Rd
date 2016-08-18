@@ -13,15 +13,17 @@ spc.STI.stdistance(master, searched, report = F)
 
 \item{report}{Logical. Default value is FALSE}
 }
+\value{
+Outputs a data.frame, with two columns : time2master ("difftime", in seconds) and 
+distance2master ("numeric", in meters)
+}
 \description{
-Function for a spectra object reports the space and time distance of each 
+Function that reports the space and time distance of each 
 row of the STI-inherited object \code{searched} to the corresponding row of the 
 STI-inherited object \code{master}
 }
 \details{
 Reports the space and time distance of each row of the STI-inherited object
-\code{searched} to the corresponding row of the STI-inherited object \code{master}. Outputs 
-a data.frame, with two columns : time2master ("difftime", in seconds) and 
-distance2master ("numeric", in meters)
+\code{searched} to the corresponding row of the STI-inherited object \code{master}.
 }
 
