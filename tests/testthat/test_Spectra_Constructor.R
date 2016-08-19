@@ -12,7 +12,11 @@ test_that("Conversion to/from data.frame", {
   expect_is(as(sp, "data.frame"),"data.frame")
   expect_is(as(as(sp, "data.frame"), "Spectra"), "Spectra")
 })
-
+dim(sp)
+c=dim(sp)
 test_that("Dimension is integer", {
   expect_is(dim(sp),"integer")
-})
+  expect_is(dim(sp@header), "NULL" )
+  expect_equal(c[1]+c[2], ncol(sp)+nrow(sp))
+  })
+ 
