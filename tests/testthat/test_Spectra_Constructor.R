@@ -22,4 +22,20 @@ test_that("Dimension is integer or null or equal to numbers of row and column", 
   expect_is(dim(sp@LongName),"NULL")
   expect_is(dim(a),"NULL")
   })
- 
+nc=dim(sp)
+test_that("nuber of row and column are equal to output of ncol and nrow", {
+  expect_equal(ncol(sp),nc[2] )
+  expect_equal(nrow(sp),nc[1] )
+})
+
+
+
+
+
+
+
+
+
+
+
+
