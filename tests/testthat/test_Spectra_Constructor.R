@@ -14,9 +14,12 @@ test_that("Conversion to/from data.frame", {
 })
 dim(sp)
 c=dim(sp)
+a=spc.getwavelengths(sp)
 test_that("Dimension is integer", {
   expect_is(dim(sp),"integer")
   expect_is(dim(sp@header), "NULL" )
   expect_equal(c[1]+c[2], ncol(sp)+nrow(sp))
+  expect_is(dim(sp@LongName),"NULL")
+  expect_is(dim(a),"NULL")
   })
  
