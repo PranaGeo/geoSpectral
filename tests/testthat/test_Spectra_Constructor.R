@@ -26,6 +26,8 @@ nc=dim(sp)
 test_that("nuber of row and column are equal to output of ncol and nrow", {
   expect_equal(ncol(sp),nc[2] )
   expect_equal(nrow(sp),nc[1] )
+  expect_is(ncol(sp),"integer")
+  expect_is(nrow(sp),"integer")
 })
 
 
