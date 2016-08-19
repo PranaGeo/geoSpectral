@@ -30,11 +30,32 @@ test_that("nuber of row and column are equal to output of ncol and nrow", {
   expect_is(nrow(sp),"integer")
 })
 
+test_that("Test for names() ", {
+  
+  expect_is(names(sp),"character")
+  expect_equal(length(names(sp)),512)
+  
+})
 
+hd=head(sp)
 
+ test_that("Tests for head", {
+  expect_equal(length(hd[,1]),6)
+   expect_equal(dim(hd)[2],ncol(hd))
+   expect_equal(dim(sp)[2],ncol(hd))
+   expect_equal(dim(hd)[2],ncol(sp))          
+   expect_is(hd,"matrix")
+   })
 
-
-
+ as.integer(TRUE)
+ a==as.logical("anap_300" %in% spc.colnames(sp))
+ if (a== TRUE){a== 1}
+ test_that("test for spc.colnames()", {
+   
+   expect_is(spc.colnames(sp),"character")
+   expect_equal(length(spc.colnames(sp)),ncol(sp))
+   expect_equal(a,1)
+   })
 
 
 
