@@ -352,7 +352,7 @@ setMethod("endTime", signature = "Spectra", def = function (x){
 #' 
 #'  
 setMethod("head", signature = "Spectra", 
-          def = function (x){  return(head(x@Spectra)) })
+          def = function (x, ...){  return(head(x@Spectra, ...)) })
 #########################################################################
 # Method : show
 #########################################################################
@@ -639,7 +639,8 @@ setMethod("spc.lines",signature = "Spectra",definition = function(x,...){
 #' @examples
 #' x <- spc.example_spectra()
 #' nrow(x)  #[1] 26
-#' x2 <- spc.rbind(x,x)
+#' 
+#' 
 #' nrow(x2)  #[1] 52
 #' 
 #' 
