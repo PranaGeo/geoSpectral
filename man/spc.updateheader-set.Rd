@@ -2,17 +2,17 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.updateheader<-}
 \alias{spc.updateheader<-}
-\title{Update a field of the @header slot of a spectra object}
+\title{Update a field of the @header slot of a \code{Spectra} object}
 \usage{
 spc.updateheader(x,name)<-value
 }
 \arguments{
-\item{x}{spectra objec}
+\item{x}{A \code{Spectra} objec}
 
 \item{name}{of the header field to be updated}
 }
 \description{
-updates or changes the value of a field in the header slot of spectra object
+Updates or changes the value of a field in the header slot of \code{Spectra} object
 }
 \examples{
 sp=spc.example_spectra()

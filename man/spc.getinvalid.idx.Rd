@@ -2,14 +2,22 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.getinvalid.idx}
 \alias{spc.getinvalid.idx}
-\title{Get the selected spectra as invalid}
+\title{Get index of \code{Spectra} rows marked as invalid}
 \usage{
-spc.getinvalid.idx(x)
+spc.getinvalid.idx(object)
 }
 \arguments{
-\item{x}{spectra object}
+\item{object}{A \code{Spectra} object}
+}
+\value{
+Logical vector
 }
 \description{
-Function  extract the indexes stored as invaild variable
+Extract the row indexes stored as invaild
+}
+\examples{
+sp= spc.example_spectra()
+spc.getinvalid.idx(sp) #No invalid rows
+
 }
 
