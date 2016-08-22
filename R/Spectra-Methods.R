@@ -23,7 +23,7 @@
 #' a time-instance, then \code{endTime==TIME}. If \code{endTime} is not provided, inDF columns are searched to match 
 #' ENDTIME. If none found, then it is assumed that data are time-instance measurements. For more information, see the
 #'  documentation of \pkg{spacetime}.
-#' @param header \code{SpcHeader} object containing metadata
+#' @param header \code{BiooHeader} object containing metadata
 #' @param ... other input arguments to be passedto 
 #' 
 #'@details
@@ -131,7 +131,7 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
   }
   if(missing(header)){
     #Extract Units
-    header = new("SpcHeader")
+    header = new("BiooHeader")
   }
 
   #First construct a STIDF object using stConstruct()
@@ -213,9 +213,9 @@ setAs(from="data.frame", to="Spectra", def=function(from){
   
   #Extract the header
   if(!is.null(attr(from,"header")))
-    header = as(attr(from,"header"),"SpcHeader")
+    header = as(attr(from,"header"),"BiooHeader")
   else
-    header = new("SpcHeader")
+    header = new("BiooHeader")
   
   if(!xts::is.timeBased(from$TIME))
     stop("The TIME column does not contain time-based data")
@@ -479,12 +479,12 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...,compressHeader
       #For all slots
       for(J in 1:length(sltn)){
         myslot = slot(eval((allinargs[[I]])),sltn[J])
-        if(class(myslot)[1]=="SpcHeader"){
+        if(class(myslot)[1]=="BiooHeader"){
           aa=rbind(as.data.frame(slot(outt,sltn[J]),stringsAsFactors=F), as.data.frame(myslot,,stringsAsFactors=F))
           rownames(aa)=NULL
           bb = as.list(aa)
           bb = lapply(bb,function(x){names(x)<-NULL;x})
-          outt@header = as(bb,"SpcHeader")
+          outt@header = as(bb,"BiooHeader")
         }
         #					if (length(myslot)==0)
         #						myslot=NA
@@ -877,7 +877,7 @@ setGeneric (name="spc.setheader<-",
             def=function(object,value,...){standardGeneric("spc.setheader<-")})
 setReplaceMethod(f="spc.setheader", signature="Spectra",
                  definition=function(object,value,...){
-                   stopifnot(class(value)=="SpcHeader")
+                   stopifnot(class(value)=="BiooHeader")
                    object@header<-value
                    validObject(object)
                    return(object)
@@ -1176,42 +1176,42 @@ setMethod("spc.interp.spectral", signature = "Spectra",
 setGeneric(name="spc.export.text",
            def=function(input,filename,sep=";",append=FALSE,writeheader=TRUE, ...) {standardGeneric("spc.export.text")})
 setMethod("spc.export.text", signature="Spectra", 
-          definition=function(input,filename,sep,append,
-                              writeheader,...){
-  data = as(input,"data.frame")
-  idx.idx = which(colnames(data) == "idx")
-  if(length(idx.idx)>0){
-    data = data[,-idx.idx]
-  }
-  data = cbind(data.frame(idx=1:nrow(data)),data)
-  clmnnames = colnames(data)
-  data$TIME = as.character(data$TIME,usetz=TRUE)
-  data$ENDTIME = as.character(data$ENDTIME,usetz=TRUE)
-  
-  written=0
-  if(writeheader){
-    spc.export.text(input@header,filename,append=F)
-    written=length(input@header)
-  }
-  slotInfos = .spc.slot.infos(input,sep)
-  for(I in 1:length(slotInfos)){
-    if(length(slotInfos[[I]])==1)
-      mysl=paste(names(slotInfos)[I],slotInfos[[I]],sep=sep)
-    else
-      mysl = paste(names(slotInfos)[I],paste(slotInfos[[I]],collapse=sep),sep=sep)
-    if(written==0)
-      write.table(mysl,filename,row.names=F,col.names=F,append=F,quote=F)
-    else
-      write.table(mysl,filename,row.names=F,col.names=F,append=T,quote=F)
-    written = written+1
-  }
-  
-  #Write column names
-  write.table(paste(clmnnames,collapse=sep), filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
-  #Write Spectra+Ancillary data
-  write.table(data, filename, sep=sep, row.names=F, col.names=F,append=T,quote=F)
-  print(paste("Wrote", filename ))			
-})
+          definition=function(input,filename,sep,append,writeheader,...){
+            
+            data = as(input,"data.frame")
+            idx.idx = which(colnames(data) == "idx")
+            if(length(idx.idx)>0){
+              data = data[,-idx.idx]
+            }
+            data = cbind(data.frame(idx=1:nrow(data)),data)
+            clmnnames = colnames(data)
+            data$TIME = as.character(data$TIME,usetz=TRUE)
+            data$ENDTIME = as.character(data$ENDTIME,usetz=TRUE)
+            
+            written=0
+            if(writeheader){
+              spc.export.text(input@header,filename,append=F)
+              written=length(input@header)
+            }
+            slotInfos = .spc.slot.infos(input,sep)
+            for(I in 1:length(slotInfos)){
+              if(length(slotInfos[[I]])==1)
+                mysl=paste(names(slotInfos)[I],slotInfos[[I]],sep=sep)
+              else
+                mysl = paste(names(slotInfos)[I],paste(slotInfos[[I]],collapse=sep),sep=sep)
+              if(written==0)
+                write.table(mysl,filename,row.names=F,col.names=F,append=F,quote=F)
+              else
+                write.table(mysl,filename,row.names=F,col.names=F,append=T,quote=F)
+              written = written+1
+            }
+            
+            #Write column names
+            write.table(paste(clmnnames,collapse=sep), filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
+            #Write Spectra+Ancillary data
+            write.table(data, filename, sep=sep, row.names=F, col.names=F,append=T,quote=F)
+            print(paste("Wrote", filename ))			
+          })
 .spc.slot.infos = function(input,sep){
   out=list('Spectra|ShortName'=input@ShortName,
            'Spectra|LongName'=input@LongName,
@@ -1220,7 +1220,7 @@ setMethod("spc.export.text", signature="Spectra",
            'Spectra|Wavelengths'=spc.getwavelengths(input))
   return(out)
 }
-setMethod("spc.export.text", signature="SpcHeader", 
+setMethod("spc.export.text", signature="BiooHeader", 
           definition=function(input,filename,sep=";",append=FALSE,...){
   nms = names(input)
   nms = paste0("Spectra|header",sep,nms)
@@ -1240,7 +1240,7 @@ setMethod("spc.export.text", signature="SpcHeader",
     } else {
       #If it is a complex type, then serialize it
       nms[[x]] <<- paste0(nms[[x]], "|Serialized")
-      # browser()
+
       myfield = rawToChar(serialize(myfield,connection = NULL,ascii = T))
       myfield = gsub('\n','_a_',myfield)
       }
@@ -1269,16 +1269,25 @@ spc.import.text = function(filename,sep=";",...){
         ""
     })
     names(header)<- nms
+    
+    #Extract Serialized fields, if any and unserialized them
+    header.idx.ser = grep("\\|Serialized",myT)
     header = .spc.header.infos(header) 
+    if (length(header.idx.ser)>0) {
+      for (JJ in header.idx.ser){
+        header[[JJ]] = unserialize(charToRaw(gsub('_a_','\n',header[[JJ]])))
+        names(header)[JJ] <- gsub("\\|Serialized","",names(header)[JJ])
+      }
+    }
     
     if(any(grepl("StationType",nms)))
       if(is.logical(header$StationType))
         header$StationType = "T"
-    header = as(header,"SpcHeader")
+    header = as(header,"BiooHeader")
     myT = myT[-header.idx]
     
   } else {
-    header = new("SpcHeader")
+    header = new("BiooHeader")
   }
   #Extract the Spectra slots
   Slots.idx = grep("Spectra\\|",myT)
