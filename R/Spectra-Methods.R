@@ -1633,41 +1633,45 @@ setMethod("spc.interp.spectral", signature = "Spectra",
 #' aa=spc.import.text("anap.txt")
 #' dev.new()
 #' spc.plot(aa)
-setMethod("spc.export.text", signature="Spectra", definition=function(input,filename,writeheader,sep,...){
-  data = as(input,"data.frame")
-  idx.idx = which(colnames(data) == "idx")
-  if(length(idx.idx)>0){
-    data = data[,-idx.idx]
-  }
-  data = cbind(data.frame(idx=1:nrow(data)),data)
-  clmnnames = colnames(data)
-  data$TIME = as.character(data$TIME,usetz=TRUE)
-  data$ENDTIME = as.character(data$ENDTIME,usetz=TRUE)
-  
-  written=0
-  if(writeheader){
-    spc.export.text(input@header,filename,append=F)
-    written=length(input@header)
-  }
-  slotInfos = .spc.slot.infos(input,sep)
-  for(I in 1:length(slotInfos)){
-    if(length(slotInfos[[I]])==1)
-      mysl=paste(names(slotInfos)[I],slotInfos[[I]],sep=sep)
-    else
-      mysl = paste(names(slotInfos)[I],paste(slotInfos[[I]],collapse=sep),sep=sep)
-    if(written==0)
-      write.table(mysl,filename,row.names=F,col.names=F,append=F,quote=F)
-    else
-      write.table(mysl,filename,row.names=F,col.names=F,append=T,quote=F)
-    written = written+1
-  }
-  
-  #Write column names
-  write.table(paste(clmnnames,collapse=sep), filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
-  #Write Spectra+Ancillary data
-  write.table(data, filename, sep=sep, row.names=F, col.names=F,append=T,quote=F)
-  print(paste("Wrote", filename ))			
-})
+setGeneric(name="spc.export.text",
+           def=function(input,filename,sep=";",append=FALSE,writeheader=TRUE, ...) {standardGeneric("spc.export.text")})
+setMethod("spc.export.text", signature="Spectra", 
+          definition=function(input,filename,sep,append,writeheader,...){
+            
+            data = as(input,"data.frame")
+            idx.idx = which(colnames(data) == "idx")
+            if(length(idx.idx)>0){
+              data = data[,-idx.idx]
+            }
+            data = cbind(data.frame(idx=1:nrow(data)),data)
+            clmnnames = colnames(data)
+            data$TIME = as.character(data$TIME,usetz=TRUE)
+            data$ENDTIME = as.character(data$ENDTIME,usetz=TRUE)
+            
+            written=0
+            if(writeheader){
+              spc.export.text(input@header,filename,append=F)
+              written=length(input@header)
+            }
+            slotInfos = .spc.slot.infos(input,sep)
+            for(I in 1:length(slotInfos)){
+              if(length(slotInfos[[I]])==1)
+                mysl=paste(names(slotInfos)[I],slotInfos[[I]],sep=sep)
+              else
+                mysl = paste(names(slotInfos)[I],paste(slotInfos[[I]],collapse=sep),sep=sep)
+              if(written==0)
+                write.table(mysl,filename,row.names=F,col.names=F,append=F,quote=F)
+              else
+                write.table(mysl,filename,row.names=F,col.names=F,append=T,quote=F)
+              written = written+1
+            }
+            
+            #Write column names
+            write.table(paste(clmnnames,collapse=sep), filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
+            #Write Spectra+Ancillary data
+            write.table(data, filename, sep=sep, row.names=F, col.names=F,append=T,quote=F)
+            print(paste("Wrote", filename ))			
+          })
 .spc.slot.infos = function(input,sep){
   out=list('Spectra|ShortName'=input@ShortName,
            'Spectra|LongName'=input@LongName,
@@ -1676,6 +1680,34 @@ setMethod("spc.export.text", signature="Spectra", definition=function(input,file
            'Spectra|Wavelengths'=spc.getwavelengths(input))
   return(out)
 }
+setMethod("spc.export.text", signature="SpcHeader", definition=function(input,filename,sep=";",append=F,...){
+  nms = names(input)
+  nms = paste0("Spectra|header",sep,nms)
+
+    out1 = lapply(1:length(input),function(x){
+    myfield <- input[[x]]
+    if(class(myfield) %in%  c("logical","numeric","character","factor")) {
+      #If the separator character exists in the header, then eliminate it 
+      if(class(myfield)=="character")
+        myfield <-gsub(sep,"",input[[x]])
+      
+      #If vector (more than one value) then collapse it into one line
+      if(length(myfield)>1)
+        myfield<-paste(myfield,collapse=sep)
+      #Convert it to character
+      myfield<-as.character(myfield)
+    } else {
+      #If it is a complex type, then serialize it
+      nms[[x]] <<- paste0(nms[[x]], "|Serialized")
+
+      myfield = rawToChar(serialize(myfield,connection = NULL,ascii = T))
+      myfield = gsub('\n','_a_',myfield)
+      }
+    myfield
+  })
+  out1 = cbind(nms,out1)
+  write.table(out1,filename,row.names=F,col.names=F,append=append,quote=F,sep=sep)
+})
 
 #########################################################################
 # Method : spc.import.text
@@ -1712,7 +1744,16 @@ spc.import.text = function(filename,sep=";",...){
         ""
     })
     names(header)<- nms
+    
+    #Extract Serialized fields, if any and unserialized them
+    header.idx.ser = grep("\\|Serialized",myT)
     header = .spc.header.infos(header) 
+    if (length(header.idx.ser)>0) {
+      for (JJ in header.idx.ser){
+        header[[JJ]] = unserialize(charToRaw(gsub('_a_','\n',header[[JJ]])))
+        names(header)[JJ] <- gsub("\\|Serialized","",names(header)[JJ])
+      }
+    }
     
     if(any(grepl("StationType",nms)))
       if(is.logical(header$StationType))
