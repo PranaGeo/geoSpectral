@@ -131,7 +131,7 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
   }
   if(missing(header)){
     #Extract Units
-    header = new("BiooHeader")
+    header = new("SpcHeader")
   }
 
   #First construct a STIDF object using stConstruct()
@@ -213,9 +213,9 @@ setAs(from="data.frame", to="Spectra", def=function(from){
   
   #Extract the header
   if(!is.null(attr(from,"header")))
-    header = as(attr(from,"header"),"BiooHeader")
+    header = as(attr(from,"header"),"SpcHeader")
   else
-    header = new("BiooHeader")
+    header = new("SpcHeader")
   
   if(!xts::is.timeBased(from$TIME))
     stop("The TIME column does not contain time-based data")
@@ -479,12 +479,12 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...,compressHeader
       #For all slots
       for(J in 1:length(sltn)){
         myslot = slot(eval((allinargs[[I]])),sltn[J])
-        if(class(myslot)[1]=="BiooHeader"){
+        if(class(myslot)[1]=="SpcHeader"){
           aa=rbind(as.data.frame(slot(outt,sltn[J]),stringsAsFactors=F), as.data.frame(myslot,,stringsAsFactors=F))
           rownames(aa)=NULL
           bb = as.list(aa)
           bb = lapply(bb,function(x){names(x)<-NULL;x})
-          outt@header = as(bb,"BiooHeader")
+          outt@header = as(bb,"SpcHeader")
         }
         #					if (length(myslot)==0)
         #						myslot=NA
@@ -877,7 +877,7 @@ setGeneric (name="spc.setheader<-",
             def=function(object,value,...){standardGeneric("spc.setheader<-")})
 setReplaceMethod(f="spc.setheader", signature="Spectra",
                  definition=function(object,value,...){
-                   stopifnot(class(value)=="BiooHeader")
+                   stopifnot(class(value)=="SpcHeader")
                    object@header<-value
                    validObject(object)
                    return(object)
@@ -1174,8 +1174,10 @@ setMethod("spc.interp.spectral", signature = "Spectra",
 #aa=spc.import.text("test.txt")
 #dev.new();spc.plot(aa)
 setGeneric(name="spc.export.text",
-           def=function(input,filename,writeheader=TRUE,sep=";",...) {standardGeneric("spc.export.text")})
-setMethod("spc.export.text", signature="Spectra", definition=function(input,filename,writeheader,sep,...){
+           def=function(input,filename,sep=";",append=FALSE,writeheader=TRUE, ...) {standardGeneric("spc.export.text")})
+setMethod("spc.export.text", signature="Spectra", 
+          definition=function(input,filename,sep,append,
+                              writeheader,...){
   data = as(input,"data.frame")
   idx.idx = which(colnames(data) == "idx")
   if(length(idx.idx)>0){
@@ -1218,16 +1220,31 @@ setMethod("spc.export.text", signature="Spectra", definition=function(input,file
            'Spectra|Wavelengths'=spc.getwavelengths(input))
   return(out)
 }
-setMethod("spc.export.text", signature="BiooHeader", definition=function(input,filename,append=F,sep=";",...){
+setMethod("spc.export.text", signature="SpcHeader", 
+          definition=function(input,filename,sep=";",append=FALSE,...){
   nms = names(input)
-  nms = paste("Spectra|header",sep,nms,sep="")
-  out1 = lapply(input,function(x){
-    #If the separator character exists in the header, then eliminate it 
-    x<-gsub(sep,"",x)
-    if(length(x)>1)
-      x<-paste(x,collapse=sep)
-    else
-      x<-as.character(x)
+  nms = paste0("Spectra|header",sep,nms)
+
+    out1 = lapply(1:length(input),function(x){
+    myfield <- input[[x]]
+    if(class(myfield) %in%  c("logical","numeric","character","factor")) {
+      #If the separator character exists in the header, then eliminate it 
+      if(class(myfield)=="character")
+        myfield <-gsub(sep,"",input[[x]])
+      
+      #If vector (more than one value) then collapse it into one line
+      if(length(myfield)>1)
+        myfield<-paste(myfield,collapse=sep)
+      #Convert it to character
+      myfield<-as.character(myfield)
+    } else {
+      #If it is a complex type, then serialize it
+      nms[[x]] <<- paste0(nms[[x]], "|Serialized")
+      # browser()
+      myfield = rawToChar(serialize(myfield,connection = NULL,ascii = T))
+      myfield = gsub('\n','_a_',myfield)
+      }
+    myfield
   })
   out1 = cbind(nms,out1)
   write.table(out1,filename,row.names=F,col.names=F,append=append,quote=F,sep=sep)
@@ -1257,11 +1274,11 @@ spc.import.text = function(filename,sep=";",...){
     if(any(grepl("StationType",nms)))
       if(is.logical(header$StationType))
         header$StationType = "T"
-    header = as(header,"BiooHeader")
+    header = as(header,"SpcHeader")
     myT = myT[-header.idx]
     
   } else {
-    header = new("BiooHeader")
+    header = new("SpcHeader")
   }
   #Extract the Spectra slots
   Slots.idx = grep("Spectra\\|",myT)
