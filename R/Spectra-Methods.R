@@ -1633,8 +1633,6 @@ setMethod("spc.interp.spectral", signature = "Spectra",
 #' aa=spc.import.text("anap.txt")
 #' dev.new()
 #' spc.plot(aa)
-setGeneric(name="spc.export.text",
-           def=function(input,filename,writeheader=TRUE,sep=";",...) {standardGeneric("spc.export.text")})
 setMethod("spc.export.text", signature="Spectra", definition=function(input,filename,writeheader,sep,...){
   data = as(input,"data.frame")
   idx.idx = which(colnames(data) == "idx")
@@ -1678,20 +1676,6 @@ setMethod("spc.export.text", signature="Spectra", definition=function(input,file
            'Spectra|Wavelengths'=spc.getwavelengths(input))
   return(out)
 }
-setMethod("spc.export.text", signature="SpcHeader", definition=function(input,filename,append=F,sep=";",...){
-  nms = names(input)
-  nms = paste("Spectra|header",sep,nms,sep="")
-  out1 = lapply(input,function(x){
-    #If the separator character exists in the header, then eliminate it 
-    x<-gsub(sep,"",x)
-    if(length(x)>1)
-      x<-paste(x,collapse=sep)
-    else
-      x<-as.character(x)
-  })
-  out1 = cbind(nms,out1)
-  write.table(out1,filename,row.names=F,col.names=F,append=append,quote=F,sep=sep)
-})
 
 #########################################################################
 # Method : spc.import.text
@@ -1769,7 +1753,7 @@ spc.import.text = function(filename,sep=";",...){
     if(length(idx)>0){
       Spec = Spec[,-idx]
     }
-    
+  browser()
     Spec$TIME<-as.character(Spec$TIME)
     tz = strsplit(Spec$TIME[1]," ")[[1]][3]
     Spec$TIME<-as.POSIXct(strptime(Spec$TIME,"%Y-%m-%d %H:%M:%S",tz=tz))
