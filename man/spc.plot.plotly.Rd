@@ -3,12 +3,22 @@
 \name{spc.plot.plotly}
 \alias{spc.plot.plotly}
 \title{sp = spc.example_spectra()
-spc.plot.plotly(sp)}
-\usage{
 spc.plot.plotly(sp)
+spc.plot.plotly(sp,legend_field = "Spectra")
+spc.plot.plotly(sp,legend_field = "CAST")
+spc.plot.plotly(sp,legend_field = "NISKIN")
+spc.plot.plotly(sp,legend_field = "STATION")
+spc.plot.plotly(sp,legend_field = "anap_440")}
+\usage{
+spc.plot.plotly(sp, legend_field = "row", plot.max = 10)
 }
 \description{
 sp = spc.example_spectra()
 spc.plot.plotly(sp)
+spc.plot.plotly(sp,legend_field = "Spectra")
+spc.plot.plotly(sp,legend_field = "CAST")
+spc.plot.plotly(sp,legend_field = "NISKIN")
+spc.plot.plotly(sp,legend_field = "STATION")
+spc.plot.plotly(sp,legend_field = "anap_440")
 }
 
