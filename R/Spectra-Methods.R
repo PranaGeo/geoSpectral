@@ -582,8 +582,14 @@ setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="
 
 #'sp = spc.example_spectra()
 #'spc.plot.plotly(sp)
-spc.plot.plotly = function(sp){
-  
+#'spc.plot.plotly(sp,legend_field = "Spectra")
+#'spc.plot.plotly(sp,legend_field = "CAST")
+#'spc.plot.plotly(sp,legend_field = "NISKIN")
+#'spc.plot.plotly(sp,legend_field = "STATION")
+#'spc.plot.plotly(sp,legend_field = "anap_440")
+setGeneric (name= "spc.plot.plotly",
+            def=function(sp, legend_field="row", plot.max=10){standardGeneric("spc.plot.plotly")})
+setMethod("spc.plot.plotly", signature="Spectra", function (sp, legend_field, plot.max=10) {
   #library(reshape2)
   # lbd = spc.getwavelengths(sp)
   # kk = data.frame(Wavelength=lbd,t(sp@Spectra))
@@ -591,16 +597,31 @@ spc.plot.plotly = function(sp){
   # p <- plotly::plot_ly(kk, x=~Wavelength, y=~value, type="scatter", mode="lines",color = ~variable,
   #              colors="Spectral", opacity=0.5, line=list(width = 1)) #,evaluate = FALSE) #, colors=pal,line = list(opacity=0.1))
   
+  
+  if (plot.max > nrow(sp))
+    stop("plot.max cannot be larger than nrow(sp)")
+  
+  idx = floor(seq(1, nrow(sp), length.out = plot.max))
+  if (legend_field %in% names(sp)) {
+    legend_field = paste(legend_field, sp[[legend_field]])
+  }
+  else
+    legend_field = paste(legend_field, 1:nrow(sp))
+  
   ylab = paste(sp@ShortName, " [", sp@Units, "]", sep="")
   xlab = paste("Wavelength [", sp@WavelengthsUnit, "]", sep="")
   p <- plot_ly()
-  for(I in 1:nrow(sp)) {  
-    p <- add_trace(p, x=sp@Wavelengths, y=sp@Spectra[I,],type = "scatter", 
-                                          #marker=list(color=line[['color']]),
+  for(I in 1:length(idx)) {  
+    p <- add_trace(p, x=sp@Wavelengths, y=sp@Spectra[idx[I],],type = "scatter", mode="line",
+                                  name=legend_field[idx[I]],        #marker=list(color=line[['color']]),
                                           evaluate = TRUE)
   }
+  p = layout(p,
+             #title = "Stock Prices",
+             xaxis = list(title = xlab), #rangeslider = list(type = "linear")),
+             yaxis = list(title = ylab))
   p
-}
+})
 
 
 #########################################################################
