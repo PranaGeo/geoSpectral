@@ -2375,6 +2375,7 @@ setMethod("spc.plot.time.plotly", signature="Spectra", function (sp, column, plo
                   name=column[I], evaluate = TRUE) 
   p = layout(p,
              #title = "Stock Prices",
+             hovermode = "closest",
              xaxis = list(title = "Time",
                           rangeslider = list(type = "date")),
              yaxis = list(title = sp@ShortName))
@@ -2419,6 +2420,7 @@ setMethod("spc.plot.depth.plotly", signature="Spectra", function (sp, column, pl
   # layout(yaxis = list(autorange = "reversed"))
   p = layout(p,
              #title = "Stock Prices",
+             hovermode = "closest",
              xaxis = list(title = paste(sp@ShortName, " [", sp@WavelengthsUnit, " ]")),
              yaxis = list(title = "Depth [ m ]", 
                           rangeslider = list(type = "linear"),
