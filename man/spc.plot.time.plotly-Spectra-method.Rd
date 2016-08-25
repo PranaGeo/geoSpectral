@@ -16,8 +16,8 @@
 Plot a \code{Spectra} object with respect to time
 }
 \examples{
-spc.plot.plotly.time.test(sp)
-spc.plot.plotly.time.test(sp, plot.max = 3)
-spc.plot.plotly.time.test(sp, c("anap_450","anap_550","anap_650"))
+spc.plot.time.plotly(sp)
+spc.plot.time.plotly(sp, plot.max = 3)
+spc.plot.time.plotly(sp, c("anap_450","anap_550","anap_650"))
 }
 

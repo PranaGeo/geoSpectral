@@ -2352,9 +2352,9 @@ setGeneric (name= "spc.plot.time.plotly",
 #' @description
 #' Plot a \code{Spectra} object with respect to time
 #' @examples 
-#' spc.plot.plotly.time.test(sp)
-#' spc.plot.plotly.time.test(sp, plot.max = 3)
-#' spc.plot.plotly.time.test(sp, c("anap_450","anap_550","anap_650"))
+#' spc.plot.time.plotly(sp)
+#' spc.plot.time.plotly(sp, plot.max = 3)
+#' spc.plot.time.plotly(sp, c("anap_450","anap_550","anap_650"))
 #' @param sp A \code{Spectra} object
 #' @param column Number or name , defoult value is 10 if a number or name has not been entered
 #'
@@ -2385,38 +2385,37 @@ setMethod("spc.plot.time.plotly", signature="Spectra", function (sp, column, plo
 #########################################################################
 #spc.plot.depth.plotly
 #########################################################################
-setGeneric (name= "spc.plot.depth.plotly",
-            def=function(sp, column, plot.max=10){standardGeneric("spc.plot.depth.plotly")})
 #' Display a Spectra object
 #' @description
 #' Plot a \code{Spectra} object with respect to depth
 #' @examples 
 #' BL = spc.makeSpcList(sp,"CAST")
-#' p1<-spc.plot.plotly.depth.test(BL[[5]])
-#' p1<-layout(title=paste("CAST =", BL[[5]]$CAST[1]))
-#' p2<-spc.plot.plotly.depth.test(BL[[4]])
-#' p2<-layout(title=paste("CAST =", BL[[4]]$CAST[1]))
-#' p <- subplot(p1, p2,  margin = 0.05)
-#' p <- layout(showlegend = FALSE)
+#' p1<-spc.plot.depth.plotly(BL[[5]])
+#' p1<-layout(p1,title=paste("CAST =", BL[[5]]$CAST[1]))
+#' p2<-spc.plot.depth.plotly(BL[[4]])
+#' p2<-layout(p2,title=paste("CAST =", BL[[4]]$CAST[1]))
+#' p <- subplot(p1, p2,  margin = 0.05, shareY=TRUE,shareX=TRUE,titleX=TRUE,titleY=TRUE)
+#' p <- layout(p, showlegend = T)
 #' p
 #' @param sp A \code{Spectra} object
 #' @param column Number or name , defoult value is 10 if a number or name has not been entered
-#'
+setGeneric (name= "spc.plot.depth.plotly",
+            def=function(sp, column, plot.max=10){standardGeneric("spc.plot.depth.plotly")})
 setMethod("spc.plot.depth.plotly", signature="Spectra", function (sp, column, plot.max=10) {
-  if(missing("col")){
+  if(missing("column")){
     if(ncol(sp)<10)
       idx = 1:ncol(sp)
     else
       idx = round(seq(1,ncol(sp), length.out = plot.max))
     
-    col = colnames(sp@Spectra)[idx]
+    column = colnames(sp@Spectra)[idx]
   }
   
-  p=plot_ly(x = sp[[col[1]]] , y = sp$DEPTH, mode = "lines + markers",name=col[1])
-  if(length(col)>1)
-    for(I in 2:length(col))
-      p=add_trace(x = sp[[col[I]]] , y =sp$DEPTH, mode = "lines + markers", 
-                  name=col[I], evaluate = TRUE) 
+  p=plot_ly(x = sp[[column[1]]] , y = sp$DEPTH, mode = "lines + markers",name=column[1])
+  if(length(column)>1)
+    for(I in 2:length(column))
+      p=add_trace(x = sp[[column[I]]] , y =sp$DEPTH, mode = "lines + markers", 
+                  name=column[I], evaluate = TRUE) 
   # layout(yaxis = list(autorange = "reversed"))
   p = layout(p,
              #title = "Stock Prices",
