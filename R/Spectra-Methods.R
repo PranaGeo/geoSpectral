@@ -597,7 +597,7 @@ setMethod("spc.plot.plotly", signature="Spectra", function (sp, legend_field, pl
   # p <- plotly::plot_ly(kk, x=~Wavelength, y=~value, type="scatter", mode="lines",color = ~variable,
   #              colors="Spectral", opacity=0.5, line=list(width = 1)) #,evaluate = FALSE) #, colors=pal,line = list(opacity=0.1))
   
-  
+  require(plotly)
   if (plot.max > nrow(sp))
     stop("plot.max cannot be larger than nrow(sp)")
   
@@ -613,11 +613,13 @@ setMethod("spc.plot.plotly", signature="Spectra", function (sp, legend_field, pl
   p <- plot_ly()
   for(I in 1:length(idx)) {  
     p <- add_trace(p, x=sp@Wavelengths, y=sp@Spectra[idx[I],],type = "scatter", mode="line",
-                                  name=legend_field[idx[I]],        #marker=list(color=line[['color']]),
+                                  name=legend_field[idx[I]], hoverinfo="x+y",
+                   #marker=list(color=line[['color']]),
                                           evaluate = TRUE)
   }
   p = layout(p,
              #title = "Stock Prices",
+             hovermode = "closest",
              xaxis = list(title = xlab), #rangeslider = list(type = "linear")),
              yaxis = list(title = ylab))
   p
@@ -2424,6 +2426,74 @@ setMethod("spc.plot.depth.plotly", signature="Spectra", function (sp, column, pl
   p 
 })
 
+#' Read the NOMAD v2 bio-optical database
+#'
+#'@description
+#' Imports the NOMAD v2 database of the SeaBASS project. More information 
+#' about this dataset can be found at \link{http://seabass.gsfc.nasa.gov/wiki/article.cgi?article=NOMAD}
+#'
+#' @param infile \code{character} containing the name of the input file.
+#'
+#' @return Returns an object of class \code{data.frame}.
+#'
+#' @examples
+#' a = spc.Read_NOMAD_v2(fnm)
+#'
+#' spc.plot.plotly(ap, plot.max=15)
+spc.Read_NOMAD_v2 = function(skip.all.na.rows=TRUE) {
+  fnm = file.path(system.file(package = "geoSpectral"), "test_data","nomad_seabass_v2.a_2008200.txt.gz")
+  #Read data off disk
+  print(paste("Reading the NOMAD file", fnm, "off disk."))
+  mydata=read.table(fnm, header=T,sep=",", comment.char = "!")
+  
+  #Date-time conversion
+  cc=paste(mydata$year, mydata$month,mydata$day,sep="/")
+  bb=paste(mydata$hour, mydata$minute,mydata$second,sep=":")
+  a=paste(cc,bb)
+  a=strptime(a,"%Y/%m/%d %H:%M:%S")
+  mydata = mydata[,-(1:6)] #Remove cols year month day hour minute second
+  nms = names(mydata)
+  nms = gsub("lat","LAT",nms)
+  nms = gsub("lon","LON",nms)
+  names(mydata)=nms
+  mydata = cbind(mydata, TIME=as.POSIXct(a))
+  mydata[mydata==-999]=NA
+  
+  ShortNames = c("kd","lw","es","ap","ad","ag","a","bb","bbr")
+  idx=lapply(ShortNames, function(x) {
+    i = regexpr(paste0("^",x,"[[:digit:]][[:digit:]][[:digit:]]$"), names(mydata))
+    i = which(i!=-1)
+    i
+    #grep(glob2rx(paste0(x,"???")), names(mydata))
+  })
+  #Extract Spectral data
+  sp = lapply(idx, function(x) mydata[,x])
+  #Cleanup mydata from Spectral data
+  mydata = mydata [, -do.call(c, idx)]
+  
+  #Reorder columns
+  require(dplyr)
+  mydata = mydata %>% select(TIME, LON, LAT, cruise, flag, everything())
+  
+  out = lapply(1:length(ShortNames), function(x) {
+    #Find rows that do not contain NAs
+    lbd = as.numeric(gsub(ShortNames[x], "", names(sp[[x]])))
+    #out = mydata[complete.cases(mydata[,idx[[x]]]),c(names(mydata)[idx[[x]]],"datetime","latitude","longitude")]    out = Spectra(out, Wavelengths = lbd,ShortName=ShortNames[x],time="TIME",Units="1/m")
+    
+    out = cbind(sp[[x]], mydata)
+    
+    if (skip.all.na.rows){
+      #Find rows where there at least some data
+      na_idx = !apply((apply(sp[[x]], 2, is.na)),1,all)
+      out = out[na_idx,]
+    }
+    out = Spectra(out, Wavelengths = lbd,ShortName=ShortNames[x],time="TIME",Units="1/m")
+    spc.colnames(out)<-spc.cname.construct(out)
+    return (out)
+  })
+  names(out) = ShortNames
+  out
+}
 
 
 
