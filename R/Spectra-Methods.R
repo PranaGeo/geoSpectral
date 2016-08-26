@@ -580,52 +580,6 @@ setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="
   grid(col="black")
 })
 
-#'sp = spc.example_spectra()
-#'spc.plot.plotly(sp)
-#'spc.plot.plotly(sp,legend_field = "Spectra")
-#'spc.plot.plotly(sp,legend_field = "CAST")
-#'spc.plot.plotly(sp,legend_field = "NISKIN")
-#'spc.plot.plotly(sp,legend_field = "STATION")
-#'spc.plot.plotly(sp,legend_field = "anap_440")
-setGeneric (name= "spc.plot.plotly",
-            def=function(sp, legend_field="row", plot.max=10){standardGeneric("spc.plot.plotly")})
-setMethod("spc.plot.plotly", signature="Spectra", function (sp, legend_field, plot.max=10) {
-  #library(reshape2)
-  # lbd = spc.getwavelengths(sp)
-  # kk = data.frame(Wavelength=lbd,t(sp@Spectra))
-  # kk=melt(kk,id.vars=1)
-  # p <- plotly::plot_ly(kk, x=~Wavelength, y=~value, type="scatter", mode="lines",color = ~variable,
-  #              colors="Spectral", opacity=0.5, line=list(width = 1)) #,evaluate = FALSE) #, colors=pal,line = list(opacity=0.1))
-  
-  require(plotly)
-  if (plot.max > nrow(sp))
-    stop("plot.max cannot be larger than nrow(sp)")
-  
-  idx = floor(seq(1, nrow(sp), length.out = plot.max))
-  if (legend_field %in% names(sp)) {
-    legend_field = paste(legend_field, sp[[legend_field]])
-  }
-  else
-    legend_field = paste(legend_field, 1:nrow(sp))
-  
-  ylab = paste(sp@ShortName, " [", sp@Units, "]", sep="")
-  xlab = paste("Wavelength [", sp@WavelengthsUnit, "]", sep="")
-  p <- plot_ly()
-  for(I in 1:length(idx)) {  
-    p <- add_trace(p, x=sp@Wavelengths, y=sp@Spectra[idx[I],],type = "scatter", mode="line",
-                                  name=legend_field[idx[I]], hoverinfo="x+y",
-                   #marker=list(color=line[['color']]),
-                                          evaluate = TRUE)
-  }
-  p = layout(p,
-             #title = "Stock Prices",
-             hovermode = "closest",
-             xaxis = list(title = xlab), #rangeslider = list(type = "linear")),
-             yaxis = list(title = ylab))
-  p
-})
-
-
 #########################################################################
 # Method : spc.lines
 #########################################################################
@@ -2343,90 +2297,6 @@ spc.example_spectra = function(){
   myS
 }
 
-#########################################################################
-#spc.plot.time.plotly
-#########################################################################
-setGeneric (name= "spc.plot.time.plotly",
-            def=function(sp, column, plot.max=10){standardGeneric("spc.plot.time.plotly")})
-#' Display a Spectra object
-#' @description
-#' Plot a \code{Spectra} object with respect to time
-#' @examples 
-#' spc.plot.time.plotly(sp)
-#' spc.plot.time.plotly(sp, plot.max = 3)
-#' spc.plot.time.plotly(sp, c("anap_450","anap_550","anap_650"))
-#' @param sp A \code{Spectra} object
-#' @param column Number or name , defoult value is 10 if a number or name has not been entered
-#'
-setMethod("spc.plot.time.plotly", signature="Spectra", function (sp, column, plot.max=10) {
-  if(missing("column")){
-    if(ncol(sp)<10)
-      idx = 1:ncol(sp)
-    else
-      idx = round(seq(1, ncol(sp), length.out = plot.max))
-    
-    column = colnames(sp@Spectra)[idx]
-  }
-  myTime = time(sp@time)
-  p=plot_ly(x = myTime , y = sp[[column[1]]], mode = "lines + markers",name=column[1])
-  if(length(column)>1)
-    for(I in 2:length(column))
-      p=add_trace(x = myTime , y = sp[[column[I]]], mode = "lines + markers", 
-                  name=column[I], evaluate = TRUE) 
-  p = layout(p,
-             #title = "Stock Prices",
-             hovermode = "closest",
-             xaxis = list(title = "Time",
-                          rangeslider = list(type = "date")),
-             yaxis = list(title = sp@ShortName))
-  p
-})
-
-#########################################################################
-#spc.plot.depth.plotly
-#########################################################################
-#' Display a Spectra object
-#' @description
-#' Plot a \code{Spectra} object with respect to depth
-#' @examples 
-#' BL = spc.makeSpcList(sp,"CAST")
-#' p1<-spc.plot.depth.plotly(BL[[5]])
-#' p1<-layout(p1,title=paste("CAST =", BL[[5]]$CAST[1]))
-#' p2<-spc.plot.depth.plotly(BL[[4]])
-#' p2<-layout(p2,title=paste("CAST =", BL[[4]]$CAST[1]))
-#' p <- subplot(p1, p2,  margin = 0.05, shareY=TRUE,shareX=TRUE,titleX=TRUE,titleY=TRUE)
-#' p <- layout(p, showlegend = T)
-#' p
-#' @param sp A \code{Spectra} object
-#' @param column Number or name , defoult value is 10 if a number or name has not been entered
-setGeneric (name= "spc.plot.depth.plotly",
-            def=function(sp, column, plot.max=10){standardGeneric("spc.plot.depth.plotly")})
-setMethod("spc.plot.depth.plotly", signature="Spectra", function (sp, column, plot.max=10) {
-  if(missing("column")){
-    if(ncol(sp)<10)
-      idx = 1:ncol(sp)
-    else
-      idx = round(seq(1,ncol(sp), length.out = plot.max))
-    
-    column = colnames(sp@Spectra)[idx]
-  }
-  
-  p=plot_ly(x = sp[[column[1]]] , y = sp$DEPTH, mode = "lines + markers",name=column[1])
-  if(length(column)>1)
-    for(I in 2:length(column))
-      p=add_trace(x = sp[[column[I]]] , y =sp$DEPTH, mode = "lines + markers", 
-                  name=column[I], evaluate = TRUE) 
-  # layout(yaxis = list(autorange = "reversed"))
-  p = layout(p,
-             #title = "Stock Prices",
-             hovermode = "closest",
-             xaxis = list(title = paste(sp@ShortName, " [", sp@WavelengthsUnit, " ]")),
-             yaxis = list(title = "Depth [ m ]", 
-                          rangeslider = list(type = "linear"),
-                          autorange = "reversed"))
-  p 
-})
-
 #' Read the NOMAD v2 bio-optical database
 #'
 #'@description
@@ -2496,5 +2366,186 @@ spc.Read_NOMAD_v2 = function(skip.all.na.rows=TRUE) {
   out
 }
 
+#'sp = spc.example_spectra()
+#'spc.plot.plotly(sp)
+#'spc.plot.plotly(sp,legend_field = "Spectra")
+#'spc.plot.plotly(sp,legend_field = "CAST")
+#'spc.plot.plotly(sp,legend_field = "NISKIN")
+#'spc.plot.plotly(sp,legend_field = "STATION")
+#'spc.plot.plotly(sp,legend_field = "anap_440")
+setGeneric (name= "spc.plot.plotly",
+            def=function(sp, legend_field="row", plot.max=10){standardGeneric("spc.plot.plotly")})
+setMethod("spc.plot.plotly", signature="Spectra", function (sp, legend_field, plot.max=10) {
+  #library(reshape2)
+  # lbd = spc.getwavelengths(sp)
+  # kk = data.frame(Wavelength=lbd,t(sp@Spectra))
+  # kk=melt(kk,id.vars=1)
+  # p <- plotly::plot_ly(kk, x=~Wavelength, y=~value, type="scatter", mode="lines",color = ~variable,
+  #              colors="Spectral", opacity=0.5, line=list(width = 1)) #,evaluate = FALSE) #, colors=pal,line = list(opacity=0.1))
+  require(plotly)
+  if (plot.max > nrow(sp))
+    stop("plot.max cannot be larger than nrow(sp)")
+  
+  idx = floor(seq(1, nrow(sp), length.out = plot.max))
+  if (legend_field %in% names(sp)) {
+    legend_field = paste(legend_field, sp[[legend_field]])
+  }
+  else
+    legend_field = paste(legend_field, 1:nrow(sp))
+  
+  ylab = paste(sp@ShortName, " [", sp@Units, "]", sep="")
+  xlab = paste("Wavelength [", sp@WavelengthsUnit, "]", sep="")
+  p <- plot_ly()
+  for(I in 1:length(idx)) {  
+    p <- add_trace(p, x=sp@Wavelengths, y=sp@Spectra[idx[I],],type = "scatter", mode="line",
+                   name=legend_field[idx[I]], hoverinfo="x+y",
+                   #marker=list(color=line[['color']]),
+                   evaluate = TRUE)
+  }
+  p = layout(p,
+             #title = "Stock Prices",
+             hovermode = "closest",
+             xaxis = list(title = xlab), #rangeslider = list(type = "linear")),
+             yaxis = list(title = ylab))
+  p
+})
 
+#' Display a Spectra object
+#' @description
+#' Plot a \code{Spectra} object with respect to time
+#' @param sp A \code{Spectra} object
+#' @param column Number or name , defoult value is 10 if a number or name has not been entered
+#' 
+#' @examples 
+#' spc.plot.time.plotly(sp)
+#' spc.plot.time.plotly(sp, plot.max = 3)
+#' spc.plot.time.plotly(sp, c("anap_450","anap_550","anap_650"))
+setGeneric (name= "spc.plot.time.plotly",
+            def=function(sp, column, plot.max=10){standardGeneric("spc.plot.time.plotly")})
+setMethod("spc.plot.time.plotly", signature="Spectra", function (sp, column, plot.max=10) {
+  require(plotly)
+  if(missing("column")){
+    if(ncol(sp)<10)
+      idx = 1:ncol(sp)
+    else
+      idx = round(seq(1, ncol(sp), length.out = plot.max))
+    
+    column = colnames(sp@Spectra)[idx]
+  }
+  myTime = time(sp@time)
+  p=plot_ly(x = myTime , y = sp[[column[1]]], mode = "lines + markers",name=column[1])
+  if(length(column)>1)
+    for(I in 2:length(column))
+      p=add_trace(x = myTime , y = sp[[column[I]]], mode = "lines + markers", 
+                  name=column[I], evaluate = TRUE) 
+  p = layout(p,
+             #title = "Stock Prices",
+             hovermode = "closest",
+             xaxis = list(title = "Time",
+                          rangeslider = list(type = "date")),
+             yaxis = list(title = sp@ShortName))
+  p
+})
+
+#########################################################################
+#spc.plot.depth.plotly
+#########################################################################
+#' Display a Spectra object
+#' @description
+#' Plot a \code{Spectra} object with respect to depth
+#' @examples 
+#' BL = spc.makeSpcList(sp,"CAST")
+#' p1<-spc.plot.depth.plotly(BL[[5]])
+#' #p1<-layout(p1,title=paste("CAST =", BL[[5]]$CAST[1]))
+#' p2<-spc.plot.depth.plotly(BL[[4]])
+#' #p2<-layout(p2,title=paste("CAST =", BL[[4]]$CAST[1]))
+#' p <- subplot(p1, p2,  margin = 0.05, shareY=TRUE,shareX=TRUE,titleX=TRUE,titleY=TRUE)
+#' p <- layout(p, showlegend = T, 
+#' annotations = list(
+#' list(x = 0.2 , y = 1.05, text = BL[[5]]$CAST[1], showarrow = F, xref='paper', yref='paper'),
+#' list(x = 0.8 , y = 1.05, text = BL[[4]]$CAST[1], showarrow = F, xref='paper', yref='paper')))
+#' p
+#' @param sp A \code{Spectra} object
+#' @param column Number or name , defoult value is 10 if a number or name has not been entered
+setGeneric (name= "spc.plot.depth.plotly",
+            def=function(sp, column, plot.max=10){standardGeneric("spc.plot.depth.plotly")})
+setMethod("spc.plot.depth.plotly", signature="Spectra", function (sp, column, plot.max=10) {
+  require(plotly)
+  if(missing("column")){
+    if(ncol(sp)<10)
+      idx = 1:ncol(sp)
+    else
+      idx = round(seq(1,ncol(sp), length.out = plot.max))
+    
+    column = colnames(sp@Spectra)[idx]
+  }
+  
+  p=plot_ly(x = sp[[column[1]]] , y = sp$DEPTH, mode = "lines + markers",name=column[1])
+  if(length(column)>1)
+    for(I in 2:length(column))
+      p=add_trace(x = sp[[column[I]]] , y =sp$DEPTH, mode = "lines + markers", 
+                  name=column[I], evaluate = TRUE) 
+  # layout(yaxis = list(autorange = "reversed"))
+  p = layout(p,
+             #title = "Stock Prices",
+             hovermode = "closest",
+             xaxis = list(title = paste(sp@ShortName, " [", sp@WavelengthsUnit, " ]")),
+             yaxis = list(title = "Depth [ m ]", 
+                          rangeslider = list(type = "linear"),
+                          autorange = "reversed"))
+  p 
+})
+
+setGeneric (name= "spc.plot.map.plotly",
+            def=function(sp, row, plot.max=10, color="#FF0000", opacity=1){standardGeneric("spc.plot.map.plotly")})
+setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, row, plot.max=250, color, opacity) {
+
+  bbx = sp@sp@bbox
+  bbx[,2] =  bbx[,2] + (0.04 * abs(bbx[,2]))
+  if(bbx[2,2]>90)
+    bbx[2,2]<-89
+  bbx[,1] =  bbx[,1] - (0.04 * abs(bbx[,1]))
+  if(bbx[2,1]< -90)
+    bbx[2,1]<- -89
+
+    g <- list(
+    #scope = 'north america',
+    showland = TRUE,
+    landcolor = toRGB("grey83"),
+    subunitcolor = toRGB("white"),
+    countrycolor = toRGB("white"),
+    showlakes = TRUE,
+    lakecolor = toRGB("blue"),
+    showrivers = TRUE,
+    showsubunits = TRUE,
+    showcountries = TRUE,
+    resolution = 50,
+    projection = list(
+      type = 'conic conformal',
+      rotation = list(
+        lon = -100
+      )
+    ),
+    lonaxis = list(
+      showgrid = TRUE,
+      gridwidth = 0.5,
+      range = c(bbx[1,1], bbx[1,2]),
+      dtick = 5
+    ),
+    lataxis = list(
+      showgrid = TRUE,
+      gridwidth = 0.5,
+      range = c(bbx[2,1],bbx[2,2]),
+      dtick = 5
+    )
+    )
+    color = rep(color, nrow(sp))
+    color[1]= "#00FF00"
+    p <- plot_ly(lat = sp@sp@coords[,"LAT"], lon = sp@sp@coords[,"LONG"], 
+                 #text = hover, color = Globvalue,marker = m
+                 type = 'scattergeo', color=color, opacity=opacity
+    ) 
+    p <- layout(geo = g)
+    p
+})
 
