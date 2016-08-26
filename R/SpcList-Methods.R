@@ -307,7 +307,7 @@ setReplaceMethod(f="spc.updateheader", signature="list",
 #########################################################################
 setMethod("spc.data2header", signature = "list", 
 		def=function(object,dataname,headerfield,compress=TRUE,...){
-			temp = lapply(object, spc.data2header, headerfield,dataname,compress,...)
+			temp = lapply(object, spc.data2header, dataname,headerfield,compress,...)
 			object@.Data=temp
 			return(object)
 		})

@@ -580,29 +580,6 @@ setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="
   grid(col="black")
 })
 
-#'sp = spc.example_spectra()
-#'spc.plot.plotly(sp)
-spc.plot.plotly = function(sp){
-  
-  #library(reshape2)
-  # lbd = spc.getwavelengths(sp)
-  # kk = data.frame(Wavelength=lbd,t(sp@Spectra))
-  # kk=melt(kk,id.vars=1)
-  # p <- plotly::plot_ly(kk, x=~Wavelength, y=~value, type="scatter", mode="lines",color = ~variable,
-  #              colors="Spectral", opacity=0.5, line=list(width = 1)) #,evaluate = FALSE) #, colors=pal,line = list(opacity=0.1))
-  
-  ylab = paste(sp@ShortName, " [", sp@Units, "]", sep="")
-  xlab = paste("Wavelength [", sp@WavelengthsUnit, "]", sep="")
-  p <- plot_ly()
-  for(I in 1:nrow(sp)) {  
-    p <- add_trace(p, x=sp@Wavelengths, y=sp@Spectra[I,],type = "scatter", 
-                                          #marker=list(color=line[['color']]),
-                                          evaluate = TRUE)
-  }
-  p
-}
-
-
 #########################################################################
 # Method : spc.lines
 #########################################################################
@@ -1643,42 +1620,44 @@ setMethod("spc.interp.spectral", signature = "Spectra",
 #' dev.new()
 #' spc.plot(aa)
 setGeneric(name="spc.export.text",
-           def=function(input,filename,writeheader=TRUE,sep=";",...) {standardGeneric("spc.export.text")})
-setMethod("spc.export.text", signature="Spectra", definition=function(input,filename,writeheader,sep,...){
-  data = as(input,"data.frame")
-  idx.idx = which(colnames(data) == "idx")
-  if(length(idx.idx)>0){
-    data = data[,-idx.idx]
-  }
-  data = cbind(data.frame(idx=1:nrow(data)),data)
-  clmnnames = colnames(data)
-  data$TIME = as.character(data$TIME,usetz=TRUE)
-  data$ENDTIME = as.character(data$ENDTIME,usetz=TRUE)
-  
-  written=0
-  if(writeheader){
-    spc.export.text(input@header,filename,append=F)
-    written=length(input@header)
-  }
-  slotInfos = .spc.slot.infos(input,sep)
-  for(I in 1:length(slotInfos)){
-    if(length(slotInfos[[I]])==1)
-      mysl=paste(names(slotInfos)[I],slotInfos[[I]],sep=sep)
-    else
-      mysl = paste(names(slotInfos)[I],paste(slotInfos[[I]],collapse=sep),sep=sep)
-    if(written==0)
-      write.table(mysl,filename,row.names=F,col.names=F,append=F,quote=F)
-    else
-      write.table(mysl,filename,row.names=F,col.names=F,append=T,quote=F)
-    written = written+1
-  }
-  
-  #Write column names
-  write.table(paste(clmnnames,collapse=sep), filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
-  #Write Spectra+Ancillary data
-  write.table(data, filename, sep=sep, row.names=F, col.names=F,append=T,quote=F)
-  print(paste("Wrote", filename ))			
-})
+           def=function(input,filename,sep=";",append=FALSE,writeheader=TRUE, ...) {standardGeneric("spc.export.text")})
+setMethod("spc.export.text", signature="Spectra", 
+          definition=function(input,filename,sep,append,writeheader,...){
+            
+            data = as(input,"data.frame")
+            idx.idx = which(colnames(data) == "idx")
+            if(length(idx.idx)>0){
+              data = data[,-idx.idx]
+            }
+            data = cbind(data.frame(idx=1:nrow(data)),data)
+            clmnnames = colnames(data)
+            data$TIME = as.character(data$TIME,usetz=TRUE)
+            data$ENDTIME = as.character(data$ENDTIME,usetz=TRUE)
+            
+            written=0
+            if(writeheader){
+              spc.export.text(input@header,filename,append=F)
+              written=length(input@header)
+            }
+            slotInfos = .spc.slot.infos(input,sep)
+            for(I in 1:length(slotInfos)){
+              if(length(slotInfos[[I]])==1)
+                mysl=paste(names(slotInfos)[I],slotInfos[[I]],sep=sep)
+              else
+                mysl = paste(names(slotInfos)[I],paste(slotInfos[[I]],collapse=sep),sep=sep)
+              if(written==0)
+                write.table(mysl,filename,row.names=F,col.names=F,append=F,quote=F)
+              else
+                write.table(mysl,filename,row.names=F,col.names=F,append=T,quote=F)
+              written = written+1
+            }
+            
+            #Write column names
+            write.table(paste(clmnnames,collapse=sep), filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
+            #Write Spectra+Ancillary data
+            write.table(data, filename, sep=sep, row.names=F, col.names=F,append=T,quote=F)
+            print(paste("Wrote", filename ))			
+          })
 .spc.slot.infos = function(input,sep){
   out=list('Spectra|ShortName'=input@ShortName,
            'Spectra|LongName'=input@LongName,
@@ -1687,16 +1666,30 @@ setMethod("spc.export.text", signature="Spectra", definition=function(input,file
            'Spectra|Wavelengths'=spc.getwavelengths(input))
   return(out)
 }
-setMethod("spc.export.text", signature="SpcHeader", definition=function(input,filename,append=F,sep=";",...){
+setMethod("spc.export.text", signature="SpcHeader", definition=function(input,filename,sep=";",append=F,...){
   nms = names(input)
-  nms = paste("Spectra|header",sep,nms,sep="")
-  out1 = lapply(input,function(x){
-    #If the separator character exists in the header, then eliminate it 
-    x<-gsub(sep,"",x)
-    if(length(x)>1)
-      x<-paste(x,collapse=sep)
-    else
-      x<-as.character(x)
+  nms = paste0("Spectra|header",sep,nms)
+
+    out1 = lapply(1:length(input),function(x){
+    myfield <- input[[x]]
+    if(class(myfield) %in%  c("logical","numeric","character","factor")) {
+      #If the separator character exists in the header, then eliminate it 
+      if(class(myfield)=="character")
+        myfield <-gsub(sep,"",input[[x]])
+      
+      #If vector (more than one value) then collapse it into one line
+      if(length(myfield)>1)
+        myfield<-paste(myfield,collapse=sep)
+      #Convert it to character
+      myfield<-as.character(myfield)
+    } else {
+      #If it is a complex type, then serialize it
+      nms[[x]] <<- paste0(nms[[x]], "|Serialized")
+
+      myfield = rawToChar(serialize(myfield,connection = NULL,ascii = T))
+      myfield = gsub('\n','_a_',myfield)
+      }
+    myfield
   })
   out1 = cbind(nms,out1)
   write.table(out1,filename,row.names=F,col.names=F,append=append,quote=F,sep=sep)
@@ -1737,7 +1730,16 @@ spc.import.text = function(filename,sep=";",...){
         ""
     })
     names(header)<- nms
+    
+    #Extract Serialized fields, if any and unserialized them
+    header.idx.ser = grep("\\|Serialized",myT)
     header = .spc.header.infos(header) 
+    if (length(header.idx.ser)>0) {
+      for (JJ in header.idx.ser){
+        header[[JJ]] = unserialize(charToRaw(gsub('_a_','\n',header[[JJ]])))
+        names(header)[JJ] <- gsub("\\|Serialized","",names(header)[JJ])
+      }
+    }
     
     if(any(grepl("StationType",nms)))
       if(is.logical(header$StationType))
@@ -2295,22 +2297,133 @@ spc.example_spectra = function(){
   myS
 }
 
-#########################################################################
-#spc.plot.time.plotly
-#########################################################################
-setGeneric (name= "spc.plot.time.plotly",
-            def=function(sp, column, plot.max=10){standardGeneric("spc.plot.time.plotly")})
-#' Display a Spectra object
+#' Read the NOMAD v2 bio-optical database
+#'
+#'@description
+#' Imports the NOMAD v2 database of the SeaBASS project. More information 
+#' about this dataset can be found at \link{http://seabass.gsfc.nasa.gov/wiki/article.cgi?article=NOMAD}
+#'
+#' @param infile \code{character} containing the name of the input file.
+#'
+#' @return Returns an object of class \code{data.frame}.
+#'
+#' @examples
+#' a = spc.Read_NOMAD_v2(fnm)
+#'
+#' spc.plot.plotly(ap, plot.max=15)
+spc.Read_NOMAD_v2 = function(skip.all.na.rows=TRUE) {
+  fnm = file.path(system.file(package = "geoSpectral"), "test_data","nomad_seabass_v2.a_2008200.txt.gz")
+  #Read data off disk
+  print(paste("Reading the NOMAD file", fnm, "off disk."))
+  mydata=read.table(fnm, header=T,sep=",", comment.char = "!")
+  
+  #Date-time conversion
+  cc=paste(mydata$year, mydata$month,mydata$day,sep="/")
+  bb=paste(mydata$hour, mydata$minute,mydata$second,sep=":")
+  a=paste(cc,bb)
+  a=strptime(a,"%Y/%m/%d %H:%M:%S")
+  mydata = mydata[,-(1:6)] #Remove cols year month day hour minute second
+  nms = names(mydata)
+  nms = gsub("lat","LAT",nms)
+  nms = gsub("lon","LON",nms)
+  names(mydata)=nms
+  mydata = cbind(mydata, TIME=as.POSIXct(a))
+  mydata[mydata==-999]=NA
+  
+  ShortNames = c("kd","lw","es","ap","ad","ag","a","bb","bbr")
+  idx=lapply(ShortNames, function(x) {
+    i = regexpr(paste0("^",x,"[[:digit:]][[:digit:]][[:digit:]]$"), names(mydata))
+    i = which(i!=-1)
+    i
+    #grep(glob2rx(paste0(x,"???")), names(mydata))
+  })
+  #Extract Spectral data
+  sp = lapply(idx, function(x) mydata[,x])
+  #Cleanup mydata from Spectral data
+  mydata = mydata [, -do.call(c, idx)]
+  
+  #Reorder columns
+  require(dplyr)
+  mydata = mydata %>% select(TIME, LON, LAT, cruise, flag, everything())
+  
+  out = lapply(1:length(ShortNames), function(x) {
+    #Find rows that do not contain NAs
+    lbd = as.numeric(gsub(ShortNames[x], "", names(sp[[x]])))
+    #out = mydata[complete.cases(mydata[,idx[[x]]]),c(names(mydata)[idx[[x]]],"datetime","latitude","longitude")]    out = Spectra(out, Wavelengths = lbd,ShortName=ShortNames[x],time="TIME",Units="1/m")
+    
+    out = cbind(sp[[x]], mydata)
+    
+    if (skip.all.na.rows){
+      #Find rows where there at least some data
+      na_idx = !apply((apply(sp[[x]], 2, is.na)),1,all)
+      out = out[na_idx,]
+    }
+    out = Spectra(out, Wavelengths = lbd,ShortName=ShortNames[x],time="TIME",Units="1/m")
+    spc.colnames(out)<-spc.cname.construct(out)
+    return (out)
+  })
+  names(out) = ShortNames
+  out
+}
+
+#'sp = spc.example_spectra()
+#'spc.plot.plotly(sp)
+#'spc.plot.plotly(sp,legend_field = "Spectra")
+#'spc.plot.plotly(sp,legend_field = "CAST")
+#'spc.plot.plotly(sp,legend_field = "NISKIN")
+#'spc.plot.plotly(sp,legend_field = "STATION")
+#'spc.plot.plotly(sp,legend_field = "anap_440")
+setGeneric (name= "spc.plot.plotly",
+            def=function(sp, legend_field="row", plot.max=10){standardGeneric("spc.plot.plotly")})
+setMethod("spc.plot.plotly", signature="Spectra", function (sp, legend_field, plot.max=10) {
+  #library(reshape2)
+  # lbd = spc.getwavelengths(sp)
+  # kk = data.frame(Wavelength=lbd,t(sp@Spectra))
+  # kk=melt(kk,id.vars=1)
+  # p <- plotly::plot_ly(kk, x=~Wavelength, y=~value, type="scatter", mode="lines",color = ~variable,
+  #              colors="Spectral", opacity=0.5, line=list(width = 1)) #,evaluate = FALSE) #, colors=pal,line = list(opacity=0.1))
+  require(plotly)
+  if (plot.max > nrow(sp))
+    stop("plot.max cannot be larger than nrow(sp)")
+  
+  idx = floor(seq(1, nrow(sp), length.out = plot.max))
+  if (legend_field %in% names(sp)) {
+    legend_field = paste(legend_field, sp[[legend_field]])
+  }
+  else
+    legend_field = paste(legend_field, 1:nrow(sp))
+  
+  ylab = paste(sp@ShortName, " [", sp@Units, "]", sep="")
+  xlab = paste("Wavelength [", sp@WavelengthsUnit, "]", sep="")
+  p <- plot_ly()
+  for(I in 1:length(idx)) {  
+    p <- add_trace(p, x=sp@Wavelengths, y=sp@Spectra[idx[I],],type = "scatter", mode="line",
+                   name=legend_field[idx[I]], hoverinfo="x+y",
+                   #marker=list(color=line[['color']]),
+                   evaluate = TRUE)
+  }
+  p = layout(p,
+             #title = "Stock Prices",
+             hovermode = "closest",
+             xaxis = list(title = xlab), #rangeslider = list(type = "linear")),
+             yaxis = list(title = ylab))
+  p
+})
+
+#' Plot a Spectra object data with respect to time
 #' @description
 #' Plot a \code{Spectra} object with respect to time
-#' @examples 
-#' spc.plot.plotly.time.test(sp)
-#' spc.plot.plotly.time.test(sp, plot.max = 3)
-#' spc.plot.plotly.time.test(sp, c("anap_450","anap_550","anap_650"))
 #' @param sp A \code{Spectra} object
-#' @param column Number or name , defoult value is 10 if a number or name has not been entered
-#'
+#' @param column number or name, default value is 10.
+#' 
+#' @examples 
+#' spc.plot.time.plotly(sp)
+#' spc.plot.time.plotly(sp, plot.max = 3)
+#' spc.plot.time.plotly(sp, c("anap_450","anap_550","anap_650"))
+setGeneric (name= "spc.plot.time.plotly",
+            def=function(sp, column, plot.max=10){standardGeneric("spc.plot.time.plotly")})
 setMethod("spc.plot.time.plotly", signature="Spectra", function (sp, column, plot.max=10) {
+  require(plotly)
   if(missing("column")){
     if(ncol(sp)<10)
       idx = 1:ncol(sp)
@@ -2327,6 +2440,7 @@ setMethod("spc.plot.time.plotly", signature="Spectra", function (sp, column, plo
                   name=column[I], evaluate = TRUE) 
   p = layout(p,
              #title = "Stock Prices",
+             hovermode = "closest",
              xaxis = list(title = "Time",
                           rangeslider = list(type = "date")),
              yaxis = list(title = sp@ShortName))
@@ -2336,41 +2450,45 @@ setMethod("spc.plot.time.plotly", signature="Spectra", function (sp, column, plo
 #########################################################################
 #spc.plot.depth.plotly
 #########################################################################
-setGeneric (name= "spc.plot.depth.plotly",
-            def=function(sp, column, plot.max=10){standardGeneric("spc.plot.depth.plotly")})
 #' Display a Spectra object
 #' @description
 #' Plot a \code{Spectra} object with respect to depth
 #' @examples 
 #' BL = spc.makeSpcList(sp,"CAST")
-#' p1<-spc.plot.plotly.depth.test(BL[[5]])
-#' p1<-layout(title=paste("CAST =", BL[[5]]$CAST[1]))
-#' p2<-spc.plot.plotly.depth.test(BL[[4]])
-#' p2<-layout(title=paste("CAST =", BL[[4]]$CAST[1]))
-#' p <- subplot(p1, p2,  margin = 0.05)
-#' p <- layout(showlegend = FALSE)
+#' p1<-spc.plot.depth.plotly(BL[[5]])
+#' #p1<-layout(p1,title=paste("CAST =", BL[[5]]$CAST[1]))
+#' p2<-spc.plot.depth.plotly(BL[[4]])
+#' #p2<-layout(p2,title=paste("CAST =", BL[[4]]$CAST[1]))
+#' p <- subplot(p1, p2,  margin = 0.05, shareY=TRUE,shareX=TRUE,titleX=TRUE,titleY=TRUE)
+#' p <- layout(p, showlegend = T, 
+#' annotations = list(
+#' list(x = 0.2 , y = 1.05, text = BL[[5]]$CAST[1], showarrow = F, xref='paper', yref='paper'),
+#' list(x = 0.8 , y = 1.05, text = BL[[4]]$CAST[1], showarrow = F, xref='paper', yref='paper')))
 #' p
 #' @param sp A \code{Spectra} object
 #' @param column Number or name , defoult value is 10 if a number or name has not been entered
-#'
+setGeneric (name= "spc.plot.depth.plotly",
+            def=function(sp, column, plot.max=10){standardGeneric("spc.plot.depth.plotly")})
 setMethod("spc.plot.depth.plotly", signature="Spectra", function (sp, column, plot.max=10) {
-  if(missing("col")){
+  require(plotly)
+  if(missing("column")){
     if(ncol(sp)<10)
       idx = 1:ncol(sp)
     else
       idx = round(seq(1,ncol(sp), length.out = plot.max))
     
-    col = colnames(sp@Spectra)[idx]
+    column = colnames(sp@Spectra)[idx]
   }
   
-  p=plot_ly(x = sp[[col[1]]] , y = sp$DEPTH, mode = "lines + markers",name=col[1])
-  if(length(col)>1)
-    for(I in 2:length(col))
-      p=add_trace(x = sp[[col[I]]] , y =sp$DEPTH, mode = "lines + markers", 
-                  name=col[I], evaluate = TRUE) 
+  p=plot_ly(x = sp[[column[1]]] , y = sp$DEPTH, mode = "lines + markers",name=column[1])
+  if(length(column)>1)
+    for(I in 2:length(column))
+      p=add_trace(x = sp[[column[I]]] , y =sp$DEPTH, mode = "lines + markers", 
+                  name=column[I], evaluate = TRUE) 
   # layout(yaxis = list(autorange = "reversed"))
   p = layout(p,
              #title = "Stock Prices",
+             hovermode = "closest",
              xaxis = list(title = paste(sp@ShortName, " [", sp@WavelengthsUnit, " ]")),
              yaxis = list(title = "Depth [ m ]", 
                           rangeslider = list(type = "linear"),
@@ -2378,6 +2496,57 @@ setMethod("spc.plot.depth.plotly", signature="Spectra", function (sp, column, pl
   p 
 })
 
-
-
+setGeneric (name= "spc.plot.map.plotly",
+            def=function(sp, showlegend = FALSE, legend_field="row", plot.max=10, color="#FF0000", opacity=1){standardGeneric("spc.plot.map.plotly")})
+setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, showlegend, legend_field, plot.max=250, color, opacity) {
+  require(plotly)
+  bbx = sp@sp@bbox
+  bbx[,2] =  bbx[,2] + (0.04 * abs(bbx[,2]))
+  if(bbx[2,2]>90)
+    bbx[2,2]<-89
+  bbx[,1] =  bbx[,1] - (0.04 * abs(bbx[,1]))
+  if(bbx[2,1]< -90)
+    bbx[2,1]<- -89
+  
+  g <- list(
+    #scope = 'north america',
+    showland = TRUE,
+    landcolor = toRGB("grey83"),
+    subunitcolor = toRGB("white"),
+    countrycolor = toRGB("white"),
+    showlakes = TRUE,
+    lakecolor = toRGB("blue"),
+    showrivers = TRUE,
+    showsubunits = TRUE,
+    showcountries = TRUE,
+    resolution = 50,
+    projection = list(
+      type = 'conic conformal',
+      rotation = list(
+        lon = -100
+      )
+    ),
+    lonaxis = list(
+      showgrid = TRUE,
+      gridwidth = 0.5,
+      range = c(bbx[1,1], bbx[1,2]),
+      dtick = 5
+    ),
+    lataxis = list(
+      showgrid = TRUE,
+      gridwidth = 0.5,
+      range = c(bbx[2,1],bbx[2,2]),
+      dtick = 5
+    )
+  )
+    
+    # if(length(color==1))
+    #   color = rep(color, nrow(sp))
+    p <- plot_ly(lat = sp@sp@coords[,"LAT"], lon = sp@sp@coords[,"LONG"], 
+                 #text = hover, color = Globvalue,marker = m
+                 type = 'scattergeo', color=color, opacity=opacity
+    ) 
+    p <- layout(geo = g, showlegend=TRUE)
+    p
+})
 
