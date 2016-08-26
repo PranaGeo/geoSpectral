@@ -105,7 +105,8 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
       latcol="LAT"
       warning("Could not find a latitude column named either of: lat,LAT,latitude,LATITUDE. Assigning LAT=1.0 to all rows")
     }
-    space=c( which(longcol==names(inDF)), which(latcol==names(inDF)))    
+    space=c( which(longcol==names(inDF)), which(latcol==names(inDF)))
+    names(inDF)[space]<-c("LON","LAT")
   }
   if(missing(time)){
     if ("time" %in% names(inDF))
