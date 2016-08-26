@@ -2543,7 +2543,7 @@ setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, showlegend, 
     
   if(length(color==1))
     color = rep(color, nrow(sp))
-  p <- plot_ly(lat = sp@sp@coords[,"LAT"], lon = sp@sp@coords[,"LONG"], 
+  p <- plot_ly(lat = sp@sp@coords[,"LAT"], lon = sp@sp@coords[,"LON"], 
                #text = hover, color = Globvalue,marker = m
                type = 'scattergeo', color=color, opacity=opacity
   ) 
