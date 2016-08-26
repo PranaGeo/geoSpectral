@@ -2410,11 +2410,11 @@ setMethod("spc.plot.plotly", signature="Spectra", function (sp, legend_field, pl
   p
 })
 
-#' Display a Spectra object
+#' Plot a Spectra object data with respect to time
 #' @description
 #' Plot a \code{Spectra} object with respect to time
 #' @param sp A \code{Spectra} object
-#' @param column Number or name , defoult value is 10 if a number or name has not been entered
+#' @param column number or name, default value is 10.
 #' 
 #' @examples 
 #' spc.plot.time.plotly(sp)
@@ -2497,9 +2497,9 @@ setMethod("spc.plot.depth.plotly", signature="Spectra", function (sp, column, pl
 })
 
 setGeneric (name= "spc.plot.map.plotly",
-            def=function(sp, row, plot.max=10, color="#FF0000", opacity=1){standardGeneric("spc.plot.map.plotly")})
-setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, row, plot.max=250, color, opacity) {
-
+            def=function(sp, showlegend = FALSE, legend_field="row", plot.max=10, color="#FF0000", opacity=1){standardGeneric("spc.plot.map.plotly")})
+setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, showlegend, legend_field, plot.max=250, color, opacity) {
+  require(plotly)
   bbx = sp@sp@bbox
   bbx[,2] =  bbx[,2] + (0.04 * abs(bbx[,2]))
   if(bbx[2,2]>90)
@@ -2507,8 +2507,8 @@ setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, row, plot.ma
   bbx[,1] =  bbx[,1] - (0.04 * abs(bbx[,1]))
   if(bbx[2,1]< -90)
     bbx[2,1]<- -89
-
-    g <- list(
+  
+  g <- list(
     #scope = 'north america',
     showland = TRUE,
     landcolor = toRGB("grey83"),
@@ -2538,14 +2538,15 @@ setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, row, plot.ma
       range = c(bbx[2,1],bbx[2,2]),
       dtick = 5
     )
-    )
-    color = rep(color, nrow(sp))
-    color[1]= "#00FF00"
+  )
+    
+    # if(length(color==1))
+    #   color = rep(color, nrow(sp))
     p <- plot_ly(lat = sp@sp@coords[,"LAT"], lon = sp@sp@coords[,"LONG"], 
                  #text = hover, color = Globvalue,marker = m
                  type = 'scattergeo', color=color, opacity=opacity
     ) 
-    p <- layout(geo = g)
+    p <- layout(geo = g, showlegend=TRUE)
     p
 })
 
