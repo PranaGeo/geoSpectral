@@ -2384,8 +2384,8 @@ setMethod("spc.plot.plotly", signature="Spectra", function (sp, legend_field, pl
   #              colors="Spectral", opacity=0.5, line=list(width = 1)) #,evaluate = FALSE) #, colors=pal,line = list(opacity=0.1))
   require(plotly)
   if (plot.max > nrow(sp))
-    stop("plot.max cannot be larger than nrow(sp)")
-  
+    plot.max = nrow(sp)
+
   idx = floor(seq(1, nrow(sp), length.out = plot.max))
   if (legend_field %in% names(sp)) {
     legend_field = paste(legend_field, sp[[legend_field]])
@@ -2540,13 +2540,13 @@ setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, showlegend, 
     )
   )
     
-    # if(length(color==1))
-    #   color = rep(color, nrow(sp))
-    p <- plot_ly(lat = sp@sp@coords[,"LAT"], lon = sp@sp@coords[,"LONG"], 
-                 #text = hover, color = Globvalue,marker = m
-                 type = 'scattergeo', color=color, opacity=opacity
-    ) 
-    p <- layout(geo = g, showlegend=TRUE)
-    p
+  if(length(color==1))
+    color = rep(color, nrow(sp))
+  p <- plot_ly(lat = sp@sp@coords[,"LAT"], lon = sp@sp@coords[,"LONG"], 
+               #text = hover, color = Globvalue,marker = m
+               type = 'scattergeo', color=color, opacity=opacity
+  ) 
+  p <- layout(geo = g, showlegend=showlegend)
+  p
 })
 
