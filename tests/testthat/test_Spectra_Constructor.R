@@ -60,4 +60,22 @@ test_that("Show Spectra",{
   
   })
 
+test_that("test for head()",{
+  expect_equal(ncol(sp),ncol(head(sp)))
+  expect_equal(sp@Spectra[1:6,3],head(sp)[,3])
+
+  })
+
+
+
+
+
+
+
+
+
+
+
+
+
 
