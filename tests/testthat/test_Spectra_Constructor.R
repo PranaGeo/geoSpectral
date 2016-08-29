@@ -63,13 +63,25 @@ test_that("Show Spectra",{
 test_that("test for head()",{
   expect_equal(ncol(sp),ncol(head(sp)))
   expect_equal(sp@Spectra[1:6,3],head(sp)[,3])
-
+  # names(sp@spectra) and names(head(sp)) are NULL why?
   })
 
+#spc.plot.grid(sp)
+#Show Traceback
 
+#Rerun with Debug
+#Error in (function (classes, fdef, mtable)  : 
 
+#       spc.plot.overlay(sp)
+#Error in (function (classes, fdef, mtable)  :    
+#Error in (function (classes, fdef, mtable)  : 
+#
 
-
+ test_that("test for subset()",{
+  expect_is(subset(sp,DEPTH<=30),"Spectra")
+  expect_equal(ncol(sp),ncol(subset(sp,DEPTH<=30)))
+ 
+                })
 
 
 
