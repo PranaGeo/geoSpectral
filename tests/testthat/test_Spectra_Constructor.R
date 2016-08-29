@@ -108,6 +108,13 @@ test_that("test for head()",{
   })
   
   
+  test_that("test for spc.gethader()",{
+    aa=sp@header
+    expect_equal(names(aa),names(spc.getheader(sp)))
+    
+    
+  })
+  
   
   
   
