@@ -111,11 +111,17 @@ test_that("test for head()",{
   test_that("test for spc.gethader()",{
     aa=sp@header
     expect_equal(names(aa),names(spc.getheader(sp)))
-    
+    #expect_output(names(aa),names(spc.getheader(sp)))
     
   })
   
   
+  test_that("test for spc.getinvalid()",{
+    abc=spc.getinvalid.idx(sp)
+    expect_true(all(abc))
+    
+    
+  })
   
   
   
