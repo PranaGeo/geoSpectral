@@ -105,7 +105,8 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
       latcol="LAT"
       warning("Could not find a latitude column named either of: lat,LAT,latitude,LATITUDE. Assigning LAT=1.0 to all rows")
     }
-    space=c( which(longcol==names(inDF)), which(latcol==names(inDF)))    
+    space=c( which(longcol==names(inDF)), which(latcol==names(inDF)))
+    names(inDF)[space]<-c("LON","LAT")
   }
   if(missing(time)){
     if ("time" %in% names(inDF))
@@ -2374,8 +2375,8 @@ spc.Read_NOMAD_v2 = function(skip.all.na.rows=TRUE) {
 #'spc.plot.plotly(sp,legend_field = "STATION")
 #'spc.plot.plotly(sp,legend_field = "anap_440")
 setGeneric (name= "spc.plot.plotly",
-            def=function(sp, legend_field="row", plot.max=10){standardGeneric("spc.plot.plotly")})
-setMethod("spc.plot.plotly", signature="Spectra", function (sp, legend_field, plot.max=10) {
+            def=function(sp, plot.max=10,showlegend = FALSE,legend_field="row"){standardGeneric("spc.plot.plotly")})
+setMethod("spc.plot.plotly", signature="Spectra", function (sp, plot.max=10,showlegend = FALSE,legend_field) {
   #library(reshape2)
   # lbd = spc.getwavelengths(sp)
   # kk = data.frame(Wavelength=lbd,t(sp@Spectra))
@@ -2384,8 +2385,8 @@ setMethod("spc.plot.plotly", signature="Spectra", function (sp, legend_field, pl
   #              colors="Spectral", opacity=0.5, line=list(width = 1)) #,evaluate = FALSE) #, colors=pal,line = list(opacity=0.1))
   require(plotly)
   if (plot.max > nrow(sp))
-    stop("plot.max cannot be larger than nrow(sp)")
-  
+    plot.max = nrow(sp)
+
   idx = floor(seq(1, nrow(sp), length.out = plot.max))
   if (legend_field %in% names(sp)) {
     legend_field = paste(legend_field, sp[[legend_field]])
@@ -2406,7 +2407,9 @@ setMethod("spc.plot.plotly", signature="Spectra", function (sp, legend_field, pl
              #title = "Stock Prices",
              hovermode = "closest",
              xaxis = list(title = xlab), #rangeslider = list(type = "linear")),
-             yaxis = list(title = ylab))
+             yaxis = list(title = ylab),
+             showlegend=showlegend
+             )
   p
 })
 
@@ -2421,8 +2424,8 @@ setMethod("spc.plot.plotly", signature="Spectra", function (sp, legend_field, pl
 #' spc.plot.time.plotly(sp, plot.max = 3)
 #' spc.plot.time.plotly(sp, c("anap_450","anap_550","anap_650"))
 setGeneric (name= "spc.plot.time.plotly",
-            def=function(sp, column, plot.max=10){standardGeneric("spc.plot.time.plotly")})
-setMethod("spc.plot.time.plotly", signature="Spectra", function (sp, column, plot.max=10) {
+            def=function(sp, column, plot.max=10,showlegend = FALSE){standardGeneric("spc.plot.time.plotly")})
+setMethod("spc.plot.time.plotly", signature="Spectra", function (sp, column, plot.max=10,showlegend) {
   require(plotly)
   if(missing("column")){
     if(ncol(sp)<10)
@@ -2443,7 +2446,9 @@ setMethod("spc.plot.time.plotly", signature="Spectra", function (sp, column, plo
              hovermode = "closest",
              xaxis = list(title = "Time",
                           rangeslider = list(type = "date")),
-             yaxis = list(title = sp@ShortName))
+             yaxis = list(title = sp@ShortName),
+             showlegend=showlegend
+             )
   p
 })
 
@@ -2468,8 +2473,8 @@ setMethod("spc.plot.time.plotly", signature="Spectra", function (sp, column, plo
 #' @param sp A \code{Spectra} object
 #' @param column Number or name , defoult value is 10 if a number or name has not been entered
 setGeneric (name= "spc.plot.depth.plotly",
-            def=function(sp, column, plot.max=10){standardGeneric("spc.plot.depth.plotly")})
-setMethod("spc.plot.depth.plotly", signature="Spectra", function (sp, column, plot.max=10) {
+            def=function(sp, column, plot.max=10,showlegend = FALSE){standardGeneric("spc.plot.depth.plotly")})
+setMethod("spc.plot.depth.plotly", signature="Spectra", function (sp, column, plot.max=10,showlegend) {
   require(plotly)
   if(missing("column")){
     if(ncol(sp)<10)
@@ -2492,7 +2497,9 @@ setMethod("spc.plot.depth.plotly", signature="Spectra", function (sp, column, pl
              xaxis = list(title = paste(sp@ShortName, " [", sp@WavelengthsUnit, " ]")),
              yaxis = list(title = "Depth [ m ]", 
                           rangeslider = list(type = "linear"),
-                          autorange = "reversed"))
+                          autorange = "reversed"),
+             showlegend=showlegend
+             )
   p 
 })
 
@@ -2540,13 +2547,13 @@ setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, showlegend, 
     )
   )
     
-    # if(length(color==1))
-    #   color = rep(color, nrow(sp))
-    p <- plot_ly(lat = sp@sp@coords[,"LAT"], lon = sp@sp@coords[,"LONG"], 
-                 #text = hover, color = Globvalue,marker = m
-                 type = 'scattergeo', color=color, opacity=opacity
-    ) 
-    p <- layout(geo = g, showlegend=TRUE)
-    p
+  if(length(color==1))
+    color = rep(color, nrow(sp))
+  p <- plot_ly(lat = sp@sp@coords[,"LAT"], lon = sp@sp@coords[,"LON"], 
+               #text = hover, color = Globvalue,marker = m
+               type = 'scattergeo', color=color, opacity=opacity
+  ) 
+  p <- layout(geo = g, showlegend=showlegend)
+  p
 })
 
