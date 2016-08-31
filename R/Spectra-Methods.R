@@ -2294,7 +2294,8 @@ spc.example_spectra = function(){
   abs$TIME = as.POSIXct(as.character(abs$TIME),tz=tz) #Compute the time
   
   #Space and time columns are automatically found in the column names of inDF
-  myS<-Spectra(abs,Wavelengths=lbd,Units=Units,ShortName="a_nap")
+  myS<-Spectra(abs,Wavelengths=lbd,Units=Units,ShortName="a_nap",
+               LongName="Absorption coefficient by non-algal particles")
   myS
 }
 
@@ -2375,8 +2376,8 @@ spc.Read_NOMAD_v2 = function(skip.all.na.rows=TRUE) {
 #'spc.plot.plotly(sp,legend_field = "STATION")
 #'spc.plot.plotly(sp,legend_field = "anap_440")
 setGeneric (name= "spc.plot.plotly",
-            def=function(sp, plot.max=10,showlegend = FALSE,legend_field="row"){standardGeneric("spc.plot.plotly")})
-setMethod("spc.plot.plotly", signature="Spectra", function (sp, plot.max=10,showlegend = FALSE,legend_field) {
+            def=function(sp, plot.max=10,showlegend=FALSE,legend_field="row",title=sp@LongName){standardGeneric("spc.plot.plotly")})
+setMethod("spc.plot.plotly", signature="Spectra", function (sp, plot.max=10,showlegend = FALSE,legend_field,title) {
   #library(reshape2)
   # lbd = spc.getwavelengths(sp)
   # kk = data.frame(Wavelength=lbd,t(sp@Spectra))
@@ -2404,7 +2405,7 @@ setMethod("spc.plot.plotly", signature="Spectra", function (sp, plot.max=10,show
                    evaluate = TRUE)
   }
   p = layout(p,
-             #title = "Stock Prices",
+             title = title,
              hovermode = "closest",
              xaxis = list(title = xlab), #rangeslider = list(type = "linear")),
              yaxis = list(title = ylab),
