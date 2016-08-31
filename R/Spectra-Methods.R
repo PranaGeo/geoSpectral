@@ -2294,7 +2294,8 @@ spc.example_spectra = function(){
   abs$TIME = as.POSIXct(as.character(abs$TIME),tz=tz) #Compute the time
   
   #Space and time columns are automatically found in the column names of inDF
-  myS<-Spectra(abs,Wavelengths=lbd,Units=Units,ShortName="a_nap")
+  myS<-Spectra(abs,Wavelengths=lbd,Units=Units,ShortName="a_nap",
+               LongName="Absorption coefficient by non-algal particles")
   myS
 }
 
@@ -2375,8 +2376,8 @@ spc.Read_NOMAD_v2 = function(skip.all.na.rows=TRUE) {
 #'spc.plot.plotly(sp,legend_field = "STATION")
 #'spc.plot.plotly(sp,legend_field = "anap_440")
 setGeneric (name= "spc.plot.plotly",
-            def=function(sp, plot.max=10,showlegend = FALSE,legend_field="row"){standardGeneric("spc.plot.plotly")})
-setMethod("spc.plot.plotly", signature="Spectra", function (sp, plot.max=10,showlegend = FALSE,legend_field) {
+            def=function(sp, plot.max=10,showlegend=FALSE,legend_field="row",hoverinfo="title",title=sp@LongName){standardGeneric("spc.plot.plotly")})
+setMethod("spc.plot.plotly", signature="Spectra", function (sp, plot.max=10,showlegend = FALSE,legend_field,hoverinfo,title) {
   #library(reshape2)
   # lbd = spc.getwavelengths(sp)
   # kk = data.frame(Wavelength=lbd,t(sp@Spectra))
@@ -2399,12 +2400,12 @@ setMethod("spc.plot.plotly", signature="Spectra", function (sp, plot.max=10,show
   p <- plot_ly()
   for(I in 1:length(idx)) {  
     p <- add_trace(p, x=sp@Wavelengths, y=sp@Spectra[idx[I],],type = "scatter", mode="line",
-                   name=legend_field[idx[I]], hoverinfo="x+y",
+                   name=legend_field[idx[I]], hoverinfo=hoverinfo,
                    #marker=list(color=line[['color']]),
                    evaluate = TRUE)
   }
   p = layout(p,
-             #title = "Stock Prices",
+             title = title,
              hovermode = "closest",
              xaxis = list(title = xlab), #rangeslider = list(type = "linear")),
              yaxis = list(title = ylab),
@@ -2424,8 +2425,8 @@ setMethod("spc.plot.plotly", signature="Spectra", function (sp, plot.max=10,show
 #' spc.plot.time.plotly(sp, plot.max = 3)
 #' spc.plot.time.plotly(sp, c("anap_450","anap_550","anap_650"))
 setGeneric (name= "spc.plot.time.plotly",
-            def=function(sp, column, plot.max=10,showlegend = FALSE){standardGeneric("spc.plot.time.plotly")})
-setMethod("spc.plot.time.plotly", signature="Spectra", function (sp, column, plot.max=10,showlegend) {
+            def=function(sp, column, plot.max=10,showlegend=FALSE,hoverinfo="name",title=sp@LongName){standardGeneric("spc.plot.time.plotly")})
+setMethod("spc.plot.time.plotly", signature="Spectra", function (sp, column, plot.max=10,showlegend,hoverinfo,title) {
   require(plotly)
   if(missing("column")){
     if(ncol(sp)<10)
@@ -2435,18 +2436,20 @@ setMethod("spc.plot.time.plotly", signature="Spectra", function (sp, column, plo
     
     column = colnames(sp@Spectra)[idx]
   }
+  ylab = paste(sp@ShortName, " [", sp@Units, "]", sep="")
   myTime = time(sp@time)
+  
   p=plot_ly(x = myTime , y = sp[[column[1]]], mode = "lines + markers",name=column[1])
   if(length(column)>1)
     for(I in 2:length(column))
       p=add_trace(x = myTime , y = sp[[column[I]]], mode = "lines + markers", 
-                  name=column[I], evaluate = TRUE) 
+                  name=column[I], hoverinfo=hoverinfo, evaluate = TRUE) 
   p = layout(p,
-             #title = "Stock Prices",
+             title = title,
              hovermode = "closest",
              xaxis = list(title = "Time",
                           rangeslider = list(type = "date")),
-             yaxis = list(title = sp@ShortName),
+             yaxis = list(title = ylab),
              showlegend=showlegend
              )
   p
@@ -2473,8 +2476,8 @@ setMethod("spc.plot.time.plotly", signature="Spectra", function (sp, column, plo
 #' @param sp A \code{Spectra} object
 #' @param column Number or name , defoult value is 10 if a number or name has not been entered
 setGeneric (name= "spc.plot.depth.plotly",
-            def=function(sp, column, plot.max=10,showlegend = FALSE){standardGeneric("spc.plot.depth.plotly")})
-setMethod("spc.plot.depth.plotly", signature="Spectra", function (sp, column, plot.max=10,showlegend) {
+            def=function(sp, column, plot.max=10,showlegend=FALSE,hoverinfo="name",title=sp@LongName){standardGeneric("spc.plot.depth.plotly")})
+setMethod("spc.plot.depth.plotly", signature="Spectra", function (sp, column, plot.max=10,showlegend,hoverinfo,title) {
   require(plotly)
   if(missing("column")){
     if(ncol(sp)<10)
@@ -2484,17 +2487,18 @@ setMethod("spc.plot.depth.plotly", signature="Spectra", function (sp, column, pl
     
     column = colnames(sp@Spectra)[idx]
   }
+  xlab = paste(sp@ShortName, " [", sp@Units, "]", sep="")
   
   p=plot_ly(x = sp[[column[1]]] , y = sp$DEPTH, mode = "lines + markers",name=column[1])
   if(length(column)>1)
     for(I in 2:length(column))
       p=add_trace(x = sp[[column[I]]] , y =sp$DEPTH, mode = "lines + markers", 
-                  name=column[I], evaluate = TRUE) 
+                  name=column[I], hoverinfo=hoverinfo, evaluate = TRUE) 
   # layout(yaxis = list(autorange = "reversed"))
   p = layout(p,
-             #title = "Stock Prices",
+             title = title,
              hovermode = "closest",
-             xaxis = list(title = paste(sp@ShortName, " [", sp@WavelengthsUnit, " ]")),
+             xaxis = list(title = xlab),
              yaxis = list(title = "Depth [ m ]", 
                           rangeslider = list(type = "linear"),
                           autorange = "reversed"),
