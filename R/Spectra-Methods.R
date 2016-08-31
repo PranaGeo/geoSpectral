@@ -2476,8 +2476,8 @@ setMethod("spc.plot.time.plotly", signature="Spectra", function (sp, column, plo
 #' @param sp A \code{Spectra} object
 #' @param column Number or name , defoult value is 10 if a number or name has not been entered
 setGeneric (name= "spc.plot.depth.plotly",
-            def=function(sp, column, plot.max=10,showlegend = FALSE){standardGeneric("spc.plot.depth.plotly")})
-setMethod("spc.plot.depth.plotly", signature="Spectra", function (sp, column, plot.max=10,showlegend) {
+            def=function(sp, column, plot.max=10,showlegend = FALSE,title=sp@LongName){standardGeneric("spc.plot.depth.plotly")})
+setMethod("spc.plot.depth.plotly", signature="Spectra", function (sp, column, plot.max=10,showlegend,title) {
   require(plotly)
   if(missing("column")){
     if(ncol(sp)<10)
@@ -2496,7 +2496,7 @@ setMethod("spc.plot.depth.plotly", signature="Spectra", function (sp, column, pl
                   name=column[I], evaluate = TRUE) 
   # layout(yaxis = list(autorange = "reversed"))
   p = layout(p,
-             #title = "Stock Prices",
+             title = title,
              hovermode = "closest",
              xaxis = list(title = xlab),
              yaxis = list(title = "Depth [ m ]", 
