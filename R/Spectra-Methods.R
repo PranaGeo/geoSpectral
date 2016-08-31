@@ -2425,8 +2425,8 @@ setMethod("spc.plot.plotly", signature="Spectra", function (sp, plot.max=10,show
 #' spc.plot.time.plotly(sp, plot.max = 3)
 #' spc.plot.time.plotly(sp, c("anap_450","anap_550","anap_650"))
 setGeneric (name= "spc.plot.time.plotly",
-            def=function(sp, column, plot.max=10,showlegend = FALSE){standardGeneric("spc.plot.time.plotly")})
-setMethod("spc.plot.time.plotly", signature="Spectra", function (sp, column, plot.max=10,showlegend) {
+            def=function(sp, column, plot.max=10,showlegend = FALSE,title=sp@LongName){standardGeneric("spc.plot.time.plotly")})
+setMethod("spc.plot.time.plotly", signature="Spectra", function (sp, column, plot.max=10,showlegend,title) {
   require(plotly)
   if(missing("column")){
     if(ncol(sp)<10)
@@ -2436,18 +2436,20 @@ setMethod("spc.plot.time.plotly", signature="Spectra", function (sp, column, plo
     
     column = colnames(sp@Spectra)[idx]
   }
+  ylab = paste(sp@ShortName, " [", sp@Units, "]", sep="")
   myTime = time(sp@time)
+  
   p=plot_ly(x = myTime , y = sp[[column[1]]], mode = "lines + markers",name=column[1])
   if(length(column)>1)
     for(I in 2:length(column))
       p=add_trace(x = myTime , y = sp[[column[I]]], mode = "lines + markers", 
                   name=column[I], evaluate = TRUE) 
   p = layout(p,
-             #title = "Stock Prices",
+             title = title,
              hovermode = "closest",
              xaxis = list(title = "Time",
                           rangeslider = list(type = "date")),
-             yaxis = list(title = sp@ShortName),
+             yaxis = list(title = ylab),
              showlegend=showlegend
              )
   p
@@ -2485,6 +2487,7 @@ setMethod("spc.plot.depth.plotly", signature="Spectra", function (sp, column, pl
     
     column = colnames(sp@Spectra)[idx]
   }
+  xlab = paste(sp@ShortName, " [", sp@Units, "]", sep="")
   
   p=plot_ly(x = sp[[column[1]]] , y = sp$DEPTH, mode = "lines + markers",name=column[1])
   if(length(column)>1)
@@ -2495,7 +2498,7 @@ setMethod("spc.plot.depth.plotly", signature="Spectra", function (sp, column, pl
   p = layout(p,
              #title = "Stock Prices",
              hovermode = "closest",
-             xaxis = list(title = paste(sp@ShortName, " [", sp@WavelengthsUnit, " ]")),
+             xaxis = list(title = xlab),
              yaxis = list(title = "Depth [ m ]", 
                           rangeslider = list(type = "linear"),
                           autorange = "reversed"),
