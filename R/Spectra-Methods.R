@@ -2197,10 +2197,11 @@ setMethod("spc.plot.depth", signature="Spectra", function (object,X,maxSp=10,lab
   #Sort with respect to depth
   d_idx = sort.int(myY,index.return = TRUE)
   myY = d_idx$x
+  
   if(class(myX)=="data.frame"){
     myX = myX[d_idx$ix,,drop=F]
     #Eliminate rows full with zeros
-    idx = !apply(myX==0,1,all)
+    idx = which(!apply(myX==0,1,all))
     myY = myY[idx]
     myX = myX[idx,,drop=F]
     #Eliminate NAs in depth
@@ -2222,16 +2223,26 @@ setMethod("spc.plot.depth", signature="Spectra", function (object,X,maxSp=10,lab
   
   if(missing(lab_cex))
     lab_cex=1
-  if (!all(diff(myY)==0) & !(length(myY)<2)) {
+  
+  depth_diff = TRUE
+  if(length(myY)>1)
+    depth_diff = !all(diff(myY)==0) 
+  
+  mytype = "l"
+  if(length(myY)==1)
+    mytype = "p"
+  
+  if (depth_diff & !(length(myY)<1)) {
     if(length(u_units)==1){	
       #All columns to be plotted have the same unit 
+      #browser()
       if(add)
-        matlines(myX,myY,type="l",xlab="",ylab="",ylim=ylim,...)
+        matlines(myX,myY,type=mytype,xlab="",ylab="",ylim=ylim,...)
       else{
         if (all(is.finite(xlim)))
-          matplot(myX,myY,type="l",cex.axis=lab_cex,xlab="",ylab="",ylim=ylim,xlim=xlim,lwd=lwd,...)
+          matplot(myX,myY,type=mytype,pch=19,cex.axis=lab_cex,xlab="",ylab="",ylim=ylim,xlim=xlim,lwd=lwd,...)
         else
-          matplot(myX,myY,type="l",cex.axis=lab_cex,xlab="",ylab="",ylim=ylim,lwd=lwd,...)						
+          matplot(myX,myY,type=mytype,pch=19,cex.axis=lab_cex,xlab="",ylab="",ylim=ylim,lwd=lwd,...)						
       }
       matpoints(myX,myY,xlab="",ylab="",pch=19,cex=0.4,ylim=ylim,...)					
       
