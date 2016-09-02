@@ -2235,7 +2235,6 @@ setMethod("spc.plot.depth", signature="Spectra", function (object,X,maxSp=10,lab
   if (depth_diff & !(length(myY)<1)) {
     if(length(u_units)==1){	
       #All columns to be plotted have the same unit 
-      #browser()
       if(add)
         matlines(myX,myY,type=mytype,xlab="",ylab="",ylim=ylim,...)
       else{
