@@ -2049,7 +2049,11 @@ spc.makeSpcList = function(myobj, name,FUN){
   #Get the indexes of each DF row :
   idx = lapply(unique(myobj[[name]]),function(x) {which(x==myobj[[name]])})
   #For each row index in the list, subset the DF, return a list
-  output = lapply(idx,function(x) myobj[x,])
+  output = lapply(idx,function(x) {
+    out = myobj[x,]
+    spc.updateheader(out, name)<-as.character(out[[name]][1])
+    out
+  })
   output = SpcList(output)
   output@by = name
   return(output)
