@@ -140,11 +140,11 @@ setGeneric (name= "spc.plot.depth.overlay",
 setMethod("spc.plot.depth.overlay", "SpcList", function (object, X, lab_cex, ...){
 			if(missing(lab_cex))
 				lab_cex = 1
-#			browser()
+
 			all_y = unlist(lapply(object,function(t) t$DEPTH))
-			all_x = unlist(lapply(object,function(t) t@Spectra[X]))
+			all_x = unlist(lapply(object,function(t) t@Spectra[,X]))
 			xlim = range(all_x)
-			ylim = range(all_y)
+			ylim = rev(range(all_y))
 			tit=""
 			for (I in 1:length(object)) {
 				if(object@by!="VariousVariables"){
@@ -155,10 +155,11 @@ setMethod("spc.plot.depth.overlay", "SpcList", function (object, X, lab_cex, ...
 					tit[I]=as.character(I)#paste(object[[I]]@ShortName)
 				}
 				if(I==1)
-					eval_txt = paste("spc.plot.depth","(object[[I]],X,lab_cex=lab_cex,xlim=xlim,col=I,...)",sep="")
+					eval_txt = paste("spc.plot.depth","(object[[I]],X,lab_cex=lab_cex,xlim=xlim,ylim=ylim,col=I,...)",sep="")
 				else
-					eval_txt =  paste("spc.plot.depth","(object[[I]],X,add=T,lab_cex=lab_cex,xlim=xlim,col=I,...)",sep="")
-				eval(parse(text=eval_txt))				
+					eval_txt =  paste("spc.plot.depth","(object[[I]],X,add=T,lab_cex=lab_cex,xlim=xlim,ylim=ylim,col=I,...)",sep="")
+
+				eval(parse(text=eval_txt))
 				#title(main=tit,mgp=c(2,1,0))
 			}#end for
 			legend("bottomright",tit,col=1:I,fill=1:I,cex=lab_cex,bty="n")
