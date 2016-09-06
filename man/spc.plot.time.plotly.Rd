@@ -2,14 +2,15 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.plot.time.plotly}
 \alias{spc.plot.time.plotly}
-\title{Display a Spectra object}
+\title{Plot a Spectra object data with respect to time}
 \usage{
-spc.plot.time.plotly(sp, column, plot.max = 10)
+spc.plot.time.plotly(sp, column, plot.max = 10, showlegend = FALSE,
+  hoverinfo = "name", title = sp@LongName)
 }
 \arguments{
 \item{sp}{A \code{Spectra} object}
 
-\item{column}{Number or name , defoult value is 10 if a number or name has not been entered}
+\item{column}{number or name, default value is 10.}
 }
 \description{
 Plot a \code{Spectra} object with respect to time

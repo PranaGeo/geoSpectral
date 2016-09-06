@@ -4,7 +4,8 @@
 \alias{spc.plot.depth.plotly}
 \title{Display a Spectra object}
 \usage{
-spc.plot.depth.plotly(sp, column, plot.max = 10)
+spc.plot.depth.plotly(sp, column, plot.max = 10, showlegend = FALSE,
+  hoverinfo = "name", title = sp@LongName)
 }
 \arguments{
 \item{sp}{A \code{Spectra} object}

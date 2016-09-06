@@ -2575,3 +2575,27 @@ setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, showlegend, 
   p
 })
 
+###########################################################
+# spc.plot.map.leaflet
+###########################################################
+ setGeneric (name= "spc.plot.map.leaflet",
+            def=function(sp, showlegend = FALSE,legend_field = "row", plot.max=10,color = "#FF0000",opacity = 1,  weight=5){standardGeneric("spc.plot.map.leaflet")})
+ setMethod("spc.plot.map.leaflet", signature="Spectra", function (sp, showlegend = FALSE,legend_field = "row", plot.max=10,color = "#FF0000",opacity = 1,  weight=5) {
+  require(leaflet)
+
+   legend_field = paste0(legend_field, 1:nrow(sp))
+  
+  m = leaflet() %>% 
+    addCircles(lng = sp@sp@coords[,"LON"], lat=sp@sp@coords[,"LAT"], 
+               opacity=opacity,color=color, weight=5) %>% 
+    addTiles()# %>%
+  #addPopups(lng = sp@sp@coords[,"LON"], lat=sp@sp@coords[,"LAT"], 
+  # popup = legend_field  )
+  #addLegend(pal = qpal, values = , opacity = 1)
+  m
+  
+
+ })
+
+
+
