@@ -2597,5 +2597,27 @@ setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, showlegend, 
 
  })
 
-
+###########################################################
+# spc.plot.map.rbokeh
+###########################################################
+setGeneric (name= "spc.plot.map.rbokeh",
+            def=function(sp,glyph = 2,color = "#FF0000", legend=NULL,hover="row",opacity =1){standardGeneric("spc.plot.map.rbokeh")})
+setMethod("spc.plot.map.rbokeh", signature="Spectra", function (sp,glyph,color, legend,hover,opacity ) {
+  require(rbokeh)
+  #a=sp$Snap
+  df = data.frame(LON = sp@sp@coords[,"LON"])
+  df$LAT = sp@sp@coords[,"LAT"]
+  df$color = color
+  df$opacity  = opacity
+  df$row = 1:nrow(sp)
+  for (I in 1:length(hover))
+  if (hover[I] %in% names(sp))
+    df[hover[I]] = sp[[hover[I]]]
+ browser()
+   figure(width = 800, padding_factor = 0) %>%
+  ly_map("world", col = "gray") %>%
+    #ly_points(x=sp@sp@coords[,"LON"], y=sp@sp@coords[,"LAT"],legend=legend,hover=hover )
+  ly_points(x=LON, y=LAT, data=df, color=color,alpha=opacity ,hover=names(df)[5:length(names(df))] )
+       
+ })
 
