@@ -2600,10 +2600,28 @@ setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, showlegend, 
 ###########################################################
 # spc.plot.map.rbokeh
 ###########################################################
+#' Display a Spectra object
+#' @description
+#' Plot a \code{Spectra} object by using rbokeh
+#' @param sp \code{Spectra} object
+#' @param color Determine color of points
+#' @param legend not implimented yet
+#' @param hover String or vector of strings giving column 
+#' names of \code{Spectra} object. This information will be displayed when 
+#' hovering over the glyph
+#' @param opacity The opacity transparency of the glyph 
+#' between 0 (transparent) and 1 (opaque)
+#' @param glyph Value(s) or field name of the glyph to
+#'  use \code{\link{point_types}}
+#' @examples 
+#' sp=spc.example_spectra()
+#' spc.plot.map.rbokeh(sp, hover = "Snap")
+#' spc.plot.map.rbokeh(sp)
 setGeneric (name= "spc.plot.map.rbokeh",
             def=function(sp,glyph = 2,color = "#FF0000", legend=NULL,hover="row",opacity =1){standardGeneric("spc.plot.map.rbokeh")})
 setMethod("spc.plot.map.rbokeh", signature="Spectra", function (sp,glyph,color, legend,hover,opacity ) {
   require(rbokeh)
+  require(maps)
   #a=sp$Snap
   df = data.frame(LON = sp@sp@coords[,"LON"])
   df$LAT = sp@sp@coords[,"LAT"]
@@ -2613,11 +2631,20 @@ setMethod("spc.plot.map.rbokeh", signature="Spectra", function (sp,glyph,color, 
   for (I in 1:length(hover))
   if (hover[I] %in% names(sp))
     df[hover[I]] = sp[[hover[I]]]
- browser()
-   figure(width = 800, padding_factor = 0) %>%
-  ly_map("world", col = "gray") %>%
+ 
+   bbx = sp@sp@bbox
+  bbx[,2] =  bbx[,2] + (0.04 * abs(bbx[,2]))
+  if(bbx[2,2]>90)
+    bbx[2,2]<-89
+  bbx[,1] =  bbx[,1] - (0.04 * abs(bbx[,1]))
+  if(bbx[2,1]< -90)
+    bbx[2,1]<- -89
+  
+  figure(xlim=c(bbx[1,1],bbx[1,2]),ylim=c(bbx[2,1],bbx[2,2]),padding_factor = 0) %>%
+    #gmap(lat = mean(sp@sp@bbox[2,]), lng = mean(sp@sp@bbox[1,]),zoom = 12, width = 680, height = 600)
+    ly_map("world", col = "gray") %>%
     #ly_points(x=sp@sp@coords[,"LON"], y=sp@sp@coords[,"LAT"],legend=legend,hover=hover )
-  ly_points(x=LON, y=LAT, data=df, color=color,alpha=opacity ,hover=names(df)[5:length(names(df))] )
-       
- })
+    ly_points(x=LON, y=LAT, data=df, color=color,fill_alpha=opacity,
+              line_alpha=opacity,hover=names(df)[5:length(names(df))] )
+})
 
