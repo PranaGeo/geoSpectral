@@ -136,11 +136,8 @@ test_that("test for head()",{
   test_that("test for spc.plot.map.leaflet()",{
     
     expect_warning( spc.plot.map.leaflet(sp),NA)
-    expect_warning( spc.plot.map.leaflet(sp,showlegend = TRUE),NA)
     expect_warning( spc.plot.map.leaflet(sp,weight=100 ),NA)
-    expect_warning( spc.plot.map.leaflet(sp,plot.max = 5 ),NA)
-    expect_warning( spc.plot.map.leaflet(sp,plot.max =length(sp)),NA)
-    
+   
   })
   
   
