@@ -2062,6 +2062,22 @@ spc.makeSpcList = function(myobj, name,FUN){
 #########################################################################
 # Method : spc.plot.time
 #########################################################################
+#'  Plotting \code{Spectra} object
+#'
+#' @description
+#' Generating plot of the contents of a \code{Spectra} object with respect to time
+#'
+#' 
+#' @usage 
+#' spc.plot(x,...)
+#' @param x	 a \code{Spectra} data 
+#' 
+#' @seealso \code{\link{spc.plot.depth}}
+#' @examples
+#' x <- spc.example_spectra()
+#' spc.plot.time(x)
+#' 
+#' 
 setGeneric (name= "spc.plot.time",
             def=function(object, ...){standardGeneric("spc.plot.time")})
 setMethod("spc.plot.time", signature="Spectra", function (object,Y,maxSp=50,xdata="time",lab_cex,lwd=2, ...){
@@ -2521,9 +2537,27 @@ setMethod("spc.plot.depth.plotly", signature="Spectra", function (sp, column, pl
   p 
 })
 
+#########################################################################
+#spc.plot.map.plotly
+#########################################################################
+#' Display a Spectra object
+#' @description
+#' Create a point map with ploty engine using \code{Spectra} rows 
+#' @examples 
+#' sp <- spc.example_spectra()
+#' spc.plot.map.plotly(sp)
+#' 
+#' @param sp A \code{Spectra} object
+#' @param hover_field A chracter, colmn names of sp object to be used  in hover box
+#' @param opacity The opacity transparency of the glyph 
+#' between 0 (transparent) and 1 (opaque)
+#' @param color Determine color of points
+#' 
+#' 
+#' 
 setGeneric (name= "spc.plot.map.plotly",
-            def=function(sp, showlegend = FALSE, legend_field="row", plot.max=10, color="#FF0000", opacity=1){standardGeneric("spc.plot.map.plotly")})
-setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, showlegend, legend_field, plot.max=250, color, opacity) {
+            def=function(sp,hover_field="row", color="#FF0000", opacity=1){standardGeneric("spc.plot.map.plotly")})
+setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, hover_field, color, opacity) {
   require(plotly)
   bbx = sp@sp@bbox
   bbx[,2] =  bbx[,2] + (0.04 * abs(bbx[,2]))
@@ -2571,16 +2605,31 @@ setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, showlegend, 
                #text = hover, color = Globvalue,marker = m
                type = 'scattergeo', color=color, opacity=opacity
   ) 
-  p <- layout(geo = g, showlegend=showlegend)
+  p <- layout(geo = g, showlegend=FALSE)
   p
 })
 
 ###########################################################
 # spc.plot.map.leaflet
 ###########################################################
+#' Display a Spectra object
+#' @description
+#' Create a point map with leaflet engine using \code{Spectra} rows 
+#' @param sp \code{Spectra} object
+#' @param color Determine color of points
+#' @param hoverA chracter or vector of strings giving column 
+#' names of \code{Spectra} object. This information will be displayed when 
+#' hovering over the glyph
+#' @param opacity The opacity transparency of the glyph 
+#' between 0 (transparent) and 1 (opaque)
+#' @param weight Stroke width in pixels
+#' @examples 
+#' sp=spc.example_spectra()
+#' spc.plot.map.leaflet(sp)
+#'
  setGeneric (name= "spc.plot.map.leaflet",
-            def=function(sp, showlegend = FALSE,legend_field = "row", plot.max=10,color = "#FF0000",opacity = 1,  weight=5){standardGeneric("spc.plot.map.leaflet")})
- setMethod("spc.plot.map.leaflet", signature="Spectra", function (sp, showlegend = FALSE,legend_field = "row", plot.max=10,color = "#FF0000",opacity = 1,  weight=5) {
+            def=function(sp,hover_field = "row",color = "#FF0000",opacity = 1,  weight=5){standardGeneric("spc.plot.map.leaflet")})
+ setMethod("spc.plot.map.leaflet", signature="Spectra", function (sp,hover_field = "row",color = "#FF0000",opacity = 1,  weight=5) {
   require(leaflet)
 
    legend_field = paste0(legend_field, 1:nrow(sp))
@@ -2602,7 +2651,7 @@ setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, showlegend, 
 ###########################################################
 #' Display a Spectra object
 #' @description
-#' Plot a \code{Spectra} object by using rbokeh
+#' Create a point map with rbokeh engine using \code{Spectra} rows 
 #' @param sp \code{Spectra} object
 #' @param color Determine color of points
 #' @param legend not implimented yet

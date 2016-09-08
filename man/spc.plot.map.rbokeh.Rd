@@ -25,7 +25,7 @@ hovering over the glyph}
 between 0 (transparent) and 1 (opaque)}
 }
 \description{
-Plot a \code{Spectra} object by using rbokeh
+Create a point map with rbokeh engine using \code{Spectra} rows
 }
 \examples{
 sp=spc.example_spectra()
