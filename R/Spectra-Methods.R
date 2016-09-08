@@ -2632,7 +2632,7 @@ setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, hover_field,
  setMethod("spc.plot.map.leaflet", signature="Spectra", function (sp,hover_field = "row",color = "#FF0000",opacity = 1,  weight=5) {
   require(leaflet)
 
-   legend_field = paste0(legend_field, 1:nrow(sp))
+   hover_field = paste0(hover_field, 1:nrow(sp))
   
   m = leaflet() %>% 
     addCircles(lng = sp@sp@coords[,"LON"], lat=sp@sp@coords[,"LAT"], 
