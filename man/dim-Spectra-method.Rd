@@ -8,18 +8,16 @@
 \S4method{dim}{Spectra}(x)
 }
 \arguments{
-\item{x}{a \code{Spectra} objectlong-format \code{data.frame}}
+\item{x}{A \code{Spectra} object}
 }
 \value{
 Returns a numeric vector containing \code{nrow} and \code{ncol} of the \code{Spectra} object.
 }
 \description{
-\code{Spectra} Creates an instance of class \code{Spectra}.
-}
-\details{
-This
+Gives number of dimension of a \code{Spectra} object
 }
 \examples{
-fnm = file.path(base::system.file(package = "Spectral"),"test_data","particulate_absorption.csv.gz")
+sp<-spc.example_spectra()
+dim(sp)
 }
 

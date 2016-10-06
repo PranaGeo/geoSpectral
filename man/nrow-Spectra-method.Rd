@@ -3,15 +3,15 @@
 \docType{methods}
 \name{nrow,Spectra-method}
 \alias{nrow,Spectra-method}
-\title{The Number of rows  of a Spectra object}
+\title{The Number of rows  of a \code{Spectra} object}
 \usage{
-ncol(x)
+nrow(x)
 }
 \arguments{
-\item{x}{a Spectra object}
+\item{x}{a \code{Spectra} object}
 }
 \description{
-\code{nrow} and \code{ncol} return the number of rows or columns present in a Spectra object
+\code{nrow} and \code{ncol} return the number of rows or columns present in a \code{Spectra} object
 }
 \examples{
 x <- spc.example_spectra() 

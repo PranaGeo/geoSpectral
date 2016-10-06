@@ -3,19 +3,20 @@
 \docType{methods}
 \name{show,Spectra-method}
 \alias{show,Spectra-method}
-\title{Show a spectra object}
+\title{Show a \code{Spectra} object}
 \usage{
 show(x)
+# or 
+x
 }
 \arguments{
-\item{x}{a spectral object}
+\item{x}{a \code{Spectra} object}
 }
 \value{
 show returns an invisible \code{NULL}
 }
 \description{
-Display the objects, by printing,plotting and so on. 
-This function will be invoked for automatic pirinting
+Display a \code{Spectra} object
 }
 \examples{
 x <- spc.example_spectra()

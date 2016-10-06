@@ -2,23 +2,27 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.colnames}
 \alias{spc.colnames}
-\title{Column names}
+\title{Column names of \code{Spectra} object}
 \usage{
 spc.colnames(x)
 }
 \arguments{
-\item{x}{a matrix-like spectra object, with at least two dimensions for colnames.}
+\item{x}{A \code{Spectra} object}
 }
 \value{
-Returns the names of an object of class \code{Spectra}.
+Returns the coulmn names of an object of class \code{Spectra} as a charecter vector.
 }
 \description{
-Retrieve  column names of a matrix-like spectra object.
+Retrieve  column names of a \code{Spectra} object
 }
 \examples{
 x <- spc.example_spectra()
 spc.colnames(x)
+# or 
+spc.colnames(x) <-spc.cname.construct(x)
 
-
+}
+\seealso{
+\code{\link{spc.cname.construct}}
 }
 

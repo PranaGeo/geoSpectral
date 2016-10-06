@@ -2,14 +2,27 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.getselected.idx}
 \alias{spc.getselected.idx}
-\title{Extract index inside of a spectra object}
+\title{Extract index inside of a \code{Spectra} object}
 \usage{
-spc.getselected.idx(x)
+spc.getselected.idx(object)
 }
 \arguments{
-\item{x}{spectra object}
+\item{object}{A \code{Spectra} object}
+}
+\value{
+\code{Spectra} object
 }
 \description{
-extracts index of rows marked as selected
+Extracts index of rows marked as selected
+}
+\examples{
+x <- spc.example_spectra()
+idx=rep(FALSE,nrow(x)); 
+idx[1:5]=TRUE
+spc.setselected.idx(x)<-idx 
+spc.getselected.idx(x)
+}
+\seealso{
+\code{\link{spc.setselected.idx}}
 }
 
