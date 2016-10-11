@@ -10,7 +10,8 @@ spc.plot.plotly(sp,legend_field = "NISKIN")
 spc.plot.plotly(sp,legend_field = "STATION")
 spc.plot.plotly(sp,legend_field = "anap_440")}
 \usage{
-spc.plot.plotly(sp, legend_field = "row", plot.max = 10)
+spc.plot.plotly(sp, plot.max = 10, showlegend = FALSE,
+  legend_field = "row", hoverinfo = "title", title = sp@LongName)
 }
 \description{
 sp = spc.example_spectra()

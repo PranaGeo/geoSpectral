@@ -2049,7 +2049,11 @@ spc.makeSpcList = function(myobj, name,FUN){
   #Get the indexes of each DF row :
   idx = lapply(unique(myobj[[name]]),function(x) {which(x==myobj[[name]])})
   #For each row index in the list, subset the DF, return a list
-  output = lapply(idx,function(x) myobj[x,])
+  output = lapply(idx,function(x) {
+    out = myobj[x,]
+    spc.updateheader(out, name)<-as.character(out[[name]][1])
+    out
+  })
   output = SpcList(output)
   output@by = name
   return(output)
@@ -2058,6 +2062,22 @@ spc.makeSpcList = function(myobj, name,FUN){
 #########################################################################
 # Method : spc.plot.time
 #########################################################################
+#'  Plotting \code{Spectra} object
+#'
+#' @description
+#' Generating plot of the contents of a \code{Spectra} object with respect to time
+#'
+#' 
+#' @usage 
+#' spc.plot(x,...)
+#' @param x	 a \code{Spectra} data 
+#' 
+#' @seealso \code{\link{spc.plot.depth}}
+#' @examples
+#' x <- spc.example_spectra()
+#' spc.plot.time(x)
+#' 
+#' 
 setGeneric (name= "spc.plot.time",
             def=function(object, ...){standardGeneric("spc.plot.time")})
 setMethod("spc.plot.time", signature="Spectra", function (object,Y,maxSp=50,xdata="time",lab_cex,lwd=2, ...){
@@ -2193,10 +2213,11 @@ setMethod("spc.plot.depth", signature="Spectra", function (object,X,maxSp=10,lab
   #Sort with respect to depth
   d_idx = sort.int(myY,index.return = TRUE)
   myY = d_idx$x
+  
   if(class(myX)=="data.frame"){
     myX = myX[d_idx$ix,,drop=F]
     #Eliminate rows full with zeros
-    idx = !apply(myX==0,1,all)
+    idx = which(!apply(myX==0,1,all))
     myY = myY[idx]
     myX = myX[idx,,drop=F]
     #Eliminate NAs in depth
@@ -2218,16 +2239,25 @@ setMethod("spc.plot.depth", signature="Spectra", function (object,X,maxSp=10,lab
   
   if(missing(lab_cex))
     lab_cex=1
-  if (!all(diff(myY)==0) & !(length(myY)<2)) {
+  
+  depth_diff = TRUE
+  if(length(myY)>1)
+    depth_diff = !all(diff(myY)==0) 
+  
+  mytype = "l"
+  if(length(myY)==1)
+    mytype = "p"
+  
+  if (depth_diff & !(length(myY)<1)) {
     if(length(u_units)==1){	
       #All columns to be plotted have the same unit 
       if(add)
-        matlines(myX,myY,type="l",xlab="",ylab="",ylim=ylim,...)
+        matlines(myX,myY,type=mytype,xlab="",ylab="",ylim=ylim,...)
       else{
         if (all(is.finite(xlim)))
-          matplot(myX,myY,type="l",cex.axis=lab_cex,xlab="",ylab="",ylim=ylim,xlim=xlim,lwd=lwd,...)
+          matplot(myX,myY,type=mytype,pch=19,cex.axis=lab_cex,xlab="",ylab="",ylim=ylim,xlim=xlim,lwd=lwd,...)
         else
-          matplot(myX,myY,type="l",cex.axis=lab_cex,xlab="",ylab="",ylim=ylim,lwd=lwd,...)						
+          matplot(myX,myY,type=mytype,pch=19,cex.axis=lab_cex,xlab="",ylab="",ylim=ylim,lwd=lwd,...)						
       }
       matpoints(myX,myY,xlab="",ylab="",pch=19,cex=0.4,ylim=ylim,...)					
       
@@ -2507,9 +2537,27 @@ setMethod("spc.plot.depth.plotly", signature="Spectra", function (sp, column, pl
   p 
 })
 
+#########################################################################
+#spc.plot.map.plotly
+#########################################################################
+#' Display a Spectra object
+#' @description
+#' Create a point map with ploty engine using \code{Spectra} rows 
+#' @examples 
+#' sp <- spc.example_spectra()
+#' spc.plot.map.plotly(sp)
+#' 
+#' @param sp A \code{Spectra} object
+#' @param hover_field A chracter, colmn names of sp object to be used  in hover box
+#' @param opacity The opacity transparency of the glyph 
+#' between 0 (transparent) and 1 (opaque)
+#' @param color Determine color of points
+#' 
+#' 
+#' 
 setGeneric (name= "spc.plot.map.plotly",
-            def=function(sp, showlegend = FALSE, legend_field="row", plot.max=10, color="#FF0000", opacity=1){standardGeneric("spc.plot.map.plotly")})
-setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, showlegend, legend_field, plot.max=250, color, opacity) {
+            def=function(sp,hover_field="row", color="#FF0000", opacity=1){standardGeneric("spc.plot.map.plotly")})
+setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, hover_field, color, opacity) {
   require(plotly)
   bbx = sp@sp@bbox
   bbx[,2] =  bbx[,2] + (0.04 * abs(bbx[,2]))
@@ -2557,7 +2605,95 @@ setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, showlegend, 
                #text = hover, color = Globvalue,marker = m
                type = 'scattergeo', color=color, opacity=opacity
   ) 
-  p <- layout(geo = g, showlegend=showlegend)
+  p <- layout(geo = g, showlegend=FALSE)
   p
+})
+
+###########################################################
+# spc.plot.map.leaflet
+###########################################################
+#' Display a Spectra object
+#' @description
+#' Create a point map with leaflet engine using \code{Spectra} rows 
+#' @param sp \code{Spectra} object
+#' @param color Determine color of points
+#' @param hoverA chracter or vector of strings giving column 
+#' names of \code{Spectra} object. This information will be displayed when 
+#' hovering over the glyph
+#' @param opacity The opacity transparency of the glyph 
+#' between 0 (transparent) and 1 (opaque)
+#' @param weight Stroke width in pixels
+#' @examples 
+#' sp=spc.example_spectra()
+#' spc.plot.map.leaflet(sp)
+#'
+ setGeneric (name= "spc.plot.map.leaflet",
+            def=function(sp,hover_field = "row",color = "#FF0000",opacity = 1,  weight=5){standardGeneric("spc.plot.map.leaflet")})
+ setMethod("spc.plot.map.leaflet", signature="Spectra", function (sp,hover_field = "row",color = "#FF0000",opacity = 1,  weight=5) {
+  require(leaflet)
+
+   hover_field = paste0(hover_field, 1:nrow(sp))
+  
+  m = leaflet() %>% 
+    addCircles(lng = sp@sp@coords[,"LON"], lat=sp@sp@coords[,"LAT"], 
+               opacity=opacity,color=color, weight=5) %>% 
+    addTiles()# %>%
+  #addPopups(lng = sp@sp@coords[,"LON"], lat=sp@sp@coords[,"LAT"], 
+  # popup = legend_field  )
+  #addLegend(pal = qpal, values = , opacity = 1)
+  m
+  
+
+ })
+
+###########################################################
+# spc.plot.map.rbokeh
+###########################################################
+#' Display a Spectra object
+#' @description
+#' Create a point map with rbokeh engine using \code{Spectra} rows 
+#' @param sp \code{Spectra} object
+#' @param color Determine color of points
+#' @param legend not implimented yet
+#' @param hover String or vector of strings giving column 
+#' names of \code{Spectra} object. This information will be displayed when 
+#' hovering over the glyph
+#' @param opacity The opacity transparency of the glyph 
+#' between 0 (transparent) and 1 (opaque)
+#' @param glyph Value(s) or field name of the glyph to
+#'  use \code{\link{point_types}}
+#' @examples 
+#' sp=spc.example_spectra()
+#' spc.plot.map.rbokeh(sp, hover = "Snap")
+#' spc.plot.map.rbokeh(sp)
+setGeneric (name= "spc.plot.map.rbokeh",
+            def=function(sp,glyph = 2,color = "#FF0000", legend=NULL,hover="row",opacity =1){standardGeneric("spc.plot.map.rbokeh")})
+setMethod("spc.plot.map.rbokeh", signature="Spectra", function (sp,glyph,color, legend,hover,opacity ) {
+  require(rbokeh)
+  require(maps)
+  #a=sp$Snap
+  df = data.frame(LON = sp@sp@coords[,"LON"])
+  df$LAT = sp@sp@coords[,"LAT"]
+  df$color = color
+  df$opacity  = opacity
+  df$row = 1:nrow(sp)
+  for (I in 1:length(hover))
+  if (hover[I] %in% names(sp))
+    df[hover[I]] = sp[[hover[I]]]
+ 
+   bbx = sp@sp@bbox
+  bbx[,2] =  bbx[,2] + (0.04 * abs(bbx[,2]))
+  if(bbx[2,2]>90)
+    bbx[2,2]<-89
+  bbx[,1] =  bbx[,1] - (0.04 * abs(bbx[,1]))
+  if(bbx[2,1]< -90)
+    bbx[2,1]<- -89
+  
+  figure(xlim=c(bbx[1,1],bbx[1,2]),ylim=c(bbx[2,1],bbx[2,2]),padding_factor = 0) %>%
+    #gmap(lat = mean(sp@sp@bbox[2,]), lng = mean(sp@sp@bbox[1,]),zoom = 12, width = 680, height = 600)
+    ly_map("world", col = "gray") %>%
+    #ly_points(x=sp@sp@coords[,"LON"], y=sp@sp@coords[,"LAT"],legend=legend,hover=hover )
+    ly_points(x=LON, y=LAT, data=df, color=color,fill_alpha=opacity,
+              line_alpha=opacity,hover=names(df)[5:length(names(df))] )
 })
 
