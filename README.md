@@ -8,7 +8,7 @@ It provides the S4 classes: **_Spectra_** (stores spatial/temporal/spectral aspe
 The package is issued with a [GPLv3](http://www.gnu.org/copyleft/gpl.html) license. Please consult the license documentation if you would like to use **geoSpectral** in your software projects.
 
 ##Requirements
-**geoSpectral** depends on the R packages *rgdal*, *spacetime* and *xlsx*. You need to install them before you can install **geoSpectral**. If you don't have them already, try :
+**geoSpectral** depends on the R packages *rgdal*, *spacetime*. You need to install them before you can install **geoSpectral**. If you don't have them already, try :
 ```
 install.packages(c("rgdal","spacetime"),dep=T)
 ```
