@@ -105,7 +105,8 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
       latcol="LAT"
       warning("Could not find a latitude column named either of: lat,LAT,latitude,LATITUDE. Assigning LAT=1.0 to all rows")
     }
-    space=c( which(longcol==names(inDF)), which(latcol==names(inDF)))    
+    space=c( which(longcol==names(inDF)), which(latcol==names(inDF)))
+    names(inDF)[space]<-c("LON","LAT")
   }
   if(missing(time)){
     if ("time" %in% names(inDF))
@@ -352,7 +353,7 @@ setMethod("endTime", signature = "Spectra", def = function (x){
 #' 
 #'  
 setMethod("head", signature = "Spectra", 
-          def = function (x){  return(head(x@Spectra)) })
+          def = function (x, ...){  return(head(x@Spectra, ...)) })
 #########################################################################
 # Method : show
 #########################################################################
@@ -580,21 +581,6 @@ setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="
   grid(col="black")
 })
 
-#'sp = spc.example_spectra()
-#'spc.plot.plotly(sp)
-spc.plot.plotly = function(sp){
-  
-  library(reshape2)
-  
-  lbd = spc.getwavelengths(sp)
-  kk = data.frame(Wavelength=lbd,t(sp@Spectra))
-  kk=melt(kk,id.vars=1)
-  p <- plotly::plot_ly(kk, x=~Wavelength, y=~value, type="scatter", mode="lines",color = ~variable,
-               colors="Spectral", opacity=0.5, line=list(width = 1)) #,evaluate = FALSE) #, colors=pal,line = list(opacity=0.1))
-  p
-}
-
-
 #########################################################################
 # Method : spc.lines
 #########################################################################
@@ -639,7 +625,8 @@ setMethod("spc.lines",signature = "Spectra",definition = function(x,...){
 #' @examples
 #' x <- spc.example_spectra()
 #' nrow(x)  #[1] 26
-#' x2 <- spc.rbind(x,x)
+#' 
+#' 
 #' nrow(x2)  #[1] 52
 #' 
 #' 
@@ -2062,7 +2049,11 @@ spc.makeSpcList = function(myobj, name,FUN){
   #Get the indexes of each DF row :
   idx = lapply(unique(myobj[[name]]),function(x) {which(x==myobj[[name]])})
   #For each row index in the list, subset the DF, return a list
-  output = lapply(idx,function(x) myobj[x,])
+  output = lapply(idx,function(x) {
+    out = myobj[x,]
+    spc.updateheader(out, name)<-as.character(out[[name]][1])
+    out
+  })
   output = SpcList(output)
   output@by = name
   return(output)
@@ -2071,6 +2062,22 @@ spc.makeSpcList = function(myobj, name,FUN){
 #########################################################################
 # Method : spc.plot.time
 #########################################################################
+#'  Plotting \code{Spectra} object
+#'
+#' @description
+#' Generating plot of the contents of a \code{Spectra} object with respect to time
+#'
+#' 
+#' @usage 
+#' spc.plot(x,...)
+#' @param x	 a \code{Spectra} data 
+#' 
+#' @seealso \code{\link{spc.plot.depth}}
+#' @examples
+#' x <- spc.example_spectra()
+#' spc.plot.time(x)
+#' 
+#' 
 setGeneric (name= "spc.plot.time",
             def=function(object, ...){standardGeneric("spc.plot.time")})
 setMethod("spc.plot.time", signature="Spectra", function (object,Y,maxSp=50,xdata="time",lab_cex,lwd=2, ...){
@@ -2206,10 +2213,11 @@ setMethod("spc.plot.depth", signature="Spectra", function (object,X,maxSp=10,lab
   #Sort with respect to depth
   d_idx = sort.int(myY,index.return = TRUE)
   myY = d_idx$x
+  
   if(class(myX)=="data.frame"){
     myX = myX[d_idx$ix,,drop=F]
     #Eliminate rows full with zeros
-    idx = !apply(myX==0,1,all)
+    idx = which(!apply(myX==0,1,all))
     myY = myY[idx]
     myX = myX[idx,,drop=F]
     #Eliminate NAs in depth
@@ -2231,16 +2239,25 @@ setMethod("spc.plot.depth", signature="Spectra", function (object,X,maxSp=10,lab
   
   if(missing(lab_cex))
     lab_cex=1
-  if (!all(diff(myY)==0) & !(length(myY)<2)) {
+  
+  depth_diff = TRUE
+  if(length(myY)>1)
+    depth_diff = !all(diff(myY)==0) 
+  
+  mytype = "l"
+  if(length(myY)==1)
+    mytype = "p"
+  
+  if (depth_diff & !(length(myY)<1)) {
     if(length(u_units)==1){	
       #All columns to be plotted have the same unit 
       if(add)
-        matlines(myX,myY,type="l",xlab="",ylab="",ylim=ylim,...)
+        matlines(myX,myY,type=mytype,xlab="",ylab="",ylim=ylim,...)
       else{
         if (all(is.finite(xlim)))
-          matplot(myX,myY,type="l",cex.axis=lab_cex,xlab="",ylab="",ylim=ylim,xlim=xlim,lwd=lwd,...)
+          matplot(myX,myY,type=mytype,pch=19,cex.axis=lab_cex,xlab="",ylab="",ylim=ylim,xlim=xlim,lwd=lwd,...)
         else
-          matplot(myX,myY,type="l",cex.axis=lab_cex,xlab="",ylab="",ylim=ylim,lwd=lwd,...)						
+          matplot(myX,myY,type=mytype,pch=19,cex.axis=lab_cex,xlab="",ylab="",ylim=ylim,lwd=lwd,...)						
       }
       matpoints(myX,myY,xlab="",ylab="",pch=19,cex=0.4,ylim=ylim,...)					
       
@@ -2307,6 +2324,377 @@ spc.example_spectra = function(){
   abs$TIME = as.POSIXct(as.character(abs$TIME),tz=tz) #Compute the time
   
   #Space and time columns are automatically found in the column names of inDF
-  myS<-Spectra(abs,Wavelengths=lbd,Units=Units,ShortName="a_nap")
+  myS<-Spectra(abs,Wavelengths=lbd,Units=Units,ShortName="a_nap",
+               LongName="Absorption coefficient by non-algal particles")
   myS
 }
+
+#' Read the NOMAD v2 bio-optical database
+#'
+#'@description
+#' Imports the NOMAD v2 database of the SeaBASS project. More information 
+#' about this dataset can be found at \link{http://seabass.gsfc.nasa.gov/wiki/article.cgi?article=NOMAD}
+#'
+#' @param infile \code{character} containing the name of the input file.
+#'
+#' @return Returns an object of class \code{data.frame}.
+#'
+#' @examples
+#' a = spc.Read_NOMAD_v2(fnm)
+#'
+#' spc.plot.plotly(ap, plot.max=15)
+spc.Read_NOMAD_v2 = function(skip.all.na.rows=TRUE) {
+  fnm = file.path(system.file(package = "geoSpectral"), "test_data","nomad_seabass_v2.a_2008200.txt.gz")
+  #Read data off disk
+  print(paste("Reading the NOMAD file", fnm, "off disk."))
+  mydata=read.table(fnm, header=T,sep=",", comment.char = "!")
+  
+  #Date-time conversion
+  cc=paste(mydata$year, mydata$month,mydata$day,sep="/")
+  bb=paste(mydata$hour, mydata$minute,mydata$second,sep=":")
+  a=paste(cc,bb)
+  a=strptime(a,"%Y/%m/%d %H:%M:%S")
+  mydata = mydata[,-(1:6)] #Remove cols year month day hour minute second
+  nms = names(mydata)
+  nms = gsub("lat","LAT",nms)
+  nms = gsub("lon","LON",nms)
+  names(mydata)=nms
+  mydata = cbind(mydata, TIME=as.POSIXct(a))
+  mydata[mydata==-999]=NA
+  
+  ShortNames = c("kd","lw","es","ap","ad","ag","a","bb","bbr")
+  idx=lapply(ShortNames, function(x) {
+    i = regexpr(paste0("^",x,"[[:digit:]][[:digit:]][[:digit:]]$"), names(mydata))
+    i = which(i!=-1)
+    i
+    #grep(glob2rx(paste0(x,"???")), names(mydata))
+  })
+  #Extract Spectral data
+  sp = lapply(idx, function(x) mydata[,x])
+  #Cleanup mydata from Spectral data
+  mydata = mydata [, -do.call(c, idx)]
+  
+  #Reorder columns
+  require(dplyr)
+  mydata = mydata %>% select(TIME, LON, LAT, cruise, flag, everything())
+  
+  out = lapply(1:length(ShortNames), function(x) {
+    #Find rows that do not contain NAs
+    lbd = as.numeric(gsub(ShortNames[x], "", names(sp[[x]])))
+    #out = mydata[complete.cases(mydata[,idx[[x]]]),c(names(mydata)[idx[[x]]],"datetime","latitude","longitude")]    out = Spectra(out, Wavelengths = lbd,ShortName=ShortNames[x],time="TIME",Units="1/m")
+    
+    out = cbind(sp[[x]], mydata)
+    
+    if (skip.all.na.rows){
+      #Find rows where there at least some data
+      na_idx = !apply((apply(sp[[x]], 2, is.na)),1,all)
+      out = out[na_idx,]
+    }
+    out = Spectra(out, Wavelengths = lbd,ShortName=ShortNames[x],time="TIME",Units="1/m")
+    spc.colnames(out)<-spc.cname.construct(out)
+    return (out)
+  })
+  names(out) = ShortNames
+  out
+}
+
+#'sp = spc.example_spectra()
+#'spc.plot.plotly(sp)
+#'spc.plot.plotly(sp,legend_field = "Spectra")
+#'spc.plot.plotly(sp,legend_field = "CAST")
+#'spc.plot.plotly(sp,legend_field = "NISKIN")
+#'spc.plot.plotly(sp,legend_field = "STATION")
+#'spc.plot.plotly(sp,legend_field = "anap_440")
+setGeneric (name= "spc.plot.plotly",
+            def=function(sp, plot.max=10,showlegend=FALSE,legend_field="row",hoverinfo="title",title=sp@LongName){standardGeneric("spc.plot.plotly")})
+setMethod("spc.plot.plotly", signature="Spectra", function (sp, plot.max=10,showlegend = FALSE,legend_field,hoverinfo,title) {
+  #library(reshape2)
+  # lbd = spc.getwavelengths(sp)
+  # kk = data.frame(Wavelength=lbd,t(sp@Spectra))
+  # kk=melt(kk,id.vars=1)
+  # p <- plotly::plot_ly(kk, x=~Wavelength, y=~value, type="scatter", mode="lines",color = ~variable,
+  #              colors="Spectral", opacity=0.5, line=list(width = 1)) #,evaluate = FALSE) #, colors=pal,line = list(opacity=0.1))
+  require(plotly)
+  if (plot.max > nrow(sp))
+    plot.max = nrow(sp)
+
+  idx = floor(seq(1, nrow(sp), length.out = plot.max))
+  if (legend_field %in% names(sp)) {
+    legend_field = paste(legend_field, sp[[legend_field]])
+  }
+  else
+    legend_field = paste(legend_field, 1:nrow(sp))
+  
+  ylab = paste(sp@ShortName, " [", sp@Units, "]", sep="")
+  xlab = paste("Wavelength [", sp@WavelengthsUnit, "]", sep="")
+  p <- plot_ly()
+  for(I in 1:length(idx)) {  
+    p <- add_trace(p, x=sp@Wavelengths, y=sp@Spectra[idx[I],],type = "scatter", mode="lines",
+                   name=legend_field[idx[I]], hoverinfo=hoverinfo
+                   #,marker=list(color=line[['color']])
+                   )
+  }
+  p = layout(p,
+             title = title,
+             hovermode = "closest",
+             xaxis = list(title = xlab), #rangeslider = list(type = "linear")),
+             yaxis = list(title = ylab),
+             showlegend=showlegend
+             )
+  p
+})
+
+#' Plot a Spectra object data with respect to time
+#' @description
+#' Plot a \code{Spectra} object with respect to time
+#' @param sp A \code{Spectra} object
+#' @param column number or name, default value is 10.
+#' 
+#' @examples 
+#' spc.plot.time.plotly(sp)
+#' spc.plot.time.plotly(sp, plot.max = 3)
+#' spc.plot.time.plotly(sp, c("anap_450","anap_550","anap_650"))
+setGeneric (name= "spc.plot.time.plotly",
+            def=function(sp, column, plot.max=10,showlegend=FALSE,hoverinfo="name",title=sp@LongName){standardGeneric("spc.plot.time.plotly")})
+setMethod("spc.plot.time.plotly", signature="Spectra", function (sp, column, plot.max=10,showlegend,hoverinfo,title) {
+  require(plotly)
+  if(missing("column")){
+    if(ncol(sp)<10)
+      idx = 1:ncol(sp)
+    else
+      idx = round(seq(1, ncol(sp), length.out = plot.max))
+    
+    column = colnames(sp@Spectra)[idx]
+  }
+  ylab = paste(sp@ShortName, " [", sp@Units, "]", sep="")
+  myTime = time(sp@time)
+  
+  p=plot_ly(x = myTime , y = sp[[column[1]]], type="scatter", mode = "lines + markers",name=column[1])
+  if(length(column)>1)
+    for(I in 2:length(column))
+      p=add_trace(p, x = myTime , y = sp[[column[I]]], 
+                  type="scatter", mode = "lines + markers", 
+                  name=column[I], hoverinfo=hoverinfo) 
+  p = layout(p,
+             title = title,
+             hovermode = "closest",
+             xaxis = list(title = "Time",
+                          rangeslider = list(type = "date")),
+             yaxis = list(title = ylab),
+             showlegend=showlegend
+             )
+  p
+})
+
+#########################################################################
+#spc.plot.depth.plotly
+#########################################################################
+#' Display a Spectra object
+#' @description
+#' Plot a \code{Spectra} object with respect to depth
+#' @examples 
+#' BL = spc.makeSpcList(sp,"CAST")
+#' p1<-spc.plot.depth.plotly(BL[[5]])
+#' #p1<-layout(p1,title=paste("CAST =", BL[[5]]$CAST[1]))
+#' p2<-spc.plot.depth.plotly(BL[[4]])
+#' #p2<-layout(p2,title=paste("CAST =", BL[[4]]$CAST[1]))
+#' p <- subplot(p1, p2,  margin = 0.05, shareY=TRUE,shareX=TRUE,titleX=TRUE,titleY=TRUE)
+#' p <- layout(p, showlegend = T, 
+#' annotations = list(
+#' list(x = 0.2 , y = 1.05, text = BL[[5]]$CAST[1], showarrow = F, xref='paper', yref='paper'),
+#' list(x = 0.8 , y = 1.05, text = BL[[4]]$CAST[1], showarrow = F, xref='paper', yref='paper')))
+#' p
+#' @param sp A \code{Spectra} object
+#' @param column Number or name , defoult value is 10 if a number or name has not been entered
+setGeneric (name= "spc.plot.depth.plotly",
+            def=function(sp, column, plot.max=10,showlegend=FALSE,hoverinfo="name",title=sp@LongName){standardGeneric("spc.plot.depth.plotly")})
+setMethod("spc.plot.depth.plotly", signature="Spectra", function (sp, column, plot.max=10,showlegend,hoverinfo,title) {
+  require(plotly)
+  if(missing("column")){
+    if(ncol(sp)<10)
+      idx = 1:ncol(sp)
+    else
+      idx = round(seq(1,ncol(sp), length.out = plot.max))
+    
+    column = colnames(sp@Spectra)[idx]
+  }
+  xlab = paste(sp@ShortName, " [", sp@Units, "]", sep="")
+  
+  p=plot_ly(x = sp[[column[1]]] , y = sp$DEPTH, type="scatter", mode = "lines + markers",name=column[1])
+  if(length(column)>1)
+    for(I in 2:length(column))
+      p=add_trace(p, x = sp[[column[I]]] , y =sp$DEPTH, type="scatter", mode = "lines + markers", 
+                  name=column[I], hoverinfo=hoverinfo) 
+  # layout(yaxis = list(autorange = "reversed"))
+  p = layout(p,
+             title = title,
+             hovermode = "closest",
+             xaxis = list(title = xlab),
+             yaxis = list(title = "Depth [ m ]", 
+                          rangeslider = list(type = "linear"),
+                          autorange = "reversed"),
+             showlegend=showlegend
+             )
+  p 
+})
+
+#########################################################################
+#spc.plot.map.plotly
+#########################################################################
+#' Display a Spectra object
+#' @description
+#' Create a point map with ploty engine using \code{Spectra} rows 
+#' @examples 
+#' sp <- spc.example_spectra()
+#' spc.plot.map.plotly(sp)
+#' 
+#' @param sp A \code{Spectra} object
+#' @param hover_field A chracter, colmn names of sp object to be used  in hover box
+#' @param opacity The opacity transparency of the glyph 
+#' between 0 (transparent) and 1 (opaque)
+#' @param color Determine color of points
+#' 
+#' 
+#' 
+setGeneric (name= "spc.plot.map.plotly",
+            def=function(sp,hover_field="row", color="#FF0000", opacity=1){standardGeneric("spc.plot.map.plotly")})
+setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, hover_field, color, opacity) {
+  require(plotly)
+  bbx = sp@sp@bbox
+  bbx[,2] =  bbx[,2] + (0.04 * abs(bbx[,2]))
+  if(bbx[2,2]>90)
+    bbx[2,2]<-89
+  bbx[,1] =  bbx[,1] - (0.04 * abs(bbx[,1]))
+  if(bbx[2,1]< -90)
+    bbx[2,1]<- -89
+  
+  g <- list(
+    #scope = 'north america',
+    showland = TRUE,
+    landcolor = toRGB("grey83"),
+    subunitcolor = toRGB("white"),
+    countrycolor = toRGB("white"),
+    showlakes = TRUE,
+    lakecolor = toRGB("blue"),
+    showrivers = TRUE,
+    showsubunits = TRUE,
+    showcountries = TRUE,
+    resolution = 50,
+    projection = list(
+      type = 'conic conformal',
+      rotation = list(
+        lon = -100
+      )
+    ),
+    lonaxis = list(
+      showgrid = TRUE,
+      gridwidth = 0.5,
+      range = c(bbx[1,1], bbx[1,2]),
+      dtick = 5
+    ),
+    lataxis = list(
+      showgrid = TRUE,
+      gridwidth = 0.5,
+      range = c(bbx[2,1],bbx[2,2]),
+      dtick = 5
+    )
+  )
+    
+  if(length(color==1))
+    color = rep(color, nrow(sp))
+  p <- plot_ly(lat = sp@sp@coords[,"LAT"], lon = sp@sp@coords[,"LON"], 
+               #text = hover, color = Globvalue,marker = m
+               type = 'scattergeo', color=color, opacity=opacity
+  ) 
+  p <- layout(p, geo = g, showlegend=FALSE)
+  p
+})
+
+###########################################################
+# spc.plot.map.leaflet
+###########################################################
+#' Display a Spectra object
+#' @description
+#' Create a point map with leaflet engine using \code{Spectra} rows 
+#' @param sp \code{Spectra} object
+#' @param color Determine color of points
+#' @param hoverA chracter or vector of strings giving column 
+#' names of \code{Spectra} object. This information will be displayed when 
+#' hovering over the glyph
+#' @param opacity The opacity transparency of the glyph 
+#' between 0 (transparent) and 1 (opaque)
+#' @param weight Stroke width in pixels
+#' @examples 
+#' sp=spc.example_spectra()
+#' spc.plot.map.leaflet(sp)
+#'
+ setGeneric (name= "spc.plot.map.leaflet",
+            def=function(sp,hover_field = "row",color = "#FF0000",opacity = 1,  weight=5){standardGeneric("spc.plot.map.leaflet")})
+ setMethod("spc.plot.map.leaflet", signature="Spectra", function (sp,hover_field = "row",color = "#FF0000",opacity = 1,  weight=5) {
+  require(leaflet)
+
+   hover_field = paste0(hover_field, 1:nrow(sp))
+  
+  m = leaflet() %>% 
+    addCircles(lng = sp@sp@coords[,"LON"], lat=sp@sp@coords[,"LAT"], 
+               opacity=opacity,color=color, weight=5) %>% 
+    addTiles()# %>%
+  #addPopups(lng = sp@sp@coords[,"LON"], lat=sp@sp@coords[,"LAT"], 
+  # popup = legend_field  )
+  #addLegend(pal = qpal, values = , opacity = 1)
+  m
+  
+
+ })
+
+###########################################################
+# spc.plot.map.rbokeh
+###########################################################
+#' Display a Spectra object
+#' @description
+#' Create a point map with rbokeh engine using \code{Spectra} rows 
+#' @param sp \code{Spectra} object
+#' @param color Determine color of points
+#' @param legend not implimented yet
+#' @param hover String or vector of strings giving column 
+#' names of \code{Spectra} object. This information will be displayed when 
+#' hovering over the glyph
+#' @param opacity The opacity transparency of the glyph 
+#' between 0 (transparent) and 1 (opaque)
+#' @param glyph Value(s) or field name of the glyph to
+#'  use \code{\link{point_types}}
+#' @examples 
+#' sp=spc.example_spectra()
+#' spc.plot.map.rbokeh(sp, hover = "Snap")
+#' spc.plot.map.rbokeh(sp)
+setGeneric (name= "spc.plot.map.rbokeh",
+            def=function(sp,glyph = 2,color = "#FF0000", legend=NULL,hover="row",opacity =1){standardGeneric("spc.plot.map.rbokeh")})
+setMethod("spc.plot.map.rbokeh", signature="Spectra", function (sp,glyph,color, legend,hover,opacity ) {
+  require(rbokeh)
+  require(maps)
+  #a=sp$Snap
+  df = data.frame(LON = sp@sp@coords[,"LON"])
+  df$LAT = sp@sp@coords[,"LAT"]
+  df$color = color
+  df$opacity  = opacity
+  df$row = 1:nrow(sp)
+  for (I in 1:length(hover))
+  if (hover[I] %in% names(sp))
+    df[hover[I]] = sp[[hover[I]]]
+ 
+   bbx = sp@sp@bbox
+  bbx[,2] =  bbx[,2] + (0.04 * abs(bbx[,2]))
+  if(bbx[2,2]>90)
+    bbx[2,2]<-89
+  bbx[,1] =  bbx[,1] - (0.04 * abs(bbx[,1]))
+  if(bbx[2,1]< -90)
+    bbx[2,1]<- -89
+  
+  figure(xlim=c(bbx[1,1],bbx[1,2]),ylim=c(bbx[2,1],bbx[2,2]),padding_factor = 0) %>%
+    #gmap(lat = mean(sp@sp@bbox[2,]), lng = mean(sp@sp@bbox[1,]),zoom = 12, width = 680, height = 600)
+    ly_map("world", col = "gray") %>%
+    #ly_points(x=sp@sp@coords[,"LON"], y=sp@sp@coords[,"LAT"],legend=legend,hover=hover )
+    ly_points(x=LON, y=LAT, data=df, color=color,fill_alpha=opacity,
+              line_alpha=opacity,hover=names(df)[5:length(names(df))] )
+})
+
