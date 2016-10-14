@@ -3,22 +3,20 @@
 \docType{methods}
 \name{names,Spectra-method}
 \alias{names,Spectra-method}
-\title{The Names of a Spectra object}
+\title{The Names of a \code{Spectra} object}
 \usage{
 names(x)
 }
 \arguments{
-\item{x}{a Spectra object}
+\item{x}{a \code{Spectra} object}
 }
 \description{
-Function to get  the names of a Spectra object
+Retrieve  the names of \code{Spectra} object
 }
 \examples{
 
 x <- spc.example_spectra() 
 names(x)
-
-
 
 }
 

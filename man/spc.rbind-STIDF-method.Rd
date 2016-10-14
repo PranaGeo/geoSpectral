@@ -3,16 +3,16 @@
 \docType{methods}
 \name{spc.rbind,STIDF-method}
 \alias{spc.rbind,STIDF-method}
-\title{Combine spectra Objects by Rows}
+\title{Combine \code{Spectra} objects by Rows}
 \usage{
 spc.cbind(...)
 spc.rbind(...)
 }
 \arguments{
-\item{...}{spectra object}
+\item{...}{\code{Spectra} object}
 }
 \description{
-Take a spectral objects and combine by rows
+Take a \code{Spectra} objects and combine by rows
 }
 \examples{
 x <- spc.example_spectra()
@@ -21,5 +21,8 @@ x2 <- spc.rbind(x,x)
 nrow(x2)  #[1] 52
 
 
+}
+\seealso{
+\code{\link{spc.cbind}}
 }
 
