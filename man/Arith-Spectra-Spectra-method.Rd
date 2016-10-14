@@ -3,7 +3,7 @@
 \docType{methods}
 \name{Arith,Spectra,Spectra-method}
 \alias{Arith,Spectra,Spectra-method}
-\title{Apply arithmetic operations on/between Spectra objects}
+\title{Apply arithmetic operations on/between \code{Spectra} objects}
 \usage{
 Arith(e1, e2)
 e1 * e2
@@ -15,11 +15,11 @@ e1 + 0.5
 \item{e2}{spectra object}
 }
 \description{
-Methods definig Arithmetic operations between two Spectra objects e1 and e2 or one
-Spectra object e1 and a numeric value.
+Methods definig Arithmetic operations between two \code{Spectra} objects e1 and e2 or one
+\code{Spectra} object e1 and a numeric value.
 }
 \details{
-These methods allow performing arithmetic operations involving Spectra objects.
+These methods allow performing arithmetic operations involving \code{Spectra} objects.
 }
 \seealso{
 \code{\link{Arith}}

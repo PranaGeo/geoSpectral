@@ -1,13 +1,14 @@
 Package: geoSpectral
 Type: Package
 Title: Classes and methods for spectral (optical) data
-Version: 0.1
+Version: 0.11
 Date: 2012-07-02
 Depends:
     R (>= 2.10.0),
     methods,
     rgdal,
-    spacetime
+    spacetime,
+    reshape2
 Author: Servet Cizmeli
 Maintainer: Servet Cizmeli <ahmet@pranageo.com>
 Description: This package provides S4 classes and basic manipulation methods
@@ -27,3 +28,4 @@ Collate:
     SpcList-Methods.R
     geoSpectral.R
 RoxygenNote: 5.0.1
+Suggests: testthat

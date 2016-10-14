@@ -2,24 +2,31 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.rbind}
 \alias{spc.rbind}
-\title{Combine spectra Objects by Rows}
+\title{Combine \code{Spectra} Objects by Rows}
 \usage{
 spc.cbind(...)
 spc.rbind(...)
 }
 \arguments{
-\item{...}{spectra object}
+\item{...}{\code{Spectra} object}
+}
+\value{
+\code{Spectra} object
 }
 \description{
-Take a spectral objects and combine by rows
+Take a \code{Spectra} objects and combine by rows
 }
 \examples{
 x <- spc.example_spectra()
 nrow(x)  #[1] 26
-x2 <- spc.rbind(x,x)
+
+
 nrow(x2)  #[1] 52
 
 
 
+}
+\seealso{
+\code{\link{spc.cbind}}
 }
 
