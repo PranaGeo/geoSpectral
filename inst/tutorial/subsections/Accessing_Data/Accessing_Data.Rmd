@@ -1,0 +1,102 @@
+---
+title: 'Accessing Data'
+output:
+  html_document:
+    keep_md: yes
+    theme: spacelab
+    toc: yes
+  pdf_document:
+    toc: yes
+---
+```{r echo=FALSE, message=TRUE, warning=TRUE, include=FALSE}
+source('Script:Accessing_Data.R')
+```
+#Accessing data
+##Getting and setting data slots
+
+To extract (get) and to change (set) wavelengths:
+```{r}
+head(spc.getwavelengths(myS))
+spc.setwavelengths(myS) <- 300:800 
+```
+
+##Subsetting
+Subsetting with row indexes using the “[“ operator returns a Spectra object. The following command extracts rows 1 to 10 and spectral columns 30 to 50 (provided in integer format). Ancillary data is unchanged. 
+```{r}
+myS[1:10]
+```
+
+The “[“ operator also supports column names :
+```{r}
+myS[,"anap_400"] 
+myS[,c("anap_400","anap_500")] 
+```
+
+If only a set of wavelengths are desired, either the column indexes have to be proveded in integer format or the desired wavelengths have to be provided in numeric (floating) format :
+
+```{r}
+myS[1:10,30:50] #Selection of channels by column index
+lbd = as.numeric(c(412,440,490,555,670))
+myS[1:10,lbd] #Selection of channels by wavelength
+```
+
+A subset of the spectra can also be extracted over a range of wavelengths using the following formulation :
+```{r}
+myS[1:10,"415::450"] 
+```
+
+If numeric values are required instead of a *Spectra* object, use the “$" or the “[[" operators
+```{r}
+myS$CAST #Returns Ancillary data
+myS$anap_400 #Returns spectra as numeric vector
+head(myS[["anap_400"]]) #Returns spectra as numeric vector
+head(myS[[c("Snap","Offset")]]) #Returns data.frame
+```
+
+Subsetting can also be achieved using the implementation of the R function subset() for *Spectra* and *SpcList* classes. It is possible to perform a row-wise selection 
+```{r}
+subset(myS,DEPTH<=30) #Subsetting rows with respect to the value of Ancillary data
+subset(myS,DEPTH<=30)$DEPTH
+subset(myS,anap_440<=0.01) #Subsetting rows with respect to the value of Spectral data
+subset(myS,subset=DEPTH<=30,select="CAST") #Selecting Ancillary data columns, leaving Spectral columns intact
+subset(myS,subset=DEPTH<=30,select="anap_440") #Selecting Spectral data columns, leaving Ancillary columns intact
+```
+
+To see the implementation of subset() for the *Spectra* class, try :
+```{r eval=FALSE}
+showMethods(subset,classes="Spectra",includeDefs=T) 
+```
+
+##Selecting and flagging rows as invalid
+It is possible to select some of the rows manually or with the help of the mouse. As of the writing of this document, only records (rows) of a Spectra object can be selected with mouse. To manually set the first five observations as selected, use :
+```{r}
+idx=rep(FALSE,nrow(myS)); 
+idx[1:5]=TRUE
+spc.setselected.idx(myS)<-idx 
+```
+
+Set the selected spectra as Invalid :
+```{r}
+spc.setinvalid.idx(myS)<-spc.getselected.idx(myS) 
+```
+
+The function spc.select() needs the Spectra plot created by the spc.plot() method. First call spc.plot(), then use the left button of the mouse to select spectra. To end the selection process, click on an empty area or push the right mouse button : Row indexes of selected curves will display in the R command line. The function `spc.setselected.idx()` stores the indexes in the slot **SelectedIdx** of the variable.
+
+```{r fig.width=5, echo=TRUE, fig.height=5}
+library(plotly)
+spc.plot.plotly(myS)
+```
+```{r eval=FALSE}
+spc.setselected.idx(myS)<-spc.select(myS)
+```
+```{r}
+spc.getselected.idx(myS)
+```
+
+The display of selected and invalid rows is currently not implemented in plotting functions (ex. spc.plot(), spc.plot.depth(), spc.plot.time()). The slot **SelectedIdx** will be reset if the dimensions of the *Spectra* object is changed by subsetting or another operation.
+
+[Back to Index](http://pranageo.com/geospectral/geospectral-tutorial/)
+
+[Previous Page (Importing Data)](../Importing_Data/Importing_Data.html)
+
+[Next Page (Data Conversion)](../Data_Conversion/Data_Conversion.html)
