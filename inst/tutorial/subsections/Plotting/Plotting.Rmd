@@ -103,7 +103,7 @@ To plot the depth profile we pass the **Spc** list we created to *spc.plot.depth
 spc.plot.depth.plotly(BL[[4]])
 ```
 
-To use **rbokeh** with geoSpectral you must install the **rbokeh** package and load its library.
+To use **rbokeh** with geoSpectRal you must install the **rbokeh** package and load its library.
 ```{r eval=FALSE}
 install.packages("rbokeh")
 ```

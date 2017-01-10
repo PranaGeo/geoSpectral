@@ -13,7 +13,7 @@ source('Script:Importing_Data.R')
 ```
 
 #Importing data
-This section describes stages of creation of a Spectra object from data located in a csv file. The file is distributed with **geoSpectral** and contains spectral data, a vertical profile of the particulate absorption coefficient collected at sea at discrete depth in 4 different stations. 
+This section describes stages of creation of a Spectra object from data located in a csv file. The file is distributed with **geoSpectRal** and contains spectral data, a vertical profile of the particulate absorption coefficient collected at sea at discrete depth in 4 different stations. 
 
 The first step is to create a *data.frame* object using the R function *read.table()*. We have a comma-delimited text file with several measured parameters in columns and observations from different bottles (stations and depths). 
 
@@ -46,7 +46,7 @@ The *Spectra* object is created with the constructor function *Spectra()*.
 myS<-Spectra(abs,Wavelengths=lbd,Units=Units,ShortName="a_nap")
 myS
 ```
-The function Spectra() calls `spacetime::stConstruct()` that creates a `STIDF` object from an input *data.frame* object of long-table format. Type `?spacetime::stConstruct` at the R prompt for more information long and wide tables. *geoSpectral* accepts the following column names when searching latitude and longitude information : `"Latitude"`, `"LATITUDE"`, `"lat"`, `"LAT"`, `"Longitude",`,`"LONGITUDE"`, `"lon"`, `"LON"`,`"long"`, `"LONG"`. If no suitable column is found, *LAT* and *LONG* takes the artificial value of 1. As mentioned above, Time needs to be stored in column `"TIME"`. If no such a column is found, an artificial vector sequence was created from 1 to the number of rows.  According to the way spacetime is built,  if the measurements have been performed over a time interval (instead of instantaneous measurements), the length of intervals can be specified in the column `"ENDTIME"`. If no such column is found, the data is assumed to be acquired in a time instance (`ENDTIME=TIME`).
+The function Spectra() calls `spacetime::stConstruct()` that creates a `STIDF` object from an input *data.frame* object of long-table format. Type `?spacetime::stConstruct` at the R prompt for more information long and wide tables. *geoSpectRal* accepts the following column names when searching latitude and longitude information : `"Latitude"`, `"LATITUDE"`, `"lat"`, `"LAT"`, `"Longitude",`,`"LONGITUDE"`, `"lon"`, `"LON"`,`"long"`, `"LONG"`. If no suitable column is found, *LAT* and *LONG* takes the artificial value of 1. As mentioned above, Time needs to be stored in column `"TIME"`. If no such a column is found, an artificial vector sequence was created from 1 to the number of rows.  According to the way spacetime is built,  if the measurements have been performed over a time interval (instead of instantaneous measurements), the length of intervals can be specified in the column `"ENDTIME"`. If no such column is found, the data is assumed to be acquired in a time instance (`ENDTIME=TIME`).
 
 Ancillary data is stored in the slot **\@data** while the spectral data, in slot **\@Spectra**. A spectra object could also be created with or without ancillary data. Since we will later need Ancillary data, it is best to conserve it in the case of this example. 
 
