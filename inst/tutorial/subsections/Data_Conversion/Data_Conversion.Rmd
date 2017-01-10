@@ -42,7 +42,7 @@ class(as(myS,"STIDF"))
 ```
 
 ###Converting from STIDF
-See the example using the constructor function `geoSpectral::Spectra()` given in section [ *Importing data*](#importing-data).
+See the example using the constructor function `geoSpectRal::Spectra()` given in section [ *Importing data*](#importing-data).
 
 ###Creating a SpcList
 Creating a SpcList object from a list of Spectra objects. The two following lines produces the same result
@@ -100,7 +100,7 @@ example here
 
 Try `rgdal::ogrDrivers()` to inquire which spatial vector formats are supported in your installation of **rgdal**. For more information on how to export an **sp** object, consult **rgdal** documentation with `?rgdal::writeOGR` as its syntax largely depends on the export format. 
 
-Please note that saving spectral data into an vector format supported by *OGR* will probably result in the loss of the spectral attributes. It is of course possible to manually pack wavelength and other spectral attributes along with data or inside metadata. However, to our knowledge, as of writing of this text, there is still no well-known vector spatial format that expresses spectral attributes of data in a convenient, consistent and standard fashion. This is also partly why the package **geoSpectral** was developed.
+Please note that saving spectral data into an vector format supported by *OGR* will probably result in the loss of the spectral attributes. It is of course possible to manually pack wavelength and other spectral attributes along with data or inside metadata. However, to our knowledge, as of writing of this text, there is still no well-known vector spatial format that expresses spectral attributes of data in a convenient, consistent and standard fashion. This is also partly why the package **geoSpectRal** was developed.
 
 [Back to Index](http://pranageo.com/geospectral/geospectral-tutorial/)
 
