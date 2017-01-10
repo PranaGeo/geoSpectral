@@ -10,7 +10,9 @@ output:
     toc: yes
 ---
 
+
 This is the documentation for the R package **geoSpectRal** v.`r packageVersion("geoSpectRal")`
+
 
 #Introduction to geoSpectRal
 
