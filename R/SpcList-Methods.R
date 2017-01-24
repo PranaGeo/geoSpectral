@@ -31,6 +31,21 @@
 #########################################################################
 # Method : spc.plot.grid
 #########################################################################
+#' Plotting \code{SpcList} object overlay
+#'
+#' @description
+#' Generating plot of the contents of a \code{SpcList} object respect to grid
+#'
+#' 
+#' @usage 
+#' spc.plot.grid(x,FUN, nnrow, nncol, mar=c(4,4.5,1,0.5),oma = c(0,0,0,0), lab_cex, ...)
+#' @param x	 a \code{SpcList} data 
+#' 
+#' @examples
+#' x <- spc.example_spectra()
+#' BL = spc.makeSpcList(sp,"CAST")
+#' spc.plot.grid(BL)
+#' 
 setGeneric (name= "spc.plot.grid",
 		def=function(x,FUN, nnrow, nncol,...){standardGeneric("spc.plot.grid")})
 setMethod("spc.plot.grid", "SpcList", function (x,FUN, nnrow, nncol, mar=c(4,4.5,1,0.5), 
@@ -74,6 +89,22 @@ setMethod("spc.plot.grid", "SpcList", function (x,FUN, nnrow, nncol, mar=c(4,4.5
 #########################################################################
 # Method : spc.plot.overlay
 #########################################################################
+#' Plotting \code{SpcList} object overlay
+#'
+#' @description
+#' Generating plot of the contents of a \code{SpcList} object overlay
+#'
+#' 
+#' @usage 
+#' spc.plot(x,lab_cex=1,leg_idx=T, type="l", lty=1,lwd=1, col, ...)
+#' @param x	 a \code{SpcList} data 
+#' 
+#' @examples
+#' x <- spc.example_spectra()
+#' BL = spc.makeSpcList(sp,"CAST")
+#' spc.plot.overlay(BL)
+#' 
+#' 
 setGeneric (name= "spc.plot.overlay",
 		def=function(object, ...){standardGeneric("spc.plot.overlay")})
 setMethod("spc.plot.overlay", "SpcList", function (object, lab_cex=1,leg_idx=T, type="l", lty=1,lwd=1, col, ...){
@@ -135,6 +166,22 @@ setMethod("spc.plot.overlay", "SpcList", function (object, lab_cex=1,leg_idx=T, 
 		})
 
 #########################################################################
+#' Plotting \code{SpcList} object 
+#'
+#' @description
+#' Generating plot of the contents of a \code{SpcList} object overlay with respect to depth
+#'
+#' 
+#' @usage 
+#' spc.plot(object, X, lab_cex, ...)
+#' @param object	 a \code{SpcList} data 
+#' 
+#' @examples
+#' x <- spc.example_spectra()
+#' BL = spc.makeSpcList(sp,"CAST")
+#' spc.plot.depth.overlay(BL)
+#' 
+#' 
 setGeneric (name= "spc.plot.depth.overlay",
 		def=function(object,X,...){standardGeneric("spc.plot.depth.overlay")})
 setMethod("spc.plot.depth.overlay", "SpcList", function (object, X, lab_cex, ...){
@@ -211,6 +258,25 @@ setMethod("subset",  signature="SpcList",
 #########################################################################
 # Method : names
 #########################################################################
+#' names of \code{SpcList} object
+#'
+#' @description
+#' Retrieve   names of a \code{SpcList} object
+#'
+#' 
+#' @usage 
+#' spc.colnames(x)
+#' @param x  A \code{SpcList} object
+#' 
+#' @return Returns the coulmn names of an object of class \code{SpcList} as a charecter vector.
+#'
+#' @examples
+#' x <- spc.example_spectra()
+#' BL = spc.makeSpcList(sp,"CAST")
+#' names(BL)
+#' 
+
+
 setMethod("names", "SpcList", function(x){
 			sapply(x, function(mobject) {
 						if(class(mobject)=="Spectra") mobject@ShortName[1]	else class(mobject) 
@@ -220,6 +286,29 @@ setMethod("names", "SpcList", function(x){
 #########################################################################
 # Method : $
 #########################################################################
+#' Extract or replace parts of a \code{SpcList} object
+#'
+#' @description
+#' Operators acting on  \code{Spectra} objects  to extract or replace parts
+#' 
+#' @usage 
+#' x[i] 
+#' x[i, j] 
+#' x[[i]] 
+#' x$i #More usage cases to be added
+#' 
+#' 
+#' @param \code{Spectra} object from which to extract element(s) or in which to replace element(s)
+#' @param i A numeric (row index) variable
+#' @param j A character (column name) or a numeric (column index) variable
+#' 
+#'
+#' @examples
+#'  sp<-spc.example_spectra()
+#'   BL = spc.makeSpcList(sp,"CAST")
+#'  BL$a_nap
+#'  
+#' 
 setMethod("$", signature = "SpcList", 
 		function(x, name) {
 			myn = names(x)
@@ -256,6 +345,19 @@ SpcList = function (spclist){
 #########################################################################
 # Method : spc.invalid.detect
 #########################################################################
+#' Determinate invalid things insade of a \code{spclist} object
+#' @description
+#' Detect invalid things insade of a \code{spclist} object and returns logical object
+#'
+#' @usage 
+#' spc.invalid.detect(x)
+#' 
+#' @param x  A  \code{spclist} object 
+#' @examples 
+#' sp=spc.example_spectra()
+#' BL = spc.makeSpcList(sp,"CAST")
+#' invalid=spc.getheader(BL)
+#' show(invalid)
 setMethod("spc.invalid.detect", signature = "list", def=function(source1){
 			out = lapply(source1, function(x) {SetInvalidIdx(x)<-spc.invalid.detect(x)})
 			return(out)
@@ -264,6 +366,24 @@ setMethod("spc.invalid.detect", signature = "list", def=function(source1){
 #########################################################################
 # Method : spc.getheader
 #########################################################################
+#' Extract a field of the @header slot of a \code{spclist} object
+#' @description
+#' Extracts the value of a field in the header slot of \code{spclist} object
+#'
+#' @usage 
+#' spc.getheader(x,name)
+#'
+#' 
+#' @param x  A  \code{spclist} object 
+#' @param name of the header field to be extracted
+#' 
+#' @examples 
+#' sp=spc.example_spectra()
+#' BL = spc.makeSpcList(sp,"CAST")
+#' BL@by
+#' spc.getheader(BL,"Latitude")
+#' 
+#' 
 setMethod("spc.getheader", signature = "list", def = function (object,name){
 			sapply(object, spc.getheader,name)
 		})
@@ -306,6 +426,29 @@ setReplaceMethod(f="spc.updateheader", signature="list",
 #########################################################################
 # Method : spc.data2header
 #########################################################################
+#' Populate fields of header slot using data from data slot 
+#' @description
+#' Populates a field of @header with a column data from @data slot.
+#'
+#' @usage 
+#' spc.data2header(object,dataname,headerfield,compress=TRUE,...)
+#'
+#' 
+#' @param dataname A character object specifying the name of @data column to be used
+#' @param object \code{spclist} object 
+#' @param compress true or false
+#' @param headerfield A character object specifying the name of the @header field to be changed
+#'  
+#' @return object of class \code{spclist}
+#' @details 
+#' This function extracts data from a column of the @data slot (specified by dataname)  
+#' and creates a new @header field with it. If headerfield is not provided, the name 
+#' of the new header field will be the same as dataname. 
+#' The name of the new header field can be overwritten by providing headerfield.
+#' If all the incoming data rows (dataname) are the same, information put into the header 
+#' can be compressed by selecting compress=TRUE (default is FALSE). This would take only the first element 
+#' from the @data column.
+#' 
 setMethod("spc.data2header", signature = "list", 
 		def=function(object,dataname,headerfield,compress=TRUE,...){
 			temp = lapply(object, spc.data2header, dataname,headerfield,compress,...)
@@ -337,7 +480,27 @@ setMethod("spc.lapply", signature="SpcList", definition= function (X, FUN, ...) 
 #########################################################################
 # Method : spc.header2data
 #########################################################################
-.h2d = function(object,headerfield,dataname,compress=TRUE,...) {
+#' Get header for data
+#' @description
+#' Get  the header for data of each element  with a column
+#'
+#' @usage 
+#' spc.data2header(object,headerfield,dataname,compress=TRUE,...)
+#'
+#' 
+#' @param dataname list \code{spclist} object
+#' @param object A \code{spclist} object 
+#' @param headerfield  data column
+#' @return object of class \code{spclist}
+#' @details 
+#' If header element has length >1, its type is checked. If it is "character",
+#' its elements will be pasted using paste(...,collapse="|"). If it is another 
+#' type, only the first element will be taken.  
+#' 
+#If header element has length >1, its type is checked. If it is "character",
+#its elements will be pasted using paste(...,collapse="|"). If it is another 
+#type, only the first element will be taken.  .
+h2d = function(object,headerfield,dataname,compress=TRUE,...) {
 	if(missing(dataname))
 		dataname=headerfield	
 

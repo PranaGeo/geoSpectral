@@ -1071,6 +1071,18 @@ setMethod("spc.bbox2lines",signature="Spectra",definition=function(object){
 #########################################################################
 # Method : spc.invalid.detect
 #########################################################################
+#' Determinate invalid things insade of a \code{Spectra} object
+#' @description
+#' Detect invalid things insade of a \code{Spectra} object and returns logical object
+#'
+#' @usage 
+#' spc.invalid.detect(x)
+#' 
+#' @param x  A  \code{Spectra} object 
+#' @examples 
+#' sp=spc.example_spectra()
+#' invalid=spc.invalid.detect(sp)
+#' show(invalid)
 setGeneric(name= "spc.invalid.detect",
            def=function(source1){standardGeneric("spc.invalid.detect")})
 setMethod("spc.invalid.detect", signature = "Spectra", def=function(source1){
