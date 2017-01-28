@@ -340,11 +340,11 @@ setMethod("endTime", signature = "Spectra", def = function (x){
 #' Return the first or last parts of a \code{Spectra} object 
 #'
 #' @param  x a \code{Spectra} object
-#' 
+#' @param  ... arguments to be passed to or from other methods
 #'  
 #' 
 #' @usage 
-#' head(x)
+#' head(x, ...)
 #' @return Returns a matrix (\code{Spectra} data)
 #'
 #' @examples
@@ -369,8 +369,6 @@ setMethod("head", signature = "Spectra",
 #' @param x a \code{Spectra} object 
 #' @return  show returns an invisible \code{NULL}
 #'
-#' 
-#' 
 #'
 #' @examples
 #' x <- spc.example_spectra()
@@ -478,9 +476,10 @@ setReplaceMethod("$", signature = "Spectra",
 #'
 #' 
 #' @usage 
-#' spc.colnames(x)
+#' spc.colnames(x,Y,...)
 #' @param x  A \code{Spectra} object
-#' 
+#' @param  ... arguments to be passed to or from other methods
+#' @param  Y  
 #' @return Returns the coulmn names of an object of class \code{Spectra} as a charecter vector.
 #'
 #' @examples
@@ -492,10 +491,10 @@ setReplaceMethod("$", signature = "Spectra",
 #' @seealso \code{\link{spc.cname.construct}}
 #' 
 #' 
-setGeneric("spc.colnames",function(x,Y,...){standardGeneric("spc.colnames")})
+setGeneric("spc.colnames",function(x,...){standardGeneric("spc.colnames")})
 setMethod("spc.colnames", signature = "Spectra", 
           def = function (x){ return(colnames(x@Spectra)) })
-setGeneric("spc.colnames<-",function(x,Y,...){standardGeneric("spc.colnames<-")})
+setGeneric("spc.colnames<-",function(x,...){standardGeneric("spc.colnames<-")})
 setReplaceMethod("spc.colnames", signature = "Spectra", def = function (x,value){
   colnames(x@Spectra) = value
   validObject(x)
