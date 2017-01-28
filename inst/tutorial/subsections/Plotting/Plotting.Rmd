@@ -1,0 +1,126 @@
+---
+title: 'Plotting'
+output:
+  html_document:
+    keep_md: yes
+    theme: spacelab
+    toc: yes
+  pdf_document:
+    toc: yes
+---
+
+```{r echo=FALSE, message=TRUE, warning=TRUE, include=FALSE}
+source('Script:Plotting.R')
+```
+
+#Plotting
+To plot a Spectra object using the base R graphics, use spc.plot(). This method uses the R function matplot(). If there are too many observations (rows), plotting with matplot() can be very slow and may result in a  figure cluttered with too many curves. To avoid such a disturbance such a case, use the argument maxSp. The following command will graph four spectra only, distributed evenly between the first and the last rows :
+
+
+```{r fig.width=10, fig.height=5}
+par(mfrow=c(1,2))
+spc.plot(myS)
+spc.plot(myS,maxSp=4) 
+par(mfrow=c(1,1))
+```
+
+Plotting the Spectra object with respect to depth can be achieved by spc.plot.depth() :
+
+```{r fig.width=9, fig.height=5}
+par(mfrow=c(1,3))
+spc.plot.depth(myS, "anap_300") 
+spc.plot.depth(myS, c("anap_300","anap_500")) 
+spc.plot.depth(myS, c("anap_300", "Snap"))
+par(mfrow=c(1,1))
+```
+
+Plotting a Spectra object with respect to observation number (channels with respect to row index) : 
+
+```{r fig.width=5, fig.height=5}
+#spc.plot.time(myS)
+```
+
+The previous command draws a maximum number of 50 channels (default maxSp=50) among all spectral data. It is also possible to draw only 7 spectra.
+
+```{r fig.width=5, fig.height=5}
+#spc.plot.time(myS, maxSp=7) 
+```
+
+A SpcList object containing several Spectra objects can be graphed in the same page in a grid structure. The function spc.plot.grid() calls spc.plot() for every grid element. The grid panels are named according to the Station header value.
+```{r}
+#spc.plot.grid(BL,"spc.plot", nnrow=2, nncol=2)
+```
+
+It is also possible to draw a grid of depth profiles if the dataset contains a column called *DEPTH*. The following command will plot depth profiles of 10 columns evenly distributed between the first and last columns. If  the function matches columns that have different units, a new x-axis will be drawn at the top for the additional unit. Only two units will are supported at this moment.
+
+```{r}
+#spc.plot.grid(BL,"spc.plot.depth", nnrow=2, nncol=2)
+```
+
+Additional arguments that can be used to format regular plotting functions of R can also be passed :
+```
+spc.plot.grid(BL,"spc.plot.depth", nnrow=2, nncol=2,ylim=c(60,0)) 
+```
+
+The function spc.plot.grid() will draw only a number of maxSp columns by default. It is possible to change this behavior by setting the input argument maxSp.
+
+```{r}
+#spc.plot.grid(BL,"spc.plot.depth", nnrow=2, nncol=2, maxSp=5)
+```
+
+To plot only one column per panel, make sure the name (or the column index) of the variable is passed to spc.plot.depth() through spc.plot.grid().
+```{r}
+#spc.plot.grid(BL,"spc.plot.depth", X="anap_300",nnrow=2, nncol=2)
+```
+
+It is also possible to draw various SpcLists objects on the same graph. Overlay of Spectra can be achieved using spc.plot.overlay()
+
+```{r}
+#spc.plot.overlay(BL,lw=2)
+```
+##Interactive Graphics with Plotly
+
+To plot **Spectra** objects using plotly you must first install the **plotly** R package and load it.
+```{r eval=FALSE}
+install.packages("plotly")
+```
+```{r}
+library("plotly")
+```
+
+To plot a **Spectra** object with **plotly**, simply pass the **Spectra** object to *spc.plot.plotly()*
+```{r fig.width=5, echo=TRUE, fig.height=5}
+spc.plot.plotly(myS)
+```
+
+The variable **myS** contains data from several casts (depth profiles). To isolate a cast, we use *spc.makeSpcList()*.
+```{r}
+BL <- spc.makeSpcList(myS, "CAST")
+```
+
+To plot the depth profile we pass the **Spc** list we created to *spc.plot.depth.plotly()*
+```{r fig.width=5, echo=TRUE, figh.height=5}
+spc.plot.depth.plotly(BL[[4]])
+```
+
+To use **rbokeh** with geoSpectral you must install the **rbokeh** package and load its library.
+```{r eval=FALSE}
+install.packages("rbokeh")
+```
+```{r}
+library("rbokeh")
+```
+
+To plot a **Spectra** object using **rbokeh** pass the object to *spc.plot.map.rbokeh()*.
+```{r fig.width=5, echo=TRUE, fig.height=5}
+spc.plot.map.rbokeh(myS)
+```
+To plot a **Spectra** object with its time, simply pass the object to *spc.plot.time.plotly()*
+```{r fig.width=5, echo=TRUE, fig.height=5}
+spc.plot.time.plotly(myS)
+```
+
+
+[Back to Index](http://pranageo.com/geospectral/geospectral-tutorial)
+
+[Previous Page (Data Conversion)](../Data_Conversion/Data_Conversion.html)
