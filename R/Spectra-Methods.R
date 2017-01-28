@@ -476,10 +476,9 @@ setReplaceMethod("$", signature = "Spectra",
 #'
 #' 
 #' @usage 
-#' spc.colnames(x,Y,...)
+#' spc.colnames(x,...)
 #' @param x  A \code{Spectra} object
 #' @param  ... arguments to be passed to or from other methods
-#' @param  Y  
 #' @return Returns the coulmn names of an object of class \code{Spectra} as a charecter vector.
 #'
 #' @examples
@@ -974,12 +973,6 @@ spc.STI.stdistance = function(master,searched,report=F){
   return(output)
 }
 
-#########################################################################
-# Method : spc.plot2
-#########################################################################
-setGeneric("spc.plot2",function(x,Y,...){standardGeneric("spc.plot2")})
-setMethod("spc.plot2", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="l",lwd=2,...){
-})
 
 #########################################################################
 # Method : Arith
