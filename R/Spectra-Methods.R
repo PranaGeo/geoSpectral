@@ -146,9 +146,21 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
   return(out)
 }
 
-#########################################################################
-# Method : Conversions from and to data.frame
-#########################################################################
+#' @title Conversions between \code{Spectra} and data.frame objects
+#'
+#' @description Convert a \code{Spectra} object into a data.frame
+#'
+#' @param from The input object
+#' @param to The output object
+#' @name Spectra-coerce
+#' @examples 
+#' sp <- spc.example_spectra()
+#' df <- as(sp, "data.frame")
+#' class(df); dim(df)
+NULL
+#> NULL
+
+#' @name Spectra-coerce
 setAs(from="Spectra", to="data.frame", def=function(from){
   if(ncol(from@data)>0)
     output = cbind(as.data.frame(from@Spectra),from@data)
@@ -172,6 +184,8 @@ setAs(from="Spectra", to="data.frame", def=function(from){
   
   return(output)
 })
+
+#' @name Spectra-coerce
 setAs(from="data.frame", to="Spectra", def=function(from){
   #This function makes use of geoSpectral::Spectra()
   if(!any(grepl("Wavelengths", names(attributes(from))))) 
@@ -237,6 +251,7 @@ setAs(from="data.frame", to="Spectra", def=function(from){
   validObject(outS)
   return(outS)
 })
+
 #' Dimensions of a \code{Spectra} object.
 #'
 #' @description
