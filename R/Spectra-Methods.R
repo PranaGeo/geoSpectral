@@ -2441,10 +2441,10 @@ setMethod("spc.plot.plotly", signature="Spectra", function (sp, plot.max=10,show
   xlab = paste("Wavelength [", sp@WavelengthsUnit, "]", sep="")
   p <- plot_ly()
   for(I in 1:length(idx)) {  
-    p <- add_trace(p, x=sp@Wavelengths, y=sp@Spectra[idx[I],],type = "scatter", mode="line",
-                   name=legend_field[idx[I]], hoverinfo=hoverinfo,
-                   #marker=list(color=line[['color']]),
-                   evaluate = TRUE)
+    p <- add_trace(p, x=sp@Wavelengths, y=sp@Spectra[idx[I],],type = "scatter", mode="lines",
+                   name=legend_field[idx[I]], hoverinfo=hoverinfo
+                   #,marker=list(color=line[['color']])
+                   )
   }
   p = layout(p,
              title = title,
@@ -2481,11 +2481,12 @@ setMethod("spc.plot.time.plotly", signature="Spectra", function (sp, column, plo
   ylab = paste(sp@ShortName, " [", sp@Units, "]", sep="")
   myTime = time(sp@time)
   
-  p=plot_ly(x = myTime , y = sp[[column[1]]], mode = "lines + markers",name=column[1])
+  p=plot_ly(x = myTime , y = sp[[column[1]]], type="scatter", mode = "lines + markers",name=column[1])
   if(length(column)>1)
     for(I in 2:length(column))
-      p=add_trace(x = myTime , y = sp[[column[I]]], mode = "lines + markers", 
-                  name=column[I], hoverinfo=hoverinfo, evaluate = TRUE) 
+      p=add_trace(p, x = myTime , y = sp[[column[I]]], 
+                  type="scatter", mode = "lines + markers", 
+                  name=column[I], hoverinfo=hoverinfo) 
   p = layout(p,
              title = title,
              hovermode = "closest",
@@ -2531,11 +2532,11 @@ setMethod("spc.plot.depth.plotly", signature="Spectra", function (sp, column, pl
   }
   xlab = paste(sp@ShortName, " [", sp@Units, "]", sep="")
   
-  p=plot_ly(x = sp[[column[1]]] , y = sp$DEPTH, mode = "lines + markers",name=column[1])
+  p=plot_ly(x = sp[[column[1]]] , y = sp$DEPTH, type="scatter", mode = "lines + markers",name=column[1])
   if(length(column)>1)
     for(I in 2:length(column))
-      p=add_trace(x = sp[[column[I]]] , y =sp$DEPTH, mode = "lines + markers", 
-                  name=column[I], hoverinfo=hoverinfo, evaluate = TRUE) 
+      p=add_trace(p, x = sp[[column[I]]] , y =sp$DEPTH, type="scatter", mode = "lines + markers", 
+                  name=column[I], hoverinfo=hoverinfo) 
   # layout(yaxis = list(autorange = "reversed"))
   p = layout(p,
              title = title,
@@ -2617,7 +2618,7 @@ setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, hover_field,
                #text = hover, color = Globvalue,marker = m
                type = 'scattergeo', color=color, opacity=opacity
   ) 
-  p <- layout(geo = g, showlegend=FALSE)
+  p <- layout(p, geo = g, showlegend=FALSE)
   p
 })
 
