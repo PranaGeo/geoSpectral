@@ -1579,6 +1579,21 @@ setMethod("rep", signature(x = "Spectra"),
 #########################################################################
 # Method : spc.interp.spectral
 #########################################################################
+#'  Interpolate spectral values 
+#' @description
+#' Estimate spectral data at a new set of wavelengths through interpolation
+#'
+#' @usage 
+#' spc.interp.spectral(source1,target_lbd,show.plot=FALSE)
+#' 
+#' @param source1  A \code{Spectra} object 
+#' @param  target_lbd numeric vector giving desired wavelengths  
+#' @param show.plot logical TRUE if a graphical representation is required 
+#' @examples 
+#' sp=spc.example_spectra()
+#' lbd = as.numeric(c(412,440,490,555,670))
+#' spc.interp.spectral(sp[,lbd],c(430,450,500),show.plot=TRUE)
+#' 
 setGeneric (name= "spc.interp.spectral",
             def=function(source1,target_lbd,...){standardGeneric("spc.interp.spectral")})
 setMethod("spc.interp.spectral", signature = "Spectra", 
