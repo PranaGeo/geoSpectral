@@ -146,17 +146,37 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
   return(out)
 }
 
-#' @title Conversions between \code{Spectra} and data.frame objects
+#' @title Conversion between \code{Spectra} and data.frame objects
 #'
-#' @description Convert a \code{Spectra} object into a data.frame
-#'
+#' @description Convert a \code{Spectra} object into a data.frame.
+#' 
+#' Converting a data.frame object to \code{Spectra} requires a set of attributes
+#'  to be present in the source data.frame object.
+#' While these attributes are generally created during the conversion of a
+#' \code{Spectra} object into data.frame, they can 
+#' also be manually set if they are non-existant (see the example below).
+#' @usage 
+#' as(from, to)
 #' @param from The input object
-#' @param to The output object
+#' @param to Name of the class of output object
 #' @name Spectra-coerce
 #' @examples 
+#' #Convert a Spectra object to data.frame
 #' sp <- spc.example_spectra()
 #' df <- as(sp, "data.frame")
 #' class(df); dim(df)
+#' attributes(df)
+#' 
+#' #Convert the data.frame back to Spectra
+#' sp2 <- as(df, "Spectra")
+#' sp2
+#' 
+#' #Convert a bare data.frame to Spectra with minimal attributes
+#' df2 <- data.frame(ch1=c(1,2,3,4), ch2=c(5,6,7,8), TIME=Sys.time()+1:4)
+#' attr(df2, "Units") <- "m-1"
+#' attr(df2, "Wavelengths") <- c(500, 600)
+#' attr(df2, "ShortName") <- "abs"
+#' as(df2, "Spectra")
 NULL
 #> NULL
 
@@ -258,8 +278,6 @@ setAs(from="data.frame", to="Spectra", def=function(from){
 #' Gives number of dimension of a \code{Spectra} object
 #'
 #' @param x A \code{Spectra} object
-#' 
-#'
 #' 
 #' @return Returns a numeric vector containing \code{nrow} and \code{ncol} of the \code{Spectra} object.
 #'
