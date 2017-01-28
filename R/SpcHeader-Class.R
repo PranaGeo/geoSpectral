@@ -6,6 +6,15 @@
 #########################################################################
 # Class : SpcHeader	
 #########################################################################
+#'  Constructor for the \code{SpcHeader} class a \code{SpcHeader} class object
+#' @description Creates an empty header object initilazed with defult values
+#'
+#' 
+#' @param object of class SpcHeader
+#' @param ...  a additional variable
+#' 
+#' @examples 
+#' new("SpcHeader")
 setClass("SpcHeader", contains="list",
 		prototype=prototype(list(Station=NA,Cruise=NA,Latitude=NA,Longitude=NA)))
 setMethod("initialize",

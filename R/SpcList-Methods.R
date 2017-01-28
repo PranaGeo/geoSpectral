@@ -512,7 +512,7 @@ h2d = function(object,headerfield,dataname,compress=TRUE,...) {
 			})
 	return(X)
 }
-setMethod("spc.header2data", signature="list", definition=.h2d)
+setMethod("spc.header2data", signature="list", definition=h2d)
 setMethod("spc.header2data", signature="SpcList", 
 		definition=function(object,headerfield,dataname,compress=TRUE,...){
 			by = object@by	

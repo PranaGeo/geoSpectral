@@ -1,6 +1,18 @@
 #########################################################################
 # Method : spc.ScanFileName  
 #########################################################################
+#' Scan File Name
+#' @description Scan name of file
+#'
+#' @usage 
+#' spc.ScanFileName (template,in.listnames,Scan)
+#' 
+#' @param object of class SpcHeader
+#' 
+#' @examples 
+#' sp=spc.example_spectra()
+#' 
+#' 
 #Uses FileNameScanTemplate
 #If there is Skip in the field name, it will be skipped
 #Scan : A string, can be either of "DirName" or "FileName".
@@ -46,6 +58,24 @@ spc.ScanFileName = function(template, in.listnames,Scan) {
 #########################################################################
 # Method : SpcHeaderAdd	
 #########################################################################
+#'  Set a field of the @header slot of a \code{SpcHeader} class object
+#' @description Function add the value of a field in the header slot of \code{SpcHeader} class object
+#'
+#' @usage 
+#' SpcHeaderAdd (object,Name,Value)
+#' 
+#' @param object of class SpcHeader
+#' @param Name a character variable  
+#' @param Value a numeric variable
+#' 
+#' @examples 
+#' sp=spc.example_spectra()
+#' sp@header
+#' sp@ShortName
+#' sp@header=SpcHeaderAdd(sp@header,sp@ShortName,10
+#' 
+#' )
+#' 
 setGeneric("SpcHeaderAdd",function(object,Name,Value,...)
 		{standardGeneric("SpcHeaderAdd")})
 setMethod("SpcHeaderAdd", signature="SpcHeader", function(object,Name,Value){	
