@@ -1,17 +1,10 @@
-# TODO: Add comment
-# 
-# Author: acizmeli
-###############################################################################
 
 #########################################################################
 # Class : SpcHeader	
 #########################################################################
-#'  Constructor for the \code{SpcHeader} class a \code{SpcHeader} class object
-#' @description Creates an empty header object initilazed with defult values
-#'
-#' 
-#' @param object of class SpcHeader
-#' @param ...  a additional variable
+#'  \code{SpcHeader} class.
+#' @description Definition for \code{SpcHeader}. This class is required
+#' for the @header slot of \code{Spectra} object.
 #' 
 #' @examples 
 #' new("SpcHeader")
@@ -36,6 +29,15 @@ setValidity("SpcHeader", function(object){
 #########################################################################
 # Class : SpcHeaderList	
 #########################################################################
+#'  \code{SpcHeaderList} class.
+#' @description Definition for \code{SpcHeaderList}. This class provides
+#' a collection of multiple \code{SpcHeader} objects inside a list.
+#' 
+#' @examples 
+#' h1 = new("SpcHeader")
+#' h2 = new("SpcHeader")
+#' as(list(h1, h2), "SpcHeaderList")
+#' new("SpcHeaderList") 
 setClass("SpcHeaderList", contains="list",
 		prototype=prototype(list(new("SpcHeader"))))
 
