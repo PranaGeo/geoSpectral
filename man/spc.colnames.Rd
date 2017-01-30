@@ -4,10 +4,12 @@
 \alias{spc.colnames}
 \title{Column names of \code{Spectra} object}
 \usage{
-spc.colnames(x)
+spc.colnames(x,...)
 }
 \arguments{
 \item{x}{A \code{Spectra} object}
+
+\item{...}{arguments to be passed to or from other methods}
 }
 \value{
 Returns the coulmn names of an object of class \code{Spectra} as a charecter vector.

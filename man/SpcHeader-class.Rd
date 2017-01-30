@@ -3,14 +3,10 @@
 \docType{class}
 \name{SpcHeader-class}
 \alias{SpcHeader-class}
-\title{Constructor for the \code{SpcHeader} class a \code{SpcHeader} class object}
-\arguments{
-\item{object}{of class SpcHeader}
-
-\item{...}{a additional variable}
-}
+\title{\code{SpcHeader} class.}
 \description{
-Creates an empty header object initilazed with defult values
+Definition for \code{SpcHeader}. This class is required
+for the @header slot of \code{Spectra} object.
 }
 \examples{
 new("SpcHeader")

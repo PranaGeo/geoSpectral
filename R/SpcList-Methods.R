@@ -31,20 +31,21 @@
 #########################################################################
 # Method : spc.plot.grid
 #########################################################################
-#' Plotting \code{SpcList} object overlay
+#' Plotting \code{SpcList} object in a grid
 #'
 #' @description
-#' Generating plot of the contents of a \code{SpcList} object respect to grid
+#' Generating plot of the contents of a \code{SpcList} object in a grid
 #'
 #' 
 #' @usage 
 #' spc.plot.grid(x,FUN, nnrow, nncol, mar=c(4,4.5,1,0.5),oma = c(0,0,0,0), lab_cex, ...)
 #' @param x	 a \code{SpcList} data 
-#' 
+#' @param FUN a character string giving the name of the ploting function to be used. 
+#' Can be either of "spc.plot"
 #' @examples
-#' x <- spc.example_spectra()
-#' BL = spc.makeSpcList(sp,"CAST")
-#' spc.plot.grid(BL)
+#' sp <- spc.example_spectra()
+#'  BL = spc.makeSpcList(sp,"CAST")
+#'  spc.plot.grid(BL,"spc.plot",3,2)
 #' 
 setGeneric (name= "spc.plot.grid",
 		def=function(x,FUN, nnrow, nncol,...){standardGeneric("spc.plot.grid")})
@@ -89,7 +90,7 @@ setMethod("spc.plot.grid", "SpcList", function (x,FUN, nnrow, nncol, mar=c(4,4.5
 #########################################################################
 # Method : spc.plot.overlay
 #########################################################################
-#' Plotting \code{SpcList} object overlay
+#' Plotting multiple  \code{Spectra} objects insade a \code{SpcList}  
 #'
 #' @description
 #' Generating plot of the contents of a \code{SpcList} object overlay
@@ -100,7 +101,7 @@ setMethod("spc.plot.grid", "SpcList", function (x,FUN, nnrow, nncol, mar=c(4,4.5
 #' @param x	 a \code{SpcList} data 
 #' 
 #' @examples
-#' x <- spc.example_spectra()
+#' sp <- spc.example_spectra()
 #' BL = spc.makeSpcList(sp,"CAST")
 #' spc.plot.overlay(BL)
 #' 
@@ -173,11 +174,11 @@ setMethod("spc.plot.overlay", "SpcList", function (object, lab_cex=1,leg_idx=T, 
 #'
 #' 
 #' @usage 
-#' spc.plot(object, X, lab_cex, ...)
+#' spc.plot.depth.overlay(object, X, lab_cex, ...)
 #' @param object	 a \code{SpcList} data 
-#' 
+#' @param X column number or index 
 #' @examples
-#' x <- spc.example_spectra()
+#' sp <- spc.example_spectra()
 #' BL = spc.makeSpcList(sp,"CAST")
 #' spc.plot.depth.overlay(BL)
 #' 
@@ -271,7 +272,7 @@ setMethod("subset",  signature="SpcList",
 #' @return Returns the coulmn names of an object of class \code{SpcList} as a charecter vector.
 #'
 #' @examples
-#' x <- spc.example_spectra()
+#' sp <- spc.example_spectra()
 #' BL = spc.makeSpcList(sp,"CAST")
 #' names(BL)
 #' 
@@ -339,15 +340,22 @@ setMethod("show", "SpcList", function(object){
 #########################################################################
 # Constructor function : SpcList()
 #########################################################################
+#'  \code{SpcList} class.
+#' @description Definition for \code{SpcList}. This class provides
+#' a collection of multiple \code{Spectra} objects inside a list.
+#' 
+#' @examples 
+#' sp=spc.example_spectra()
+#' as(list(sp,sp^2), "SpcList")
 SpcList = function (spclist){
 	new("SpcList", spclist)
 }
 #########################################################################
 # Method : spc.invalid.detect
 #########################################################################
-#' Determinate invalid things insade of a \code{spclist} object
+#' Determinate invalid records insade of a \code{spclist} object
 #' @description
-#' Detect invalid things insade of a \code{spclist} object and returns logical object
+#' Detect invalid records (rows) inside of a \code{spclist} object and returns logical object
 #'
 #' @usage 
 #' spc.invalid.detect(x)
@@ -458,6 +466,17 @@ setMethod("spc.data2header", signature = "list",
 #########################################################################
 # Method : sort
 #########################################################################
+#' Sorting elements of a spclist Populate fields of header slot using data from data slot 
+#' @description
+#' Populates a field of @header with a column data from @data slot.
+#'
+#' @usage 
+#' spc.data2header(object,dataname,headerfield,compress=TRUE,...)
+#'
+#' 
+#' @param dataname A character object specifying the name of @data column to be used
+#' @param object \code{spclist} object 
+#' @param compress true or false
 setMethod("sort", signature="list", definition= function (x, which.col, decreasing = FALSE, ...){
 			newdata = lapply(x, sort, which.col=which.col, decreasing=decreasing, ...)
 			x@.Data = newdata
@@ -512,7 +531,8 @@ h2d = function(object,headerfield,dataname,compress=TRUE,...) {
 			})
 	return(X)
 }
-setMethod("spc.header2data", signature="list", definition=h2d)
+setMethod("spc.header2data", signature="list", definition=
+            h2d)
 setMethod("spc.header2data", signature="SpcList", 
 		definition=function(object,headerfield,dataname,compress=TRUE,...){
 			by = object@by	

@@ -2006,6 +2006,17 @@ setMethod("subset",  signature="Spectra",
 #########################################################################
 # Method : spc.select Select Spectra with the help of the mouse
 #########################################################################
+#' Gives logical vector after clicking \code{Spectra} object in plot 
+#' @description
+#' when click on graph to select a \code{Spectra} adn print which row select,
+#'  click Esc to quit after that, it returns logical vector
+#'  @usage 
+#'  spc.select(x)
+#'  @param x a \code{Spectra} object
+#' @examples 
+#' sp=spc.example_spectra()
+#' spc.plot(sp)
+#' spc.select(sp)
 mat_identify <- function(x, y, ...){
   l <- locator(1)
   if(all(x <= l$x) || all(x >= l$x)){
@@ -2172,6 +2183,21 @@ setMethod("spc.plot.time", signature="Spectra", function (object,Y,maxSp=50,xdat
 #########################################################################
 # Method : spc.plot.depth
 #########################################################################
+#'  Plotting \code{Spectra} object
+#'
+#' @description
+#' Generating plot of the contents of a \code{Spectra} object with respect to depth
+#'
+#' 
+#' @usage 
+#' spc.plot.depth(x,...)
+#' @param x	 a \code{Spectra} data 
+#' @param ... any further arguments of plot
+#' @seealso \code{\link{spc.plot}}
+#' @examples
+#' x <- spc.example_spectra()
+#' spc.plot.depth(x)
+#' 
 setGeneric (name= "spc.plot.depth",
             def=function(object, ...){standardGeneric("spc.plot.depth")})
 setMethod("spc.plot.depth", signature="Spectra", function (object,X,maxSp=10,lab_cex,
