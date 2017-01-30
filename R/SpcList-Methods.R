@@ -42,6 +42,13 @@
 #' @param x	 a \code{SpcList} data 
 #' @param FUN a character string giving the name of the ploting function to be used. 
 #' Can be either of "spc.plot"
+#' @param mar A numeric vector of length 4, which sets the margin sizes in the following order: bottom, left, top, and right. The default is c(4,4.5,1,0.5)
+#' @param ... any further arguments of plot
+#' @param lab_cex vector of character expansion sizes, used cyclically
+#' @param  nrow number of row for grid
+#' @param  ncol number of column for grid
+#' @param oma oma the "outer margin area" around a figure or figures. The usage of mar and oma is shown when plotting a single figure,
+#' 
 #' @examples
 #' sp <- spc.example_spectra()
 #'  BL = spc.makeSpcList(sp,"CAST")
@@ -99,7 +106,13 @@ setMethod("spc.plot.grid", "SpcList", function (x,FUN, nnrow, nncol, mar=c(4,4.5
 #' @usage 
 #' spc.plot(x,lab_cex=1,leg_idx=T, type="l", lty=1,lwd=1, col, ...)
 #' @param x	 a \code{SpcList} data 
-#' 
+#' @param lab_cex vector of character expansion sizes, used cyclically
+#' @param type character string (length 1 vector) or vector of 1-character strings indicating the type of plot for each column of y, 
+#' @param lwd vector of line widths
+#' @param ...  any further arguments of plot
+#' @param  lty vector of line types
+#' @param  col columns of a \code{SpcList} data 
+#' @param leg_idx logical, to display legend of index or not, default is TRUE
 #' @examples
 #' sp <- spc.example_spectra()
 #' BL = spc.makeSpcList(sp,"CAST")
@@ -177,6 +190,8 @@ setMethod("spc.plot.overlay", "SpcList", function (object, lab_cex=1,leg_idx=T, 
 #' spc.plot.depth.overlay(object, X, lab_cex, ...)
 #' @param object	 a \code{SpcList} data 
 #' @param X column number or index 
+#' @param lab_cex vector of character expansion sizes, used cyclically
+#' @param ...  any further arguments of plot
 #' @examples
 #' sp <- spc.example_spectra()
 #' BL = spc.makeSpcList(sp,"CAST")
@@ -216,6 +231,52 @@ setMethod("spc.plot.depth.overlay", "SpcList", function (object, X, lab_cex, ...
 #########################################################################
 # Method : subset
 #########################################################################
+#' Subsetting for a \code{spcList} and Spectra classes
+#' @description
+#' Subsetting can be achieved using the implementation of the R function subset() for \code{Spectra} and SpcList classes
+#'It is possible to perform a row-wise selection
+#'
+#' @usage 
+#' subset(x,y,select,...)
+#' 
+#' 
+#' @param drop passed on to [ indexing operator. Default is FALSE 
+#' @param ... arguments to be passed to or from other methods.
+#' @param x A \code{Spectra} object 
+#' @param y Subset
+#' @param  select Condition selected
+#' @examples 
+#' fnm = file.path(system.file(package = "geoSpectral"), "test_data","particulate_absorption.csv.gz")
+#' abs = read.table(fnm,sep=",",header=T)
+#' abs$STATION=factor(abs$STATION)
+#' abs[1:2,1:17] #Display only the first 2 rows and first 17 columns if the data frame
+#' lbd = as.numeric(gsub("X","",colnames(abs)[14:514]))
+#' Units="1/m"
+#' colnames(abs)= gsub("X",paste("anap","_",sep=""), colnames(abs))
+#' colnames(abs)= gsub("PRES","DEPTH", colnames(abs))
+#' abs = abs[,c(14:514,1:13)]
+#' tz<-strsplit(as.character(abs$TIME)," ")[[1]][[3]] #Extract the timezone
+#' abs$TIME = as.POSIXct(as.character(abs$TIME),tz=tz) 
+#' myS<-Spectra(abs,Wavelengths=lbd,Units=Units,ShortName="a_nap")
+#' myS
+#' head(spc.getwavelengths(myS))
+#' spc.setwavelengths(myS) <- 300:800 
+#' myS[1:10]
+#' myS[,"anap_400"] 
+#' myS[,c("anap_400","anap_500")] 
+#' myS[1:10,30:50] #Selection of channels by column index
+#' lbd = as.numeric(c(412,440,490,555,670))
+#' myS[1:10,lbd] #Selection of channels by wavelength
+#' myS[1:10,"415::450"] 
+#' myS$CAST #Returns Ancillary data
+#' myS$anap_400 #Returns spectra as numeric vector
+#' head(myS[["anap_400"]]) #Returns spectra as numeric vector
+#' head(myS[[c("Snap","Offset")]]) #Returns data.frame
+#' subset(myS,DEPTH<=30) #Subsetting rows with respect to the value of Ancillary data
+#' subset(myS,anap_440<=0.01) #Subsetting rows with respect to the value of Spectral data
+#' subset(myS,subset=DEPTH<=30,select="CAST") #Selecting Ancillary data columns, leaving Spectral columns intact
+#' 
+#' 
 #The argument "select" is not implemented yet. Use "[]"
 setMethod("subset",  signature="SpcList",
 		definition=function(x, subset, select, drop = FALSE, ...) {                   
@@ -321,6 +382,23 @@ setMethod("$", signature = "SpcList",
 #########################################################################
 # Method : show
 #########################################################################
+#' Show a \code{SpcList} object
+#'
+#' @description
+#' Display a \code{SpcList} object 
+#'
+#' @usage 
+#' show(x)
+#' # or 
+#' x
+#' @param x a \code{SpcList} object 
+#' @return  show returns an invisible \code{NULL}
+#'
+#'
+#' @examples
+#' x <- spc.example_spectra()
+#' BL = spc.makeSpcList(x,"CAST")
+#' show(BL)
 setMethod("show", "SpcList", function(object){
 			if(length(object)>0)
 				sapply(1:length(object), function(x) {
@@ -388,7 +466,7 @@ setMethod("spc.invalid.detect", signature = "list", def=function(source1){
 #' @examples 
 #' sp=spc.example_spectra()
 #' BL = spc.makeSpcList(sp,"CAST")
-#' BL@by
+#' BL[[1]]@header
 #' spc.getheader(BL,"Latitude")
 #' 
 #' 
@@ -399,6 +477,24 @@ setMethod("spc.getheader", signature = "list", def = function (object,name){
 #########################################################################
 # Method : spc.setheader<-
 #########################################################################
+#' Set a field of the @header slot of a \code{spclist} object
+#' @description
+#' Function sets or changes the value of a field in the header slot of \code{spclist} object
+#'
+#'@usage 
+#' spc.setheader(x,name,...)<-value
+#'
+#' @param value Object of class SpcList
+#' @param x A \code{SpcList} object 
+#' @param name of the header field to be setted
+#' @param ... arguments to be passed to or from other methods
+#' @examples 
+#' sp=spc.example_spectra()
+#' BL=spc.data2header(sp,"CAST")
+#' a=new("SpcHeader") # create new SpcHeader class
+#' a$Longitude=123 
+#' spc.setheader(BL[[1]],"Station") <- a
+#' BL[[1]]@header
 setReplaceMethod(f="spc.setheader", signature="list",
 		definition=function(object,value,...){
 			if(inherits(value,"Spectra"))
@@ -416,6 +512,21 @@ setReplaceMethod(f="spc.setheader", signature="list",
 #########################################################################
 # Method : spc.updateheader<-
 #########################################################################
+#' Update a field of the @header slot of a \code{spclist} object
+#' @description
+#'  Updates or changes the value of a field in the header slot of \code{spclist} object 
+#'
+#' @usage 
+#' spc.updateheader(x,name,...)<-value
+#' @param ... arguments to be passed to or from other methods 
+#' @param x A \code{Spectra} objec 
+#' @param name of the header field to be updated
+#' @examples 
+#' sp=spc.example_spectra()
+#' BL=spc.data2header(sp,"CAST")
+#' BL[[1]]@header
+#' spc.updateheader(BL[[1]],"Station")<-11
+#' BL[[1]]@header
 setReplaceMethod(f="spc.updateheader", signature="list",
 		definition=function(object,Name,value,...){
 			if(inherits(value,"Spectra"))
@@ -456,7 +567,16 @@ setReplaceMethod(f="spc.updateheader", signature="list",
 #' If all the incoming data rows (dataname) are the same, information put into the header 
 #' can be compressed by selecting compress=TRUE (default is FALSE). This would take only the first element 
 #' from the @data column.
-#' 
+#'  @examples 
+#' sp=spc.example_spectra()
+#' BL=spc.data2header(sp,"CAST")
+#' BL[[1]]@header
+#'  BL[[1]]=spc.data2header(BL[[1]],"CAST","ProjectCast")
+#' BL[[1]]@header
+#' BL[[1]]$CAST=rep(33, nrow( BL[[1]]))
+#' BL[[1]]=spc.data2header(BL[[1]],"CAST","ProjectCast", compress=T)
+#' BL[[1]]@header
+
 setMethod("spc.data2header", signature = "list", 
 		def=function(object,dataname,headerfield,compress=TRUE,...){
 			temp = lapply(object, spc.data2header, dataname,headerfield,compress,...)
@@ -466,19 +586,19 @@ setMethod("spc.data2header", signature = "list",
 #########################################################################
 # Method : sort
 #########################################################################
-#' Sorting elements of a spclist Populate fields of header slot using data from data slot 
+#' Sorting   elements of a spclist  
 #' @description
-#' Populates a field of @header with a column data from @data slot.
+#' Sort elements of a spclist  into ascending or descending order
 #'
 #' @usage 
-#' spc.data2header(object,dataname,headerfield,compress=TRUE,...)
-#'
-#' 
-#' @param dataname A character object specifying the name of @data column to be used
-#' @param object \code{spclist} object 
-#' @param compress true or false
+#' spc.data2header(x, which.col, decreasing = FALSE, ...)
+#' @param decreasing gical. Should the sort be increasing or decreasing
+#' @param ... arguments to be passed to or from methods
+#' @param x \code{spclist} object 
+#' @examples  
+
 setMethod("sort", signature="list", definition= function (x, which.col, decreasing = FALSE, ...){
-			newdata = lapply(x, sort, which.col=which.col, decreasing=decreasing, ...)
+			newdata = lapply(x, sort, decreasing=decreasing, ...)
 			x@.Data = newdata
 			return(x)
 		})
@@ -486,6 +606,21 @@ setMethod("sort", signature="list", definition= function (x, which.col, decreasi
 #########################################################################
 # Method : spc.lapply
 #########################################################################
+#' Apply a function over a Spclist 
+#' @description
+#' lapply returns a list of the same length as X, each element of which is the result of applying FUN to the corresponding element of X.
+#'
+#' @usage 
+#' spc.lapply(X, FUN, ...)
+#'
+#'
+#' @param X A \code{spclist} object 
+#' @param ...  optional arguments to FUN.
+#' @return FUN  function to be applied to each element of X
+#' @examples  
+#' sp=spc.example_spectra()
+#' BL=spc.data2header(sp,"CAST")
+#' spc.lapply(BL,function(x) {nrow(x)})
 setGeneric (name= "spc.lapply",
 		def=function(X, FUN,...){standardGeneric("spc.lapply")})
 setMethod("spc.lapply", signature="SpcList", definition= function (X, FUN, ...) {

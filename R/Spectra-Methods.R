@@ -544,8 +544,15 @@ setReplaceMethod("spc.colnames", signature = "Spectra", def = function (x,value)
 #'
 #' 
 #' @usage 
-#' spc.plot(x,...)
-#' @param x	 a \code{Spectra} data 
+#' spc.plot(x, Y, maxSp, lab_cex,xlab,ylab,type,pch,lwd,cex,...)
+#' @param x and Y	 a \code{Spectra} data 
+#' @param xlab title for x  axe, as in plot.
+#' @param ylab title for y axe, as in plot.
+#' @param pch character string or vector of 1-characters or integers for plotting characters
+#' @param ...  any further arguments of plot
+#' @param lab_cex vector of character expansion sizes, used cyclically
+#' @param lwd vector of line widths
+#' @param  type character string (length 1 vector) or vector of 1-character strings indicating the type of plot for each column of y, 
 #' 
 #' @seealso \code{\link{spc.lines}}
 #' @examples
@@ -646,18 +653,17 @@ setMethod("spc.lines",signature = "Spectra",definition = function(x,...){
 #' Take a \code{Spectra} objects and combine by rows
 #'
 #'@usage 
-#' spc.cbind(...)
-#' spc.rbind(...)
+#' spc.cbind(...,compressHeader)
+#' spc.rbind(...,compressHeader)
 #'
 #' @param ... \code{Spectra} object
-#' 
+#' @param compressHeader Compress the header (make multiple all-equal header elements as ONE, default value is TRUE	
 #' @seealso \code{\link{spc.cbind}}
 #' @return  \code{Spectra} object 
 #' @examples
 #' x <- spc.example_spectra()
 #' nrow(x)  #[1] 26
-#' 
-#' 
+#' x2=spc.rbind(x,x)
 #' nrow(x2)  #[1] 52
 #' 
 #' 
@@ -1162,12 +1168,13 @@ setMethod("spc.getheader", signature = "Spectra",
 #' Function sets or changes the value of a field in the header slot of \code{Spectra} object
 #'
 #'@usage 
-#' spc.setheader(x,name)<-value
+#' spc.setheader(x,name,...)<-value
 #'
 #' @seealso \code{\link{spc.getheader}}
 #' @param value Object of class SpcHeader
 #' @param x A \code{Spectra} object 
 #' @param name of the header field to be setted
+#' @param ... arguments to be passed to or from other methods
 #' @examples 
 #' sp=spc.example_spectra()
 #' a=new("SpcHeader") # create new SpcHeader class
@@ -1192,8 +1199,8 @@ setReplaceMethod(f="spc.setheader", signature="Spectra",
 #'  Updates or changes the value of a field in the header slot of \code{Spectra} object 
 #'
 #' @usage 
-#' spc.updateheader(x,name)<-value
-#'
+#' spc.updateheader(x,name,...)<-value
+#' @param ... arguments to be passed to or from other methods 
 #' @param x A \code{Spectra} objec 
 #' @param name of the header field to be updated
 #' @examples 
@@ -1344,14 +1351,14 @@ setReplaceMethod(f="spc.setinvalid.idx", signature="Spectra",
 #' Populates a field of @header with a column data from @data slot.
 #'
 #' @usage 
-#' spc.data2header(object,dataname,headerfield,compress)
+#' spc.data2header(object,dataname,headerfield,compress,...)
 #'
 #' 
 #' @param dataname A character object specifying the name of @data column to be used
 #' @param object \code{Spectra} object 
 #' @param compress true or false
 #' @param headerfield A character object specifying the name of the @header field to be changed
-#'  
+#'  @param ... arguments to be passed to or from other methods
 #' @return object of class \code{Spectra}
 #' @details 
 #' This function extracts data from a column of the @data slot (specified by dataname)  
@@ -1398,6 +1405,7 @@ setMethod("spc.data2header", signature = "Spectra",
 #' @param object A \code{Spectra} object 
 #' @param headerfield  data column
 #' @return object of class \code{Spectra}
+#' @param ... arguments to be passed to or from other methods
 #' @details 
 #' If header element has length >1, its type is checked. If it is "character",
 #' its elements will be pasted using paste(...,collapse="|"). If it is another 
@@ -1662,10 +1670,14 @@ setMethod("spc.interp.spectral", signature = "Spectra",
 #' Save the \code{Spectra} object on disk in text format
 #'
 #' @usage 
-#' spc.export.text(x,filename)
+#' spc.export.text(x,filename,sep,append,writeheader,...)
 #' @seealso \code{\link{spc.import.text}}
 #' @param x  A \code{Spectra} object 
-#' @param  filename Name of the output text file  
+#' @param  filename Name of the output text file
+#' @param ... arguments to be passed to or from other methods
+#' @param sep the field separator string
+#' @param append logical. Only relevant if file is a character string. Default is  TRUE
+#' @param writeheader either a logical value indicating whether the header names  are to be written        
 #' @examples 
 #' x=spc.example_spectra()
 #' spc.export.text(x,filename="anap.txt")
@@ -1757,9 +1769,9 @@ setMethod("spc.export.text", signature="SpcHeader", definition=function(input,fi
 #' as a \code{Spectral} object.
 #' @seealso \code{\link{spc.export.text}}
 #' @usage 
-#' spc.import.text(filename, sep)
+#' spc.import.text(filename, sep,...)
 #' 
-#' 
+#' @param ... arguments to be passed to or from other methods.
 #' @param filename Name of input text file
 #' @param sep Field delimiter to be used
 #' @examples 
@@ -1833,7 +1845,7 @@ spc.import.text = function(filename,sep=";",...){
     if(length(idx)>0){
       Spec = Spec[,-idx]
     }
-  browser()
+  #browser()
     Spec$TIME<-as.character(Spec$TIME)
     tz = strsplit(Spec$TIME[1]," ")[[1]][3]
     Spec$TIME<-as.POSIXct(strptime(Spec$TIME,"%Y-%m-%d %H:%M:%S",tz=tz))
@@ -1945,11 +1957,11 @@ setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,file
 #'It is possible to perform a row-wise selection
 #'
 #' @usage 
-#' subset(x,y,select)
+#' subset(x,y,select,...)
 #' 
 #' 
-#'
-#' 
+#' @param drop passed on to [ indexing operator. Default is FALSE 
+#' @param ... arguments to be passed to or from other methods.
 #' @param x A \code{Spectra} object 
 #' @param y Subset
 #' @param  select Condition selected
@@ -2044,8 +2056,9 @@ setMethod("subset",  signature="Spectra",
 #' when click on graph to select a \code{Spectra} adn print which row select,
 #'  click Esc to quit after that, it returns logical vector
 #'  @usage 
-#'  spc.select(x)
-#'  @param x a \code{Spectra} object
+#'  spc.select(x, y, ...)
+#'  @param x and y a \code{Spectra} object
+#'  @param ... arguments to be passed to or from other methods.
 #' @examples 
 #' sp=spc.example_spectra()
 #' spc.plot(sp)
@@ -2134,7 +2147,7 @@ spc.makeSpcList = function(myobj, name,FUN){
 #' @usage 
 #' spc.plot(x,...)
 #' @param x	 a \code{Spectra} data 
-#' 
+#' @param ... any further arguments of plot
 #' @seealso \code{\link{spc.plot.depth}}
 #' @examples
 #' x <- spc.example_spectra()
@@ -2584,6 +2597,10 @@ setMethod("spc.plot.time.plotly", signature="Spectra", function (sp, column, plo
 #' p
 #' @param sp A \code{Spectra} object
 #' @param column Number or name , defoult value is 10 if a number or name has not been entered
+#' @param plot.max numeric value for a maximum number of data in plot
+#' @param showlegend logical, to display legend or not, default is FALSE 
+#' @param hoverinfo  a chracter, info about  \code{Spectra} object to be used  in hover box
+#' @param title a chracter string, title for plot
 setGeneric (name= "spc.plot.depth.plotly",
             def=function(sp, column, plot.max=10,showlegend=FALSE,hoverinfo="name",title=sp@LongName){standardGeneric("spc.plot.depth.plotly")})
 setMethod("spc.plot.depth.plotly", signature="Spectra", function (sp, column, plot.max=10,showlegend,hoverinfo,title) {
@@ -2696,7 +2713,7 @@ setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, hover_field,
 #' Create a point map with leaflet engine using \code{Spectra} rows 
 #' @param sp \code{Spectra} object
 #' @param color Determine color of points
-#' @param hoverA chracter or vector of strings giving column 
+#' @param hover_field A chracter or vector of strings giving column 
 #' names of \code{Spectra} object. This information will be displayed when 
 #' hovering over the glyph
 #' @param opacity The opacity transparency of the glyph 
