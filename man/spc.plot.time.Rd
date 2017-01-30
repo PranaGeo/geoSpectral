@@ -7,6 +7,8 @@
 spc.plot(x,...)
 }
 \arguments{
+\item{...}{any further arguments of plot}
+
 \item{x}{a \code{Spectra} data}
 }
 \description{

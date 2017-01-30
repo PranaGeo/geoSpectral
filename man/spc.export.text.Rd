@@ -4,10 +4,18 @@
 \alias{spc.export.text}
 \title{Exporting into text format}
 \usage{
-spc.export.text(x,filename)
+spc.export.text(x,filename,sep,append,writeheader,...)
 }
 \arguments{
 \item{filename}{Name of the output text file}
+
+\item{sep}{the field separator string}
+
+\item{append}{logical. Only relevant if file is a character string. Default is  TRUE}
+
+\item{writeheader}{either a logical value indicating whether the header names  are to be written}
+
+\item{...}{arguments to be passed to or from other methods}
 
 \item{x}{A \code{Spectra} object}
 }

@@ -10,8 +10,9 @@ mat_identify(x, y, ...)
 when click on graph to select a \code{Spectra} adn print which row select,
  click Esc to quit after that, it returns logical vector
  @usage 
- spc.select(x)
- @param x a \code{Spectra} object
+ spc.select(x, y, ...)
+ @param x and y a \code{Spectra} object
+ @param ... arguments to be passed to or from other methods.
 }
 \examples{
 sp=spc.example_spectra()

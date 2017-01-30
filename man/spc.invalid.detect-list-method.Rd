@@ -3,7 +3,7 @@
 \docType{methods}
 \name{spc.invalid.detect,list-method}
 \alias{spc.invalid.detect,list-method}
-\title{Determinate invalid things insade of a \code{spclist} object}
+\title{Determinate invalid records insade of a \code{spclist} object}
 \usage{
 spc.invalid.detect(x)
 }
@@ -11,7 +11,7 @@ spc.invalid.detect(x)
 \item{x}{A  \code{spclist} object}
 }
 \description{
-Detect invalid things insade of a \code{spclist} object and returns logical object
+Detect invalid records (rows) inside of a \code{spclist} object and returns logical object
 }
 \examples{
 sp=spc.example_spectra()

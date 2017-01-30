@@ -17,7 +17,7 @@ Returns the coulmn names of an object of class \code{SpcList} as a charecter vec
 Retrieve   names of a \code{SpcList} object
 }
 \examples{
-x <- spc.example_spectra()
+sp <- spc.example_spectra()
 BL = spc.makeSpcList(sp,"CAST")
 names(BL)
 

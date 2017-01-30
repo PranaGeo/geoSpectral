@@ -4,14 +4,15 @@
 \alias{spc.data2header}
 \title{Populate fields of header slot using data from data slot}
 \usage{
-spc.data2header(object,dataname,headerfield,compress)
+spc.data2header(object,dataname,headerfield,compress,...)
 }
 \arguments{
 \item{object}{\code{Spectra} object}
 
 \item{dataname}{A character object specifying the name of @data column to be used}
 
-\item{headerfield}{A character object specifying the name of the @header field to be changed}
+\item{headerfield}{A character object specifying the name of the @header field to be changed
+@param ... arguments to be passed to or from other methods}
 
 \item{compress}{true or false}
 }

@@ -4,16 +4,22 @@
 \alias{spc.plot.depth.overlay}
 \title{Plotting \code{SpcList} object}
 \usage{
-spc.plot(object, X, lab_cex, ...)
+spc.plot.depth.overlay(object, X, lab_cex, ...)
 }
 \arguments{
 \item{object}{a \code{SpcList} data}
+
+\item{X}{column number or index}
+
+\item{...}{any further arguments of plot}
+
+\item{lab_cex}{vector of character expansion sizes, used cyclically}
 }
 \description{
 Generating plot of the contents of a \code{SpcList} object overlay with respect to depth
 }
 \examples{
-x <- spc.example_spectra()
+sp <- spc.example_spectra()
 BL = spc.makeSpcList(sp,"CAST")
 spc.plot.depth.overlay(BL)
 

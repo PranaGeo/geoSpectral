@@ -12,6 +12,8 @@ spc.data2header(object,headerfield,dataname )
 \item{headerfield}{data column}
 
 \item{dataname}{list \code{Spectra} object}
+
+\item{...}{arguments to be passed to or from other methods}
 }
 \value{
 object of class \code{Spectra}

@@ -30,5 +30,14 @@ The name of the new header field can be overwritten by providing headerfield.
 If all the incoming data rows (dataname) are the same, information put into the header 
 can be compressed by selecting compress=TRUE (default is FALSE). This would take only the first element 
 from the @data column.
+ @examples 
+sp=spc.example_spectra()
+BL=spc.data2header(sp,"CAST")
+BL[[1]]@header
+ BL[[1]]=spc.data2header(BL[[1]],"CAST","ProjectCast")
+BL[[1]]@header
+BL[[1]]$CAST=rep(33, nrow( BL[[1]]))
+BL[[1]]=spc.data2header(BL[[1]],"CAST","ProjectCast", compress=T)
+BL[[1]]@header
 }
 
