@@ -1398,10 +1398,11 @@ setMethod("spc.data2header", signature = "Spectra",
 #' If header element has length >1, its type is checked. If it is "character",
 #' its elements will be pasted using paste(...,collapse="|"). If it is another 
 #' type, only the first element will be taken.  
-#' 
-#If header element has length >1, its type is checked. If it is "character",
-#its elements will be pasted using paste(...,collapse="|"). If it is another 
-#type, only the first element will be taken.  
+#' @examples 
+#' sp <- spc.example_spectra()
+#' spc.updateheader(sp, "Zone")<- "ZoneA"
+#' sp <- spc.header2data(sp, "Zone")
+#' sp$Zone
 setGeneric(name= "spc.header2data",
            def=function(object,headerfield,dataname,...){standardGeneric("spc.header2data")})
 setMethod("spc.header2data", signature = "Spectra", 
