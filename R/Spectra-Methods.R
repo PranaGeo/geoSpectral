@@ -105,7 +105,8 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
       latcol="LAT"
       warning("Could not find a latitude column named either of: lat,LAT,latitude,LATITUDE. Assigning LAT=1.0 to all rows")
     }
-    space=c( which(longcol==names(inDF)), which(latcol==names(inDF)))    
+    space=c( which(longcol==names(inDF)), which(latcol==names(inDF)))
+    names(inDF)[space]<-c("LON","LAT")
   }
   if(missing(time)){
     if ("time" %in% names(inDF))
@@ -132,7 +133,7 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
   }
   if(missing(header)){
     #Extract Units
-    header = new("BiooHeader")
+    header = new("SpcHeader")
   }
 
   #First construct a STIDF object using stConstruct()
@@ -145,9 +146,41 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
   return(out)
 }
 
-#########################################################################
-# Method : Conversions from and to data.frame
-#########################################################################
+#' @title Conversion between \code{Spectra} and data.frame objects
+#'
+#' @description Convert a \code{Spectra} object into a data.frame.
+#' 
+#' Converting a data.frame object to \code{Spectra} requires a set of attributes
+#'  to be present in the source data.frame object.
+#' While these attributes are generally created during the conversion of a
+#' \code{Spectra} object into data.frame, they can 
+#' also be manually set if they are non-existant (see the example below).
+#' @usage 
+#' as(from, to)
+#' @param from The input object
+#' @param to Name of the class of output object
+#' @name Spectra-coerce
+#' @examples 
+#' #Convert a Spectra object to data.frame
+#' sp <- spc.example_spectra()
+#' df <- as(sp, "data.frame")
+#' class(df); dim(df)
+#' attributes(df)
+#' 
+#' #Convert the data.frame back to Spectra
+#' sp2 <- as(df, "Spectra")
+#' sp2
+#' 
+#' #Convert a bare data.frame to Spectra with minimal attributes
+#' df2 <- data.frame(ch1=c(1,2,3,4), ch2=c(5,6,7,8), TIME=Sys.time()+1:4)
+#' attr(df2, "Units") <- "m-1"
+#' attr(df2, "Wavelengths") <- c(500, 600)
+#' attr(df2, "ShortName") <- "abs"
+#' as(df2, "Spectra")
+NULL
+#> NULL
+
+#' @name Spectra-coerce
 setAs(from="Spectra", to="data.frame", def=function(from){
   if(ncol(from@data)>0)
     output = cbind(as.data.frame(from@Spectra),from@data)
@@ -171,6 +204,8 @@ setAs(from="Spectra", to="data.frame", def=function(from){
   
   return(output)
 })
+
+#' @name Spectra-coerce
 setAs(from="data.frame", to="Spectra", def=function(from){
   #This function makes use of geoSpectral::Spectra()
   if(!any(grepl("Wavelengths", names(attributes(from))))) 
@@ -214,9 +249,9 @@ setAs(from="data.frame", to="Spectra", def=function(from){
   
   #Extract the header
   if(!is.null(attr(from,"header")))
-    header = as(attr(from,"header"),"BiooHeader")
+    header = as(attr(from,"header"),"SpcHeader")
   else
-    header = new("BiooHeader")
+    header = new("SpcHeader")
   
   if(!xts::is.timeBased(from$TIME))
     stop("The TIME column does not contain time-based data")
@@ -239,18 +274,16 @@ setAs(from="data.frame", to="Spectra", def=function(from){
 
 #' Dimensions of a \code{Spectra} object.
 #'
-#'@description
-#' \code{Spectra} Creates an instance of class \code{Spectra}.
+#' @description
+#' Gives number of dimension of a \code{Spectra} object
 #'
-#' @param x  a \code{Spectra} objectlong-format \code{data.frame} 
-#' 
-#'@details
-#' This 
+#' @param x A \code{Spectra} object
 #' 
 #' @return Returns a numeric vector containing \code{nrow} and \code{ncol} of the \code{Spectra} object.
 #'
 #' @examples
-#' fnm = file.path(base::system.file(package = "Spectral"),"test_data","particulate_absorption.csv.gz")
+#' sp<-spc.example_spectra()
+#' dim(sp)
 setMethod("dim", signature = "Spectra", 
           def = function (x){
             return(dim(x@Spectra))  
@@ -261,17 +294,14 @@ setMethod("dim", signature = "Spectra",
 #' The Number of Columns  of a Spectra object
 #'
 #'@description
-#' \code{nrow} and \code{ncol} return the number of rows or columns present in a Spectra object 
-#'  
-#'    
-#'
+#' \code{nrow} and \code{ncol} return the number of rows or columns of a \code{Spectra} object 
 #' 
 #' 
 #' @usage 
 #'  
-#' nrow(x)
+#' ncol(x)
 #'
-#' @param  x a Spectra object 
+#' @param  x A \code{Spectra} object 
 #'
 #' @examples
 #' x <- spc.example_spectra() 
@@ -285,20 +315,16 @@ setMethod("ncol", signature = "Spectra",
 ########################################################################
 # Method : nrow
 #########################################################################
-#' The Number of rows  of a Spectra object
+#' The Number of rows  of a \code{Spectra} object
 #'
 #'@description
-#' \code{nrow} and \code{ncol} return the number of rows or columns present in a Spectra object 
+#' \code{nrow} and \code{ncol} return the number of rows or columns present in a \code{Spectra} object 
 #'  
-#'    
-#'
-#' 
-#' 
 #' @usage 
 #'  
-#' ncol(x)
+#' nrow(x)
 #'
-#' @param  x a Spectra object 
+#' @param  x a \code{Spectra} object 
 #'
 #' @examples
 #' x <- spc.example_spectra() 
@@ -311,25 +337,19 @@ setMethod("nrow", signature = "Spectra",
 #########################################################################
 # Method : names
 #########################################################################
-#' The Names of a Spectra object
+#' The Names of a \code{Spectra} object
 #'
-#'@description
-#'  Function to get  the names of a Spectra object 
+#' @description
+#'  Retrieve  the names of \code{Spectra} object 
 #'  
-#'@usage 
-#'  
+#' @usage 
 #' names(x)
 #'
-#'@param  x  a Spectra object
-# 
-#'
-#'
-#'@examples
+#' @param  x  a \code{Spectra} object
+#' @examples
 #' 
 #' x <- spc.example_spectra() 
 #' names(x)
-#' 
-#' 
 #' 
 setMethod("names", signature = "Spectra", 
           def = function (x){ 
@@ -347,18 +367,18 @@ setMethod("endTime", signature = "Spectra", def = function (x){
 #########################################################################
 # Method : head
 #########################################################################
-#' Return the first or last part of a Spectra object
+#' Return the first or last part of a \code{Spectra} object
 #'
-#'@description
-#' Return the first or last parts of a spectral object such as vector, matrix, table, data frame.
+#' @description
+#' Return the first or last parts of a \code{Spectra} object 
 #'
-#' @param  x a specrtal object
-#' @param ... arguments to be passed to or from other methods 
+#' @param  x a \code{Spectra} object
+#' 
 #'  
 #' 
 #' @usage 
 #' head(x)
-#' @return Returns an object of class \code{Spectra}.
+#' @return Returns a matrix (\code{Spectra} data)
 #'
 #' @examples
 #' x <- spc.example_spectra()
@@ -366,19 +386,20 @@ setMethod("endTime", signature = "Spectra", def = function (x){
 #' 
 #'  
 setMethod("head", signature = "Spectra", 
-          def = function (x){  return(head(x@Spectra)) })
+          def = function (x, ...){  return(head(x@Spectra, ...)) })
 #########################################################################
 # Method : show
 #########################################################################
-#' Show a spectra object
+#' Show a \code{Spectra} object
 #'
-#'@description
-#' Display the objects, by printing,plotting and so on. 
-#'This function will be invoked for automatic pirinting
+#' @description
+#' Display a \code{Spectra} object 
+#'
 #' @usage 
 #' show(x)
-#' 
-#' @param x a spectral object 
+#' # or 
+#' x
+#' @param x a \code{Spectra} object 
 #' @return  show returns an invisible \code{NULL}
 #'
 #' 
@@ -435,25 +456,29 @@ setMethod("show", "Spectra", function(object){
 #########################################################################
 # Method : $
 #########################################################################
-# use  help("$,Spectra-method") to get code
-#' Extract or replace parts of a spectra object
+#' Extract or replace parts of a \code{Spectra} object
 #'
-#'@description
-#' Operators acting on  spectral objects such as vectors, matrices, arrays and lists to extract or replace parts
+#' @description
+#' Operators acting on  \code{Spectra} objects  to extract or replace parts
 #' 
 #' @usage 
-#'  x[i] <- spc.example_spectra()
-#' x[i, j, ...] <- spc.example_spectra()
-#' x[[i]] <- spc.example_spectra()
-#' x$i <- spc.example_spectra()
-#'
+#' x[i] 
+#' x[i, j] 
+#' x[[i]] 
+#' x$i #More usage cases to be added
 #' 
-#' @param Spectra object from which to extract element(s) or in which to replace element(s)
 #' 
+#' @param \code{Spectra} object from which to extract element(s) or in which to replace element(s)
+#' @param i A numeric (row index) variable
+#' @param j A character (column name) or a numeric (column index) variable
 #' 
 #'
 #' @examples
-#'  
+#'  sp<-spc.example_spectra()
+#'  # spc.colnames() is used to show that anap_300 or anap_345 is colon ,  
+#'  spc.colnames(sp)
+#'  sp$anap_300
+#'  sp["anap_345"]
 #'  
 #' 
 #' 
@@ -479,21 +504,25 @@ setReplaceMethod("$", signature = "Spectra",
 #########################################################################
 # Method : spc.colnames
 #########################################################################
-#' Column names
+#' Column names of \code{Spectra} object
 #'
-#'@description
-#' Retrieve  column names of a matrix-like spectra object.
+#' @description
+#' Retrieve  column names of a \code{Spectra} object
 #'
 #' 
 #' @usage 
 #' spc.colnames(x)
-#' @param x  a matrix-like spectra object, with at least two dimensions for colnames.
+#' @param x  A \code{Spectra} object
 #' 
-#' @return Returns the names of an object of class \code{Spectra}.
+#' @return Returns the coulmn names of an object of class \code{Spectra} as a charecter vector.
 #'
 #' @examples
 #' x <- spc.example_spectra()
 #' spc.colnames(x)
+#' # or 
+#' spc.colnames(x) <-spc.cname.construct(x)
+#' 
+#' @seealso \code{\link{spc.cname.construct}}
 #' 
 #' 
 setGeneric("spc.colnames",function(x,Y,...){standardGeneric("spc.colnames")})
@@ -510,17 +539,17 @@ setReplaceMethod("spc.colnames", signature = "Spectra", def = function (x,value)
 #########################################################################
 # Method : spc.plot
 #########################################################################
-#'  Plotting spectra object
+#'  Plotting \code{Spectra} object
 #'
-#'@description
-#' Generating plot of the contents of a spectra object
+#' @description
+#' Generating plot of the contents of a \code{Spectra} object
 #'
 #' 
 #' @usage 
 #' spc.plot(x,...)
-#' @param x	 a spectral data 
+#' @param x	 a \code{Spectra} data 
 #' 
-#'
+#' @seealso \code{\link{spc.lines}}
 #' @examples
 #' x <- spc.example_spectra()
 #' spc.plot(x)
@@ -585,39 +614,25 @@ setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="
   grid(col="black")
 })
 
-#'sp = spc.example_spectra()
-#'spc.plot.plotly(sp)
-spc.plot.plotly = function(sp){
-  
-  library(reshape2)
-  
-  lbd = spc.getwavelengths(sp)
-  kk = data.frame(Wavelength=lbd,t(sp@Spectra))
-  kk=melt(kk,id.vars=1)
-  p <- plot_ly(kk, x=~Wavelength, y=~value, type="scatter", mode="lines",color = ~variable,
-               colors="Spectral", opacity=0.5, line=list(width = 1)) #,evaluate = FALSE) #, colors=pal,line = list(opacity=0.1))
-  p
-}
-
-
 #########################################################################
 # Method : spc.lines
 #########################################################################
-#'  Add Connected Line Segments to a Plot
+#'  Add spectra to an existing plot
 #'
-#'@description
-#' A spectral function taking coordinates given in various ways and joining the corresponding points with line segments.
+#' @description
+#' Adds spectra to an existing plot created by spc.plot() using lines()
 #'
 #' 
 #' @usage 
 #' spc.lines(x,...)
-#' @param x	 a spectral vector of points to join plot
+#' @param x	 An object of class \code{Spectra}
+#' @param ... Additional input arguments to be passed to lines()
 #' 
-#'
-#' 
-
-
-
+#' @seealso \code{\link{spc.plot}}
+#' @examples 
+#' sp = spc.example_spectra()
+#' spc.plot(sp[2,])
+#' spc.lines(sp[3,],col="red")
 setGeneric("spc.lines",function(x,...){standardGeneric("spc.lines")})
 setMethod("spc.lines",signature = "Spectra",definition = function(x,...){
   a=sapply(1:nrow(x@Spectra), function(S) {
@@ -627,24 +642,25 @@ setMethod("spc.lines",signature = "Spectra",definition = function(x,...){
 #########################################################################
 # Method : spc.rbind
 #########################################################################
-#' Combine spectra Objects by Rows
+#' Combine \code{Spectra} Objects by Rows
 #'
-#'@description
-#'Take a spectral objects and combine by rows
+#' @description
+#' Take a \code{Spectra} objects and combine by rows
 #'
 #'@usage 
 #' spc.cbind(...)
 #' spc.rbind(...)
 #'
-#' @param ... spectra object
+#' @param ... \code{Spectra} object
 #' 
-#' 
-#'
+#' @seealso \code{\link{spc.cbind}}
+#' @return  \code{Spectra} object 
 #' @examples
 #' x <- spc.example_spectra()
-#'nrow(x)  #[1] 26
-#'x2 <- spc.rbind(x,x)
-#'nrow(x2)  #[1] 52
+#' nrow(x)  #[1] 26
+#' 
+#' 
+#' nrow(x2)  #[1] 52
 #' 
 #' 
 #' 
@@ -699,12 +715,12 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...,compressHeader
       #For all slots
       for(J in 1:length(sltn)){
         myslot = slot(eval((allinargs[[I]])),sltn[J])
-        if(class(myslot)[1]=="BiooHeader"){
+        if(class(myslot)[1]=="SpcHeader"){
           aa=rbind(as.data.frame(slot(outt,sltn[J]),stringsAsFactors=F), as.data.frame(myslot,,stringsAsFactors=F))
           rownames(aa)=NULL
           bb = as.list(aa)
           bb = lapply(bb,function(x){names(x)<-NULL;x})
-          outt@header = as(bb,"BiooHeader")
+          outt@header = as(bb,"SpcHeader")
         }
         #					if (length(myslot)==0)
         #						myslot=NA
@@ -751,24 +767,24 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...,compressHeader
 #########################################################################
 # Method : spc.rbind
 #########################################################################
-#' Combine spectra Objects by Rows
+#' Combine \code{Spectra} objects by Rows
 #'
-#'@description
-#'Take a spectral objects and combine by rows
+#' @description
+#' Take a \code{Spectra} objects and combine by rows
 #'
-#'@usage 
+#' @usage 
 #' spc.cbind(...)
 #' spc.rbind(...)
 #'
-#' @param ... spectra object
+#' @param ... \code{Spectra} object
 #' 
-#' 
+#' @seealso \code{\link{spc.cbind}}
 #'
 #' @examples
 #' x <- spc.example_spectra()
-#'nrow(x)  #[1] 26
-#'x2 <- spc.rbind(x,x)
-#'nrow(x2)  #[1] 52
+#' nrow(x)  #[1] 26
+#' x2 <- spc.rbind(x,x)
+#' nrow(x2)  #[1] 52
 #' 
 #' 
 setMethod("spc.rbind", signature = "STIDF", def = function (...){
@@ -801,7 +817,7 @@ setMethod("spc.rbind", signature = "STIDF", def = function (...){
         }
       if(class(myslot)[1]=="xts"){
         slot(outt,sltn[J])<-c(slot(outt,sltn[J]),myslot)
-        slot(outt,sltn[J])<-xts(1:length(slot(outt,sltn[J])),time(slot(outt,sltn[J])))
+        slot(outt,sltn[J])<-xts::xts(1:length(slot(outt,sltn[J])),time(slot(outt,sltn[J])))
       }
       if(class(myslot)[1]=="SpatialPoints"){
         prj = slot(outt,sltn[J])@proj4string
@@ -821,18 +837,18 @@ setMethod("spc.rbind", signature = "STIDF", def = function (...){
 #########################################################################
 # Method : spc.getwavelengths
 #########################################################################
-#' Getting wave lenghts in a spectral object
+#' Extract wave lenghts of a \code{Spectra} object
 #'
-#'@description
-#'Function get wave lenghts insade of  a spectral object
+#' @description
+#' Get wave lenghts insade of  a \code{Spectra} object
 #'
-#'@usage 
-#' spc.getwavelengths(...)
+#' @usage 
+#' spc.getwavelengths(object)
 #'
-#' @param ... spectra object
+#' @param object A \code{Spectra} object
 #' 
-#' 
-#'
+#' @return numeric vector of  wave lenghts
+#' @seealso \code{\link{spc.setwavelengths}}
 #' @examples
 #'  x <- spc.example_spectra()
 #'  spc.getwavelengths(x)
@@ -846,19 +862,20 @@ setMethod("spc.getwavelengths", signature = "Spectra",
 #########################################################################
 # Method : spc.setwavelengths
 #########################################################################
-#' Setting wavelenghts in a spectral object
+#' Setting wavelenghts in a \code{Spectra} object
 #'
 #'@description
-#'Function  to change or set wavelenghts insade of  a spectral object
+#'Function  to change or set wavelenghts insade of  a \code{Spectra} object
 #'
 #'@usage 
-#' spc.setwavelengths(...)
+#' spc.setwavelengths(object,value)
 #'
 #'
-#' @param ... spectra object
+#' @param object A \code{Spectra} object
+#' @param value Numeric 
 #' 
 #' 
-#' 
+#' @seealso \code{\link{spc.getwavelengths}}
 #' 
 #'
 #' @examples
@@ -876,19 +893,24 @@ setReplaceMethod(f="spc.setwavelengths", signature="Spectra",
 #########################################################################
 # Method : spc.cname.construct
 #########################################################################
-#' Generating column names for a spectra object
+#' Generating column names for a \code{Spectra} object
 #' @description
-#'Function for a spectra object generates column names and it is combination of shortName  and Wavelenght
+#'Function for a \code{Spectra} object that generates column names made of a 
+#'combination of @shortName and @Wavelenght slots. If \code{value} is 
+#'ommitted, the @ShortName slot is used.
 #'
-#'@usage 
-#' spc.cname.construct(...)
+#' @usage 
+#' spc.cname.construct(object)
+#' spc.cname.construct(object, value)
 #'
-#'
-#' @param ... spectra object
+#' @param value A character object
+#' @param object A variable of class \code{Spectra}
 #' 
-#' 
-#' 
-#' 
+#' @return vector of characters
+#' @examples 
+#' sp <- spc.example_spectra()
+#' spc.cname.construct(sp)
+#' spc.cname.construct(sp,"Newvar")
 #'
 #generating colmn names for a spectra object + combination of @shortName @Wavelenght
 setGeneric("spc.cname.construct",function(object,value)
@@ -900,110 +922,6 @@ setMethod(f="spc.cname.construct", signature="Spectra",
             return(paste(value,round(spc.getwavelengths(object)),sep="_"))
           })
 
-#########################################################################
-#spc.make.stindex 
-#########################################################################
-#' Extracting an element of spectral objects and returning the first and last measurements
-#' @description
-#'Take an element of spectral objects and outputs one STIDF object.
-#'Returning the first and last measurements of the input list element acrording to a time interval depending of the input argument
-#'
-#'@usage 
-#' spc.make.stindex (...,value)
-#'
-#'
-#' @param ...  spectra object
-#' @param value  outputs one STIDF object
-#' 
-#' @details 
-#' Takes a n-element list of Spectra objects and outputs one STIDF object. Each row 
-#' of the ST object has a time interval depending of the input argument rowSimplify.
-#' rowSimplify : "none", "spc.colMeans","firstRow" or "lastRow"
-#' none: length of the output object equals the sum of all rows of all elements of the input list object
-#' spc.colMeans: length of the output object equals the number of rows of the input list object. 
-#' This option returns the measurement nearest to the average time of the input list element
-#' firstRow and lastRow : length of the output object equals the number of rows of the input list object.
-#' These two options return the first and last measurements of the input list element
-#' 
-#' 
-#' 
-#' 
-#Takes a n-element list of Spectra objects and outputs one STIDF object. Each row 
-#of the ST object has a time interval depending of the input argument rowSimplify.
-#rowSimplify : "none", "spc.colMeans","firstRow" or "lastRow"
-#none: length of the output object equals the sum of all rows of all elements of the input list object
-#spc.colMeans: length of the output object equals the number of rows of the input list object. 
-#This option returns the measurement nearest to the average time of the input list element
-#firstRow and lastRow : length of the output object equals the number of rows of the input list object.
-#These two options return the first and last measurements of the input list element
-spc.make.stindex = function(input,what2include="",rowSimplify="none",
-                            includeTIME=FALSE,includeLATLON=FALSE) {
-  
-  if(!(rowSimplify %in% c("spc.Colmeans","firstRow","lastRow","none")))
-    stop(simpleError(paste("rowSimplify should be one of",paste(c("spc.Colmeans","firstRow","lastRow","none"),collapse=","))))
-  
-  if(!inherits(input,"list"))
-    stop("The input dataset should inherit from a list (can also be a SpcList)")
-  
-  MyOutput = lapply(1:length(input),function(x){
-    if(nrow(input[[x]])>0){
-      try(what2include<-get("what2include",envir=parent.frame(2)),silent=T)
-      #what2include=c("Rrs_805","INTTIME")					
-      #Save the endTime into a variable
-      endTime<-input[[x]]@endTime
-      
-      #Convert to STIDF (dropping Spectral and Ancillary data, if any)
-      if(rowSimplify=="spc.Colmeans"){
-        my = spc.colMeans(input[[x]])
-        my@endTime = endTime[length(endTime)]
-      }
-      if(rowSimplify=="firstRow"){
-        my = input[[x]][1]
-        my@endTime = endTime[length(endTime)]
-      }
-      if(rowSimplify=="lastRow"){
-        my = input[[x]][nrow(input[[x]])]
-      }
-      if(rowSimplify=="none"){
-        my = input[[x]]
-      }
-      if(!(length(what2include)==1 && what2include==""))
-        w2i = input[[x]][[what2include]]
-      
-      w2i2 = data.frame(Index=1:nrow(my),ListIndex=rep(x,nrow(my)))
-      if(exists("w2i"))
-        w2i2 = cbind(w2i2,w2i)
-      my@data = w2i2
-      
-      my<-as(my,"STIDF")					
-      #Put the time and endTime slots as data columns
-      if(includeTIME){
-        my[["TIME"]]=time(my)
-        my[["ENDTIME"]]=my@endTime
-      }
-      if(includeLATLON){
-        my@data[["LON"]]=coordinates(my)[,"LON"]
-        my@data[["LAT"]]=coordinates(my)[,"LAT"]
-      }
-      #my[["TIME"]]=as.character(time(input@time),usetz=T)
-      #my[["ENDTIME"]]=as.character(input@endTtime,usetz=T)
-    } else {
-      #Empty variable
-      my<-NA
-    }
-    return(my)
-  })
-  #Eliminate NAs (invalid records, index kept in $ListIndex)
-  myWarn = options()$warn
-  options(warn=-1)
-  MyOutput = MyOutput[!sapply(MyOutput,is.na)]
-  options(warn=myWarn)
-  
-  #Call spc.rbind to convert the list of STIDF to one STIDF object  xxx
-  MyOutput = do.call(spc.rbind,MyOutput)
-  validObject(MyOutput)
-  return(MyOutput)
-}
 ##############################################################################
 #Another version of spacetime::timeMatch(). 
 #method="over" uses the simple over technique. Same as of spacetime::timeMatch().  
@@ -1045,27 +963,21 @@ spc.timeMatch = function(master,searched,returnList=FALSE,method="over",limits,r
   }
   return(out)
 }
-##############################################################################
-#Reports the space and time distance of each row of the STI-inherited object
-#searched to the corresponding row of the STI-inherited object master. Outputs 
-#a data.frame, with two columns : time2master ("difftime", in seconds) and 
-#distance2master ("numeric", in meters) 
-#' Report the space and time distance of each row of the STI-inherited object
+#' Report the space and time distance of each row of an STI-inherited object
 #' @description
-#'Function for a spectra object reports the space and time distance of each row of the STI-inherited object
-#'searched to the corresponding row of the STI-inherited object master
+#' Function that reports the space and time distance of each 
+#' row of the STI-inherited object \code{searched} to the corresponding row of the 
+#' STI-inherited object \code{master}
 #'
-#'@usage 
-#' spc.STI.stdistance(...,searched)
-#'
-#'
-#' @param ...  STI-inherited object master
-#' @param searched      a data.frame
+#' @param master  An STI-inherited object
+#' @param searched An STI-inherited object
+#' @param report Logical. Default value is FALSE
 #' 
 #' @details 
 #' Reports the space and time distance of each row of the STI-inherited object
-#' searched to the corresponding row of the STI-inherited object master. Outputs 
-#' a data.frame, with two columns : time2master ("difftime", in seconds) and 
+#' \code{searched} to the corresponding row of the STI-inherited object \code{master}. 
+#' 
+#' @return Outputs a data.frame, with two columns : time2master ("difftime", in seconds) and 
 #' distance2master ("numeric", in meters) 
 #' 
 spc.STI.stdistance = function(master,searched,report=F){
@@ -1106,10 +1018,10 @@ setMethod("spc.plot2", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type=
 #########################################################################
 # Method : Arith
 #########################################################################
-#' Apply arithmetic operations on/between Spectra objects
+#' Apply arithmetic operations on/between \code{Spectra} objects
 #' @description
-#' Methods definig Arithmetic operations between two Spectra objects e1 and e2 or one
-#' Spectra object e1 and a numeric value.
+#' Methods definig Arithmetic operations between two \code{Spectra} objects e1 and e2 or one
+#' \code{Spectra} object e1 and a numeric value.
 #'
 #'@usage 
 #' Arith(e1, e2)
@@ -1120,7 +1032,7 @@ setMethod("spc.plot2", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type=
 #' @param e2 spectra object 
 #' 
 #' @details 
-#' These methods allow performing arithmetic operations involving Spectra objects.
+#' These methods allow performing arithmetic operations involving \code{Spectra} objects.
 #' 
 #' @seealso \code{\link{Arith}}
 setMethod("Arith", signature(e1 = "Spectra", e2 = "Spectra"),function (e1, e2) {
@@ -1155,7 +1067,7 @@ setMethod("spc.colMeans", signature("Spectra"),function (object) {
   object@Spectra <- t(as.matrix(colMeans(object@Spectra)))
   #			object@data <- as.data.frame(t(callGeneric(object@data)))
   #Find the mean time
-  meantime <- xts(1,mean(time(object@time)),tzone=attr(object@time,"tzone"))
+  meantime <- xts::xts(1,mean(time(object@time)),tzone=attr(object@time,"tzone"))
   #Find the row index closer in time to meantime
   min.idx = which.min(abs(as.numeric(time(meantime)-time(object@time))))
   object@sp <- object@sp[min.idx]
@@ -1203,16 +1115,16 @@ setMethod("spc.invalid.detect", signature = "Spectra", def=function(source1){
 #########################################################################
 # Method : spc.getheader
 #########################################################################
-#' Extract a field of the @header slot of a spectra object
+#' Extract a field of the @header slot of a \code{Spectra} object
 #' @description
-#' Function extracts the value of a field in the header slot of spectra object
+#' Extracts the value of a field in the header slot of \code{Spectra} object
 #'
-#'@usage 
+#' @usage 
 #' spc.getheader(x,name)
 #'
+#' @seealso \code{\link{spc.setheader}}
 #' 
-#' 
-#' @param x spectra object 
+#' @param x  A  \code{Spectra} object 
 #' @param name of the header field to be extracted
 #' 
 #' @examples 
@@ -1241,26 +1153,28 @@ setMethod("spc.getheader", signature = "Spectra",
 #########################################################################
 # Method : spc.setheader
 #########################################################################
-#' Set a field of the @header slot of a spectra object
+#' Set a field of the @header slot of a \code{Spectra} object
 #' @description
-#' Function sets or changes the value of a field in the header slot of spectra object
+#' Function sets or changes the value of a field in the header slot of \code{Spectra} object
 #'
 #'@usage 
 #' spc.setheader(x,name)<-value
 #'
-#' 
-#' 
-#' @param x spectra object 
+#' @seealso \code{\link{spc.getheader}}
+#' @param value Object of class SpcHeader
+#' @param x A \code{Spectra} object 
 #' @param name of the header field to be setted
-#' 
-#' 
-#' 
-#' 
+#' @examples 
+#' sp=spc.example_spectra()
+#' a=new("SpcHeader") # create new SpcHeader class
+#' a$Longitude=123 
+#' spc.setheader(sp,"Station") <- a
+#' sp@header
 setGeneric (name="spc.setheader<-",
             def=function(object,value,...){standardGeneric("spc.setheader<-")})
 setReplaceMethod(f="spc.setheader", signature="Spectra",
                  definition=function(object,value,...){
-                   stopifnot(class(value)=="BiooHeader")
+                   stopifnot(class(value)=="SpcHeader")
                    object@header<-value
                    validObject(object)
                    return(object)
@@ -1269,14 +1183,14 @@ setReplaceMethod(f="spc.setheader", signature="Spectra",
 #########################################################################
 # Method : spc.updateheader
 #########################################################################
-#' Update a field of the @header slot of a spectra object
+#' Update a field of the @header slot of a \code{Spectra} object
 #' @description
-#'  updates or changes the value of a field in the header slot of spectra object 
+#'  Updates or changes the value of a field in the header slot of \code{Spectra} object 
 #'
 #' @usage 
 #' spc.updateheader(x,name)<-value
 #'
-#' @param x spectra objec 
+#' @param x A \code{Spectra} objec 
 #' @param name of the header field to be updated
 #' @examples 
 #' sp=spc.example_spectra()
@@ -1297,18 +1211,23 @@ setReplaceMethod(f="spc.updateheader", signature="Spectra",
 #########################################################################
 # Method : spc.getselected.idx
 #########################################################################
-#' Extract index inside of a spectra object
+#' Extract index inside of a \code{Spectra} object
 #' @description
-#' extracts index of rows marked as selected
+#' Extracts index of rows marked as selected
 #' 
 #'@usage 
-#' spc.getselected.idx(x)
+#' spc.getselected.idx(object)
 #'
+#' @seealso \code{\link{spc.setselected.idx}}
 #' 
-#' 
-#' @param x spectra object 
-#' 
-#' 
+#' @param object  A \code{Spectra} object 
+#' @return \code{Spectra} object
+#' @examples 
+#' x <- spc.example_spectra()
+#' idx=rep(FALSE,nrow(x)); 
+#' idx[1:5]=TRUE
+#' spc.setselected.idx(x)<-idx 
+#' spc.getselected.idx(x)
 setGeneric (name= "spc.getselected.idx",
             def=function(object){standardGeneric("spc.getselected.idx")})
 setMethod("spc.getselected.idx", signature = "Spectra", 
@@ -1318,24 +1237,24 @@ setMethod("spc.getselected.idx", signature = "Spectra",
 #########################################################################
 # Method : spc.setselected.idx	
 #########################################################################
-#' Set index to a spectra object
+#' Set index to a \code{Spectra} object
 #' @description
-#' Function set or change selection row index of a spectra object 
+#' Set or change selection row index of a \code{Spectra} object 
 #' @usage 
 #' spc.setselected.idx(x,value)
 #'
 #' 
 #' 
-#' @param x spectra object 
-#' @param value index for spectra object
-#' 
+#' @param x A \code{Spectra} object 
+#' @param value index for a \code{Spectra} object
+#' @seealso \code{\link{spc.getselected.idx}}
 #' @examples 
 #' x <- spc.example_spectra()
 #' idx=rep(FALSE,nrow(x)); 
 #' idx[1:5]=TRUE
 #' spc.setselected.idx(x)<-idx 
 #' spc.plot(x)
-#' 
+#' @return \code{Spectra} object
 #' 
 #' 
 setGeneric("spc.setselected.idx<-",function(object,value)
@@ -1357,19 +1276,19 @@ setReplaceMethod(f="spc.setselected.idx", signature="Spectra",
 #########################################################################
 # Method : spc.getinvalid.idx
 #########################################################################
-#' Get the selected spectra as invalid
+#' Get index of \code{Spectra} rows marked as invalid
 #' @description
-#' Function  extract the indexes stored as invaild variable
+#' Extract the row indexes stored as invaild 
 #'
 #' @usage 
-#' spc.getinvalid.idx(x)
+#' spc.getinvalid.idx(object)
 #'
+#' @param object A \code{Spectra} object 
+#' @return Logical vector 
+#' @examples 
+#' sp= spc.example_spectra()
+#' spc.getinvalid.idx(sp) #No invalid rows
 #' 
-#' 
-#' @param x spectra object 
-#' 
-#' 
-#
 setGeneric (name= "spc.getinvalid.idx",
             def=function(object){standardGeneric("spc.getinvalid.idx")})
 setMethod("spc.getinvalid.idx", signature = "Spectra", 
@@ -1379,18 +1298,23 @@ setMethod("spc.getinvalid.idx", signature = "Spectra",
 #########################################################################
 # Method : spc.setinvalid.idx
 #########################################################################
-#' Set the selected spectra as invalid
+#' Set rows of \code{Spectra} as invalid
 #' @description
-#' Function  stores the indexes as invaild variable
+#' Stores the row indexes as invaild
 #'
 #' @usage 
-#' spc.setinvalid.idx(x)
+#' spc.setinvalid.idx(object,value)
 #'
 #' 
 #' 
-#' @param x spectra object 
-#' 
-#
+#' @param x A \code{Spectra} object 
+#' @param value Logical vector 
+#' @examples  
+#' sp = spc.example_spectra()
+#' spc.getinvalid.idx(sp) #No invalid rows
+#' vld = rep(TRUE,26)
+#' vld[1:5]<-FALSE
+#' spc.setinvalid.idx(sp)<-vld #Mark the first 5 rows as invalid
 #' 
 setGeneric("spc.setinvalid.idx<-",function(object,value)
 {standardGeneric("spc.setinvalid.idx<-")})
@@ -1411,36 +1335,42 @@ setReplaceMethod(f="spc.setinvalid.idx", signature="Spectra",
 #########################################################################
 # Method : spc.data2header
 #########################################################################
-#' Set or cahenge data in header
+#' Populate fields of header slot using data from data slot 
 #' @description
-#' Function  populates  the header of each element  with a column
+#' Populates a field of @header with a column data from @data slot.
 #'
 #' @usage 
-#' spc.data2header(x,headerfield,dataname, compress )
+#' spc.data2header(object,dataname,headerfield,compress)
 #'
 #' 
-#' @param dataname list spectra object
-#' @param x spectra object 
+#' @param dataname A character object specifying the name of @data column to be used
+#' @param object \code{Spectra} object 
 #' @param compress true or false
-#' @param headerfield  data column
-#' 
+#' @param headerfield A character object specifying the name of the @header field to be changed
+#'  
+#' @return object of class \code{Spectra}
 #' @details 
-#' The function  can be used to populate  the header of each element  with a column.
-#'Since we are certain that all the columns of all individuals elements are the same,
-#'we can compress the column (taking only the first element from data column into the header.
+#' This function extracts data from a column of the @data slot (specified by dataname)  
+#' and creates a new @header field with it. If headerfield is not provided, the name 
+#' of the new header field will be the same as dataname. 
+#' The name of the new header field can be overwritten by providing headerfield.
+#' If all the incoming data rows (dataname) are the same, information put into the header 
+#' can be compressed by selecting compress=TRUE (default is FALSE). This would take only the first element 
+#' from the @data column.
 #' 
-#' 
-#' @rdname 
-#' spc.data2header
-#' 
-#' 
-#' 
-#' 
-#' 
+#' @examples 
+#' sp=spc.example_spectra()
+#' sp=spc.data2header(sp,"CAST")
+#' sp@header
+#' sp=spc.data2header(sp,"CAST","ProjectCast")
+#' sp@header
+#' sp$CAST=rep(33, nrow(sp))
+#' sp=spc.data2header(sp,"CAST","ProjectCast", compress=T)
+#' sp@header
 setGeneric(name= "spc.data2header",
-           def=function(object,headerfield,dataname,compress,...){standardGeneric("spc.data2header")})
+           def=function(object,dataname,headerfield,compress=FALSE,...){standardGeneric("spc.data2header")})
 setMethod("spc.data2header", signature = "Spectra", 
-          def=function(object,headerfield,dataname,compress=TRUE,...){
+          def=function(object,dataname, headerfield,compress,...){
             if(missing(headerfield))
               headerfield = dataname
             object@header[[headerfield]]=object[[dataname]]
@@ -1452,9 +1382,27 @@ setMethod("spc.data2header", signature = "Spectra",
 #########################################################################
 # Method : spc.header2data
 #########################################################################
-#If header element has length >1, its type is checked. If it is "character",
-#its elements will be pasted using paste(...,collapse="|"). If it is another 
-#type, only the first element will be taken.  
+#' Get header for data
+#' @description
+#' Get  the header for data of each element  with a column
+#'
+#' @usage 
+#' spc.data2header(object,headerfield,dataname )
+#'
+#' 
+#' @param dataname list \code{Spectra} object
+#' @param object A \code{Spectra} object 
+#' @param headerfield  data column
+#' @return object of class \code{Spectra}
+#' @details 
+#' If header element has length >1, its type is checked. If it is "character",
+#' its elements will be pasted using paste(...,collapse="|"). If it is another 
+#' type, only the first element will be taken.  
+#' @examples 
+#' sp <- spc.example_spectra()
+#' spc.updateheader(sp, "Zone")<- "ZoneA"
+#' sp <- spc.header2data(sp, "Zone")
+#' sp$Zone
 setGeneric(name= "spc.header2data",
            def=function(object,headerfield,dataname,...){standardGeneric("spc.header2data")})
 setMethod("spc.header2data", signature = "Spectra", 
@@ -1477,25 +1425,22 @@ setMethod("spc.header2data", signature = "Spectra",
 #########################################################################
 # Method : [
 #########################################################################
-#' Extract or replace parts of a spectra object
+#' Extract or replace parts of a \code{Spectra} object
 #' @description
-#' Operators acting on spectra object and spectra lists to extract or replace parts.
+#' Operators acting on \code{Spectra} object and \code{Spectra} lists to extract or replace parts.
 #'
 #' @usage 
 #' x[i]
-#' 
-#'
-#' 
-#' @param x  object from which to extract element(s) or in which to replace element(s). 
-#' 
-#' 
-#'  
+#' x[i,j]
+#' @param x A \code{Spectra} object from which to extract element(s) or in which to replace element(s). 
+#' @param i,j indices specifying elements to extract or replace. Indices are numeric or character vectors 
 #' @details 
 #' These operators are generic. You can write methods to handle indexing of specific classes of objects
 #' 
-#' 
-#' 
-#' 
+#' @examples 
+#' sp=spc.example_spectra()
+#' sp #501 spectral channels in columns and 26 observations in rows 
+#' sp[1] #501 spectral channels in columns and 1 observations in rows 
 #' 
 setMethod("[", signature(x = "Spectra"), function(x, i, j) {
   OUT_ANC = 0
@@ -1562,6 +1507,29 @@ setMethod("[", signature(x = "Spectra"), function(x, i, j) {
 #########################################################################
 # Method : [[
 #########################################################################
+#' Extract or replace parts of a \code{Spectra} object
+#' @description
+#' Operators acting on \code{Spectra} object and \code{Spectra} lists to extract or replace parts.
+#'
+#' @usage 
+#' x[[i]]
+#' x[[i,j]]
+#'
+#' 
+#' @param x A \code{Spectra} object from which to extract element(s) or in which to replace element(s). 
+#' @param i,j indices specifying elements to extract or replace. Indices are numeric or character vectors 
+#' 
+#'  
+#' @details 
+#' These operators are generic. You can write methods to handle indexing of specific classes of objects
+#' 
+#' @examples 
+#' sp=spc.example_spectra()
+#' sp #501 spectral channels in columns and 26 observations in rows 
+#' sp[1] #501 spectral channels in columns and 1 observations in rows 
+#' sp[[1]] # The first column of the @data slot
+#' 
+#' 
 setMethod("[[", signature=c("Spectra","character","missing"),
           function(x, i, j, ...) {
             Boutput = list()
@@ -1673,62 +1641,58 @@ setMethod("spc.interp.spectral", signature = "Spectra",
 #########################################################################
 #' Exporting into text format
 #' @description
-#' Save the spectra object on disk and Text files can be  saved with  this function 
+#' Save the \code{Spectra} object on disk in text format
 #'
 #' @usage 
 #' spc.export.text(x,filename)
-#' 
-#'
-#' 
-#' @param x  a spectra object 
-#' @param  filename text name  
+#' @seealso \code{\link{spc.import.text}}
+#' @param x  A \code{Spectra} object 
+#' @param  filename Name of the output text file  
 #' @examples 
 #' x=spc.example_spectra()
 #' spc.export.text(x,filename="anap.txt")
 #' aa=spc.import.text("anap.txt")
 #' dev.new()
 #' spc.plot(aa)
-#spc.export.text(out.Rrs[[5]]@Rrs,"test.txt")
-#   aa=spc.import.text("test.txt")
-#dev.new()
-# spc.plot(aa)
 setGeneric(name="spc.export.text",
-           def=function(input,filename,writeheader=TRUE,sep=";",...) {standardGeneric("spc.export.text")})
-setMethod("spc.export.text", signature="Spectra", definition=function(input,filename,writeheader,sep,...){
-  data = as(input,"data.frame")
-  idx.idx = which(colnames(data) == "idx")
-  if(length(idx.idx)>0){
-    data = data[,-idx.idx]
-  }
-  data = cbind(data.frame(idx=1:nrow(data)),data)
-  clmnnames = colnames(data)
-  data$TIME = as.character(data$TIME,usetz=TRUE)
-  data$ENDTIME = as.character(data$ENDTIME,usetz=TRUE)
-  
-  written=0
-  if(writeheader){
-    spc.export.text(input@header,filename,append=F)
-    written=length(input@header)
-  }
-  slotInfos = .spc.slot.infos(input,sep)
-  for(I in 1:length(slotInfos)){
-    if(length(slotInfos[[I]])==1)
-      mysl=paste(names(slotInfos)[I],slotInfos[[I]],sep=sep)
-    else
-      mysl = paste(names(slotInfos)[I],paste(slotInfos[[I]],collapse=sep),sep=sep)
-    if(written==0)
-      write.table(mysl,filename,row.names=F,col.names=F,append=F,quote=F)
-    else
-      write.table(mysl,filename,row.names=F,col.names=F,append=T,quote=F)
-    written = written+1
-  }
-  
-  #Write column names
-  write.table(paste(clmnnames,collapse=sep), filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
-  #Write Spectra+Ancillary data
-  write.table(data, filename, sep=sep, row.names=F, col.names=F,append=T,quote=F)
-  print(paste("Wrote", filename ))			
-})
+           def=function(input,filename,sep=";",append=FALSE,writeheader=TRUE, ...) {standardGeneric("spc.export.text")})
+setMethod("spc.export.text", signature="Spectra", 
+          definition=function(input,filename,sep,append,writeheader,...){
+            
+            data = as(input,"data.frame")
+            idx.idx = which(colnames(data) == "idx")
+            if(length(idx.idx)>0){
+              data = data[,-idx.idx]
+            }
+            data = cbind(data.frame(idx=1:nrow(data)),data)
+            clmnnames = colnames(data)
+            data$TIME = as.character(data$TIME,usetz=TRUE)
+            data$ENDTIME = as.character(data$ENDTIME,usetz=TRUE)
+            
+            written=0
+            if(writeheader){
+              spc.export.text(input@header,filename,append=F)
+              written=length(input@header)
+            }
+            slotInfos = .spc.slot.infos(input,sep)
+            for(I in 1:length(slotInfos)){
+              if(length(slotInfos[[I]])==1)
+                mysl=paste(names(slotInfos)[I],slotInfos[[I]],sep=sep)
+              else
+                mysl = paste(names(slotInfos)[I],paste(slotInfos[[I]],collapse=sep),sep=sep)
+              if(written==0)
+                write.table(mysl,filename,row.names=F,col.names=F,append=F,quote=F)
+              else
+                write.table(mysl,filename,row.names=F,col.names=F,append=T,quote=F)
+              written = written+1
+            }
+            
+            #Write column names
+            write.table(paste(clmnnames,collapse=sep), filename, row.names=F, col.names=F,append=T, quote=F,eol="\n")
+            #Write Spectra+Ancillary data
+            write.table(data, filename, sep=sep, row.names=F, col.names=F,append=T,quote=F)
+            print(paste("Wrote", filename ))			
+          })
 .spc.slot.infos = function(input,sep){
   out=list('Spectra|ShortName'=input@ShortName,
            'Spectra|LongName'=input@LongName,
@@ -1737,16 +1701,30 @@ setMethod("spc.export.text", signature="Spectra", definition=function(input,file
            'Spectra|Wavelengths'=spc.getwavelengths(input))
   return(out)
 }
-setMethod("spc.export.text", signature="BiooHeader", definition=function(input,filename,append=F,sep=";",...){
+setMethod("spc.export.text", signature="SpcHeader", definition=function(input,filename,sep=";",append=F,...){
   nms = names(input)
-  nms = paste("Spectra|header",sep,nms,sep="")
-  out1 = lapply(input,function(x){
-    #If the separator character exists in the header, then eliminate it 
-    x<-gsub(sep,"",x)
-    if(length(x)>1)
-      x<-paste(x,collapse=sep)
-    else
-      x<-as.character(x)
+  nms = paste0("Spectra|header",sep,nms)
+
+    out1 = lapply(1:length(input),function(x){
+    myfield <- input[[x]]
+    if(class(myfield) %in%  c("logical","numeric","character","factor")) {
+      #If the separator character exists in the header, then eliminate it 
+      if(class(myfield)=="character")
+        myfield <-gsub(sep,"",input[[x]])
+      
+      #If vector (more than one value) then collapse it into one line
+      if(length(myfield)>1)
+        myfield<-paste(myfield,collapse=sep)
+      #Convert it to character
+      myfield<-as.character(myfield)
+    } else {
+      #If it is a complex type, then serialize it
+      nms[[x]] <<- paste0(nms[[x]], "|Serialized")
+
+      myfield = rawToChar(serialize(myfield,connection = NULL,ascii = T))
+      myfield = gsub('\n','_a_',myfield)
+      }
+    myfield
   })
   out1 = cbind(nms,out1)
   write.table(out1,filename,row.names=F,col.names=F,append=append,quote=F,sep=sep)
@@ -1755,21 +1733,20 @@ setMethod("spc.export.text", signature="BiooHeader", definition=function(input,f
 #########################################################################
 # Method : spc.import.text
 #########################################################################
-#' Importing  text into R
+#' Importing  spectral data from a text file
 #' @description
-#' Texts can be imported back into R with this function 
-#'
+#' Spectral data already saved by spc.export.text() can be imported back 
+#' as a \code{Spectral} object.
+#' @seealso \code{\link{spc.export.text}}
 #' @usage 
-#' spc.import.text(...)
+#' spc.import.text(filename, sep)
 #' 
 #' 
-#'
-#' 
-#' @param ... name of text
-#' 
+#' @param filename Name of input text file
+#' @param sep Field delimiter to be used
 #' @examples 
-#'x=spc.example_spectra()
-#'  spc.export.text(x,filename="anap.txt")
+#' x=spc.example_spectra()
+#' spc.export.text(x,filename="anap.txt")
 #' aa=spc.import.text("anap.txt")
 #' spc.plot(aa)
 spc.import.text = function(filename,sep=";",...){
@@ -1788,16 +1765,25 @@ spc.import.text = function(filename,sep=";",...){
         ""
     })
     names(header)<- nms
+    
+    #Extract Serialized fields, if any and unserialized them
+    header.idx.ser = grep("\\|Serialized",myT)
     header = .spc.header.infos(header) 
+    if (length(header.idx.ser)>0) {
+      for (JJ in header.idx.ser){
+        header[[JJ]] = unserialize(charToRaw(gsub('_a_','\n',header[[JJ]])))
+        names(header)[JJ] <- gsub("\\|Serialized","",names(header)[JJ])
+      }
+    }
     
     if(any(grepl("StationType",nms)))
       if(is.logical(header$StationType))
         header$StationType = "T"
-    header = as(header,"BiooHeader")
+    header = as(header,"SpcHeader")
     myT = myT[-header.idx]
     
   } else {
-    header = new("BiooHeader")
+    header = new("SpcHeader")
   }
   #Extract the Spectra slots
   Slots.idx = grep("Spectra\\|",myT)
@@ -1887,22 +1873,9 @@ spc.import.text = function(filename,sep=";",...){
 #' @return None. Simply creates an Excel file on disk.
 #'
 #' @examples
-#' fnm = file.path(base::system.file(package = "Spectral"), "test_data","particulate_absorption.csv.gz")
-#' abs = read.table(fnm,sep=",",header=T)
-#' abs$STATION=factor(abs$STATION)
-#' abs[1:2,1:17] #Display only the first 2 rows and first 17 columns if the data frame
-#' lbd = as.numeric(gsub("X","",colnames(abs)[14:514]))
-#' Units="1/m"
-#' colnames(abs)= gsub("X",paste("anap","_",sep=""), colnames(abs))
-#' colnames(abs)= gsub("PRES","DEPTH", colnames(abs))
-#' abs = abs[,c(14:514,1:13)] #Rearrange so that Spectra columns come first
-#' tz<-strsplit(as.character(abs$TIME)," ")[[1]][[3]] #Extract the timezone
-#' abs$TIME = as.POSIXct(as.character(abs$TIME),tz=tz) #Compute the time
-#' 
-#' #Space and time columns are automatically found in the column names of inDF
-#' myS<-Spectra(abs,Wavelengths=lbd,Units=Units,ShortName="a_nap")
-#' 
-#' spc.export.xlsx(myS,"test.xlsx")
+#' sp=spc.example_spectra()
+#' if("xlsx" %in% installed.packages())
+#'    spc.export.xlsx(sp,"test.xlsx")
 setGeneric(name="spc.export.xlsx",
            def=function(input,filename,sheetName,writeheader=TRUE,append=F,sep=";",...) {standardGeneric("spc.export.xlsx")})
 setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,filename,sheetName,writeheader,append,sep,...){
@@ -1948,9 +1921,9 @@ setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,file
 #########################################################################
 # Method : subset
 #########################################################################
-#' Subsetting for spectra and spcList classes
+#' Subsetting for a \code{Spectra} and spcList classes
 #' @description
-#' Subsetting can be achieved using the implementation of the R function subset() for Spectra and SpcList classes
+#' Subsetting can be achieved using the implementation of the R function subset() for \code{Spectra} and SpcList classes
 #'It is possible to perform a row-wise selection
 #'
 #' @usage 
@@ -1959,9 +1932,9 @@ setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,file
 #' 
 #'
 #' 
-#' @param x spectra object 
-#' @param y subset
-#' @param  select condition selected
+#' @param x A \code{Spectra} object 
+#' @param y Subset
+#' @param  select Condition selected
 #' @examples 
 #' fnm = file.path(system.file(package = "geoSpectral"), "test_data","particulate_absorption.csv.gz")
 #' abs = read.table(fnm,sep=",",header=T)
@@ -1992,7 +1965,6 @@ setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,file
 #' subset(myS,DEPTH<=30) #Subsetting rows with respect to the value of Ancillary data
 #' subset(myS,anap_440<=0.01) #Subsetting rows with respect to the value of Spectral data
 #' subset(myS,subset=DEPTH<=30,select="CAST") #Selecting Ancillary data columns, leaving Spectral columns intact
-#' showMethods(subset,classes="Spectra",includeDefs=T) 
 #' 
 #' 
 setMethod("subset",  signature="Spectra",
@@ -2111,7 +2083,11 @@ spc.makeSpcList = function(myobj, name,FUN){
   #Get the indexes of each DF row :
   idx = lapply(unique(myobj[[name]]),function(x) {which(x==myobj[[name]])})
   #For each row index in the list, subset the DF, return a list
-  output = lapply(idx,function(x) myobj[x,])
+  output = lapply(idx,function(x) {
+    out = myobj[x,]
+    spc.updateheader(out, name)<-as.character(out[[name]][1])
+    out
+  })
   output = SpcList(output)
   output@by = name
   return(output)
@@ -2120,6 +2096,22 @@ spc.makeSpcList = function(myobj, name,FUN){
 #########################################################################
 # Method : spc.plot.time
 #########################################################################
+#'  Plotting \code{Spectra} object
+#'
+#' @description
+#' Generating plot of the contents of a \code{Spectra} object with respect to time
+#'
+#' 
+#' @usage 
+#' spc.plot(x,...)
+#' @param x	 a \code{Spectra} data 
+#' 
+#' @seealso \code{\link{spc.plot.depth}}
+#' @examples
+#' x <- spc.example_spectra()
+#' spc.plot.time(x)
+#' 
+#' 
 setGeneric (name= "spc.plot.time",
             def=function(object, ...){standardGeneric("spc.plot.time")})
 setMethod("spc.plot.time", signature="Spectra", function (object,Y,maxSp=50,xdata="time",lab_cex,lwd=2, ...){
@@ -2255,10 +2247,11 @@ setMethod("spc.plot.depth", signature="Spectra", function (object,X,maxSp=10,lab
   #Sort with respect to depth
   d_idx = sort.int(myY,index.return = TRUE)
   myY = d_idx$x
+  
   if(class(myX)=="data.frame"){
     myX = myX[d_idx$ix,,drop=F]
     #Eliminate rows full with zeros
-    idx = !apply(myX==0,1,all)
+    idx = which(!apply(myX==0,1,all))
     myY = myY[idx]
     myX = myX[idx,,drop=F]
     #Eliminate NAs in depth
@@ -2280,16 +2273,25 @@ setMethod("spc.plot.depth", signature="Spectra", function (object,X,maxSp=10,lab
   
   if(missing(lab_cex))
     lab_cex=1
-  if (!all(diff(myY)==0) & !(length(myY)<2)) {
+  
+  depth_diff = TRUE
+  if(length(myY)>1)
+    depth_diff = !all(diff(myY)==0) 
+  
+  mytype = "l"
+  if(length(myY)==1)
+    mytype = "p"
+  
+  if (depth_diff & !(length(myY)<1)) {
     if(length(u_units)==1){	
       #All columns to be plotted have the same unit 
       if(add)
-        matlines(myX,myY,type="l",xlab="",ylab="",ylim=ylim,...)
+        matlines(myX,myY,type=mytype,xlab="",ylab="",ylim=ylim,...)
       else{
         if (all(is.finite(xlim)))
-          matplot(myX,myY,type="l",cex.axis=lab_cex,xlab="",ylab="",ylim=ylim,xlim=xlim,lwd=lwd,...)
+          matplot(myX,myY,type=mytype,pch=19,cex.axis=lab_cex,xlab="",ylab="",ylim=ylim,xlim=xlim,lwd=lwd,...)
         else
-          matplot(myX,myY,type="l",cex.axis=lab_cex,xlab="",ylab="",ylim=ylim,lwd=lwd,...)						
+          matplot(myX,myY,type=mytype,pch=19,cex.axis=lab_cex,xlab="",ylab="",ylim=ylim,lwd=lwd,...)						
       }
       matpoints(myX,myY,xlab="",ylab="",pch=19,cex=0.4,ylim=ylim,...)					
       
@@ -2338,7 +2340,12 @@ setMethod("spc.plot.depth", signature="Spectra", function (object,X,maxSp=10,lab
 })
 
 spc.example_spectra = function(){
+  #Search in the package installation directory
   fnm = file.path(base::system.file(package = "geoSpectral"),"test_data","particulate_absorption.csv.gz")
+  #If the previous search fails, search the file in the source code directory
+  if(!file.exists(fnm))
+    fnm = file.path(base::system.file(package = "geoSpectral"),"inst","test_data","particulate_absorption.csv.gz")
+  
   abs = read.table(fnm,sep=",",header=TRUE)
   abs$STATION=factor(abs$STATION)
   abs[1:2,1:17] #Display only the first 2 rows and first 17 columns if the data frame
@@ -2351,6 +2358,377 @@ spc.example_spectra = function(){
   abs$TIME = as.POSIXct(as.character(abs$TIME),tz=tz) #Compute the time
   
   #Space and time columns are automatically found in the column names of inDF
-  myS<-Spectra(abs,Wavelengths=lbd,Units=Units,ShortName="a_nap")
+  myS<-Spectra(abs,Wavelengths=lbd,Units=Units,ShortName="a_nap",
+               LongName="Absorption coefficient by non-algal particles")
   myS
 }
+
+#' Read the NOMAD v2 bio-optical database
+#'
+#'@description
+#' Imports the NOMAD v2 database of the SeaBASS project. More information 
+#' about this dataset can be found at \link{http://seabass.gsfc.nasa.gov/wiki/article.cgi?article=NOMAD}
+#'
+#' @param infile \code{character} containing the name of the input file.
+#'
+#' @return Returns an object of class \code{data.frame}.
+#'
+#' @examples
+#' a = spc.Read_NOMAD_v2(fnm)
+#'
+#' spc.plot.plotly(ap, plot.max=15)
+spc.Read_NOMAD_v2 = function(skip.all.na.rows=TRUE) {
+  fnm = file.path(system.file(package = "geoSpectral"), "test_data","nomad_seabass_v2.a_2008200.txt.gz")
+  #Read data off disk
+  print(paste("Reading the NOMAD file", fnm, "off disk."))
+  mydata=read.table(fnm, header=T,sep=",", comment.char = "!")
+  
+  #Date-time conversion
+  cc=paste(mydata$year, mydata$month,mydata$day,sep="/")
+  bb=paste(mydata$hour, mydata$minute,mydata$second,sep=":")
+  a=paste(cc,bb)
+  a=strptime(a,"%Y/%m/%d %H:%M:%S")
+  mydata = mydata[,-(1:6)] #Remove cols year month day hour minute second
+  nms = names(mydata)
+  nms = gsub("lat","LAT",nms)
+  nms = gsub("lon","LON",nms)
+  names(mydata)=nms
+  mydata = cbind(mydata, TIME=as.POSIXct(a))
+  mydata[mydata==-999]=NA
+  
+  ShortNames = c("kd","lw","es","ap","ad","ag","a","bb","bbr")
+  idx=lapply(ShortNames, function(x) {
+    i = regexpr(paste0("^",x,"[[:digit:]][[:digit:]][[:digit:]]$"), names(mydata))
+    i = which(i!=-1)
+    i
+    #grep(glob2rx(paste0(x,"???")), names(mydata))
+  })
+  #Extract Spectral data
+  sp = lapply(idx, function(x) mydata[,x])
+  #Cleanup mydata from Spectral data
+  mydata = mydata [, -do.call(c, idx)]
+  
+  #Reorder columns
+  require(dplyr)
+  mydata = mydata %>% select(TIME, LON, LAT, cruise, flag, everything())
+  
+  out = lapply(1:length(ShortNames), function(x) {
+    #Find rows that do not contain NAs
+    lbd = as.numeric(gsub(ShortNames[x], "", names(sp[[x]])))
+    #out = mydata[complete.cases(mydata[,idx[[x]]]),c(names(mydata)[idx[[x]]],"datetime","latitude","longitude")]    out = Spectra(out, Wavelengths = lbd,ShortName=ShortNames[x],time="TIME",Units="1/m")
+    
+    out = cbind(sp[[x]], mydata)
+    
+    if (skip.all.na.rows){
+      #Find rows where there at least some data
+      na_idx = !apply((apply(sp[[x]], 2, is.na)),1,all)
+      out = out[na_idx,]
+    }
+    out = Spectra(out, Wavelengths = lbd,ShortName=ShortNames[x],time="TIME",Units="1/m")
+    spc.colnames(out)<-spc.cname.construct(out)
+    return (out)
+  })
+  names(out) = ShortNames
+  out
+}
+
+#'sp = spc.example_spectra()
+#'spc.plot.plotly(sp)
+#'spc.plot.plotly(sp,legend_field = "Spectra")
+#'spc.plot.plotly(sp,legend_field = "CAST")
+#'spc.plot.plotly(sp,legend_field = "NISKIN")
+#'spc.plot.plotly(sp,legend_field = "STATION")
+#'spc.plot.plotly(sp,legend_field = "anap_440")
+setGeneric (name= "spc.plot.plotly",
+            def=function(sp, plot.max=10,showlegend=FALSE,legend_field="row",hoverinfo="title",title=sp@LongName){standardGeneric("spc.plot.plotly")})
+setMethod("spc.plot.plotly", signature="Spectra", function (sp, plot.max=10,showlegend = FALSE,legend_field,hoverinfo,title) {
+  #library(reshape2)
+  # lbd = spc.getwavelengths(sp)
+  # kk = data.frame(Wavelength=lbd,t(sp@Spectra))
+  # kk=melt(kk,id.vars=1)
+  # p <- plotly::plot_ly(kk, x=~Wavelength, y=~value, type="scatter", mode="lines",color = ~variable,
+  #              colors="Spectral", opacity=0.5, line=list(width = 1)) #,evaluate = FALSE) #, colors=pal,line = list(opacity=0.1))
+  require(plotly)
+  if (plot.max > nrow(sp))
+    plot.max = nrow(sp)
+
+  idx = floor(seq(1, nrow(sp), length.out = plot.max))
+  if (legend_field %in% names(sp)) {
+    legend_field = paste(legend_field, sp[[legend_field]])
+  }
+  else
+    legend_field = paste(legend_field, 1:nrow(sp))
+  
+  ylab = paste(sp@ShortName, " [", sp@Units, "]", sep="")
+  xlab = paste("Wavelength [", sp@WavelengthsUnit, "]", sep="")
+  p <- plot_ly()
+  for(I in 1:length(idx)) {  
+    p <- add_trace(p, x=sp@Wavelengths, y=sp@Spectra[idx[I],],type = "scatter", mode="lines",
+                   name=legend_field[idx[I]], hoverinfo=hoverinfo
+                   #,marker=list(color=line[['color']])
+                   )
+  }
+  p = layout(p,
+             title = title,
+             hovermode = "closest",
+             xaxis = list(title = xlab), #rangeslider = list(type = "linear")),
+             yaxis = list(title = ylab),
+             showlegend=showlegend
+             )
+  p
+})
+
+#' Plot a Spectra object data with respect to time
+#' @description
+#' Plot a \code{Spectra} object with respect to time
+#' @param sp A \code{Spectra} object
+#' @param column number or name, default value is 10.
+#' 
+#' @examples 
+#' spc.plot.time.plotly(sp)
+#' spc.plot.time.plotly(sp, plot.max = 3)
+#' spc.plot.time.plotly(sp, c("anap_450","anap_550","anap_650"))
+setGeneric (name= "spc.plot.time.plotly",
+            def=function(sp, column, plot.max=10,showlegend=FALSE,hoverinfo="name",title=sp@LongName){standardGeneric("spc.plot.time.plotly")})
+setMethod("spc.plot.time.plotly", signature="Spectra", function (sp, column, plot.max=10,showlegend,hoverinfo,title) {
+  require(plotly)
+  if(missing("column")){
+    if(ncol(sp)<10)
+      idx = 1:ncol(sp)
+    else
+      idx = round(seq(1, ncol(sp), length.out = plot.max))
+    
+    column = colnames(sp@Spectra)[idx]
+  }
+  ylab = paste(sp@ShortName, " [", sp@Units, "]", sep="")
+  myTime = time(sp@time)
+  
+  p=plot_ly(x = myTime , y = sp[[column[1]]], type="scatter", mode = "lines + markers",name=column[1])
+  if(length(column)>1)
+    for(I in 2:length(column))
+      p=add_trace(p, x = myTime , y = sp[[column[I]]], 
+                  type="scatter", mode = "lines + markers", 
+                  name=column[I], hoverinfo=hoverinfo) 
+  p = layout(p,
+             title = title,
+             hovermode = "closest",
+             xaxis = list(title = "Time",
+                          rangeslider = list(type = "date")),
+             yaxis = list(title = ylab),
+             showlegend=showlegend
+             )
+  p
+})
+
+#########################################################################
+#spc.plot.depth.plotly
+#########################################################################
+#' Display a Spectra object
+#' @description
+#' Plot a \code{Spectra} object with respect to depth
+#' @examples 
+#' BL = spc.makeSpcList(sp,"CAST")
+#' p1<-spc.plot.depth.plotly(BL[[5]])
+#' #p1<-layout(p1,title=paste("CAST =", BL[[5]]$CAST[1]))
+#' p2<-spc.plot.depth.plotly(BL[[4]])
+#' #p2<-layout(p2,title=paste("CAST =", BL[[4]]$CAST[1]))
+#' p <- subplot(p1, p2,  margin = 0.05, shareY=TRUE,shareX=TRUE,titleX=TRUE,titleY=TRUE)
+#' p <- layout(p, showlegend = T, 
+#' annotations = list(
+#' list(x = 0.2 , y = 1.05, text = BL[[5]]$CAST[1], showarrow = F, xref='paper', yref='paper'),
+#' list(x = 0.8 , y = 1.05, text = BL[[4]]$CAST[1], showarrow = F, xref='paper', yref='paper')))
+#' p
+#' @param sp A \code{Spectra} object
+#' @param column Number or name , defoult value is 10 if a number or name has not been entered
+setGeneric (name= "spc.plot.depth.plotly",
+            def=function(sp, column, plot.max=10,showlegend=FALSE,hoverinfo="name",title=sp@LongName){standardGeneric("spc.plot.depth.plotly")})
+setMethod("spc.plot.depth.plotly", signature="Spectra", function (sp, column, plot.max=10,showlegend,hoverinfo,title) {
+  require(plotly)
+  if(missing("column")){
+    if(ncol(sp)<10)
+      idx = 1:ncol(sp)
+    else
+      idx = round(seq(1,ncol(sp), length.out = plot.max))
+    
+    column = colnames(sp@Spectra)[idx]
+  }
+  xlab = paste(sp@ShortName, " [", sp@Units, "]", sep="")
+  
+  p=plot_ly(x = sp[[column[1]]] , y = sp$DEPTH, type="scatter", mode = "lines + markers",name=column[1])
+  if(length(column)>1)
+    for(I in 2:length(column))
+      p=add_trace(p, x = sp[[column[I]]] , y =sp$DEPTH, type="scatter", mode = "lines + markers", 
+                  name=column[I], hoverinfo=hoverinfo) 
+  # layout(yaxis = list(autorange = "reversed"))
+  p = layout(p,
+             title = title,
+             hovermode = "closest",
+             xaxis = list(title = xlab),
+             yaxis = list(title = "Depth [ m ]", 
+                          rangeslider = list(type = "linear"),
+                          autorange = "reversed"),
+             showlegend=showlegend
+             )
+  p 
+})
+
+#########################################################################
+#spc.plot.map.plotly
+#########################################################################
+#' Display a Spectra object
+#' @description
+#' Create a point map with ploty engine using \code{Spectra} rows 
+#' @examples 
+#' sp <- spc.example_spectra()
+#' spc.plot.map.plotly(sp)
+#' 
+#' @param sp A \code{Spectra} object
+#' @param hover_field A chracter, colmn names of sp object to be used  in hover box
+#' @param opacity The opacity transparency of the glyph 
+#' between 0 (transparent) and 1 (opaque)
+#' @param color Determine color of points
+#' 
+#' 
+#' 
+setGeneric (name= "spc.plot.map.plotly",
+            def=function(sp,hover_field="row", color="#FF0000", opacity=1){standardGeneric("spc.plot.map.plotly")})
+setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, hover_field, color, opacity) {
+  require(plotly)
+  bbx = sp@sp@bbox
+  bbx[,2] =  bbx[,2] + (0.04 * abs(bbx[,2]))
+  if(bbx[2,2]>90)
+    bbx[2,2]<-89
+  bbx[,1] =  bbx[,1] - (0.04 * abs(bbx[,1]))
+  if(bbx[2,1]< -90)
+    bbx[2,1]<- -89
+  
+  g <- list(
+    #scope = 'north america',
+    showland = TRUE,
+    landcolor = toRGB("grey83"),
+    subunitcolor = toRGB("white"),
+    countrycolor = toRGB("white"),
+    showlakes = TRUE,
+    lakecolor = toRGB("blue"),
+    showrivers = TRUE,
+    showsubunits = TRUE,
+    showcountries = TRUE,
+    resolution = 50,
+    projection = list(
+      type = 'conic conformal',
+      rotation = list(
+        lon = -100
+      )
+    ),
+    lonaxis = list(
+      showgrid = TRUE,
+      gridwidth = 0.5,
+      range = c(bbx[1,1], bbx[1,2]),
+      dtick = 5
+    ),
+    lataxis = list(
+      showgrid = TRUE,
+      gridwidth = 0.5,
+      range = c(bbx[2,1],bbx[2,2]),
+      dtick = 5
+    )
+  )
+    
+  if(length(color==1))
+    color = rep(color, nrow(sp))
+  p <- plot_ly(lat = sp@sp@coords[,"LAT"], lon = sp@sp@coords[,"LON"], 
+               #text = hover, color = Globvalue,marker = m
+               type = 'scattergeo', color=color, opacity=opacity
+  ) 
+  p <- layout(p, geo = g, showlegend=FALSE)
+  p
+})
+
+###########################################################
+# spc.plot.map.leaflet
+###########################################################
+#' Display a Spectra object
+#' @description
+#' Create a point map with leaflet engine using \code{Spectra} rows 
+#' @param sp \code{Spectra} object
+#' @param color Determine color of points
+#' @param hoverA chracter or vector of strings giving column 
+#' names of \code{Spectra} object. This information will be displayed when 
+#' hovering over the glyph
+#' @param opacity The opacity transparency of the glyph 
+#' between 0 (transparent) and 1 (opaque)
+#' @param weight Stroke width in pixels
+#' @examples 
+#' sp=spc.example_spectra()
+#' spc.plot.map.leaflet(sp)
+#'
+ setGeneric (name= "spc.plot.map.leaflet",
+            def=function(sp,hover_field = "row",color = "#FF0000",opacity = 1,  weight=5){standardGeneric("spc.plot.map.leaflet")})
+ setMethod("spc.plot.map.leaflet", signature="Spectra", function (sp,hover_field = "row",color = "#FF0000",opacity = 1,  weight=5) {
+  require(leaflet)
+
+   hover_field = paste0(hover_field, 1:nrow(sp))
+  
+  m = leaflet() %>% 
+    addCircles(lng = sp@sp@coords[,"LON"], lat=sp@sp@coords[,"LAT"], 
+               opacity=opacity,color=color, weight=5) %>% 
+    addTiles()# %>%
+  #addPopups(lng = sp@sp@coords[,"LON"], lat=sp@sp@coords[,"LAT"], 
+  # popup = legend_field  )
+  #addLegend(pal = qpal, values = , opacity = 1)
+  m
+  
+
+ })
+
+###########################################################
+# spc.plot.map.rbokeh
+###########################################################
+#' Display a Spectra object
+#' @description
+#' Create a point map with rbokeh engine using \code{Spectra} rows 
+#' @param sp \code{Spectra} object
+#' @param color Determine color of points
+#' @param legend not implimented yet
+#' @param hover String or vector of strings giving column 
+#' names of \code{Spectra} object. This information will be displayed when 
+#' hovering over the glyph
+#' @param opacity The opacity transparency of the glyph 
+#' between 0 (transparent) and 1 (opaque)
+#' @param glyph Value(s) or field name of the glyph to
+#'  use \code{\link{point_types}}
+#' @examples 
+#' sp=spc.example_spectra()
+#' spc.plot.map.rbokeh(sp, hover = "Snap")
+#' spc.plot.map.rbokeh(sp)
+setGeneric (name= "spc.plot.map.rbokeh",
+            def=function(sp,glyph = 2,color = "#FF0000", legend=NULL,hover="row",opacity =1){standardGeneric("spc.plot.map.rbokeh")})
+setMethod("spc.plot.map.rbokeh", signature="Spectra", function (sp,glyph,color, legend,hover,opacity ) {
+  require(rbokeh)
+  require(maps)
+  #a=sp$Snap
+  df = data.frame(LON = sp@sp@coords[,"LON"])
+  df$LAT = sp@sp@coords[,"LAT"]
+  df$color = color
+  df$opacity  = opacity
+  df$row = 1:nrow(sp)
+  for (I in 1:length(hover))
+  if (hover[I] %in% names(sp))
+    df[hover[I]] = sp[[hover[I]]]
+ 
+   bbx = sp@sp@bbox
+  bbx[,2] =  bbx[,2] + (0.04 * abs(bbx[,2]))
+  if(bbx[2,2]>90)
+    bbx[2,2]<-89
+  bbx[,1] =  bbx[,1] - (0.04 * abs(bbx[,1]))
+  if(bbx[2,1]< -90)
+    bbx[2,1]<- -89
+  
+  figure(xlim=c(bbx[1,1],bbx[1,2]),ylim=c(bbx[2,1],bbx[2,2]),padding_factor = 0) %>%
+    #gmap(lat = mean(sp@sp@bbox[2,]), lng = mean(sp@sp@bbox[1,]),zoom = 12, width = 680, height = 600)
+    ly_map("world", col = "gray") %>%
+    #ly_points(x=sp@sp@coords[,"LON"], y=sp@sp@coords[,"LAT"],legend=legend,hover=hover )
+    ly_points(x=LON, y=LAT, data=df, color=color,fill_alpha=opacity,
+              line_alpha=opacity,hover=names(df)[5:length(names(df))] )
+})
+

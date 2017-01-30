@@ -2,20 +2,23 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.plot}
 \alias{spc.plot}
-\title{Plotting spectra object}
+\title{Plotting \code{Spectra} object}
 \usage{
 spc.plot(x,...)
 }
 \arguments{
-\item{x}{a spectral data}
+\item{x}{a \code{Spectra} data}
 }
 \description{
-Generating plot of the contents of a spectra object
+Generating plot of the contents of a \code{Spectra} object
 }
 \examples{
 x <- spc.example_spectra()
 spc.plot(x)
 
 
+}
+\seealso{
+\code{\link{spc.lines}}
 }
 
