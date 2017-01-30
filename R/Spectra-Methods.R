@@ -1398,7 +1398,7 @@ setMethod("spc.data2header", signature = "Spectra",
 #' Get  the header for data of each element  with a column
 #'
 #' @usage 
-#' spc.data2header(object,headerfield,dataname )
+#' spc.header2data(object,headerfield,dataname,...)
 #'
 #' 
 #' @param dataname list \code{Spectra} object
@@ -1410,6 +1410,10 @@ setMethod("spc.data2header", signature = "Spectra",
 #' If header element has length >1, its type is checked. If it is "character",
 #' its elements will be pasted using paste(...,collapse="|"). If it is another 
 #' type, only the first element will be taken.  
+#' @examples 
+#' 
+#' 
+#' 
 #' 
 #If header element has length >1, its type is checked. If it is "character",
 #its elements will be pasted using paste(...,collapse="|"). If it is another 
