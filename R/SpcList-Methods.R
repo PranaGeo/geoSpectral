@@ -583,22 +583,30 @@ setMethod("spc.data2header", signature = "list",
 			object@.Data=temp
 			return(object)
 		})
+
 #########################################################################
 # Method : sort
 #########################################################################
-#' Sorting   elements of a spclist  
+#' Sort a SpcList object
 #' @description
-#' Sort elements of a spclist  into ascending or descending order
-#'
-#' @usage 
-#' spc.data2header(x, which.col, decreasing = FALSE, ...)
-#' @param decreasing gical. Should the sort be increasing or decreasing
-#' @param ... arguments to be passed to or from methods
-#' @param x \code{spclist} object 
-#' @examples  
-
-setMethod("sort", signature="list", definition= function (x, which.col, decreasing = FALSE, ...){
-			newdata = lapply(x, sort, decreasing=decreasing, ...)
+#' Applies the sort() method for \code{Spectra} class to every element of a \code{SpcList} object. 
+#' All the \code{Spectra} objects within the \code{SpcList} object gets sorted according to the
+#' specified criteria.
+#' @param x A \code{SpcList} object
+#' @param which.col A character, defining the name of the column to be used in the sorting
+#' @param decreasing Logical. If TRUE, then the rows are sorted in decreasing order. Passed on to the
+#' sort.idx() function from the base package. Default is FALSE.
+#' @param na.last for controlling the treatment of NAs. Passed on to the
+#' sort.idx() function from the base package. Default is NA.
+#' @examples
+#' sp <- spc.example_spectra()
+#' #Create an SpcList object (one separate Spectra object for each unique STATION)
+#' spL <- spc.makeSpcList(sp,"STATION")
+#' #Sort all Spectra objects with respect to their rows using the CAST column
+#' spL.s <- sort(spL,which.col="CAST",decreasing=TRUE)
+#' lapply(spL.s, function(x) as.character(x[["CAST"]]))
+setMethod("sort", signature="SpcList", definition= function (x, decreasing = FALSE, na.last=NA, which.col, ...){
+			newdata = lapply(x, sort, which.col=which.col, decreasing=decreasing, na.last=na.last, ...)
 			x@.Data = newdata
 			return(x)
 		})

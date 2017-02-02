@@ -1411,6 +1411,10 @@ setMethod("spc.data2header", signature = "Spectra",
 #' its elements will be pasted using paste(...,collapse="|"). If it is another 
 #' type, only the first element will be taken.  
 #' @examples 
+#' sp <- spc.example_spectra()
+#' spc.updateheader(sp, "Zone")<- "ZoneA"
+#' sp <- spc.header2data(sp, "Zone")
+#' sp$Zone
 #' 
 #' 
 #' 
@@ -2797,3 +2801,25 @@ setMethod("spc.plot.map.rbokeh", signature="Spectra", function (sp,glyph,color, 
               line_alpha=opacity,hover=names(df)[5:length(names(df))] )
 })
 
+#' Sort a Spectra object
+#' @description
+#' Sort a \code{Spectra} object with respect to its rows with respect to values of one 
+#' given column (specified by which.col). Sorting with respect to multiple columns is not implemented yet.
+#' @param x A \code{Spectra} object
+#' @param which.col A character, defining the name of the column to be used in the sorting
+#' @param decreasing Logical. If TRUE, then the rows are sorted in decreasing order. Passed on to the
+#' sort.idx() function from the base package. Default is FALSE.
+#' @param na.last for controlling the treatment of NAs. Passed on to the
+#' sort.idx() function from the base package. Default is NA.
+#' @examples 
+#' sp <- spc.example_spectra()
+#' sp2 <- sort(sp, which.col="STATION")
+#' sp2$STATION
+#' sp2 <- sort(sp, which.col="STATION", decreasing=TRUE)
+#' sp2$STATION
+setMethod("sort", signature="Spectra", definition= function (x, decreasing = FALSE, na.last=NA, which.col, ...){
+  srt <- sort.int(x[[which.col]], decreasing=decreasing, index.return = TRUE, na.last=na.last, ...)
+  x<- x[srt$ix]
+  validObject(x)
+  return(x)
+})
