@@ -10,16 +10,16 @@ spc.plot.map.leaflet(sp, hover_field = "row", color = "#FF0000",
 \arguments{
 \item{sp}{\code{Spectra} object}
 
+\item{hover_field}{A chracter or vector of strings giving column 
+names of \code{Spectra} object. This information will be displayed when 
+hovering over the glyph}
+
 \item{color}{Determine color of points}
 
 \item{opacity}{The opacity transparency of the glyph 
 between 0 (transparent) and 1 (opaque)}
 
 \item{weight}{Stroke width in pixels}
-
-\item{hoverA}{chracter or vector of strings giving column 
-names of \code{Spectra} object. This information will be displayed when 
-hovering over the glyph}
 }
 \description{
 Create a point map with leaflet engine using \code{Spectra} rows
