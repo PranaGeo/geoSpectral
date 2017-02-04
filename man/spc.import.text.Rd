@@ -4,12 +4,14 @@
 \alias{spc.import.text}
 \title{Importing  spectral data from a text file}
 \usage{
-spc.import.text(filename, sep)
+spc.import.text(filename, sep,...)
 }
 \arguments{
 \item{filename}{Name of input text file}
 
 \item{sep}{Field delimiter to be used}
+
+\item{...}{arguments to be passed to or from other methods.}
 }
 \description{
 Spectral data already saved by spc.export.text() can be imported back 

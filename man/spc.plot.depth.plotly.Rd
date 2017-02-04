@@ -11,6 +11,14 @@ spc.plot.depth.plotly(sp, column, plot.max = 10, showlegend = FALSE,
 \item{sp}{A \code{Spectra} object}
 
 \item{column}{Number or name , defoult value is 10 if a number or name has not been entered}
+
+\item{plot.max}{numeric value for a maximum number of data in plot}
+
+\item{showlegend}{logical, to display legend or not, default is FALSE}
+
+\item{hoverinfo}{a chracter, info about  \code{Spectra} object to be used  in hover box}
+
+\item{title}{a chracter string, title for plot}
 }
 \description{
 Plot a \code{Spectra} object with respect to depth

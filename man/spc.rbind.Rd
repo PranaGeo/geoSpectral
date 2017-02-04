@@ -4,11 +4,13 @@
 \alias{spc.rbind}
 \title{Combine \code{Spectra} Objects by Rows}
 \usage{
-spc.cbind(...)
-spc.rbind(...)
+spc.cbind(...,compressHeader)
+spc.rbind(...,compressHeader)
 }
 \arguments{
 \item{...}{\code{Spectra} object}
+
+\item{compressHeader}{Compress the header (make multiple all-equal header elements as ONE, default value is TRUE}
 }
 \value{
 \code{Spectra} object
@@ -19,8 +21,7 @@ Take a \code{Spectra} objects and combine by rows
 \examples{
 x <- spc.example_spectra()
 nrow(x)  #[1] 26
-
-
+x2=spc.rbind(x,x)
 nrow(x2)  #[1] 52
 
 
