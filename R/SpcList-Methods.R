@@ -341,8 +341,8 @@ setMethod("names", "SpcList", function(x){
 			    mobject[[x@by]][1]
 			  else 
 			    if(class(mobject)=="Spectra") mobject@ShortName[1]	else class(mobject) 
-					})
-		})
+			})
+})
 
 #########################################################################
 # Method : $
@@ -638,6 +638,20 @@ setMethod("spc.lapply", signature="SpcList", definition= function (X, FUN, ...) 
 			validObject(X)
 			return(X)
 		})
+
+h2d = function(object,headerfield,dataname,compress=TRUE,...) {
+  if(missing(dataname))
+    dataname=headerfield	
+  
+  X = lapply(object,function(x,...){ #
+    if(headerfield %in% names(x@header))
+      x = spc.header2data(x,headerfield=headerfield,dataname=dataname,compress=compress,...)
+    else
+      x
+  })
+  return(X)
+}
+
 #########################################################################
 # Method : spc.header2data
 #########################################################################
@@ -646,7 +660,7 @@ setMethod("spc.lapply", signature="SpcList", definition= function (X, FUN, ...) 
 #' Get  the header for data of each element  with a column
 #'
 #' @usage 
-#' spc.data2header(object,headerfield,dataname,compress=TRUE,...)
+#' spc.header2data(object,headerfield,dataname,compress=TRUE,...)
 #'
 #' 
 #' @param dataname list \code{spclist} object
@@ -663,28 +677,18 @@ setMethod("spc.lapply", signature="SpcList", definition= function (X, FUN, ...) 
 #' spc.updateheader(BL[[1]], "Zone")<- "ZoneA"
 #' BL[[1]] <- spc.header2data(BL[[1]], "Zone")
 #' BL[[1]]$Zone
-#' 
-#If header element has length >1, its type is checked. If it is "character",
-#its elements will be pasted using paste(...,collapse="|"). If it is another 
-#type, only the first element will be taken.  .
-h2d = function(object,headerfield,dataname,compress=TRUE,...) {
-	if(missing(dataname))
-		dataname=headerfield	
+#' @name spc.header2data
+NULL
 
-	X = lapply(object,function(x,...){ #
-				if(headerfield %in% names(x@header))
-					x = spc.header2data(x,headerfield=headerfield,dataname=dataname,compress=compress,...)
-				else
-					x
-			})
-	return(X)
-}
+#' @name spc.header2data
 setMethod("spc.header2data", signature="list", definition=
             h2d)
+
+#' @name spc.header2data
 setMethod("spc.header2data", signature="SpcList", 
 		definition=function(object,headerfield,dataname,compress=TRUE,...){
 			by = object@by	
-			X <- .h2d(object,headerfield=headerfield,dataname=dataname,compress=compress,...)
+			X <- h2d(object,headerfield=headerfield,dataname=dataname,compress=compress,...)
 			X <- as(X, "SpcList")
 			X@by = by
 			validObject(X)
