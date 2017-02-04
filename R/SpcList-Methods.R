@@ -185,17 +185,16 @@ setMethod("spc.plot.overlay", "SpcList", function (object, lab_cex=1,leg_idx=T, 
 #' @description
 #' Generating plot of the contents of a \code{SpcList} object overlay with respect to depth
 #'
-#' 
 #' @usage 
 #' spc.plot.depth.overlay(object, X, lab_cex, ...)
 #' @param object	 a \code{SpcList} data 
-#' @param X column number or index 
+#' @param X column name or index 
 #' @param lab_cex vector of character expansion sizes, used cyclically
 #' @param ...  any further arguments of plot
 #' @examples
 #' sp <- spc.example_spectra()
 #' BL = spc.makeSpcList(sp,"CAST")
-#' spc.plot.depth.overlay(BL)
+#' spc.plot.depth.overlay(BL, "anap_555")
 #' 
 #' 
 setGeneric (name= "spc.plot.depth.overlay",
@@ -325,7 +324,6 @@ setMethod("subset",  signature="SpcList",
 #' @description
 #' Retrieve   names of a \code{SpcList} object
 #'
-#' 
 #' @usage 
 #' spc.colnames(x)
 #' @param x  A \code{SpcList} object
@@ -337,11 +335,12 @@ setMethod("subset",  signature="SpcList",
 #' BL = spc.makeSpcList(sp,"CAST")
 #' names(BL)
 #' 
-
-
 setMethod("names", "SpcList", function(x){
 			sapply(x, function(mobject) {
-						if(class(mobject)=="Spectra") mobject@ShortName[1]	else class(mobject) 
+			  if (!is.null(x@by) | !is.na(x@by))
+			    mobject[[x@by]][1]
+			  else 
+			    if(class(mobject)=="Spectra") mobject@ShortName[1]	else class(mobject) 
 					})
 		})
 

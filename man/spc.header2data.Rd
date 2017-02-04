@@ -4,7 +4,7 @@
 \alias{spc.header2data}
 \title{Get header for data}
 \usage{
-spc.data2header(object,headerfield,dataname )
+spc.header2data(object,headerfield,dataname,...)
 }
 \arguments{
 \item{object}{A \code{Spectra} object}
@@ -31,5 +31,9 @@ sp <- spc.example_spectra()
 spc.updateheader(sp, "Zone")<- "ZoneA"
 sp <- spc.header2data(sp, "Zone")
 sp$Zone
+
+
+
+
 }
 
