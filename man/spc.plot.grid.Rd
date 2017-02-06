@@ -29,8 +29,8 @@ Generating plot of the contents of a \code{SpcList} object in a grid
 }
 \examples{
 sp <- spc.example_spectra()
- BL = spc.makeSpcList(sp,"CAST")
- spc.plot.grid(BL,"spc.plot",3,2)
+BL = spc.makeSpcList(sp,"CAST")
+spc.plot.grid(BL,"spc.plot",3,2)
 
 }
 

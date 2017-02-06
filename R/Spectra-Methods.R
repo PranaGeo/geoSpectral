@@ -545,8 +545,8 @@ setReplaceMethod("spc.colnames", signature = "Spectra", def = function (x,value)
 #' @usage 
 #' spc.plot(x, Y, maxSp, lab_cex,xlab,ylab,type,pch,lwd,cex,...)
 #' @param x and Y	 a \code{Spectra} data 
-#' @param xlab title for x  axe, as in plot.
-#' @param ylab title for y axe, as in plot.
+#' @param xlab title for x  axix, as in plot().
+#' @param ylab title for y axis, as in plot().
 #' @param pch character string or vector of 1-characters or integers for plotting characters
 #' @param ...  any further arguments to be passed to matplot
 #' @param lab_cex vector of character expansion sizes, used cyclically
@@ -1652,37 +1652,48 @@ setMethod("rep", signature(x = "Spectra"),
 #'  Interpolate spectral values 
 #' @description
 #' Estimate spectral data at a new set of wavelengths through interpolation
+#' using approx().
 #'
 #' @usage 
 #' spc.interp.spectral(source1,target_lbd,show.plot=FALSE)
 #' 
 #' @param source1  A \code{Spectra} object 
 #' @param  target_lbd numeric vector giving desired wavelengths  
-#' @param show.plot logical TRUE if a graphical representation is required 
+#' @param show.plot logical TRUE for a graphical representation of the first Spectra row.
+#' @param rule an integer (of length 1 or 2) describing how interpolation 
+#' is to take place outside the interval [min(x), max(x)]. See approx().
+#' @param ... further arguments to pass on to approx(). 
 #' @examples 
 #' sp=spc.example_spectra()
 #' lbd = as.numeric(c(412,440,490,555,670))
-#' spc.interp.spectral(sp[,lbd],c(430,450,500),show.plot=TRUE)
+#' sp2 = spc.interp.spectral(sp[,lbd],c(430,450,500))
+#' spc.plot.overlay(SpcList(list(sp,sp2)))
+#' 
+#' #Quick Plot only the first row
+#' spc.interp.spectral(sp[,lbd],c(430,520,500),show.plot=TRUE)
 #' 
 setGeneric (name= "spc.interp.spectral",
             def=function(source1,target_lbd,...){standardGeneric("spc.interp.spectral")})
 setMethod("spc.interp.spectral", signature = "Spectra", 
-          def = function (source1,target_lbd,show.plot=FALSE){
+          def = function (source1,target_lbd,show.plot=FALSE, rule = 2, ...){
             if(missing(target_lbd))
               stop("The input argument 'target_lbd' is missing")
             
+            inArgs = list(...)
+            if (!("rule" %in% names(inArgs)))
+              inArgs$rule=rule
             out = source1
             lbd_source1 = spc.getwavelengths(source1)
             DF = matrix(nrow=nrow(source1),ncol=length(target_lbd))
             my = list()
-            for(x in 1:nrow(DF)) {
-              my[[x]] = approx(lbd_source1, source1@Spectra[x,],xout=target_lbd,rule=2)
-              DF[x,] = t(my[[x]]$y)
+            for(I in 1:nrow(DF)) {
+              outArgs <- list(x=lbd_source1, y=source1@Spectra[I,],xout=target_lbd)
+              my[[I]] = do.call(approx, c(outArgs, inArgs))
+              DF[I,] = t(my[[I]]$y)
             }
             if(show.plot){
-              browser()
               plot(lbd_source1, source1@Spectra[1,],type="b",ylab=source1@LongName,xlab="Wavelength",pch="o")
-              points(my[[x]]$x,my[[x]]$y,col="green",cex=1)
+              points(my[[1]]$x,my[[1]]$y,col="red",cex=1)
               grid(col="black")
             }
             out@Spectra = DF
