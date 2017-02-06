@@ -9,7 +9,7 @@ spc.plot.depth.overlay(object, X, lab_cex, ...)
 \arguments{
 \item{object}{a \code{SpcList} data}
 
-\item{X}{column number or index}
+\item{X}{column name or index}
 
 \item{...}{any further arguments of plot}
 
@@ -21,7 +21,7 @@ Generating plot of the contents of a \code{SpcList} object overlay with respect 
 \examples{
 sp <- spc.example_spectra()
 BL = spc.makeSpcList(sp,"CAST")
-spc.plot.depth.overlay(BL)
+spc.plot.depth.overlay(BL, "anap_555")
 
 
 }
