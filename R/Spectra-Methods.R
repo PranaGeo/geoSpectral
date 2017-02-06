@@ -540,19 +540,19 @@ setReplaceMethod("spc.colnames", signature = "Spectra", def = function (x,value)
 #'  Plotting \code{Spectra} object
 #'
 #' @description
-#' Generating plot of the contents of a \code{Spectra} object
+#' Generating plot of the intensity of a measurement inside a \code{Spectra} object with respect to the wavelength.
 #'
-#' 
 #' @usage 
 #' spc.plot(x, Y, maxSp, lab_cex,xlab,ylab,type,pch,lwd,cex,...)
 #' @param x and Y	 a \code{Spectra} data 
-#' @param xlab title for x  axe, as in plot.
-#' @param ylab title for y axe, as in plot.
+#' @param xlab title for x  axix, as in plot().
+#' @param ylab title for y axis, as in plot().
 #' @param pch character string or vector of 1-characters or integers for plotting characters
-#' @param ...  any further arguments of plot
+#' @param ...  any further arguments to be passed to matplot
 #' @param lab_cex vector of character expansion sizes, used cyclically
 #' @param lwd vector of line widths
-#' @param  type character string (length 1 vector) or vector of 1-character strings indicating the type of plot for each column of y, 
+#' @param type character string (length 1 vector) or vector of 1-character strings indicating 
+#' the type of plot for each column of y. See help of matplot() or plot().
 #' 
 #' @seealso \code{\link{spc.lines}}
 #' @examples
@@ -561,8 +561,7 @@ setReplaceMethod("spc.colnames", signature = "Spectra", def = function (x,value)
 #' 
 #' 
 setGeneric("spc.plot",function(x,Y,...){standardGeneric("spc.plot")})
-setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="l",
-                                           pch=19,lwd=2,cex=0.3,...){						
+setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,type="l",pch=19,lwd=2,cex=0.3,...){						
   if (length(x@InvalidIdx)==0)
     x@InvalidIdx = rep(FALSE,nrow(x@Spectra))
   
@@ -595,22 +594,44 @@ setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="
   if(class(YY)=="matrix" && nrow(YY)!=length(x@Wavelengths))
     YY = t(YY)
   
-  xlim = range(x@Wavelengths)
-  if (x@WavelengthsUnit=="cm-1")
+  inargs_in <- list(...)
+  inargs_out <- c(list(x=x@Wavelengths,y=YY), inargs_in)
+
+  if(! ("xlim" %in% names(inargs_in))){
+    xlim = range(x@Wavelengths)
+    if (x@WavelengthsUnit=="cm-1")
       xlim = rev(xlim)
-  
-  matplot(x@Wavelengths,YY,#lab=x@Wavelengths,#xaxt="n",
-          ylab= "",xlab="",type=type,xlim=xlim,pch=pch,cex=cex,cex.axis=lab_cex,lwd=lwd,...)
-  
-  if(missing(ylab)){
-    if(1)#(x@LongName[1]=="spvar2 longname")
-      ylab = bquote(.(x@ShortName)*", ["*.(x@Units[1])*"]")
-    else
-      ylab = bquote(.(x@LongName[1])*", ["*.(x@Units[1])*"]")
-    #	ylab = "Scalar~quantum~irradiance~mu .mol.m^{-2}~s^{-1}"
+    inargs_out$xlim <- xlim
   }
-  if(missing(xlab))
+  
+  # if("ylim" %in% names(inargs_in))
+  #   inargs_out <- c(list(ylim=inargs_in$ylim), inargs_out)
+  inargs_out <- c(list(xlab=""), inargs_out)
+  inargs_out <- c(list(ylab=""), inargs_out)
+  if(! ("type" %in% names(inargs_in)))
+    inargs_out <- c(list(type=type), inargs_out)
+  if(! ("pch" %in% names(inargs_in)))
+    inargs_out <- c(list(pch=pch), inargs_out)
+  if(! ("cex" %in% names(inargs_in)))
+    inargs_out <- c(list(cex=cex), inargs_out)
+  if(! ("cex.axis" %in% names(inargs_in)))
+    inargs_out <- c(list(cex.axis=lab_cex), inargs_out)
+  if(! ("lwd" %in% names(inargs_in)))
+    inargs_out <- c(list(lwd=lwd), inargs_out)
+
+  do.call(matplot, inargs_out)
+  # matplot(x@Wavelengths,YY,#lab=x@Wavelengths,#xaxt="n",
+  #         ylab= "",xlab="",type=type,xlim=xlim,pch=pch,cex=cex,cex.axis=lab_cex,lwd=lwd,...)
+
+  if((!("ylab" %in% names(inargs_in))))
+    ylab = bquote(.(x@ShortName)*", ["*.(x@Units[1])*"]")
+  else
+    ylab=inargs_in$ylab
+  
+  if((!("xlab" %in% names(inargs_in))))
     xlab=bquote("Wavelength ["*.(x@WavelengthsUnit)*"]")
+  else
+    xlab=inargs_in$xlab
   
   mtext(xlab,side=1,line=2,cex=lab_cex)			
   mtext(ylab,side=2,line=2,cex=lab_cex)
@@ -1631,6 +1652,7 @@ setMethod("rep", signature(x = "Spectra"),
 #'  Interpolate spectral values 
 #' @description
 #' Estimate spectral data at a new set of wavelengths through interpolation
+#' using approx().
 #'
 #' @usage 
 #' spc.interp.spectral(source1,target_lbd,show.plot=FALSE)
@@ -1638,9 +1660,14 @@ setMethod("rep", signature(x = "Spectra"),
 #' @param source1  A \code{Spectra} object 
 #' @param  target_lbd numeric vector giving desired wavelengths  
 #' @param show.plot logical TRUE if a graphical representation is required 
+#' @param ... further arguments to pass on to approx(). 
 #' @examples 
 #' sp=spc.example_spectra()
 #' lbd = as.numeric(c(412,440,490,555,670))
+#' sp2 = spc.interp.spectral(sp[,lbd],c(430,450,500))
+#' spc.plot.overlay(SpcList(list(sp,sp2)))
+#' 
+#' #Quick Plot only the first row
 #' spc.interp.spectral(sp[,lbd],c(430,450,500),show.plot=TRUE)
 #' 
 setGeneric (name= "spc.interp.spectral",
@@ -1660,7 +1687,7 @@ setMethod("spc.interp.spectral", signature = "Spectra",
             }
             if(show.plot){
               plot(lbd_source1, source1@Spectra[1,],type="b",ylab=source1@LongName,xlab="Wavelength",pch="o")
-              points(my[[x]]$x,my[[x]]$y,col="green",cex=0.4)
+              points(my[[x]]$x,my[[1]]$y,col="red",cex=1)
               grid(col="black")
             }
             out@Spectra = DF

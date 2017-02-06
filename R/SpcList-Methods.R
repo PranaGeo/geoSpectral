@@ -51,8 +51,8 @@
 #' 
 #' @examples
 #' sp <- spc.example_spectra()
-#'  BL = spc.makeSpcList(sp,"CAST")
-#'  spc.plot.grid(BL,"spc.plot",3,2)
+#' BL = spc.makeSpcList(sp,"CAST")
+#' spc.plot.grid(BL,"spc.plot",3,2)
 #' 
 setGeneric (name= "spc.plot.grid",
 		def=function(x,FUN, nnrow, nncol,...){standardGeneric("spc.plot.grid")})
@@ -97,33 +97,43 @@ setMethod("spc.plot.grid", "SpcList", function (x,FUN, nnrow, nncol, mar=c(4,4.5
 #########################################################################
 # Method : spc.plot.overlay
 #########################################################################
-#' Plotting multiple  \code{Spectra} objects insade a \code{SpcList}  
+#' Plotting multiple \code{Spectra} objects inside a \code{SpcList}  
 #'
 #' @description
-#' Generating plot of the contents of a \code{SpcList} object overlay
-#'
+#' This function overlays spectra plots of several \code{Spectra} objects inside a 
+#' \code{SpcList} object. The first element of the input \code{SpcList} object
+#' is plotted with spc.plot() while remaining elements are overlaid with spc.lines().
 #' 
 #' @usage 
-#' spc.plot(x,lab_cex=1,leg_idx=T, type="l", lty=1,lwd=1, col, ...)
+#' spc.plot.overlay(x,lab_cex=1,leg_idx=T, type="l", lty=1,lwd=1, col, ...)
 #' @param x	 a \code{SpcList} data 
 #' @param lab_cex vector of character expansion sizes, used cyclically
 #' @param type character string (length 1 vector) or vector of 1-character strings indicating the type of plot for each column of y, 
-#' @param lwd vector of line widths
-#' @param ...  any further arguments of plot
-#' @param  lty vector of line types
-#' @param  col columns of a \code{SpcList} data 
-#' @param leg_idx logical, to display legend of index or not, default is TRUE
+#' @param lwd numeric. Vector of line widths. See par().
+#' @param ...  any further arguments to the plotting function matplot() or spc.plot()
+#' @param lty vector of line types. See par().
+#' @param col A specification for the default plotting color. See par().
+#' @param leg_idx logical If it is of length 1, it determines whether or not to display the legend.
+#' If length(leg_idx) is bigger than 1, then its lengths has to equal length(object). Default is TRUE.
 #' @examples
 #' sp <- spc.example_spectra()
 #' BL = spc.makeSpcList(sp,"CAST")
 #' spc.plot.overlay(BL)
-#' 
+#' spc.plot.overlay(BL, xlim=c(400,500),ylim=c(0,0.2),lwd=2)
+#' spc.plot.overlay(BL, col=c("red"), leg_idx=FALSE, lty=2)
+#' spc.plot.overlay(BL, col=c("red","blue","green","yellow","cyan","black"))
 #' 
 setGeneric (name= "spc.plot.overlay",
 		def=function(object, ...){standardGeneric("spc.plot.overlay")})
 setMethod("spc.plot.overlay", "SpcList", function (object, lab_cex=1,leg_idx=T, type="l", lty=1,lwd=1, col, ...){
 			if(missing(col))
 				col = 1:length(object)
+			if(length(col)==1)
+			  col = rep(col,length(object))
+			if(length(col)>1)
+			  stopifnot(length(col)==length(object))
+			if(length(leg_idx)>1)
+			  stopifnot(length(leg_idx)==length(object))
 			if(length(leg_idx)==1)
 				leg_idx = rep(leg_idx,length(object))
 			if(length(lty)==1)
@@ -135,15 +145,13 @@ setMethod("spc.plot.overlay", "SpcList", function (object, lab_cex=1,leg_idx=T, 
 			
 			all_x = unlist(lapply(object,function(t) t@Wavelengths))
 			all_y = unlist(lapply(object,function(t) t@Spectra))
-#			browser()
 			xlim = range(all_x)
 			ylim = range(all_y)
-			
 			if(any(grepl("xlim",names(match.call())))){
-				xlim = eval(match.call(expand.dots = T)$xlim)
+				xlim = list(...)$xlim #eval(match.call(expand.dots = T)$xlim)
 			}
 			if(any(grepl("ylim",names(match.call())))){
-				ylim = eval(match.call(expand.dots = T)$ylim)
+				ylim = list(...)$ylim #eval(match.call(expand.dots = T)$ylim)
 			}
 			tit=""
 			#Check object names to see if they can be put in the legend
@@ -165,19 +173,20 @@ setMethod("spc.plot.overlay", "SpcList", function (object, lab_cex=1,leg_idx=T, 
 					eval_txt = paste("spc.plot", "(object[[I]],lab_cex=lab_cex,col=col[I],lty=lty[I],lwd=lwd[I],type=type[I],...)",sep="")
 				else
 					eval_txt = paste("spc.lines", "(object[[I]],col=col[I],lty=lty[I],lwd=lwd[I],type=type[I],...)",sep="")
-				if (!any(grepl("xlim",names(match.call()))))
+				if (0) #(!any(grepl("xlim",names(match.call()))))
 					eval_txt = gsub("object\\[\\[I\\]\\],","object\\[\\[I\\]\\],xlim=xlim,",eval_txt)
 				if (!any(grepl("ylim",names(match.call()))))
 					eval_txt = gsub("object\\[\\[I\\]\\],","object\\[\\[I\\]\\],ylim=ylim,",eval_txt)
-#			print(eval_txt)	
+
 				eval(parse(text=eval_txt))				
-				#title(main=tit,mgp=c(2,1,0))
 			}#end for
-			if(!all(diff(lty)==0))
-				legend("bottomright",tit[leg_idx],col=col[leg_idx],cex=lab_cex,bty="n",lty=lty[leg_idx],lwd=lwd[leg_idx])	
-			else
-				legend("bottomright",tit[leg_idx],col=col[leg_idx],fill=col[leg_idx],cex=lab_cex,bty="n")	
-		})
+			if(any(leg_idx)) {
+			  if(!all(diff(lty)==0))
+			    legend("bottomright",tit[leg_idx],col=col[leg_idx],cex=lab_cex,bty="n",lty=lty[leg_idx],lwd=lwd[leg_idx])	
+			  else
+			    legend("bottomright",tit[leg_idx],col=col[leg_idx],fill=col[leg_idx],cex=lab_cex,bty="n")	
+			}
+})
 
 #########################################################################
 #' Plotting \code{SpcList} object 
@@ -185,17 +194,16 @@ setMethod("spc.plot.overlay", "SpcList", function (object, lab_cex=1,leg_idx=T, 
 #' @description
 #' Generating plot of the contents of a \code{SpcList} object overlay with respect to depth
 #'
-#' 
 #' @usage 
 #' spc.plot.depth.overlay(object, X, lab_cex, ...)
 #' @param object	 a \code{SpcList} data 
-#' @param X column number or index 
+#' @param X column name or index 
 #' @param lab_cex vector of character expansion sizes, used cyclically
 #' @param ...  any further arguments of plot
 #' @examples
 #' sp <- spc.example_spectra()
 #' BL = spc.makeSpcList(sp,"CAST")
-#' spc.plot.depth.overlay(BL)
+#' spc.plot.depth.overlay(BL, "anap_555")
 #' 
 #' 
 setGeneric (name= "spc.plot.depth.overlay",
@@ -325,7 +333,6 @@ setMethod("subset",  signature="SpcList",
 #' @description
 #' Retrieve   names of a \code{SpcList} object
 #'
-#' 
 #' @usage 
 #' spc.colnames(x)
 #' @param x  A \code{SpcList} object
@@ -337,13 +344,14 @@ setMethod("subset",  signature="SpcList",
 #' BL = spc.makeSpcList(sp,"CAST")
 #' names(BL)
 #' 
-
-
 setMethod("names", "SpcList", function(x){
 			sapply(x, function(mobject) {
-						if(class(mobject)=="Spectra") mobject@ShortName[1]	else class(mobject) 
-					})
-		})
+			  if (!is.null(x@by) & !is.na(x@by) & x@by!="VariousVariables")
+			    mobject[[x@by]][1]
+			  else 
+			    if(class(mobject)=="Spectra") mobject@ShortName[1]	else class(mobject) 
+			})
+})
 
 #########################################################################
 # Method : $
@@ -639,6 +647,20 @@ setMethod("spc.lapply", signature="SpcList", definition= function (X, FUN, ...) 
 			validObject(X)
 			return(X)
 		})
+
+h2d = function(object,headerfield,dataname,compress=TRUE,...) {
+  if(missing(dataname))
+    dataname=headerfield	
+  
+  X = lapply(object,function(x,...){ #
+    if(headerfield %in% names(x@header))
+      x = spc.header2data(x,headerfield=headerfield,dataname=dataname,compress=compress,...)
+    else
+      x
+  })
+  return(X)
+}
+
 #########################################################################
 # Method : spc.header2data
 #########################################################################
@@ -647,7 +669,7 @@ setMethod("spc.lapply", signature="SpcList", definition= function (X, FUN, ...) 
 #' Get  the header for data of each element  with a column
 #'
 #' @usage 
-#' spc.data2header(object,headerfield,dataname,compress=TRUE,...)
+#' spc.header2data(object,headerfield,dataname,compress=TRUE,...)
 #'
 #' 
 #' @param dataname list \code{spclist} object
@@ -664,28 +686,18 @@ setMethod("spc.lapply", signature="SpcList", definition= function (X, FUN, ...) 
 #' spc.updateheader(BL[[1]], "Zone")<- "ZoneA"
 #' BL[[1]] <- spc.header2data(BL[[1]], "Zone")
 #' BL[[1]]$Zone
-#' 
-#If header element has length >1, its type is checked. If it is "character",
-#its elements will be pasted using paste(...,collapse="|"). If it is another 
-#type, only the first element will be taken.  .
-h2d = function(object,headerfield,dataname,compress=TRUE,...) {
-	if(missing(dataname))
-		dataname=headerfield	
+#' @name spc.header2data
+NULL
 
-	X = lapply(object,function(x,...){ #
-				if(headerfield %in% names(x@header))
-					x = spc.header2data(x,headerfield=headerfield,dataname=dataname,compress=compress,...)
-				else
-					x
-			})
-	return(X)
-}
+#' @name spc.header2data
 setMethod("spc.header2data", signature="list", definition=
             h2d)
+
+#' @name spc.header2data
 setMethod("spc.header2data", signature="SpcList", 
 		definition=function(object,headerfield,dataname,compress=TRUE,...){
 			by = object@by	
-			X <- .h2d(object,headerfield=headerfield,dataname=dataname,compress=compress,...)
+			X <- h2d(object,headerfield=headerfield,dataname=dataname,compress=compress,...)
 			X <- as(X, "SpcList")
 			X@by = by
 			validObject(X)
