@@ -16,10 +16,8 @@
 #' sp=spc.example_spectra()
 #' sp@header
 #' sp@ShortName
-#' sp@header=SpcHeaderAdd(sp@header,sp@ShortName,10
-#' 
-#' )
-#' 
+#' sp@header=SpcHeaderAdd(sp@header,sp@ShortName,10)
+#' sp@header
 setGeneric("SpcHeaderAdd",function(object,Name,Value,...)
 		{standardGeneric("SpcHeaderAdd")})
 setMethod("SpcHeaderAdd", signature="SpcHeader", function(object,Name,Value){	
