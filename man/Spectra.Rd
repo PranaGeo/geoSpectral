@@ -51,8 +51,7 @@ that is the construtor of the \code{STIDF} class using an input \code{data.frame
 \code{length{@Wavelengths}==ncol(@Spectra)}. The default @WavelengthsUnit is nm^{-1}.
 }
 \examples{
-fnm = file.path(base::system.file(package = "geo
-Spectral"),"test_data","particulate_absorption.csv.gz")
+fnm = file.path(base::system.file(package = "geoSpectral"),"test_data","particulate_absorption.csv.gz")
 abs = read.table(fnm,sep=",",header=TRUE)
 abs$STATION=factor(abs$STATION)
 abs[1:2,1:17] #Display only the first 2 rows and first 17 columns if the data frame

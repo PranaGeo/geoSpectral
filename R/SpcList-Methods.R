@@ -375,8 +375,8 @@ setMethod("names", "SpcList", function(x){
 #'
 #' @examples
 #'  sp<-spc.example_spectra()
-#'   BL = spc.makeSpcList(sp,"CAST")
-#'  BL$a_nap
+#'  BL = spc.makeSpcList(sp,"CAST")
+#'  BL$`38`
 #'  
 #' 
 setMethod("$", signature = "SpcList", 
