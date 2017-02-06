@@ -2430,7 +2430,21 @@ setMethod("spc.plot.depth", signature="Spectra", function (object,X,maxSp=10,lab
     return(0)
   }
 })
+#################################################
 
+################################################
+#' Create example of Spectral object 
+#' @description
+#' Example of Spectral object is created by the function
+#'
+#' 
+#' @usage 
+#' spc.example_spectra()
+#' @examples 
+#' sp = spc.example_spectra()
+#' class(sp)
+#' show(sp)
+#' 
 spc.example_spectra = function(){
   #Search in the package installation directory
   fnm = file.path(base::system.file(package = "geoSpectral"),"test_data","particulate_absorption.csv.gz")
