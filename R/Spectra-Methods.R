@@ -472,13 +472,10 @@ setMethod("show", "Spectra", function(object){
 #'
 #' @examples
 #'  sp<-spc.example_spectra()
-#'  # spc.colnames() is used to show that anap_300 or anap_345 is colon ,  
-#'  spc.colnames(sp)
-#'  sp$anap_300
-#'  sp["anap_345"]
-#'  
-#' 
-#' 
+#'  # spc.colnames() is used to extract column names
+#'  head(spc.colnames(sp))
+#'  head(sp$anap_300)
+#'  sp[,"anap_345"]
 setMethod("$", signature="Spectra",
           function(x, name) {
             if (name %in% colnames(x@Spectra)){
@@ -1484,7 +1481,8 @@ setMethod("spc.header2data", signature = "Spectra",
 setMethod("[", signature(x = "Spectra"), function(x, i, j) {
   OUT_ANC = 0
   if(missing(i))
-    i =  1:nrow(x@Spectra)
+    i <-  1:nrow(x@Spectra)
+
   if(missing(j))
     j =  1:ncol(x@Spectra)
   
@@ -1522,7 +1520,7 @@ setMethod("[", signature(x = "Spectra"), function(x, i, j) {
     j = j.new
   }
   InvalidIdx = x@InvalidIdx
-  if (!OUT_ANC) {				
+  if (!OUT_ANC) {
     x@Spectra=x@Spectra[i,j,drop=F]
     if(nrow(x@data)>0)
       x@data=x@data[i,,drop=F]
