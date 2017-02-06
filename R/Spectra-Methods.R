@@ -1483,7 +1483,7 @@ setMethod("[", signature(x = "Spectra"), function(x, i, j) {
   OUT_ANC = 0
   if(missing(i))
     i <-  1:nrow(x@Spectra)
-                 
+
   if(missing(j))
     j =  1:ncol(x@Spectra)
   
