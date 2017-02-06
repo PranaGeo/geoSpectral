@@ -11,9 +11,9 @@ spc.plot(x, Y, maxSp, lab_cex,xlab,ylab,type,pch,lwd,cex,...)
 
 \item{...}{any further arguments to be passed to matplot}
 
-\item{xlab}{title for x  axe, as in plot.}
+\item{xlab}{title for x  axix, as in plot().}
 
-\item{ylab}{title for y axe, as in plot.}
+\item{ylab}{title for y axis, as in plot().}
 
 \item{pch}{character string or vector of 1-characters or integers for plotting characters}
 

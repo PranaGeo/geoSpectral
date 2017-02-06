@@ -545,8 +545,8 @@ setReplaceMethod("spc.colnames", signature = "Spectra", def = function (x,value)
 #' @usage 
 #' spc.plot(x, Y, maxSp, lab_cex,xlab,ylab,type,pch,lwd,cex,...)
 #' @param x and Y	 a \code{Spectra} data 
-#' @param xlab title for x  axe, as in plot.
-#' @param ylab title for y axe, as in plot.
+#' @param xlab title for x  axix, as in plot().
+#' @param ylab title for y axis, as in plot().
 #' @param pch character string or vector of 1-characters or integers for plotting characters
 #' @param ...  any further arguments to be passed to matplot
 #' @param lab_cex vector of character expansion sizes, used cyclically
@@ -1652,6 +1652,7 @@ setMethod("rep", signature(x = "Spectra"),
 #'  Interpolate spectral values 
 #' @description
 #' Estimate spectral data at a new set of wavelengths through interpolation
+#' using approx().
 #'
 #' @usage 
 #' spc.interp.spectral(source1,target_lbd,show.plot=FALSE)
@@ -1659,9 +1660,14 @@ setMethod("rep", signature(x = "Spectra"),
 #' @param source1  A \code{Spectra} object 
 #' @param  target_lbd numeric vector giving desired wavelengths  
 #' @param show.plot logical TRUE if a graphical representation is required 
+#' @param ... further arguments to pass on to approx(). 
 #' @examples 
 #' sp=spc.example_spectra()
 #' lbd = as.numeric(c(412,440,490,555,670))
+#' sp2 = spc.interp.spectral(sp[,lbd],c(430,450,500))
+#' spc.plot.overlay(SpcList(list(sp,sp2)))
+#' 
+#' #Quick Plot only the first row
 #' spc.interp.spectral(sp[,lbd],c(430,450,500),show.plot=TRUE)
 #' 
 setGeneric (name= "spc.interp.spectral",
@@ -1680,9 +1686,8 @@ setMethod("spc.interp.spectral", signature = "Spectra",
               DF[x,] = t(my[[x]]$y)
             }
             if(show.plot){
-              browser()
               plot(lbd_source1, source1@Spectra[1,],type="b",ylab=source1@LongName,xlab="Wavelength",pch="o")
-              points(my[[x]]$x,my[[x]]$y,col="green",cex=1)
+              points(my[[x]]$x,my[[1]]$y,col="red",cex=1)
               grid(col="black")
             }
             out@Spectra = DF
