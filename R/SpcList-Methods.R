@@ -475,7 +475,7 @@ setMethod("spc.invalid.detect", signature = "list", def=function(source1){
 #' sp=spc.example_spectra()
 #' BL = spc.makeSpcList(sp,"CAST")
 #' BL[[1]]@header
-#' spc.getheader(BL,"Latitude")
+#' spc.getheader(BL,"CAST")
 #' 
 #' 
 setMethod("spc.getheader", signature = "list", def = function (object,name){
@@ -498,11 +498,13 @@ setMethod("spc.getheader", signature = "list", def = function (object,name){
 #' @param ... arguments to be passed to or from other methods
 #' @examples 
 #' sp=spc.example_spectra()
-#' BL=spc.data2header(sp,"CAST")
+#' BL=spc.makeSpcList(sp,"CAST")
 #' a=new("SpcHeader") # create new SpcHeader class
 #' a$Longitude=123 
 #' spc.setheader(BL[[1]],"Station") <- a
-#' BL[[1]]@header
+#' h=spc.getheader(BL[[1]])
+#' h
+#' 
 setReplaceMethod(f="spc.setheader", signature="list",
 		definition=function(object,value,...){
 			if(inherits(value,"Spectra"))
@@ -531,7 +533,7 @@ setReplaceMethod(f="spc.setheader", signature="list",
 #' @param name of the header field to be updated
 #' @examples 
 #' sp=spc.example_spectra()
-#' BL=spc.data2header(sp,"CAST")
+#' BL=spc.makeSpcList(sp,"CAST")
 #' BL[[1]]@header
 #' spc.updateheader(BL[[1]],"Station")<-11
 #' BL[[1]]@header
@@ -577,7 +579,7 @@ setReplaceMethod(f="spc.updateheader", signature="list",
 #' from the @data column.
 #'  @examples 
 #' sp=spc.example_spectra()
-#' BL=spc.data2header(sp,"CAST")
+#' BL=spc.makeSpcList(sp,"CAST")
 #' BL[[1]]@header
 #'  BL[[1]]=spc.data2header(BL[[1]],"CAST","ProjectCast")
 #' BL[[1]]@header
@@ -635,7 +637,7 @@ setMethod("sort", signature="SpcList", definition= function (x, decreasing = FAL
 #' @return FUN  function to be applied to each element of X
 #' @examples  
 #' sp=spc.example_spectra()
-#' BL=spc.data2header(sp,"CAST")
+#' BL=spc.makeSpcList(sp,"CAST")
 #' spc.lapply(BL,function(x) {nrow(x)})
 setGeneric (name= "spc.lapply",
 		def=function(X, FUN,...){standardGeneric("spc.lapply")})
@@ -682,13 +684,10 @@ h2d = function(object,headerfield,dataname,compress=TRUE,...) {
 #' type, only the first element will be taken.  
 #' @examples 
 #' sp <- spc.example_spectra()
-#' BL=spc.data2header(sp,"CAST")
-#' spc.updateheader(BL[[1]], "Zone")<- "ZoneA"
+#' BL=spc.makeSpcList(sp,"CAST")
+#' spc.updateheader(BL[[1]], "Zone")<- "Zone"
 #' BL[[1]] <- spc.header2data(BL[[1]], "Zone")
 #' BL[[1]]$Zone
-#' @name spc.header2data
-NULL
-
 #' @name spc.header2data
 setMethod("spc.header2data", signature="list", definition=
             h2d)

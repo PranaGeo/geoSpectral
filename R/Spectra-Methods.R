@@ -35,7 +35,9 @@
 #' @return Returns an object of class \code{Spectra}.
 #'
 #' @examples
+#' 
 #' fnm = file.path(base::system.file(package = "geoSpectral"),"test_data","particulate_absorption.csv.gz")
+#' fnm=gsub("\\\\", "/", fnm)
 #' abs = read.table(fnm,sep=",",header=TRUE)
 #' abs$STATION=factor(abs$STATION)
 #' abs[1:2,1:17] #Display only the first 2 rows and first 17 columns if the data frame
@@ -475,7 +477,7 @@ setMethod("show", "Spectra", function(object){
 #'  # spc.colnames() is used to show that anap_300 or anap_345 is colon ,  
 #'  spc.colnames(sp)
 #'  sp$anap_300
-#'  sp["anap_345"]
+#'  sp[,"anap_345"]
 #'  
 #' 
 #' 
@@ -518,7 +520,7 @@ setReplaceMethod("$", signature = "Spectra",
 #' spc.colnames(x)
 #' # or 
 #' spc.colnames(x) <-spc.cname.construct(x)
-#' 
+#' spc.colnames(x)
 #' @seealso \code{\link{spc.cname.construct}}
 #' 
 #' 
@@ -904,6 +906,7 @@ setMethod("spc.getwavelengths", signature = "Spectra",
 #'
 #' @examples
 #'  x <- spc.example_spectra()
+#'  show(x)
 #'  spc.setwavelengths(x) <- 300:800
 #'  show(x)
 setGeneric("spc.setwavelengths<-",function(object,value)
@@ -1346,7 +1349,7 @@ setMethod("spc.getinvalid.idx", signature = "Spectra",
 #' vld = rep(TRUE,26)
 #' vld[1:5]<-FALSE
 #' spc.setinvalid.idx(sp)<-vld #Mark the first 5 rows as invalid
-#' 
+#' spc.getinvalid.idx(sp)
 setGeneric("spc.setinvalid.idx<-",function(object,value)
 {standardGeneric("spc.setinvalid.idx<-")})
 setReplaceMethod(f="spc.setinvalid.idx", signature="Spectra",
@@ -1658,9 +1661,7 @@ setMethod("rep", signature(x = "Spectra"),
 #' 
 #' @param source1  A \code{Spectra} object 
 #' @param  target_lbd numeric vector giving desired wavelengths  
-#' @param show.plot logical TRUE for a graphical representation of the first Spectra row.
-#' @param rule an integer (of length 1 or 2) describing how interpolation 
-#' is to take place outside the interval [min(x), max(x)]. See approx().
+#' @param show.plot logical TRUE if a graphical representation is required 
 #' @param ... further arguments to pass on to approx(). 
 #' @examples 
 #' sp=spc.example_spectra()
@@ -1674,25 +1675,21 @@ setMethod("rep", signature(x = "Spectra"),
 setGeneric (name= "spc.interp.spectral",
             def=function(source1,target_lbd,...){standardGeneric("spc.interp.spectral")})
 setMethod("spc.interp.spectral", signature = "Spectra", 
-          def = function (source1,target_lbd,show.plot=FALSE, rule = 2, ...){
+          def = function (source1,target_lbd,show.plot=FALSE){
             if(missing(target_lbd))
               stop("The input argument 'target_lbd' is missing")
             
-            inArgs = list(...)
-            if (!("rule" %in% names(inArgs)))
-              inArgs$rule=rule
             out = source1
             lbd_source1 = spc.getwavelengths(source1)
             DF = matrix(nrow=nrow(source1),ncol=length(target_lbd))
             my = list()
-            for(I in 1:nrow(DF)) {
-              outArgs <- list(x=lbd_source1, y=source1@Spectra[I,],xout=target_lbd)
-              my[[I]] = do.call(approx, c(outArgs, inArgs))
-              DF[I,] = t(my[[I]]$y)
+            for(x in 1:nrow(DF)) {
+              my[[x]] = approx(lbd_source1, source1@Spectra[x,],xout=target_lbd,rule=2)
+              DF[x,] = t(my[[x]]$y)
             }
             if(show.plot){
               plot(lbd_source1, source1@Spectra[1,],type="b",ylab=source1@LongName,xlab="Wavelength",pch="o")
-              points(my[[1]]$x,my[[1]]$y,col="red",cex=1)
+              points(my[[x]]$x,my[[1]]$y,col="red",cex=1)
               grid(col="black")
             }
             out@Spectra = DF
@@ -2436,7 +2433,7 @@ setMethod("spc.plot.depth", signature="Spectra", function (object,X,maxSp=10,lab
   }
 })
 #################################################
-
+#spc.example_spectra
 ################################################
 #' Create example of Spectral object 
 #' @description
@@ -2542,7 +2539,15 @@ spc.Read_NOMAD_v2 = function(skip.all.na.rows=TRUE) {
   names(out) = ShortNames
   out
 }
-
+#' Plot a Spectra object data 
+#' @description
+#' Plot a \code{Spectra} object with plotly engine 
+#' @param sp A \code{Spectra} object
+#' @param column Number or name , defoult value is 10 if a number or name has not been entered
+#' @param plot.max numeric value for a maximum number of data in plot
+#' @param showlegend logical, to display legend or not, default is FALSE 
+#' @param hoverinfo  a chracter, info about  \code{Spectra} object to be used  in hover box
+#' @param title a chracter string, title for plot
 #'sp = spc.example_spectra()
 #'spc.plot.plotly(sp)
 #'spc.plot.plotly(sp,legend_field = "Spectra")
@@ -2592,9 +2597,12 @@ setMethod("spc.plot.plotly", signature="Spectra", function (sp, plot.max=10,show
 #' Plot a Spectra object data with respect to time
 #' @description
 #' Plot a \code{Spectra} object with respect to time
-#' @param sp A \code{Spectra} object
-#' @param column number or name, default value is 10.
-#' 
+#'  @param sp A \code{Spectra} object
+#' @param column Number or name , defoult value is 10 if a number or name has not been entered
+#' @param plot.max numeric value for a maximum number of data in plot
+#' @param showlegend logical, to display legend or not, default is FALSE 
+#' @param hoverinfo  a chracter, info about  \code{Spectra} object to be used  in hover box
+#' @param title a chracter string, title for plot
 #' @examples 
 #' spc.plot.time.plotly(sp)
 #' spc.plot.time.plotly(sp, plot.max = 3)
