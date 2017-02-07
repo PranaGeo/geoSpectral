@@ -635,15 +635,23 @@ setMethod("sort", signature="SpcList", definition= function (x, decreasing = FAL
 #' @return FUN  function to be applied to each element of X
 #' @examples  
 #' sp=spc.example_spectra()
-#' BL=spc.data2header(sp,"CAST")
+#' BL=spc.makeSpcList(sp,"CAST")
+#' #Counts rows (returns a list object)
 #' spc.lapply(BL,function(x) {nrow(x)})
+#' #Perform arithmetic operations on all Spectra elements. Returns a SpcList object.
+#' spc.lapply(BL,function(x) {x^2+1})
 setGeneric (name= "spc.lapply",
 		def=function(X, FUN,...){standardGeneric("spc.lapply")})
 setMethod("spc.lapply", signature="SpcList", definition= function (X, FUN, ...) {
 			by = X@by
+			by_names <- names(X)
 			X = lapply(as(X,"list"),FUN,...)
-			X = as(X, "SpcList")
-			X@by = by
+			if (all(sapply(X, class)=="Spectra")) {
+			  X = as(X, "SpcList")
+			  X@by = by
+			} else {
+			  names(X) <- by_names
+			}
 			validObject(X)
 			return(X)
 		})
