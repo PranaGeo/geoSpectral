@@ -123,24 +123,24 @@ test_that("test for head()",{
     
   })
   
-  test_that("test for spc.plot.map.rbokeh()",{
-    
-    expect_warning( spc.plot.map.rbokeh(sp),NA)
-    expect_warning( spc.plot.map.rbokeh(sp, hover = "Snap"),NA)
-    expect_warning( spc.plot.map.rbokeh(sp,glyph = 4 ),NA)
-    expect_warning( spc.plot.map.rbokeh(sp,color=" #0000ff " ),NA)
-    
-    
-     })
-  
-  test_that("test for spc.plot.map.leaflet()",{
-    
-    expect_warning( spc.plot.map.leaflet(sp),NA)
-    expect_warning( spc.plot.map.leaflet(sp,weight=100 ),NA)
-   
-  })
-  
-  
+  # test_that("test for spc.plot.map.rbokeh()",{
+  #   
+  #   expect_warning( spc.plot.map.rbokeh(sp),NA)
+  #   expect_warning( spc.plot.map.rbokeh(sp, hover = "Snap"),NA)
+  #   expect_warning( spc.plot.map.rbokeh(sp,glyph = 4 ),NA)
+  #   expect_warning( spc.plot.map.rbokeh(sp,color=" #0000ff " ),NA)
+  #   
+  #   
+  #    })
+  # 
+  # test_that("test for spc.plot.map.leaflet()",{
+  #   
+  #   expect_warning( spc.plot.map.leaflet(sp),NA)
+  #   expect_warning( spc.plot.map.leaflet(sp,weight=100 ),NA)
+  #  
+  # })
+  # 
+  # 
   
   
   

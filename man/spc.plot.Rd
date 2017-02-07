@@ -4,13 +4,28 @@
 \alias{spc.plot}
 \title{Plotting \code{Spectra} object}
 \usage{
-spc.plot(x,...)
+spc.plot(x, Y, maxSp, lab_cex,xlab,ylab,type,pch,lwd,cex,...)
 }
 \arguments{
-\item{x}{a \code{Spectra} data}
+\item{x}{and Y     a \code{Spectra} data}
+
+\item{...}{any further arguments to be passed to matplot}
+
+\item{xlab}{title for x  axix, as in plot().}
+
+\item{ylab}{title for y axis, as in plot().}
+
+\item{pch}{character string or vector of 1-characters or integers for plotting characters}
+
+\item{lab_cex}{vector of character expansion sizes, used cyclically}
+
+\item{lwd}{vector of line widths}
+
+\item{type}{character string (length 1 vector) or vector of 1-character strings indicating 
+the type of plot for each column of y. See help of matplot() or plot().}
 }
 \description{
-Generating plot of the contents of a \code{Spectra} object
+Generating plot of the intensity of a measurement inside a \code{Spectra} object with respect to the wavelength.
 }
 \examples{
 x <- spc.example_spectra()
