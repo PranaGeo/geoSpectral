@@ -7,8 +7,8 @@
 \title{Manipulation of spectral (electromagnetic) data}
 \description{
 \pkg{geoSpectral} is an R package providing a new data type for R that stores
- spectral,temporal and spatial attributes of measurement data as well as methods for 
-accessing and manipulating the spectral (and non-spectral) data.
+ spectral, temporal, and spatial attributes of measurement data as well as methods for 
+accessing and manipulating the spectral (and non-spectral) data
 with code.
 }
 \details{
