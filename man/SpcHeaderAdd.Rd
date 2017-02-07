@@ -20,9 +20,7 @@ Function add the value of a field in the header slot of \code{SpcHeader} class o
 sp=spc.example_spectra()
 sp@header
 sp@ShortName
-sp@header=SpcHeaderAdd(sp@header,sp@ShortName,10
-
-)
-
+sp@header=SpcHeaderAdd(sp@header,sp@ShortName,10)
+sp@header
 }
 
