@@ -8,7 +8,7 @@
 x[i] 
 x[i, j] 
 x[[i]] 
-x$i #More usage cases to be added
+x$i
 }
 \arguments{
 \item{\code{Spectra}}{object from which to extract element(s) or in which to replace element(s)}

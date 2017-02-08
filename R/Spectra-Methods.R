@@ -463,7 +463,7 @@ setMethod("show", "Spectra", function(object){
 #' x[i] 
 #' x[i, j] 
 #' x[[i]] 
-#' x$i #More usage cases to be added
+#' x$i 
 #' 
 #' 
 #' @param \code{Spectra} object from which to extract element(s) or in which to replace element(s)
