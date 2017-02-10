@@ -463,7 +463,7 @@ setMethod("show", "Spectra", function(object){
 #' x[i] 
 #' x[i, j] 
 #' x[[i]] 
-#' x$i #More usage cases to be added
+#' x$i 
 #' 
 #' 
 #' @param \code{Spectra} object from which to extract element(s) or in which to replace element(s)
@@ -1036,21 +1036,24 @@ spc.STI.stdistance = function(master,searched,report=F){
 #########################################################################
 #' Apply arithmetic operations on/between \code{Spectra} objects
 #' @description
-#' Methods definig Arithmetic operations between two \code{Spectra} objects e1 and e2 or one
+#' Methods defining Arithmetic operations between two \code{Spectra} objects e1 and e2 or one
 #' \code{Spectra} object e1 and a numeric value.
 #'
 #'@usage 
-#' Arith(e1, e2)
 #' e1 * e2
 #' e1 + 0.5
 #'
 #' @param e1 spectra object 
-#' @param e2 spectra object 
+#' @param e2 spectra object or other
 #' 
 #' @details 
 #' These methods allow performing arithmetic operations involving \code{Spectra} objects.
-#' 
+#' @name Arith
 #' @seealso \code{\link{Arith}}
+#' 
+NULL
+
+#' @name Arith
 setMethod("Arith", signature(e1 = "Spectra", e2 = "Spectra"),function (e1, e2) {
   result <- callGeneric(e1@Spectra, e2@Spectra)
   output = e1
@@ -1059,9 +1062,7 @@ setMethod("Arith", signature(e1 = "Spectra", e2 = "Spectra"),function (e1, e2) {
   return(output)
 })
 
-#########################################################################
-# Method : Arith
-#########################################################################
+#' @name Arith
 setMethod("Arith", signature(e1 = "Spectra", e2 = "numeric"),function (e1, e2) {
   result <- callGeneric(e1@Spectra, e2)
   output = e1

@@ -346,10 +346,20 @@ setMethod("subset",  signature="SpcList",
 #' 
 setMethod("names", "SpcList", function(x){
 			sapply(x, function(mobject) {
-			  if (!is.null(x@by) & !is.na(x@by) & x@by!="VariousVariables")
-			    mobject[[x@by]][1]
-			  else 
-			    if(class(mobject)=="Spectra") mobject@ShortName[1]	else class(mobject) 
+			  if (!is.null(x@by) & !is.na(x@by) & x@by!="VariousVariables") {
+			    if(x@by %in% names(mobject))
+			      mobject[[x@by]][1]
+			    else
+			      NULL
+			  }
+			  else {
+			    if(class(mobject)=="Spectra") {
+			      mobject@ShortName[1]
+			    }
+			    else{
+			      class(mobject)
+			    }
+			  }
 			})
 })
 
@@ -365,7 +375,7 @@ setMethod("names", "SpcList", function(x){
 #' x[i] 
 #' x[i, j] 
 #' x[[i]] 
-#' x$i #More usage cases to be added
+#' x$i
 #' 
 #' 
 #' @param \code{Spectra} object from which to extract element(s) or in which to replace element(s)
@@ -374,10 +384,22 @@ setMethod("names", "SpcList", function(x){
 #' 
 #'
 #' @examples
-#'  sp<-spc.example_spectra()
-#'   BL = spc.makeSpcList(sp,"CAST")
-#'  BL$a_nap
-#'  
+#'   sp<-spc.example_spectra()
+#'   BL = spc.makeSpcList(sp,"STATION")
+#'   
+#'   #Extract station 394 (returns Spectra object)
+#'   BL$`394`
+#'   
+#'   
+#'   BL@by="CRUISE"
+#'   BL[[1]]$CRUISE="Cruise1"
+#'   BL[[2]]$CRUISE="Cruise2"
+#'   BL[[3]]$CRUISE="Cruise3"
+#'   BL[[4]]$CRUISE="Cruise4"
+#'   BL[[5]]$CRUISE="Cruise5"
+#'   BL[[6]]$CRUISE="Cruise6"
+#'   names(BL)
+#'   BL$Cruise4
 #' 
 setMethod("$", signature = "SpcList", 
 		function(x, name) {
@@ -411,7 +433,7 @@ setMethod("show", "SpcList", function(object){
 			if(length(object)>0)
 				sapply(1:length(object), function(x) {
 							if(object@by!="VariousVariables") {
-								byName = paste(object@by, spc.getheader(object[[x]],object@by), ":")								
+								byName = paste(object@by, names(object)[x], ":")								
 							}
 							else { 
 								byName = paste("Element", x, ":")								

@@ -20,7 +20,10 @@ lapply returns a list of the same length as X, each element of which is the resu
 \examples{
  
 sp=spc.example_spectra()
-BL=spc.data2header(sp,"CAST")
+BL=spc.makeSpcList(sp,"CAST")
+#Counts rows (returns a list object)
 spc.lapply(BL,function(x) {nrow(x)})
+#Perform arithmetic operations on all Spectra elements. Returns a SpcList object.
+spc.lapply(BL,function(x) {x^2+1})
 }
 
