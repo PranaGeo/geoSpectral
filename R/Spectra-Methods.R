@@ -2205,8 +2205,19 @@ setMethod("spc.select", signature = "Spectra",
 #########################################################################
 # Method : Conversion from Spectra to SpcList using a data field (factor)
 #########################################################################
+#'  Conversion from \code{Spectra} to \code{Spclist}
+#' @description
+#'Conversion from \code{Spectra} to \code{Spclist} using a data field
+#'  @usage 
+#'  spc.makeSpcList(myobj, name)
+#'  @param myobj a \code{Spectra} object
+#'  @param name  name of station of a \code{Spectra} object
+#' @examples 
+#' sp <- spc.example_spectra()
+#' BL = spc.makeSpcList(sp,"CAST")
+#' show(BL)
 #Later add the functionality with FUN (i.e. taking means)
-spc.makeSpcList = function(myobj, name,FUN){
+spc.makeSpcList = function(myobj, name){
   if(length(name)!=1)
     simpleError(stop("Argument 'name' should have a length of 1"))
   #Get the indexes of each DF row :
