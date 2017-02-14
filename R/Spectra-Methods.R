@@ -1119,7 +1119,20 @@ setMethod("spc.colMeans", signature("Spectra"),function (object) {
   validObject(object)
   return(object)
 })
-
+#######################################################################
+#spc.bbox2lines
+######################################################################
+#'  Constructs a rectangle with a \code{Spectra} object
+#' @description
+#' Constructs a rectangle of sp::Lines using the bounding box of a \code{Spectra} object.
+#'@usage 
+#' spc.bbox2lines(object)
+#'
+#' @param object spectra object t 
+#' 
+#' @examples 
+#' 
+#' 
 #Constructs a rectangle of sp::Lines using the bounding box of a Spatial object
 setGeneric (name= "spc.bbox2lines",def=function(object){standardGeneric("spc.bbox2lines")})
 setMethod("spc.bbox2lines",signature="Spatial",definition=function(object){
