@@ -2203,7 +2203,7 @@ setMethod("spc.select", signature = "Spectra",
           })
 
 #########################################################################
-# Method : Conversion from Spectra to SpcList using a data field (factor)
+# spc.makeSpcList
 #########################################################################
 #'  Conversion from \code{Spectra} to \code{Spclist}
 #' @description
@@ -2216,6 +2216,7 @@ setMethod("spc.select", signature = "Spectra",
 #' sp <- spc.example_spectra()
 #' BL = spc.makeSpcList(sp,"CAST")
 #' show(BL)
+#Method : Conversion from Spectra to SpcList using a data field (factor)
 #Later add the functionality with FUN (i.e. taking means)
 spc.makeSpcList = function(myobj, name){
   if(length(name)!=1)
