@@ -946,7 +946,29 @@ setMethod(f="spc.cname.construct", signature="Spectra",
             return(paste(value,round(spc.getwavelengths(object)),sep="_"))
           })
 
-##############################################################################
+##########################################################################
+#spc.timeMatch
+##########################################################################
+#' Match two time sequences
+#' @description
+#' Match two time sequences for a \code{Spectra} object, where each can be intervals or instances.
+#'
+#' @usage 
+#' spc.timeMatch(master,searched,returnList,method,limits,report)
+#'
+#' @param master ordered sequence of variable of class \code{Spectra}
+#' @param searched A variable of class \code{Spectra}which is searched
+#' @param returnList Boolean; should a list be returned with all matches (TRUE), or a vector with single matches (FALSE)?
+#' @param method Uses the simple  technique, same as of spacetime::timeMatch(),
+#' @param limits the interval limits
+#' @param report return character string which has information about searching results, default is False
+#' @details 
+#' Another version of spacetime::timeMatch(),method="over" uses the simple over technique. Same as of spacetime::timeMatch(),
+#' method="nearest" finds the nearest measurement. Matches only one data for all elements of master
+#' method="within" finds the measurements that are within the interval limits=c(upper,lower) (in seconds) 
+#' @examples 
+#' 
+#' 
 #Another version of spacetime::timeMatch(). 
 #method="over" uses the simple over technique. Same as of spacetime::timeMatch().  
 #method="nearest" finds the nearest measurement. Matches only one data for all elements of master
