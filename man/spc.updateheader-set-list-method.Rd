@@ -19,7 +19,7 @@ Updates or changes the value of a field in the header slot of \code{spclist} obj
 }
 \examples{
 sp=spc.example_spectra()
-BL=spc.data2header(sp,"CAST")
+BL=spc.makeSpcList(sp,"CAST")
 BL[[1]]@header
 spc.updateheader(BL[[1]],"Station")<-11
 BL[[1]]@header

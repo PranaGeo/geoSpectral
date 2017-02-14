@@ -24,7 +24,7 @@ into the existing file. Default : FALSE (overwrites the existing Excel file if i
 None. Simply creates an Excel file on disk.
 }
 \description{
-Exorts a \code{Spectra} object into Excel format.
+Exports  a \code{Spectra} object into Excel format.
 }
 \details{
 \code{spc.export.xlsx()} calls functions from package \code{xlsx} to write the contents of 

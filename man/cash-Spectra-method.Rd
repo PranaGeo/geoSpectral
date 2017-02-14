@@ -22,12 +22,9 @@ Operators acting on  \code{Spectra} objects  to extract or replace parts
 }
 \examples{
  sp<-spc.example_spectra()
- # spc.colnames() is used to show that anap_300 or anap_345 is colon ,  
- spc.colnames(sp)
- sp$anap_300
- sp["anap_345"]
- 
-
-
+ # spc.colnames() is used to extract column names
+ head(spc.colnames(sp))
+ head(sp$anap_300)
+ sp[,"anap_345"]
 }
 

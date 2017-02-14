@@ -1893,11 +1893,28 @@ spc.import.text = function(filename,sep=";",...){
   }
   return(Spec)
 }
-
+##########################################
+#spc.header.infos
+#########################################
+#' Getting as input the \code{Spectra} heade
+#' @description
+#' This internal function takes as input the \code{Spectral} header as a list and 
+#' converts its elements to numbers (when possible)
+#' evals its elements in case the text contains some R code
+#' 
+#' @usage 
+#' spc.header.infos(header)
+#' 
+#' @param header A \code{Spectra} header
+#' 
+#' @examples 
+#' sp=spc.example_spectra()
+#' spc.header.infos(sp@header)
+#' 
 #This internal function takes as input the Spectra header as a list and 
 #1)converts its elements to numbers (when possible)
 #2)evals its elements in case the text contains some R code
-.spc.header.infos = function(header){ 
+spc.header.infos = function(header){ 
   #Suppress warnings for the below operation (as.numeric creates warnings)
   myWarn = options()$warn
   options(warn=-1)
