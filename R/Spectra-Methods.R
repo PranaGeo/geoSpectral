@@ -1099,6 +1099,23 @@ setMethod("Math", signature("Spectra"),function (x) {
   validObject(x)
   return(x)
 })
+#############################################################
+#spc.colMeans
+#############################################################
+#' Computes the mean along the rows of \code{Spectra} (@Spectra)
+#' @description
+#' Computes the mean along the rows of Spectra (@Spectra). The method finds the measurement 
+#' closest in time to the mean time and keeps the spatial/time attributes as well as Ancillary
+#' data table (@data) associated to that measurement as that of the mean spectra
+#'@usage 
+#' spc.colMeans(object)
+#'
+#' @param object a \code{Spectra} object 
+#' 
+#' @examples 
+#' sp=spc.example_spectra()
+#' spc.colMeans(sp)
+#' 
 setGeneric (name= "spc.colMeans",def=function(object){standardGeneric("spc.colMeans")})
 setMethod("spc.colMeans", signature("Spectra"),function (object) {
   #Computes the mean along the rows of Spectra (@Spectra). The method finds the measurement
@@ -1868,7 +1885,7 @@ spc.import.text = function(filename,sep=";",...){
     
     #Extract Serialized fields, if any and unserialized them
     header.idx.ser = grep("\\|Serialized",myT)
-    header = .spc.header.infos(header) 
+    header = spc.header.infos(header) 
     if (length(header.idx.ser)>0) {
       for (JJ in header.idx.ser){
         header[[JJ]] = unserialize(charToRaw(gsub('_a_','\n',header[[JJ]])))
