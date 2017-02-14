@@ -1099,6 +1099,23 @@ setMethod("Math", signature("Spectra"),function (x) {
   validObject(x)
   return(x)
 })
+#############################################################
+#spc.colMeans
+#############################################################
+#' Computes the mean along the rows of \code{Spectra} (@Spectra)
+#' @description
+#' Computes the mean along the rows of Spectra (@Spectra). The method finds the measurement 
+#' closest in time to the mean time and keeps the spatial/time attributes as well as Ancillary
+#' data table (@data) associated to that measurement as that of the mean spectra
+#'@usage 
+#' spc.colMeans(object)
+#'
+#' @param object a \code{Spectra} object 
+#' 
+#' @examples 
+#' sp=spc.example_spectra()
+#' spc.colMeans(sp)
+#' 
 setGeneric (name= "spc.colMeans",def=function(object){standardGeneric("spc.colMeans")})
 setMethod("spc.colMeans", signature("Spectra"),function (object) {
   #Computes the mean along the rows of Spectra (@Spectra). The method finds the measurement
