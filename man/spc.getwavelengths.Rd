@@ -10,10 +10,10 @@ spc.getwavelengths(object)
 \item{object}{A \code{Spectra} object}
 }
 \value{
-numeric vector of  wave lenghts
+numeric vector of  wave lengths
 }
 \description{
-Get wave lenghts insade of  a \code{Spectra} object
+Get wave lenghts inside of  a \code{Spectra} object
 }
 \examples{
  x <- spc.example_spectra()

@@ -22,8 +22,8 @@ Operators acting on  \code{Spectra} objects  to extract or replace parts
 }
 \examples{
  sp<-spc.example_spectra()
-  BL = spc.makeSpcList(sp,"CAST")
- BL$a_nap
+ BL = spc.makeSpcList(sp,"CAST")
+ BL$`38`
  
 
 }

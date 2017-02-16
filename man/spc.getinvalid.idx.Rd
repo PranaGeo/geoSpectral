@@ -13,7 +13,7 @@ spc.getinvalid.idx(object)
 Logical vector
 }
 \description{
-Extract the row indexes stored as invaild
+Extract the row indexes stored as invalid
 }
 \examples{
 sp= spc.example_spectra()
