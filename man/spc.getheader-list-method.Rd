@@ -19,7 +19,7 @@ Extracts the value of a field in the header slot of \code{spclist} object
 sp=spc.example_spectra()
 BL = spc.makeSpcList(sp,"CAST")
 BL[[1]]@header
-spc.getheader(BL,"Latitude")
+spc.getheader(BL,"CAST")
 
 
 }

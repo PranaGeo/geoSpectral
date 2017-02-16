@@ -13,10 +13,7 @@ spc.interp.spectral(source1,target_lbd,show.plot=FALSE)
 
 \item{...}{further arguments to pass on to approx().}
 
-\item{show.plot}{logical TRUE for a graphical representation of the first Spectra row.}
-
-\item{rule}{an integer (of length 1 or 2) describing how interpolation 
-is to take place outside the interval [min(x), max(x)]. See approx().}
+\item{show.plot}{logical TRUE if a graphical representation is required}
 }
 \description{
 Estimate spectral data at a new set of wavelengths through interpolation

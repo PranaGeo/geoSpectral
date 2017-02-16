@@ -21,10 +21,12 @@ Function sets or changes the value of a field in the header slot of \code{spclis
 }
 \examples{
 sp=spc.example_spectra()
-BL=spc.data2header(sp,"CAST")
+BL=spc.makeSpcList(sp,"CAST")
 a=new("SpcHeader") # create new SpcHeader class
 a$Longitude=123 
 spc.setheader(BL[[1]],"Station") <- a
-BL[[1]]@header
+h=spc.getheader(BL[[1]])
+h
+
 }
 

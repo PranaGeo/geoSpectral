@@ -12,7 +12,7 @@ spc.colnames(x,...)
 \item{...}{arguments to be passed to or from other methods}
 }
 \value{
-Returns the coulmn names of an object of class \code{Spectra} as a charecter vector.
+Returns the column  names of an object of class \code{Spectra} as a character  vector.
 }
 \description{
 Retrieve  column names of a \code{Spectra} object
@@ -22,7 +22,7 @@ x <- spc.example_spectra()
 spc.colnames(x)
 # or 
 spc.colnames(x) <-spc.cname.construct(x)
-
+spc.colnames(x)
 }
 \seealso{
 \code{\link{spc.cname.construct}}

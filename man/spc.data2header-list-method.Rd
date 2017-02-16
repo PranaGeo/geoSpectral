@@ -32,7 +32,7 @@ can be compressed by selecting compress=TRUE (default is FALSE). This would take
 from the @data column.
  @examples 
 sp=spc.example_spectra()
-BL=spc.data2header(sp,"CAST")
+BL=spc.makeSpcList(sp,"CAST")
 BL[[1]]@header
  BL[[1]]=spc.data2header(BL[[1]],"CAST","ProjectCast")
 BL[[1]]@header

@@ -10,7 +10,7 @@ spc.plot.map.leaflet(sp, hover_field = "row", color = "#FF0000",
 \arguments{
 \item{sp}{\code{Spectra} object}
 
-\item{hover_field}{A chracter or vector of strings giving column 
+\item{hover_field}{A character  or vector of strings giving column 
 names of \code{Spectra} object. This information will be displayed when 
 hovering over the glyph}
 

@@ -4,7 +4,7 @@
 \alias{spc.Read_NOMAD_v2}
 \title{Read the NOMAD v2 bio-optical database}
 \usage{
-spc.Read_NOMAD_v2(skip.all.na.rows = TRUE)
+spc.Read_NOMAD_v2(fnm, skip.all.na.rows = TRUE)
 }
 \arguments{
 \item{infile}{\code{character} containing the name of the input file.}
@@ -17,8 +17,8 @@ Imports the NOMAD v2 database of the SeaBASS project. More information
 about this dataset can be found at \link{http://seabass.gsfc.nasa.gov/wiki/article.cgi?article=NOMAD}
 }
 \examples{
-a = spc.Read_NOMAD_v2(fnm)
-
-spc.plot.plotly(ap, plot.max=15)
+ap = spc.Read_NOMAD_v2(fnm)
+class(ap)
+spc.plot.plotly(ap[[4]], plot.max=15)
 }
 
