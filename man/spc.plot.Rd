@@ -21,4 +21,3 @@ spc.plot(x)
 \seealso{
 \code{\link{spc.lines}}
 }
-

@@ -24,4 +24,3 @@ If header element has length >1, its type is checked. If it is "character",
 its elements will be pasted using paste(...,collapse="|"). If it is another 
 type, only the first element will be taken.
 }
-

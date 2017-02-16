@@ -25,4 +25,3 @@ spc.colnames(x) <-spc.cname.construct(x)
 \seealso{
 \code{\link{spc.cname.construct}}
 }
-

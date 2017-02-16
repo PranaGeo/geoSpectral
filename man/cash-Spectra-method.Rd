@@ -30,4 +30,3 @@ Operators acting on  \code{Spectra} objects  to extract or replace parts
 
 
 }
-

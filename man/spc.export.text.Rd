@@ -24,4 +24,3 @@ spc.plot(aa)
 \seealso{
 \code{\link{spc.import.text}}
 }
-
