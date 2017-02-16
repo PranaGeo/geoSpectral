@@ -2561,10 +2561,10 @@ spc.example_spectra = function(){
 #' @return Returns an object of class \code{data.frame}.
 #'
 #' @examples
-#' a = spc.Read_NOMAD_v2(fnm)
-#'
-#' spc.plot.plotly(ap, plot.max=15)
-spc.Read_NOMAD_v2 = function(skip.all.na.rows=TRUE) {
+#' ap = spc.Read_NOMAD_v2(fnm)
+#' class(ap)
+#' spc.plot.plotly(ap[[4]], plot.max=15)
+spc.Read_NOMAD_v2 = function(fnm,skip.all.na.rows=TRUE) {
   fnm = file.path(system.file(package = "geoSpectral"), "test_data","nomad_seabass_v2.a_2008200.txt.gz")
   #Read data off disk
   print(paste("Reading the NOMAD file", fnm, "off disk."))
