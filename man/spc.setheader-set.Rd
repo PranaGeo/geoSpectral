@@ -28,4 +28,3 @@ sp@header
 \seealso{
 \code{\link{spc.getheader}}
 }
-

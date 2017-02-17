@@ -14,4 +14,3 @@ a collection of multiple \code{Spectra} objects inside a list.
 sp=spc.example_spectra()
 as(list(sp,sp^2), "SpcList")
 }
-

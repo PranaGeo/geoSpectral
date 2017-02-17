@@ -23,4 +23,3 @@ sp=spc.example_spectra()
 BL=spc.makeSpcList(sp,"CAST")
 spc.lapply(BL,function(x) {nrow(x)})
 }
-

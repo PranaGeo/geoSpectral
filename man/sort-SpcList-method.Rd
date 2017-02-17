@@ -32,4 +32,3 @@ spL <- spc.makeSpcList(sp,"STATION")
 spL.s <- sort(spL,which.col="CAST",decreasing=TRUE)
 lapply(spL.s, function(x) as.character(x[["CAST"]]))
 }
-

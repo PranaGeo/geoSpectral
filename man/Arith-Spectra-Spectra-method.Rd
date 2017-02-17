@@ -24,4 +24,3 @@ These methods allow performing arithmetic operations involving \code{Spectra} ob
 \seealso{
 \code{\link{Arith}}
 }
-
