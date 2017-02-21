@@ -12,7 +12,7 @@ spc.setinvalid.idx(object,value)
 \item{x}{A \code{Spectra} object}
 }
 \description{
-Stores the row indexes as invaild
+Stores the row indexes as invalid
 }
 \examples{
  
@@ -21,6 +21,5 @@ spc.getinvalid.idx(sp) #No invalid rows
 vld = rep(TRUE,26)
 vld[1:5]<-FALSE
 spc.setinvalid.idx(sp)<-vld #Mark the first 5 rows as invalid
-
+spc.getinvalid.idx(sp)
 }
-

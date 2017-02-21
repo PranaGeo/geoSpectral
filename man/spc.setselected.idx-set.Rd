@@ -15,7 +15,7 @@ spc.setselected.idx(x,value)
 \code{Spectra} object
 }
 \description{
-Set or change selection row index of a \code{Spectra} object
+Set or change selected  row index of a \code{Spectra} object
 }
 \examples{
 x <- spc.example_spectra()
@@ -27,4 +27,3 @@ spc.plot(x)
 \seealso{
 \code{\link{spc.getselected.idx}}
 }
-

@@ -15,7 +15,7 @@ use \code{\link{point_types}}}
 
 \item{color}{Determine color of points}
 
-\item{legend}{not implimented yet}
+\item{legend}{not implemented  yet}
 
 \item{hover}{String or vector of strings giving column 
 names of \code{Spectra} object. This information will be displayed when 
@@ -32,4 +32,3 @@ sp=spc.example_spectra()
 spc.plot.map.rbokeh(sp, hover = "Snap")
 spc.plot.map.rbokeh(sp)
 }
-

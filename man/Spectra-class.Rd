@@ -20,4 +20,3 @@ setClass(class, contains,pepresentation,prototype)
 Create a spectra class definition, specifying the representation (the slots) and/or the classes contained in this one (the superclasses),
 plus other optional details. As a side effect, the class definition is stored in the specified environment
 }
-
