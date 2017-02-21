@@ -18,7 +18,7 @@ vector of characters
 \description{
 Function for a \code{Spectra} object that generates column names made of a 
 combination of @shortName and @Wavelenght slots. If \code{value} is 
-ommitted, the @ShortName slot is used.
+omitted, the @ShortName slot is used.
 }
 \examples{
 sp <- spc.example_spectra()
@@ -26,4 +26,3 @@ spc.cname.construct(sp)
 spc.cname.construct(sp,"Newvar")
 
 }
-

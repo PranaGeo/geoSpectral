@@ -10,7 +10,7 @@ spc.plot.map.plotly(sp, hover_field = "row", color = "#FF0000",
 \arguments{
 \item{sp}{A \code{Spectra} object}
 
-\item{hover_field}{A chracter, colmn names of sp object to be used  in hover box}
+\item{hover_field}{A character, column  names of sp object to be used  in hover box}
 
 \item{color}{Determine color of points}
 
@@ -25,4 +25,3 @@ sp <- spc.example_spectra()
 spc.plot.map.plotly(sp)
 
 }
-

@@ -27,7 +27,6 @@ Operators acting on  \code{Spectra} objects  to extract or replace parts
   #Extract station 394 (returns Spectra object)
   BL$`394`
   
-  
   BL@by="CRUISE"
   BL[[1]]$CRUISE="Cruise1"
   BL[[2]]$CRUISE="Cruise2"
@@ -39,4 +38,3 @@ Operators acting on  \code{Spectra} objects  to extract or replace parts
   BL$Cruise4
 
 }
-

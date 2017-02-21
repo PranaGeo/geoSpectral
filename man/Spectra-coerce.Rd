@@ -2,6 +2,8 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{Spectra-coerce}
 \alias{Spectra-coerce}
+\alias{Spectra-coerce}
+\alias{Spectra-coerce}
 \title{Conversion between \code{Spectra} and data.frame objects}
 \usage{
 as(from, to)
@@ -38,4 +40,3 @@ attr(df2, "Wavelengths") <- c(500, 600)
 attr(df2, "ShortName") <- "abs"
 as(df2, "Spectra")
 }
-

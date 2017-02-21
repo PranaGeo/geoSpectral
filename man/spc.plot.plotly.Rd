@@ -2,24 +2,31 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.plot.plotly}
 \alias{spc.plot.plotly}
-\title{sp = spc.example_spectra()
-spc.plot.plotly(sp)
-spc.plot.plotly(sp,legend_field = "Spectra")
-spc.plot.plotly(sp,legend_field = "CAST")
-spc.plot.plotly(sp,legend_field = "NISKIN")
-spc.plot.plotly(sp,legend_field = "STATION")
-spc.plot.plotly(sp,legend_field = "anap_440")}
+\title{Plot a Spectra object data}
 \usage{
 spc.plot.plotly(sp, plot.max = 10, showlegend = FALSE,
   legend_field = "row", hoverinfo = "title", title = sp@LongName)
 }
-\description{
+\arguments{
+\item{sp}{A \code{Spectra} object}
+
+\item{plot.max}{numeric value for a maximum number of data in plot}
+
+\item{showlegend}{logical, to display legend or not, default is FALSE}
+
+\item{hoverinfo}{a chracter, info about  \code{Spectra} object to be used  in hover box}
+
+\item{title}{a chracter string, title for plot
 sp = spc.example_spectra()
 spc.plot.plotly(sp)
 spc.plot.plotly(sp,legend_field = "Spectra")
 spc.plot.plotly(sp,legend_field = "CAST")
 spc.plot.plotly(sp,legend_field = "NISKIN")
 spc.plot.plotly(sp,legend_field = "STATION")
-spc.plot.plotly(sp,legend_field = "anap_440")
-}
+spc.plot.plotly(sp,legend_field = "anap_440")}
 
+\item{column}{Number or name , defoult value is 10 if a number or name has not been entered}
+}
+\description{
+Plot a \code{Spectra} object with plotly engine
+}
