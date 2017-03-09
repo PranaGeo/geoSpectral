@@ -1062,8 +1062,8 @@ spc.STI.stdistance = function(master,searched,report=F){
 #' \code{Spectra} object e1 and a numeric value.
 #'
 #'@usage 
-#' e1 * e2
-#' e1 + 0.5
+#' Arith(e1 * e2)
+#' Arith(e1 + 0.5)
 #'
 #' @param e1 spectra object 
 #' @param e2 spectra object or other
@@ -2060,7 +2060,7 @@ setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,file
 #'It is possible to perform a row-wise selection
 #'
 #' @usage 
-#' subset(x,y,select,...)
+#' subset(x,y,select,drop,...)
 #' 
 #' 
 #' @param drop passed on to [ indexing operator. Default is FALSE 

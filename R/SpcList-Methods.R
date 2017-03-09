@@ -450,7 +450,9 @@ setMethod("show", "SpcList", function(object){
 #'  \code{SpcList} class.
 #' @description Definition for \code{SpcList}. This class provides
 #' a collection of multiple \code{Spectra} objects inside a list.
-#' 
+#' @usage 
+#' SpcList(x)
+#' @param x a list object
 #' @examples 
 #' sp=spc.example_spectra()
 #' as(list(sp,sp^2), "SpcList")
