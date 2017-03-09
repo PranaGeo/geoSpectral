@@ -677,7 +677,6 @@ setMethod("spc.lines",signature = "Spectra",definition = function(x,...){
 #'
 #' @param ... \code{Spectra} object
 #' @param compressHeader Compress the header (make multiple all-equal header elements as ONE, default value is TRUE	
-#' @seealso \code{\link{spc.cbind}}
 #' @return  \code{Spectra} object 
 #' @examples
 #' x <- spc.example_spectra()
@@ -801,7 +800,6 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...,compressHeader
 #'
 #' @param ... \code{Spectra} object
 #' 
-#' @seealso \code{\link{spc.cbind}}
 #'
 #' @examples
 #' x <- spc.example_spectra()
