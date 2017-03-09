@@ -27,4 +27,3 @@ spc.plot(x)
 \seealso{
 \code{\link{spc.getselected.idx}}
 }
-

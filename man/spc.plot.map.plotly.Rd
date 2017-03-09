@@ -25,4 +25,3 @@ sp <- spc.example_spectra()
 spc.plot.map.plotly(sp)
 
 }
-

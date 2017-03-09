@@ -16,4 +16,3 @@ Constructs a rectangle of sp::Lines using the bounding box of a \code{Spectra} o
 sp=spc.example_spectra()
 spc.bbox2lines(sp)
 }
-

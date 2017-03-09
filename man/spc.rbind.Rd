@@ -27,7 +27,3 @@ nrow(x2)  #[1] 52
 
 
 }
-\seealso{
-\code{\link{spc.cbind}}
-}
-

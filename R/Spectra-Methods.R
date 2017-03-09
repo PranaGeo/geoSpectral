@@ -464,7 +464,7 @@ setMethod("show", "Spectra", function(object){
 #' x[i] 
 #' x[i, j] 
 #' x[[i]] 
-#' x$i #More usage cases to be added
+#' x$i 
 #' 
 #' 
 #' @param \code{Spectra} object from which to extract element(s) or in which to replace element(s)
@@ -677,7 +677,6 @@ setMethod("spc.lines",signature = "Spectra",definition = function(x,...){
 #'
 #' @param ... \code{Spectra} object
 #' @param compressHeader Compress the header (make multiple all-equal header elements as ONE, default value is TRUE	
-#' @seealso \code{\link{spc.cbind}}
 #' @return  \code{Spectra} object 
 #' @examples
 #' x <- spc.example_spectra()
@@ -801,7 +800,6 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...,compressHeader
 #'
 #' @param ... \code{Spectra} object
 #' 
-#' @seealso \code{\link{spc.cbind}}
 #'
 #' @examples
 #' x <- spc.example_spectra()
@@ -1060,21 +1058,24 @@ spc.STI.stdistance = function(master,searched,report=F){
 #########################################################################
 #' Apply arithmetic operations on/between \code{Spectra} objects
 #' @description
-#' Methods definig Arithmetic operations between two \code{Spectra} objects e1 and e2 or one
+#' Methods defining Arithmetic operations between two \code{Spectra} objects e1 and e2 or one
 #' \code{Spectra} object e1 and a numeric value.
 #'
 #'@usage 
-#' Arith(e1, e2)
-#' e1 * e2
-#' e1 + 0.5
+#' Arith(e1 * e2)
+#' Arith(e1 + 0.5)
 #'
 #' @param e1 spectra object 
-#' @param e2 spectra object 
+#' @param e2 spectra object or other
 #' 
 #' @details 
 #' These methods allow performing arithmetic operations involving \code{Spectra} objects.
-#' 
+#' @name Arith
 #' @seealso \code{\link{Arith}}
+#' 
+NULL
+
+#' @name Arith
 setMethod("Arith", signature(e1 = "Spectra", e2 = "Spectra"),function (e1, e2) {
   result <- callGeneric(e1@Spectra, e2@Spectra)
   output = e1
@@ -1083,9 +1084,7 @@ setMethod("Arith", signature(e1 = "Spectra", e2 = "Spectra"),function (e1, e2) {
   return(output)
 })
 
-#########################################################################
-# Method : Arith
-#########################################################################
+#' @name Arith
 setMethod("Arith", signature(e1 = "Spectra", e2 = "numeric"),function (e1, e2) {
   result <- callGeneric(e1@Spectra, e2)
   output = e1
@@ -2061,7 +2060,7 @@ setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,file
 #'It is possible to perform a row-wise selection
 #'
 #' @usage 
-#' subset(x,y,select,...)
+#' subset(x,y,select,drop,...)
 #' 
 #' 
 #' @param drop passed on to [ indexing operator. Default is FALSE 

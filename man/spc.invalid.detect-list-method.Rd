@@ -19,4 +19,3 @@ BL = spc.makeSpcList(sp,"CAST")
 invalid=spc.getheader(BL)
 show(invalid)
 }
-
