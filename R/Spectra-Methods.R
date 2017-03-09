@@ -156,8 +156,8 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
 #' While these attributes are generally created during the conversion of a
 #' \code{Spectra} object into data.frame, they can 
 #' also be manually set if they are non-existant (see the example below).
-#' @usage 
-#' as(from, to)
+#' @aliases as<- as<-.Spectra
+#' @usage \method{as}{Spectra}(from, to)
 #' @param from The input object
 #' @param to Name of the class of output object
 #' @name Spectra-coerce
@@ -173,7 +173,7 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
 #' sp2
 #' 
 #' #Convert a bare data.frame to Spectra with minimal attributes
-#' df2 <- data.frame(ch1=c(1,2,3,4), ch2=c(5,6,7,8), TIME=Sys.time()+1:4)
+#' df2 <- data.frame(ch1=c(1,2,3,4), ch2=c(5,6,7,8), TIME=Sys.time()+1:4, LAT=1:4, LON=5:8)
 #' attr(df2, "Units") <- "m-1"
 #' attr(df2, "Wavelengths") <- c(500, 600)
 #' attr(df2, "ShortName") <- "abs"

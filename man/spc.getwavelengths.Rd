@@ -23,3 +23,4 @@ Get wave lenghts inside of  a \code{Spectra} object
 \seealso{
 \code{\link{spc.setwavelengths}}
 }
+

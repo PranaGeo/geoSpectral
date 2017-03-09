@@ -17,3 +17,4 @@ sp=spc.example_spectra()
 invalid=spc.invalid.detect(sp)
 show(invalid)
 }
+

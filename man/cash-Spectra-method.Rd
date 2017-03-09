@@ -27,3 +27,4 @@ Operators acting on  \code{Spectra} objects  to extract or replace parts
  head(sp$anap_300)
  sp[,"anap_345"]
 }
+

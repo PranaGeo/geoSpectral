@@ -27,5 +27,6 @@ Collate:
     SpcList-Class.R
     SpcList-Methods.R
     geoSpectral.R
-RoxygenNote: 6.0.1
-Suggests: testthat
+RoxygenNote: 5.0.1
+Suggests:
+    testthat
