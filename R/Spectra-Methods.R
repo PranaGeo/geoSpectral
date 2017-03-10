@@ -1196,7 +1196,7 @@ setMethod("spc.invalid.detect", signature = "Spectra", def=function(source1){
 #' @usage 
 #' spc.getheader(x,name)
 #'
-#' @seealso \code{\link{spc.setheader}}
+#' @seealso \code{\link{spc.setheader<-}}
 #' 
 #' @param x  A  \code{Spectra} object 
 #' @param name of the header field to be extracted
@@ -2546,7 +2546,7 @@ spc.example_spectra = function(){
 #'
 #'@description
 #' Imports the NOMAD v2 database of the SeaBASS project. More information 
-#' about this dataset can be found at \link{http://seabass.gsfc.nasa.gov/wiki/article.cgi?article=NOMAD}
+#' about this dataset can be found at \url{http://seabass.gsfc.nasa.gov/wiki/article.cgi?article=NOMAD}
 #'
 #' @param infile \code{character} containing the name of the input file.
 #'
