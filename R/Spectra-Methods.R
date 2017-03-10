@@ -1077,7 +1077,7 @@ NULL
 
 #' @name Arith
 setMethod("Arith", signature(e1 = "Spectra", e2 = "Spectra"),function (e1, e2) {
-  result <- callGeneric(e1@Spectra, e2@Spectra)
+  result <- methods::callGeneric(e1@Spectra, e2@Spectra)
   output = e1
   output@Spectra = result
   validObject(output)
@@ -1686,7 +1686,7 @@ setMethod("rep", signature(x = "Spectra"),
             
             crds = matrix(rep(x@sp@coords,times),ncol=ncol(x@sp@coords),byrow=T)
             colnames(crds)<-c("LON","LAT")
-            x@time = xts(rep(x@time,times),rep(time(x@time),times))
+            x@time = xts::xts(rep(x@time,times),rep(time(x@time),times))
             x@endTime = rep(x@endTime,times)
             x@sp@coords <- crds
             if(prod(dim(x@data))!=0)
@@ -2595,7 +2595,6 @@ spc.Read_NOMAD_v2 = function(fnm,skip.all.na.rows=TRUE) {
   mydata = mydata [, -do.call(c, idx)]
   
   #Reorder columns
-  require(dplyr)
   mydata = mydata %>% select(TIME, LON, LAT, cruise, flag, everything())
   
   out = lapply(1:length(ShortNames), function(x) {
@@ -2642,7 +2641,7 @@ setMethod("spc.plot.plotly", signature="Spectra", function (sp, plot.max=10,show
   # kk=melt(kk,id.vars=1)
   # p <- plotly::plot_ly(kk, x=~Wavelength, y=~value, type="scatter", mode="lines",color = ~variable,
   #              colors="Spectral", opacity=0.5, line=list(width = 1)) #,evaluate = FALSE) #, colors=pal,line = list(opacity=0.1))
-  require(plotly)
+  # require(plotly)
   if (plot.max > nrow(sp))
     plot.max = nrow(sp)
 
@@ -2655,14 +2654,14 @@ setMethod("spc.plot.plotly", signature="Spectra", function (sp, plot.max=10,show
   
   ylab = paste(sp@ShortName, " [", sp@Units, "]", sep="")
   xlab = paste("Wavelength [", sp@WavelengthsUnit, "]", sep="")
-  p <- plot_ly()
+  p <- plotly::plot_ly()
   for(I in 1:length(idx)) {  
-    p <- add_trace(p, x=sp@Wavelengths, y=sp@Spectra[idx[I],],type = "scatter", mode="lines",
+    p <- plotly::add_trace(p, x=sp@Wavelengths, y=sp@Spectra[idx[I],],type = "scatter", mode="lines",
                    name=legend_field[idx[I]], hoverinfo=hoverinfo
                    #,marker=list(color=line[['color']])
                    )
   }
-  p = layout(p,
+  p = plotly::layout(p,
              title = title,
              hovermode = "closest",
              xaxis = list(title = xlab), #rangeslider = list(type = "linear")),
@@ -2688,7 +2687,7 @@ setMethod("spc.plot.plotly", signature="Spectra", function (sp, plot.max=10,show
 setGeneric (name= "spc.plot.time.plotly",
             def=function(sp, column, plot.max=10,showlegend=FALSE,hoverinfo="name",title=sp@LongName){standardGeneric("spc.plot.time.plotly")})
 setMethod("spc.plot.time.plotly", signature="Spectra", function (sp, column, plot.max=10,showlegend,hoverinfo,title) {
-  require(plotly)
+  # require(plotly)
   if(missing("column")){
     if(ncol(sp)<10)
       idx = 1:ncol(sp)
@@ -2700,13 +2699,13 @@ setMethod("spc.plot.time.plotly", signature="Spectra", function (sp, column, plo
   ylab = paste(sp@ShortName, " [", sp@Units, "]", sep="")
   myTime = time(sp@time)
   
-  p=plot_ly(x = myTime , y = sp[[column[1]]], type="scatter", mode = "lines + markers",name=column[1])
+  p=plotly::plot_ly(x = myTime , y = sp[[column[1]]], type="scatter", mode = "lines + markers",name=column[1])
   if(length(column)>1)
     for(I in 2:length(column))
-      p=add_trace(p, x = myTime , y = sp[[column[I]]], 
+      p=plotly::add_trace(p, x = myTime , y = sp[[column[I]]], 
                   type="scatter", mode = "lines + markers", 
                   name=column[I], hoverinfo=hoverinfo) 
-  p = layout(p,
+  p = plotly::layout(p,
              title = title,
              hovermode = "closest",
              xaxis = list(title = "Time",
@@ -2744,7 +2743,7 @@ setMethod("spc.plot.time.plotly", signature="Spectra", function (sp, column, plo
 setGeneric (name= "spc.plot.depth.plotly",
             def=function(sp, column, plot.max=10,showlegend=FALSE,hoverinfo="name",title=sp@LongName){standardGeneric("spc.plot.depth.plotly")})
 setMethod("spc.plot.depth.plotly", signature="Spectra", function (sp, column, plot.max=10,showlegend,hoverinfo,title) {
-  require(plotly)
+  # require(plotly)
   if(missing("column")){
     if(ncol(sp)<10)
       idx = 1:ncol(sp)
@@ -2755,13 +2754,13 @@ setMethod("spc.plot.depth.plotly", signature="Spectra", function (sp, column, pl
   }
   xlab = paste(sp@ShortName, " [", sp@Units, "]", sep="")
   
-  p=plot_ly(x = sp[[column[1]]] , y = sp$DEPTH, type="scatter", mode = "lines + markers",name=column[1])
+  p=plotly::plot_ly(x = sp[[column[1]]] , y = sp$DEPTH, type="scatter", mode = "lines + markers",name=column[1])
   if(length(column)>1)
     for(I in 2:length(column))
-      p=add_trace(p, x = sp[[column[I]]] , y =sp$DEPTH, type="scatter", mode = "lines + markers", 
+      p=plotly::add_trace(p, x = sp[[column[I]]] , y =sp$DEPTH, type="scatter", mode = "lines + markers", 
                   name=column[I], hoverinfo=hoverinfo) 
   # layout(yaxis = list(autorange = "reversed"))
-  p = layout(p,
+  p = plotly::layout(p,
              title = title,
              hovermode = "closest",
              xaxis = list(title = xlab),
@@ -2794,7 +2793,7 @@ setMethod("spc.plot.depth.plotly", signature="Spectra", function (sp, column, pl
 setGeneric (name= "spc.plot.map.plotly",
             def=function(sp,hover_field="row", color="#FF0000", opacity=1){standardGeneric("spc.plot.map.plotly")})
 setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, hover_field, color, opacity) {
-  require(plotly)
+  # require(plotly)
   bbx = sp@sp@bbox
   bbx[,2] =  bbx[,2] + (0.04 * abs(bbx[,2]))
   if(bbx[2,2]>90)
@@ -2806,11 +2805,11 @@ setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, hover_field,
   g <- list(
     #scope = 'north america',
     showland = TRUE,
-    landcolor = toRGB("grey83"),
-    subunitcolor = toRGB("white"),
-    countrycolor = toRGB("white"),
+    landcolor = plotly::toRGB("grey83"),
+    subunitcolor = plotly::toRGB("white"),
+    countrycolor = plotly::toRGB("white"),
     showlakes = TRUE,
-    lakecolor = toRGB("blue"),
+    lakecolor = plotly::toRGB("blue"),
     showrivers = TRUE,
     showsubunits = TRUE,
     showcountries = TRUE,
@@ -2837,11 +2836,11 @@ setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, hover_field,
     
   if(length(color==1))
     color = rep(color, nrow(sp))
-  p <- plot_ly(lat = sp@sp@coords[,"LAT"], lon = sp@sp@coords[,"LON"], 
+  p <- plotly::plot_ly(lat = sp@sp@coords[,"LAT"], lon = sp@sp@coords[,"LON"], 
                #text = hover, color = Globvalue,marker = m
                type = 'scattergeo', color=color, opacity=opacity
   ) 
-  p <- layout(p, geo = g, showlegend=FALSE)
+  p <- plotly::layout(p, geo = g, showlegend=FALSE)
   p
 })
 
@@ -2866,7 +2865,6 @@ setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, hover_field,
  setGeneric (name= "spc.plot.map.leaflet",
             def=function(sp,hover_field = "row",color = "#FF0000",opacity = 1,  weight=5){standardGeneric("spc.plot.map.leaflet")})
  setMethod("spc.plot.map.leaflet", signature="Spectra", function (sp,hover_field = "row",color = "#FF0000",opacity = 1,  weight=5) {
-  require(leaflet)
 
    hover_field = paste0(hover_field, 1:nrow(sp))
   
@@ -2905,8 +2903,8 @@ setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, hover_field,
 setGeneric (name= "spc.plot.map.rbokeh",
             def=function(sp,glyph = 2,color = "#FF0000", legend=NULL,hover="row",opacity =1){standardGeneric("spc.plot.map.rbokeh")})
 setMethod("spc.plot.map.rbokeh", signature="Spectra", function (sp,glyph,color, legend,hover,opacity ) {
-  require(rbokeh)
-  require(maps)
+  # require(rbokeh)
+  # require(maps)
   #a=sp$Snap
   df = data.frame(LON = sp@sp@coords[,"LON"])
   df$LAT = sp@sp@coords[,"LAT"]
