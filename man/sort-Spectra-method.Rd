@@ -30,4 +30,3 @@ sp2$STATION
 sp2 <- sort(sp, which.col="STATION", decreasing=TRUE)
 sp2$STATION
 }
-
