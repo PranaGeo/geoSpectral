@@ -2936,10 +2936,10 @@ setMethod("spc.plot.map.rbokeh", signature="Spectra", function (sp,glyph,color, 
 #' sort.idx() function from the base package. Default is NA.
 #' @examples 
 #' sp <- spc.example_spectra()
-#' sp2 <- sort(sp, which.col="STATION")
-#' sp2$STATION
-#' sp2 <- sort(sp, which.col="STATION", decreasing=TRUE)
-#' sp2$STATION
+#' sp2 <- sort(sp, which.col="Offset")
+#' sp2$Offset
+#' sp2 <- sort(sp, which.col="CAST", decreasing=TRUE)
+#' sp2$CAST
 setMethod("sort", signature="Spectra", definition= function (x, decreasing = FALSE, na.last=NA, which.col, ...){
   srt <- sort.int(x[[which.col]], decreasing=decreasing, index.return = TRUE, na.last=na.last, ...)
   x<- x[srt$ix]
