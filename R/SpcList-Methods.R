@@ -416,10 +416,6 @@ setMethod("$", signature = "SpcList",
 #' @description
 #' Display a \code{SpcList} object 
 #'
-#' @usage 
-#' show(x)
-#' # or 
-#' x
 #' @param x a \code{SpcList} object 
 #' @return  show returns an invisible \code{NULL}
 #'

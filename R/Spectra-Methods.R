@@ -351,7 +351,7 @@ setMethod("nrow", signature = "Spectra",
 #' 
 #' x <- spc.example_spectra() 
 #' names(x)
-#' 
+#'
 setMethod("names", signature = "Spectra", 
           def = function (x){ 
             #			if(ncol(x@data)>1)
@@ -396,10 +396,6 @@ setMethod("head", signature = "Spectra",
 #' @description
 #' Display a \code{Spectra} object 
 #'
-#' @usage 
-#' show(x)
-#' # or 
-#' x
 #' @param x a \code{Spectra} object 
 #' @return  show returns an invisible \code{NULL}
 #'
@@ -869,7 +865,7 @@ setMethod("spc.rbind", signature = "STIDF", def = function (...){
 #' @param object A \code{Spectra} object
 #' 
 #' @return numeric vector of  wave lengths
-#' @seealso \code{\link{spc.setwavelengths}}
+#' @seealso \code{\link{spc.setwavelengths<-}}
 #' @examples
 #'  x <- spc.example_spectra()
 #'  spc.getwavelengths(x)
@@ -887,9 +883,6 @@ setMethod("spc.getwavelengths", signature = "Spectra",
 #'
 #'@description
 #'Function  to change or set wavelengths  inside  of  a \code{Spectra} object
-#'
-#'@usage 
-#' spc.setwavelengths(object,value)
 #'
 #'
 #' @param object A \code{Spectra} object
@@ -1203,7 +1196,7 @@ setMethod("spc.invalid.detect", signature = "Spectra", def=function(source1){
 #' @usage 
 #' spc.getheader(x,name)
 #'
-#' @seealso \code{\link{spc.setheader}}
+#' @seealso \code{\link{spc.setheader<-}}
 #' 
 #' @param x  A  \code{Spectra} object 
 #' @param name of the header field to be extracted
@@ -1300,7 +1293,7 @@ setReplaceMethod(f="spc.updateheader", signature="Spectra",
 #'@usage 
 #' spc.getselected.idx(object)
 #'
-#' @seealso \code{\link{spc.setselected.idx}}
+#' @seealso \code{\link{spc.setselected.idx<-}}
 #' 
 #' @param object  A \code{Spectra} object 
 #' @return \code{Spectra} object
@@ -2553,7 +2546,7 @@ spc.example_spectra = function(){
 #'
 #'@description
 #' Imports the NOMAD v2 database of the SeaBASS project. More information 
-#' about this dataset can be found at \link{http://seabass.gsfc.nasa.gov/wiki/article.cgi?article=NOMAD}
+#' about this dataset can be found at \url{http://seabass.gsfc.nasa.gov/wiki/article.cgi?article=NOMAD}
 #'
 #' @param infile \code{character} containing the name of the input file.
 #'

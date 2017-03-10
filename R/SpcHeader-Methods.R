@@ -41,9 +41,6 @@ setMethod("SpcHeaderAdd", signature="SpcHeader", function(object,Name,Value){
 #' Show a SpcHeader object
 #' @description Display a SpcHeader object
 #'
-#' @usage 
-#' show(object)
-#' 
 #' @param object of class SpcHeader
 #' @seealso \code{\link{show}}
 #' 

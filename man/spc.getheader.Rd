@@ -22,6 +22,6 @@ spc.getheader(sp,"Latitude")
 
 }
 \seealso{
-\code{\link{spc.setheader}}
+\code{\link{spc.setheader<-}}
 }
 

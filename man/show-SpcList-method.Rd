@@ -5,9 +5,7 @@
 \alias{show,SpcList-method}
 \title{Show a \code{SpcList} object}
 \usage{
-show(x)
-# or 
-x
+\S4method{show}{SpcList}(object)
 }
 \arguments{
 \item{x}{a \code{SpcList} object}

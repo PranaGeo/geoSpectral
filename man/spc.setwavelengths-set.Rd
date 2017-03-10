@@ -4,7 +4,7 @@
 \alias{spc.setwavelengths<-}
 \title{Setting wavelengths  in a \code{Spectra} object}
 \usage{
-spc.setwavelengths(object,value)
+spc.setwavelengths(object) <- value
 }
 \arguments{
 \item{object}{A \code{Spectra} object}
