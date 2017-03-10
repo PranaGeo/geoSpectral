@@ -6,9 +6,16 @@ Date: 2012-07-02
 Depends:
     R (>= 2.10.0),
     methods,
+    dplyr,
     rgdal,
     spacetime,
-    reshape2
+    reshape2,
+    xts
+Imports:
+    leaflet,
+    maps,
+    rbokeh,
+    plotly
 Author: Servet Cizmeli
 Maintainer: Servet Cizmeli <ahmet@pranageo.com>
 Description: This package provides S4 classes and basic manipulation methods
@@ -27,5 +34,7 @@ Collate:
     SpcList-Class.R
     SpcList-Methods.R
     geoSpectral.R
-RoxygenNote: 6.0.1
-Suggests: testthat
+RoxygenNote: 5.0.1
+Suggests:
+    testthat,
+    xlsx

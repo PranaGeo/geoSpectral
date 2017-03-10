@@ -4,7 +4,10 @@
 \alias{SpcList}
 \title{\code{SpcList} class.}
 \usage{
-SpcList(spclist)
+SpcList(x)
+}
+\arguments{
+\item{x}{a list object}
 }
 \description{
 Definition for \code{SpcList}. This class provides
@@ -14,3 +17,4 @@ a collection of multiple \code{Spectra} objects inside a list.
 sp=spc.example_spectra()
 as(list(sp,sp^2), "SpcList")
 }
+

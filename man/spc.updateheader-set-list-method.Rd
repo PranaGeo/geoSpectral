@@ -24,3 +24,4 @@ BL[[1]]@header
 spc.updateheader(BL[[1]],"Station")<-11
 BL[[1]]@header
 }
+

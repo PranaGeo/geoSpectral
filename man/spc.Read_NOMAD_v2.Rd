@@ -21,3 +21,4 @@ ap = spc.Read_NOMAD_v2(fnm)
 class(ap)
 spc.plot.plotly(ap[[4]], plot.max=15)
 }
+

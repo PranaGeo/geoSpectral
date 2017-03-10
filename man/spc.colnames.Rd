@@ -27,3 +27,4 @@ spc.colnames(x)
 \seealso{
 \code{\link{spc.cname.construct}}
 }
+
