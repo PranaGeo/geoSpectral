@@ -865,7 +865,7 @@ setMethod("spc.rbind", signature = "STIDF", def = function (...){
 #' @param object A \code{Spectra} object
 #' 
 #' @return numeric vector of  wave lengths
-#' @seealso \code{\link{spc.setwavelengths}}
+#' @seealso \code{\link{spc.setwavelengths<-}}
 #' @examples
 #'  x <- spc.example_spectra()
 #'  spc.getwavelengths(x)
