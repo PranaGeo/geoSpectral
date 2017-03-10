@@ -25,9 +25,9 @@ given column (specified by which.col). Sorting with respect to multiple columns 
 }
 \examples{
 sp <- spc.example_spectra()
-sp2 <- sort(sp, which.col="STATION")
-sp2$STATION
-sp2 <- sort(sp, which.col="STATION", decreasing=TRUE)
-sp2$STATION
+sp2 <- sort(sp, which.col="Offset")
+sp2$Offset
+sp2 <- sort(sp, which.col="CAST", decreasing=TRUE)
+sp2$CAST
 }
 

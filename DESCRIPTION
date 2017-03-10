@@ -10,10 +10,10 @@ Depends:
     rgdal,
     spacetime,
     reshape2,
-    xts
+    xts,
+    maps
 Imports:
     leaflet,
-    maps,
     rbokeh,
     plotly,
     sp,
