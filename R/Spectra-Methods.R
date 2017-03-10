@@ -1440,7 +1440,7 @@ setReplaceMethod(f="spc.setinvalid.idx", signature="Spectra",
 #' sp=spc.data2header(sp,"CAST","ProjectCast")
 #' sp@header
 #' sp$CAST=rep(33, nrow(sp))
-#' sp=spc.data2header(sp,"CAST","ProjectCast", compress=T)
+#' sp=spc.data2header(sp,"CAST","ProjectCast", compress=TRUE)
 #' sp@header
 setGeneric(name= "spc.data2header",
            def=function(object,dataname,headerfield,compress=FALSE,...){standardGeneric("spc.data2header")})
@@ -2063,7 +2063,7 @@ setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,file
 #' @param  select Condition selected
 #' @examples 
 #' fnm = file.path(system.file(package = "geoSpectral"), "test_data","particulate_absorption.csv.gz")
-#' abs = read.table(fnm,sep=",",header=T)
+#' abs = read.table(fnm,sep=",",header=TRUE)
 #' abs$STATION=factor(abs$STATION)
 #' abs[1:2,1:17] #Display only the first 2 rows and first 17 columns if the data frame
 #' lbd = as.numeric(gsub("X","",colnames(abs)[14:514]))
@@ -2674,6 +2674,7 @@ setMethod("spc.plot.plotly", signature="Spectra", function (sp, plot.max=10,show
 #' @param hoverinfo  a chracter, info about  \code{Spectra} object to be used  in hover box
 #' @param title a chracter string, title for plot
 #' @examples 
+#' sp = spc.example_spectra()
 #' spc.plot.time.plotly(sp)
 #' spc.plot.time.plotly(sp, plot.max = 3)
 #' spc.plot.time.plotly(sp, c("anap_450","anap_550","anap_650"))
@@ -2716,16 +2717,17 @@ setMethod("spc.plot.time.plotly", signature="Spectra", function (sp, column, plo
 #' @description
 #' Plot a \code{Spectra} object with respect to depth
 #' @examples 
+#' sp = spc.example_spectra()
 #' BL = spc.makeSpcList(sp,"CAST")
 #' p1<-spc.plot.depth.plotly(BL[[5]])
 #' #p1<-layout(p1,title=paste("CAST =", BL[[5]]$CAST[1]))
 #' p2<-spc.plot.depth.plotly(BL[[4]])
-#' #p2<-layout(p2,title=paste("CAST =", BL[[4]]$CAST[1]))
-#' p <- subplot(p1, p2,  margin = 0.05, shareY=TRUE,shareX=TRUE,titleX=TRUE,titleY=TRUE)
-#' p <- layout(p, showlegend = T, 
+#' #p2<-plotly::layout(p2,title=paste("CAST =", BL[[4]]$CAST[1]))
+#' p <- plotly::subplot(p1, p2,  margin = 0.05, shareY=TRUE,shareX=TRUE,titleX=TRUE,titleY=TRUE)
+#' p <- plotly::layout(p, showlegend = TRUE, 
 #' annotations = list(
-#' list(x = 0.2 , y = 1.05, text = BL[[5]]$CAST[1], showarrow = F, xref='paper', yref='paper'),
-#' list(x = 0.8 , y = 1.05, text = BL[[4]]$CAST[1], showarrow = F, xref='paper', yref='paper')))
+#' list(x = 0.2 , y = 1.05, text = BL[[5]]$CAST[1], showarrow = FALSE, xref='paper', yref='paper'),
+#' list(x = 0.8 , y = 1.05, text = BL[[4]]$CAST[1], showarrow = FALSE, xref='paper', yref='paper')))
 #' p
 #' @param sp A \code{Spectra} object
 #' @param column Number or name , default  value is 10 if a number or name has not been entered
@@ -2936,10 +2938,10 @@ setMethod("spc.plot.map.rbokeh", signature="Spectra", function (sp,glyph,color, 
 #' sort.idx() function from the base package. Default is NA.
 #' @examples 
 #' sp <- spc.example_spectra()
-#' sp2 <- sort(sp, which.col="STATION")
-#' sp2$STATION
-#' sp2 <- sort(sp, which.col="STATION", decreasing=TRUE)
-#' sp2$STATION
+#' sp2 <- sort(sp, which.col="Offset")
+#' sp2$Offset
+#' sp2 <- sort(sp, which.col="CAST", decreasing=TRUE)
+#' sp2$CAST
 setMethod("sort", signature="Spectra", definition= function (x, decreasing = FALSE, na.last=NA, which.col, ...){
   srt <- sort.int(x[[which.col]], decreasing=decreasing, index.return = TRUE, na.last=na.last, ...)
   x<- x[srt$ix]
