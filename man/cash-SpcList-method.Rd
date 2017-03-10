@@ -32,8 +32,6 @@ Operators acting on  \code{Spectra} objects  to extract or replace parts
   BL[[2]]$CRUISE="Cruise2"
   BL[[3]]$CRUISE="Cruise3"
   BL[[4]]$CRUISE="Cruise4"
-  BL[[5]]$CRUISE="Cruise5"
-  BL[[6]]$CRUISE="Cruise6"
   names(BL)
   BL$Cruise4
 
