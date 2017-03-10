@@ -1,4 +1,4 @@
-exportPattern("^[[:alpha:]]+")
+exportPattern("^[^\\.]")
 import(
   methods,
   rgdal,
@@ -9,6 +9,6 @@ import(
   maps,
   sp,
   stats)
-importFrom(dplyr, select)
+importFrom(dplyr, select, everything)
 importFrom(rbokeh, figure, ly_map, ly_points)
 importFrom(plotly, plot_ly, add_trace, layout, toRGB)
