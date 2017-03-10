@@ -6,7 +6,9 @@ import(
   reshape2,
   xts,
   leaflet,
-  maps)
+  maps,
+  sp,
+  stats)
 importFrom(dplyr, select)
 importFrom(rbokeh, figure, ly_map, ly_points)
 importFrom(plotly, plot_ly, add_trace, layout, toRGB)

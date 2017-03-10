@@ -351,7 +351,7 @@ setMethod("nrow", signature = "Spectra",
 #' 
 #' x <- spc.example_spectra() 
 #' names(x)
-#' 
+#'
 setMethod("names", signature = "Spectra", 
           def = function (x){ 
             #			if(ncol(x@data)>1)
@@ -396,10 +396,6 @@ setMethod("head", signature = "Spectra",
 #' @description
 #' Display a \code{Spectra} object 
 #'
-#' @usage 
-#' show(x)
-#' # or 
-#' x
 #' @param x a \code{Spectra} object 
 #' @return  show returns an invisible \code{NULL}
 #'
@@ -888,9 +884,6 @@ setMethod("spc.getwavelengths", signature = "Spectra",
 #'@description
 #'Function  to change or set wavelengths  inside  of  a \code{Spectra} object
 #'
-#'@usage 
-#' spc.setwavelengths(object,value)
-#'
 #'
 #' @param object A \code{Spectra} object
 #' @param value Numeric 
@@ -1300,7 +1293,7 @@ setReplaceMethod(f="spc.updateheader", signature="Spectra",
 #'@usage 
 #' spc.getselected.idx(object)
 #'
-#' @seealso \code{\link{spc.setselected.idx}}
+#' @seealso \code{\link{spc.setselected.idx<-}}
 #' 
 #' @param object  A \code{Spectra} object 
 #' @return \code{Spectra} object

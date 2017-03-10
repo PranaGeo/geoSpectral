@@ -15,7 +15,9 @@ Imports:
     leaflet,
     maps,
     rbokeh,
-    plotly
+    plotly,
+    sp,
+    stats
 Author: Servet Cizmeli
 Maintainer: Servet Cizmeli <ahmet@pranageo.com>
 Description: This package provides S4 classes and basic manipulation methods
