@@ -23,5 +23,5 @@ spc.setselected.idx(x)<-idx
 spc.getselected.idx(x)
 }
 \seealso{
-\code{\link{spc.setselected.idx}}
+\code{\link{spc.setselected.idx<-}}
 }

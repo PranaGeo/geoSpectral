@@ -4,7 +4,10 @@
 \alias{SpcList}
 \title{\code{SpcList} class.}
 \usage{
-SpcList(spclist)
+SpcList(x)
+}
+\arguments{
+\item{x}{a list object}
 }
 \description{
 Definition for \code{SpcList}. This class provides

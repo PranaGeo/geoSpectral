@@ -255,7 +255,7 @@ setMethod("spc.plot.depth.overlay", "SpcList", function (object, X, lab_cex, ...
 #' @param  select Condition selected
 #' @examples 
 #' fnm = file.path(system.file(package = "geoSpectral"), "test_data","particulate_absorption.csv.gz")
-#' abs = read.table(fnm,sep=",",header=T)
+#' abs = read.table(fnm,sep=",",header=TRUE)
 #' abs$STATION=factor(abs$STATION)
 #' abs[1:2,1:17] #Display only the first 2 rows and first 17 columns if the data frame
 #' lbd = as.numeric(gsub("X","",colnames(abs)[14:514]))
@@ -395,8 +395,6 @@ setMethod("names", "SpcList", function(x){
 #'   BL[[2]]$CRUISE="Cruise2"
 #'   BL[[3]]$CRUISE="Cruise3"
 #'   BL[[4]]$CRUISE="Cruise4"
-#'   BL[[5]]$CRUISE="Cruise5"
-#'   BL[[6]]$CRUISE="Cruise6"
 #'   names(BL)
 #'   BL$Cruise4
 #' 
@@ -416,10 +414,6 @@ setMethod("$", signature = "SpcList",
 #' @description
 #' Display a \code{SpcList} object 
 #'
-#' @usage 
-#' show(x)
-#' # or 
-#' x
 #' @param x a \code{SpcList} object 
 #' @return  show returns an invisible \code{NULL}
 #'
@@ -450,7 +444,9 @@ setMethod("show", "SpcList", function(object){
 #'  \code{SpcList} class.
 #' @description Definition for \code{SpcList}. This class provides
 #' a collection of multiple \code{Spectra} objects inside a list.
-#' 
+#' @usage 
+#' SpcList(x)
+#' @param x a list object
 #' @examples 
 #' sp=spc.example_spectra()
 #' as(list(sp,sp^2), "SpcList")

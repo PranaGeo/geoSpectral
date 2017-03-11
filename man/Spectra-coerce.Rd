@@ -2,11 +2,13 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{Spectra-coerce}
 \alias{Spectra-coerce}
+\alias{as<-}
+\alias{as<-.Spectra}
 \alias{Spectra-coerce}
 \alias{Spectra-coerce}
 \title{Conversion between \code{Spectra} and data.frame objects}
 \usage{
-as(from, to)
+\method{as}{Spectra}(from, to)
 }
 \arguments{
 \item{from}{The input object}
@@ -34,7 +36,7 @@ sp2 <- as(df, "Spectra")
 sp2
 
 #Convert a bare data.frame to Spectra with minimal attributes
-df2 <- data.frame(ch1=c(1,2,3,4), ch2=c(5,6,7,8), TIME=Sys.time()+1:4)
+df2 <- data.frame(ch1=c(1,2,3,4), ch2=c(5,6,7,8), TIME=Sys.time()+1:4, LAT=1:4, LON=5:8)
 attr(df2, "Units") <- "m-1"
 attr(df2, "Wavelengths") <- c(500, 600)
 attr(df2, "ShortName") <- "abs"

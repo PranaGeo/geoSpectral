@@ -23,6 +23,7 @@ Plot a \code{Spectra} object with respect to time
  @param sp A \code{Spectra} object
 }
 \examples{
+sp = spc.example_spectra()
 spc.plot.time.plotly(sp)
 spc.plot.time.plotly(sp, plot.max = 3)
 spc.plot.time.plotly(sp, c("anap_450","anap_550","anap_650"))

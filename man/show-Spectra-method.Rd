@@ -5,9 +5,7 @@
 \alias{show,Spectra-method}
 \title{Show a \code{Spectra} object}
 \usage{
-show(x)
-# or 
-x
+\S4method{show}{Spectra}(object)
 }
 \arguments{
 \item{x}{a \code{Spectra} object}

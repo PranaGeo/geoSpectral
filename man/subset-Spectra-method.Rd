@@ -5,7 +5,7 @@
 \alias{subset,Spectra-method}
 \title{Subsetting for a \code{Spectra} and spcList classes}
 \usage{
-subset(x,y,select,...)
+subset(x,y,select,drop,...)
 }
 \arguments{
 \item{x}{A \code{Spectra} object}
@@ -24,7 +24,7 @@ It is possible to perform a row-wise selection
 }
 \examples{
 fnm = file.path(system.file(package = "geoSpectral"), "test_data","particulate_absorption.csv.gz")
-abs = read.table(fnm,sep=",",header=T)
+abs = read.table(fnm,sep=",",header=TRUE)
 abs$STATION=factor(abs$STATION)
 abs[1:2,1:17] #Display only the first 2 rows and first 17 columns if the data frame
 lbd = as.numeric(gsub("X","",colnames(abs)[14:514]))
