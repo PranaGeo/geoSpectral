@@ -22,4 +22,3 @@ spc.plot.depth(x)
 \seealso{
 \code{\link{spc.plot}}
 }
-

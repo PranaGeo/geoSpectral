@@ -29,4 +29,3 @@ spc.plot.overlay(SpcList(list(sp,sp2)))
 spc.interp.spectral(sp[,lbd],c(430,450,500),show.plot=TRUE)
 
 }
-

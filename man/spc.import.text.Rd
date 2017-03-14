@@ -26,4 +26,3 @@ spc.plot(aa)
 \seealso{
 \code{\link{spc.export.text}}
 }
-

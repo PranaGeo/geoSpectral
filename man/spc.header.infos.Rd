@@ -19,4 +19,3 @@ sp=spc.example_spectra()
 spc.header.infos(sp@header)
 
 }
-

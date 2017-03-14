@@ -23,4 +23,3 @@ spc.plot.time(x)
 \seealso{
 \code{\link{spc.plot.depth}}
 }
-

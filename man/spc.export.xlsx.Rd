@@ -35,4 +35,3 @@ sp=spc.example_spectra()
 if("xlsx" \%in\% installed.packages())
    spc.export.xlsx(sp,"test.xlsx")
 }
-
