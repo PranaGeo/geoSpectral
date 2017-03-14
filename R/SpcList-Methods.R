@@ -334,7 +334,7 @@ setMethod("subset",  signature="SpcList",
 #' Retrieve   names of a \code{SpcList} object
 #'
 #' @usage 
-#' spc.colnames(x)
+#' names(x)
 #' @param x  A \code{SpcList} object
 #' 
 #' @return Returns the coulmn names of an object of class \code{SpcList} as a charecter vector.
@@ -450,7 +450,7 @@ setMethod("show", "SpcList", function(object){
 #' @examples 
 #' sp=spc.example_spectra()
 #' as(list(sp,sp^2), "SpcList")
-SpcList = function (spclist){
+SpcList = function (x){
 	new("SpcList", spclist)
 }
 #########################################################################
@@ -461,9 +461,9 @@ SpcList = function (spclist){
 #' Detect invalid records (rows) inside of a \code{spclist} object and returns logical object
 #'
 #' @usage 
-#' spc.invalid.detect(x)
+#' spc.invalid.detect(source1)
 #' 
-#' @param x  A  \code{spclist} object 
+#' @param source1  A  \code{spclist} object 
 #' @examples 
 #' sp=spc.example_spectra()
 #' BL = spc.makeSpcList(sp,"CAST")
@@ -482,10 +482,10 @@ setMethod("spc.invalid.detect", signature = "list", def=function(source1){
 #' Extracts the value of a field in the header slot of \code{spclist} object
 #'
 #' @usage 
-#' spc.getheader(x,name)
+#' spc.getheader(object,name)
 #'
 #' 
-#' @param x  A  \code{spclist} object 
+#' @param object  A  \code{spclist} object 
 #' @param name of the header field to be extracted
 #' 
 #' @examples 
@@ -544,9 +544,9 @@ setReplaceMethod(f="spc.setheader", signature="list",
 #'  Updates or changes the value of a field in the header slot of \code{spclist} object 
 #'
 #' @usage 
-#' spc.updateheader(x,name,...)<-value
+#' spc.updateheader(object,name,...)<-value
 #' @param ... arguments to be passed to or from other methods 
-#' @param x A \code{Spectra} objec 
+#' @param object A \code{Spectra} objec 
 #' @param name of the header field to be updated
 #' @examples 
 #' sp=spc.example_spectra()
@@ -577,7 +577,7 @@ setReplaceMethod(f="spc.updateheader", signature="list",
 #' Populates a field of @header with a column data from @data slot.
 #'
 #' @usage 
-#' spc.data2header(object,dataname,headerfield,compress=TRUE,...)
+#' spc.data2header(object,dataname,headerfield,compress,...)
 #'
 #' 
 #' @param dataname A character object specifying the name of @data column to be used
@@ -696,7 +696,7 @@ h2d = function(object,headerfield,dataname,compress=TRUE,...) {
 #' Get  the header for data of each element  with a column
 #'
 #' @usage 
-#' spc.header2data(object,headerfield,dataname,compress=TRUE,...)
+#' spc.header2data(object,headerfield,dataname,compress,...)
 #'
 #' 
 #' @param dataname list \code{spclist} object

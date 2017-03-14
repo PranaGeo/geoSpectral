@@ -6,7 +6,7 @@
 #' @description Function add the value of a field in the header slot of \code{SpcHeader} class object
 #'
 #' @usage 
-#' SpcHeaderAdd (object,Name,Value)
+#' SpcHeaderAdd (object,Name,Value,...)
 #' 
 #' @param object of class SpcHeader
 #' @param Name a character variable  
