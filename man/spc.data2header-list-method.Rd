@@ -5,7 +5,7 @@
 \alias{spc.data2header,list-method}
 \title{Populate fields of header slot using data from data slot}
 \usage{
-spc.data2header(object,dataname,headerfield,compress=TRUE,...)
+spc.data2header(object,dataname,headerfield,compress,...)
 }
 \arguments{
 \item{object}{\code{spclist} object}

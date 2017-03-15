@@ -5,7 +5,7 @@
 \alias{names,SpcList-method}
 \title{names of \code{SpcList} object}
 \usage{
-spc.colnames(x)
+names(x)
 }
 \arguments{
 \item{x}{A \code{SpcList} object}

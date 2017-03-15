@@ -5,12 +5,12 @@
 \alias{spc.updateheader<-,list-method}
 \title{Update a field of the @header slot of a \code{spclist} object}
 \usage{
-spc.updateheader(x,name,...)<-value
+spc.updateheader(object,name,...)<-value
 }
 \arguments{
-\item{...}{arguments to be passed to or from other methods}
+\item{object}{A \code{Spectra} objec}
 
-\item{x}{A \code{Spectra} objec}
+\item{...}{arguments to be passed to or from other methods}
 
 \item{name}{of the header field to be updated}
 }
