@@ -1993,54 +1993,60 @@ spc.header.infos = function(header){
 #' 
 #'@details
 #' \code{spc.export.xlsx()} calls functions from package \code{xlsx} to write the contents of 
-#' a \code{Spectra} object into an Excel file.
+#' a \code{Spectra} object into an Excel file. Make sure \code{xlsx} is installed.
 #' 
 #' @return None. Simply creates an Excel file on disk.
 #'
 #' @examples
-#' sp=spc.example_spectra()
-#' if("xlsx" %in% installed.packages())
-#'    spc.export.xlsx(sp,"test.xlsx")
+#' \dontrun{
+#'   sp=spc.example_spectra()
+#'   if("xlsx" %in% installed.packages())
+#'      spc.export.xlsx(sp,"test.xlsx")
+#' }
 setGeneric(name="spc.export.xlsx",
            def=function(input,filename,sheetName,writeheader=TRUE,append=F,sep=";",...) {standardGeneric("spc.export.xlsx")})
 setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,filename,sheetName,writeheader,append,sep,...){
-  if(missing(sheetName))
-    sheetName = input@ShortName
-  data = as(input,"data.frame")
-  data$TIME = as.character(data$TIME,usetz=TRUE)
-  data$ENDTIME = as.character(data$ENDTIME,usetz=TRUE)
-  data = cbind(data.frame(idx=1:nrow(data)),data)
-  
-  slotInfos = .spc.slot.infos(input,sep)
-  if(!append){
-    #Create an empty excel workbook and start writing into it
-    wb <- xlsx::createWorkbook()
-  }else{
-    #Create an empty excel workbook and start writing into it
-    wb <- xlsx::loadWorkbook(file=filename)
-  }
-  sheet <- xlsx::createSheet(wb, sheetName=sheetName)
-  if(writeheader){
-    for(I in 1:length(input@header)){					
-      if(length(input@header[[I]])==1)
-        myH=cbind("Spectra|header",names(input@header)[I],input@header[[I]])
-      else		
-        myH = cbind("Spectra|header",names(input@header)[I],t(input@header[[I]]))
-      xlsx::addDataFrame(myH, sheet,row.names=F,col.names=F,,startRow=I,startColumn=1)
+  if (!requireNamespace("xls", quietly = TRUE)) {
+    print("xlsx needed for this function to work. Please install it.")
+  } else {
+    if(missing(sheetName))
+      sheetName = input@ShortName
+    data = as(input,"data.frame")
+    data$TIME = as.character(data$TIME,usetz=TRUE)
+    data$ENDTIME = as.character(data$ENDTIME,usetz=TRUE)
+    data = cbind(data.frame(idx=1:nrow(data)),data)
+    
+    slotInfos = .spc.slot.infos(input,sep)
+    if(!append){
+      #Create an empty excel workbook and start writing into it
+      wb <- xlsx::createWorkbook()
+    }else{
+      #Create an empty excel workbook and start writing into it
+      wb <- xlsx::loadWorkbook(file=filename)
     }
+    sheet <- xlsx::createSheet(wb, sheetName=sheetName)
+    if(writeheader){
+      for(I in 1:length(input@header)){					
+        if(length(input@header[[I]])==1)
+          myH=cbind("Spectra|header",names(input@header)[I],input@header[[I]])
+        else		
+          myH = cbind("Spectra|header",names(input@header)[I],t(input@header[[I]]))
+        xlsx::addDataFrame(myH, sheet,row.names=F,col.names=F,,startRow=I,startColumn=1)
+      }
+    }
+    written = length(input@header)
+    for(I in 1:length(slotInfos)){
+      if(length(slotInfos[[I]])==1)
+        mysl=cbind(names(slotInfos)[I],slotInfos[[I]])
+      else
+        mysl = cbind(names(slotInfos)[I],t(slotInfos[[I]]))
+      xlsx::addDataFrame(mysl,sheet,row.names=F,col.names=F,startRow=written+1,startColumn=1)
+      written = written+1
+    }
+    xlsx::addDataFrame(data, sheet,row.names=F,startRow=written+1,startColumn=1)
+    xlsx::saveWorkbook(wb, filename)
+    print(paste("Wrote sheet", sheetName, "to", filename))
   }
-  written = length(input@header)
-  for(I in 1:length(slotInfos)){
-    if(length(slotInfos[[I]])==1)
-      mysl=cbind(names(slotInfos)[I],slotInfos[[I]])
-    else
-      mysl = cbind(names(slotInfos)[I],t(slotInfos[[I]]))
-    xlsx::addDataFrame(mysl,sheet,row.names=F,col.names=F,startRow=written+1,startColumn=1)
-    written = written+1
-  }
-  xlsx::addDataFrame(data, sheet,row.names=F,startRow=written+1,startColumn=1)
-  xlsx::saveWorkbook(wb, filename)
-  print(paste("Wrote sheet", sheetName, "to", filename))
 })
 
 #########################################################################
