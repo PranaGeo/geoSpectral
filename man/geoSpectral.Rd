@@ -4,7 +4,7 @@
 \name{geoSpectral}
 \alias{geoSpectral}
 \alias{geoSpectral-package}
-\title{Manipulation of spectral (electromagnetic) data}
+\title{Classes and methods for working with spectral (electromagnetic) data in R.}
 \description{
 \pkg{geoSpectral} is an R package providing a new data type for R that stores
  spectral, temporal, and spatial attributes of measurement data as well as methods for 
