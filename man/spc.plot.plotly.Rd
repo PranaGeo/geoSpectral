@@ -30,3 +30,4 @@ spc.plot.plotly(sp,legend_field = "anap_440")}
 \description{
 Plot a \code{Spectra} object with plotly engine
 }
+

@@ -11,9 +11,9 @@ spc.plot.depth.overlay(object, X, lab_cex, ...)
 
 \item{X}{column name or index}
 
-\item{...}{any further arguments of plot}
-
 \item{lab_cex}{vector of character expansion sizes, used cyclically}
+
+\item{...}{any further arguments of plot}
 }
 \description{
 Generating plot of the contents of a \code{SpcList} object overlay with respect to depth
@@ -25,3 +25,4 @@ spc.plot.depth.overlay(BL, "anap_555")
 
 
 }
+
