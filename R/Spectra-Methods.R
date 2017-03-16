@@ -521,7 +521,7 @@ setReplaceMethod("$", signature = "Spectra",
 setGeneric("spc.colnames",function(x,...){standardGeneric("spc.colnames")})
 setMethod("spc.colnames", signature = "Spectra", 
           def = function (x){ return(colnames(x@Spectra)) })
-setGeneric("spc.colnames<-",function(x,...){standardGeneric("spc.colnames<-")})
+setGeneric("spc.colnames<-",function(x,value){standardGeneric("spc.colnames<-")})
 setReplaceMethod("spc.colnames", signature = "Spectra", def = function (x,value){
   colnames(x@Spectra) = value
   validObject(x)
@@ -1247,9 +1247,9 @@ setMethod("spc.getheader", signature = "Spectra",
 #' spc.setheader(sp,"Station") <- a
 #' sp@header
 setGeneric (name="spc.setheader<-",
-            def=function(object,value,...){standardGeneric("spc.setheader<-")})
+            def=function(object,value){standardGeneric("spc.setheader<-")})
 setReplaceMethod(f="spc.setheader", signature="Spectra",
-                 definition=function(object,value,...){
+                 definition=function(object,value){
                    stopifnot(class(value)=="SpcHeader")
                    object@header<-value
                    validObject(object)
@@ -2232,6 +2232,7 @@ setMethod("spc.select", signature = "Spectra",
 #' sp <- spc.example_spectra()
 #' BL = spc.makeSpcList(sp,"CAST")
 #' show(BL)
+#' @export
 #Method : Conversion from Spectra to SpcList using a data field (factor)
 #Later add the functionality with FUN (i.e. taking means)
 spc.makeSpcList = function(myobj, name){
