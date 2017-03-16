@@ -18,7 +18,6 @@
 #' sp@ShortName
 #' sp@header=SpcHeaderAdd(sp@header,sp@ShortName,10)
 #' sp@header
-#' @export
 setGeneric("SpcHeaderAdd",function(object,Name,Value,...)
 		{standardGeneric("SpcHeaderAdd")})
 setMethod("SpcHeaderAdd", signature="SpcHeader", function(object,Name,Value){	
