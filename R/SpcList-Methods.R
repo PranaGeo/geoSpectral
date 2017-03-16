@@ -450,7 +450,7 @@ setMethod("show", "SpcList", function(object){
 #' @examples 
 #' sp=spc.example_spectra()
 #' as(list(sp,sp^2), "SpcList")
-SpcList = function (x){
+SpcList = function (spclist){
 	new("SpcList", spclist)
 }
 #########################################################################
