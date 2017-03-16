@@ -4,25 +4,25 @@
 \alias{spc.plot.overlay}
 \title{Plotting multiple \code{Spectra} objects inside a \code{SpcList}}
 \usage{
-spc.plot.overlay(x,lab_cex=1,leg_idx=T, type="l", lty=1,lwd=1, col, ...)
+spc.plot.overlay(object,lab_cex,leg_idx, type, lty,lwd, col, ...)
 }
 \arguments{
-\item{...}{any further arguments to the plotting function matplot() or spc.plot()}
-
-\item{x}{a \code{SpcList} data}
-
 \item{lab_cex}{vector of character expansion sizes, used cyclically}
-
-\item{type}{character string (length 1 vector) or vector of 1-character strings indicating the type of plot for each column of y,}
-
-\item{lwd}{numeric. Vector of line widths. See par().}
-
-\item{lty}{vector of line types. See par().}
-
-\item{col}{A specification for the default plotting color. See par().}
 
 \item{leg_idx}{logical If it is of length 1, it determines whether or not to display the legend.
 If length(leg_idx) is bigger than 1, then its lengths has to equal length(object). Default is TRUE.}
+
+\item{type}{character string (length 1 vector) or vector of 1-character strings indicating the type of plot for each column of y,}
+
+\item{lty}{vector of line types. See par().}
+
+\item{lwd}{numeric. Vector of line widths. See par().}
+
+\item{col}{A specification for the default plotting color. See par().}
+
+\item{...}{any further arguments to the plotting function matplot() or spc.plot()}
+
+\item{x}{a \code{SpcList} data}
 }
 \description{
 This function overlays spectra plots of several \code{Spectra} objects inside a 
@@ -38,3 +38,4 @@ spc.plot.overlay(BL, col=c("red"), leg_idx=FALSE, lty=2)
 spc.plot.overlay(BL, col=c("red","blue","green","yellow","cyan","black"))
 
 }
+

@@ -5,7 +5,11 @@
 \alias{spc.updateheader<-,list-method}
 \title{Update a field of the @header slot of a \code{spclist} object}
 \usage{
+<<<<<<< HEAD
 spc.updateheader(object,name,...)<-value
+=======
+\S4method{spc.updateheader}{list}(object, Name, ...) <- value
+>>>>>>> 83febb7f733cd671c07061f9ea3eb580475924bc
 }
 \arguments{
 \item{object}{A \code{Spectra} objec}
@@ -24,3 +28,4 @@ BL[[1]]@header
 spc.updateheader(BL[[1]],"Station")<-11
 BL[[1]]@header
 }
+
