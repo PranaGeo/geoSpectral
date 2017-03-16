@@ -11,9 +11,9 @@ spc.interp.spectral(source1,target_lbd,show.plot=FALSE)
 
 \item{target_lbd}{numeric vector giving desired wavelengths}
 
-\item{...}{further arguments to pass on to approx().}
-
 \item{show.plot}{logical TRUE if a graphical representation is required}
+
+\item{...}{further arguments to pass on to approx().}
 }
 \description{
 Estimate spectral data at a new set of wavelengths through interpolation
@@ -29,3 +29,4 @@ spc.plot.overlay(SpcList(list(sp,sp2)))
 spc.interp.spectral(sp[,lbd],c(430,450,500),show.plot=TRUE)
 
 }
+

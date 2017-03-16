@@ -19,3 +19,4 @@ sp=spc.example_spectra()
 spc.plot(sp)
 spc.select(sp)
 }
+

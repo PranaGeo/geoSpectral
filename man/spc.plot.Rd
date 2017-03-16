@@ -9,20 +9,20 @@ spc.plot(x, Y, maxSp, lab_cex,xlab,ylab,type,pch,lwd,cex,...)
 \arguments{
 \item{x}{and Y     a \code{Spectra} data}
 
-\item{...}{any further arguments to be passed to matplot}
+\item{lab_cex}{vector of character expansion sizes, used cyclically}
 
 \item{xlab}{title for x  axix, as in plot().}
 
 \item{ylab}{title for y axis, as in plot().}
 
-\item{pch}{character string or vector of 1-characters or integers for plotting characters}
+\item{type}{character string (length 1 vector) or vector of 1-character strings indicating 
+the type of plot for each column of y. See help of matplot() or plot().}
 
-\item{lab_cex}{vector of character expansion sizes, used cyclically}
+\item{pch}{character string or vector of 1-characters or integers for plotting characters}
 
 \item{lwd}{vector of line widths}
 
-\item{type}{character string (length 1 vector) or vector of 1-character strings indicating 
-the type of plot for each column of y. See help of matplot() or plot().}
+\item{...}{any further arguments to be passed to matplot}
 }
 \description{
 Generating plot of the intensity of a measurement inside a \code{Spectra} object with respect to the wavelength.
@@ -36,3 +36,4 @@ spc.plot(x)
 \seealso{
 \code{\link{spc.lines}}
 }
+

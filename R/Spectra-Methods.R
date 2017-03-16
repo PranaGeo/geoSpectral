@@ -555,8 +555,8 @@ setReplaceMethod("spc.colnames", signature = "Spectra", def = function (x,value)
 #' spc.plot(x)
 #' 
 #' 
-setGeneric("spc.plot",function(x,Y,...){standardGeneric("spc.plot")})
-setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,type="l",pch=19,lwd=2,cex=0.3,...){						
+setGeneric("spc.plot",function(x,Y,maxSp,lab_cex,xlab,ylab,type,pch,lwd,cex,...){standardGeneric("spc.plot")})
+setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="l",pch=19,lwd=2,cex=0.3,...){						
   if (length(x@InvalidIdx)==0)
     x@InvalidIdx = rep(FALSE,nrow(x@Spectra))
   
@@ -685,7 +685,7 @@ setMethod("spc.lines",signature = "Spectra",definition = function(x,...){
 #' 
 #compressHeader=T Compress the header (make multiple all-equal header elements as ONE	
 setGeneric (name= "spc.rbind",def=function(...){standardGeneric("spc.rbind")})
-setMethod("spc.rbind", signature = "Spectra", def = function (...,compressHeader=T){
+setMethod("spc.rbind", signature = "Spectra", def = function (...,compressHeader=TRUE){
   #Check that column names match
   DFL=sapply(list(...),function(x) names(x@data),simplify=F)
   if(!all(sapply(1:length(DFL),function(x) all(DFL[[x]]==DFL[[1]]))))
@@ -1234,7 +1234,6 @@ setMethod("spc.getheader", signature = "Spectra",
 #'
 #'@usage 
 #' spc.setheader(x,name,...)<-value
-#'
 #' @seealso \code{\link{spc.getheader}}
 #' @param value Object of class SpcHeader
 #' @param x A \code{Spectra} object 
@@ -1251,7 +1250,7 @@ setGeneric (name="spc.setheader<-",
 setReplaceMethod(f="spc.setheader", signature="Spectra",
                  definition=function(object,value){
                    stopifnot(class(value)=="SpcHeader")
-                   object@header<-value
+                   object@header<-value 
                    validObject(object)
                    return(object)
                  })
@@ -1276,7 +1275,7 @@ setReplaceMethod(f="spc.setheader", signature="Spectra",
 setGeneric (name="spc.updateheader<-",
             def=function(object,Name,value,...){standardGeneric("spc.updateheader<-")})
 setReplaceMethod(f="spc.updateheader", signature="Spectra",
-                 definition=function(object,Name,value){
+                 definition=function(object,Name,value,...){
                    hdr=spc.getheader(object)
                    hdr[[Name]]=value
                    spc.setheader(object)<-hdr
@@ -1462,8 +1461,6 @@ setMethod("spc.data2header", signature = "Spectra",
 #' @description
 #' Get  the header for data of each element  with a column
 #'
-#' @usage 
-#' spc.header2data(object,headerfield,dataname,...)
 #'
 #' 
 #' @param dataname list \code{Spectra} object
@@ -1488,7 +1485,7 @@ setMethod("spc.data2header", signature = "Spectra",
 #its elements will be pasted using paste(...,collapse="|"). If it is another 
 #type, only the first element will be taken.  
 setGeneric(name= "spc.header2data",
-           def=function(object,headerfield,dataname,...){standardGeneric("spc.header2data")})
+           def=function(object,headerfield,dataname,compress,...){standardGeneric("spc.header2data")})
 setMethod("spc.header2data", signature = "Spectra", 
           def=function(object,headerfield,dataname,compress=TRUE,...){
             if(missing(dataname))
@@ -1716,7 +1713,7 @@ setMethod("rep", signature(x = "Spectra"),
 #' spc.interp.spectral(sp[,lbd],c(430,450,500),show.plot=TRUE)
 #' 
 setGeneric (name= "spc.interp.spectral",
-            def=function(source1,target_lbd,...){standardGeneric("spc.interp.spectral")})
+            def=function(source1,target_lbd,show.plot,...){standardGeneric("spc.interp.spectral")})
 setMethod("spc.interp.spectral", signature = "Spectra", 
           def = function (source1,target_lbd,show.plot=FALSE){
             if(missing(target_lbd))

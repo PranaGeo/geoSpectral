@@ -5,8 +5,7 @@
 \alias{subset,Spectra-method}
 \title{Subsetting for a \code{Spectra} and spcList classes}
 \usage{
-subset(x,y,select,drop,...)
-}
+\S4method{subset}{Spectra}(x, subset, select, drop = FALSE, ...)
 \arguments{
 \item{x}{A \code{Spectra} object}
 
@@ -55,3 +54,4 @@ subset(myS,subset=DEPTH<=30,select="CAST") #Selecting Ancillary data columns, le
 
 
 }
+
