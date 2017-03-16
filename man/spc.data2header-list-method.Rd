@@ -5,7 +5,7 @@
 \alias{spc.data2header,list-method}
 \title{Populate fields of header slot using data from data slot}
 \usage{
-spc.data2header(object,dataname,headerfield,compress=TRUE,...)
+spc.data2header(object,dataname,headerfield,compress,...)
 }
 \arguments{
 \item{object}{\code{spclist} object}
@@ -40,3 +40,4 @@ BL[[1]]$CAST=rep(33, nrow( BL[[1]]))
 BL[[1]]=spc.data2header(BL[[1]],"CAST","ProjectCast", compress=T)
 BL[[1]]@header
 }
+

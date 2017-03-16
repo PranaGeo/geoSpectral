@@ -5,12 +5,12 @@
 \alias{spc.getheader,list-method}
 \title{Extract a field of the @header slot of a \code{spclist} object}
 \usage{
-spc.getheader(x,name)
+spc.getheader(object,name)
 }
 \arguments{
-\item{name}{of the header field to be extracted}
+\item{object}{A  \code{spclist} object}
 
-\item{x}{A  \code{spclist} object}
+\item{name}{of the header field to be extracted}
 }
 \description{
 Extracts the value of a field in the header slot of \code{spclist} object
@@ -23,3 +23,4 @@ spc.getheader(BL,"CAST")
 
 
 }
+

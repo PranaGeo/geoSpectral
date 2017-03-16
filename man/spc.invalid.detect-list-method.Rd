@@ -5,10 +5,10 @@
 \alias{spc.invalid.detect,list-method}
 \title{Determinate invalid records insade of a \code{spclist} object}
 \usage{
-spc.invalid.detect(x)
+spc.invalid.detect(source1)
 }
 \arguments{
-\item{x}{A  \code{spclist} object}
+\item{source1}{A  \code{spclist} object}
 }
 \description{
 Detect invalid records (rows) inside of a \code{spclist} object and returns logical object
@@ -19,3 +19,4 @@ BL = spc.makeSpcList(sp,"CAST")
 invalid=spc.getheader(BL)
 show(invalid)
 }
+

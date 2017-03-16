@@ -4,10 +4,10 @@
 \alias{spc.invalid.detect}
 \title{Determinate invalid things insade of a \code{Spectra} object}
 \usage{
-spc.invalid.detect(x)
+spc.invalid.detect(source1)
 }
 \arguments{
-\item{x}{A  \code{Spectra} object}
+\item{source1}{A  \code{Spectra} object}
 }
 \description{
 Detect invalid things insade of a \code{Spectra} object and returns logical object
@@ -17,3 +17,4 @@ sp=spc.example_spectra()
 invalid=spc.invalid.detect(sp)
 show(invalid)
 }
+

@@ -21,3 +21,4 @@ x <- spc.example_spectra()
 BL = spc.makeSpcList(x,"CAST")
 show(BL)
 }
+

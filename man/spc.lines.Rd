@@ -22,3 +22,4 @@ spc.lines(sp[3,],col="red")
 \seealso{
 \code{\link{spc.plot}}
 }
+

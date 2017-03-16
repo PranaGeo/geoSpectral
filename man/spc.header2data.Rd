@@ -3,13 +3,11 @@
 \docType{methods}
 \name{spc.header2data}
 \alias{spc.header2data}
-\alias{spc.header2data}
-\alias{spc.header2data}
 \title{Get header for data}
 \usage{
-spc.header2data(object,headerfield,dataname,...)
+spc.header2data(object, headerfield, dataname, compress, ...)
 
-spc.header2data(object,headerfield,dataname,compress=TRUE,...)
+spc.header2data(object,headerfield,dataname,compress,...)
 
 \S4method{spc.header2data}{SpcList}(object, headerfield, dataname,
   compress = TRUE, ...)
@@ -63,3 +61,4 @@ spc.updateheader(BL[[1]], "Zone")<- "Zone"
 BL[[1]] <- spc.header2data(BL[[1]], "Zone")
 BL[[1]]$Zone
 }
+

@@ -4,7 +4,7 @@
 \alias{SpcHeaderAdd}
 \title{Set a field of the @header slot of a \code{SpcHeader} class object}
 \usage{
-SpcHeaderAdd (object,Name,Value)
+SpcHeaderAdd (object,Name,Value,...)
 }
 \arguments{
 \item{object}{of class SpcHeader}
@@ -23,3 +23,4 @@ sp@ShortName
 sp@header=SpcHeaderAdd(sp@header,sp@ShortName,10)
 sp@header
 }
+

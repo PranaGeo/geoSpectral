@@ -38,7 +38,7 @@
 #'
 #' 
 #' @usage 
-#' spc.plot.grid(x,FUN, nnrow, nncol, mar=c(4,4.5,1,0.5),oma = c(0,0,0,0), lab_cex, ...)
+#' spc.plot.grid(x,FUN, nnrow, nncol, mar,oma, lab_cex, ...)
 #' @param x	 a \code{SpcList} data 
 #' @param FUN a character string giving the name of the ploting function to be used. 
 #' Can be either of "spc.plot"
@@ -55,7 +55,7 @@
 #' spc.plot.grid(BL,"spc.plot",3,2)
 #' 
 setGeneric (name= "spc.plot.grid",
-		def=function(x,FUN, nnrow, nncol,...){standardGeneric("spc.plot.grid")})
+		def=function(x,FUN, nnrow, nncol,mar, oma, lab_cex,...){standardGeneric("spc.plot.grid")})
 setMethod("spc.plot.grid", "SpcList", function (x,FUN, nnrow, nncol, mar=c(4,4.5,1,0.5), 
 				oma = c(0,0,0,0), lab_cex, ...){
 			nb_spc = length(which(sapply(x, inherits, "Spectra")))
@@ -105,7 +105,7 @@ setMethod("spc.plot.grid", "SpcList", function (x,FUN, nnrow, nncol, mar=c(4,4.5
 #' is plotted with spc.plot() while remaining elements are overlaid with spc.lines().
 #' 
 #' @usage 
-#' spc.plot.overlay(x,lab_cex=1,leg_idx=T, type="l", lty=1,lwd=1, col, ...)
+#' spc.plot.overlay(object,lab_cex,leg_idx, type, lty,lwd, col, ...)
 #' @param x	 a \code{SpcList} data 
 #' @param lab_cex vector of character expansion sizes, used cyclically
 #' @param type character string (length 1 vector) or vector of 1-character strings indicating the type of plot for each column of y, 
@@ -124,7 +124,7 @@ setMethod("spc.plot.grid", "SpcList", function (x,FUN, nnrow, nncol, mar=c(4,4.5
 #' spc.plot.overlay(BL, col=c("red","blue","green","yellow","cyan","black"))
 #' 
 setGeneric (name= "spc.plot.overlay",
-		def=function(object, ...){standardGeneric("spc.plot.overlay")})
+		def=function(object,lab_cex, leg_idx, type, lty, lwd, col, ...){standardGeneric("spc.plot.overlay")})
 setMethod("spc.plot.overlay", "SpcList", function (object, lab_cex=1,leg_idx=T, type="l", lty=1,lwd=1, col, ...){
 			if(missing(col))
 				col = 1:length(object)
@@ -207,7 +207,7 @@ setMethod("spc.plot.overlay", "SpcList", function (object, lab_cex=1,leg_idx=T, 
 #' 
 #' 
 setGeneric (name= "spc.plot.depth.overlay",
-		def=function(object,X,...){standardGeneric("spc.plot.depth.overlay")})
+		def=function(object,X,lab_cex,...){standardGeneric("spc.plot.depth.overlay")})
 setMethod("spc.plot.depth.overlay", "SpcList", function (object, X, lab_cex, ...){
 			if(missing(lab_cex))
 				lab_cex = 1
@@ -244,8 +244,6 @@ setMethod("spc.plot.depth.overlay", "SpcList", function (object, X, lab_cex, ...
 #' Subsetting can be achieved using the implementation of the R function subset() for \code{Spectra} and SpcList classes
 #'It is possible to perform a row-wise selection
 #'
-#' @usage 
-#' subset(x,y,select,...)
 #' 
 #' 
 #' @param drop passed on to [ indexing operator. Default is FALSE 
@@ -506,8 +504,6 @@ setMethod("spc.getheader", signature = "list", def = function (object,name){
 #' @description
 #' Function sets or changes the value of a field in the header slot of \code{spclist} object
 #'
-#'@usage 
-#' spc.setheader(x,name,...)<-value
 #'
 #' @param value Object of class SpcList
 #' @param x A \code{SpcList} object 
@@ -523,7 +519,7 @@ setMethod("spc.getheader", signature = "list", def = function (object,name){
 #' h
 #' 
 setReplaceMethod(f="spc.setheader", signature="list",
-		definition=function(object,value,...){
+		definition=function(object,name,value,...){
 			if(inherits(value,"Spectra"))
 				stop("It is forbidden to set a SpcHeader an object that inherits from the Spectra class")
 			if(length(value)==1)
@@ -543,8 +539,6 @@ setReplaceMethod(f="spc.setheader", signature="list",
 #' @description
 #'  Updates or changes the value of a field in the header slot of \code{spclist} object 
 #'
-#' @usage 
-#' spc.updateheader(object,name,...)<-value
 #' @param ... arguments to be passed to or from other methods 
 #' @param object A \code{Spectra} objec 
 #' @param name of the header field to be updated
