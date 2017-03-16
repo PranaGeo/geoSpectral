@@ -4,6 +4,7 @@
 \alias{spc.cname.construct}
 \title{Generating column names for a \code{Spectra} object}
 \usage{
+spc.cname.construct(object)
 spc.cname.construct(object, value)
 }
 \arguments{

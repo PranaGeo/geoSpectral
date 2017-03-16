@@ -1232,7 +1232,8 @@ setMethod("spc.getheader", signature = "Spectra",
 #' @description
 #' Function sets or changes the value of a field in the header slot of \code{Spectra} object
 #'
-#' @usage spc.setheader(object,name,value,...)
+#'@usage 
+#' spc.setheader(x,name,...)<-value
 #' @seealso \code{\link{spc.getheader}}
 #' @param value Object of class SpcHeader
 #' @param x A \code{Spectra} object 
@@ -1245,11 +1246,11 @@ setMethod("spc.getheader", signature = "Spectra",
 #' spc.setheader(sp,"Station") <- a
 #' sp@header
 setGeneric (name="spc.setheader<-",
-            def=function(object,name,value,...){standardGeneric("spc.setheader<-")})
+            def=function(object,value){standardGeneric("spc.setheader<-")})
 setReplaceMethod(f="spc.setheader", signature="Spectra",
-                 definition=function(object,name,value,...){
+                 definition=function(object,value){
                    stopifnot(class(value)=="SpcHeader")
-                   object@header<-value
+                   object@header<-value 
                    validObject(object)
                    return(object)
                  })
@@ -1261,11 +1262,11 @@ setReplaceMethod(f="spc.setheader", signature="Spectra",
 #' @description
 #'  Updates or changes the value of a field in the header slot of \code{Spectra} object 
 #'
-#' @usage spc.updateheader(object,Name,value,...)
-#' @param object A \code{Spectra} object
-#' @param Name of the header field to be updated
-#' @param value to update header with
-#' @param ... arguments to be passed to or from other methods
+#' @usage 
+#' spc.updateheader(x,name,...)<-value
+#' @param ... arguments to be passed to or from other methods 
+#' @param x A \code{Spectra} objec 
+#' @param name of the header field to be updated
 #' @examples 
 #' sp=spc.example_spectra()
 #' sp@header

@@ -4,12 +4,12 @@
 \alias{spc.getheader}
 \title{Extract a field of the @header slot of a \code{Spectra} object}
 \usage{
-spc.getheader(object,name)
+spc.getheader(x,name)
 }
 \arguments{
-\item{object}{A  \code{Spectra} object}
-
 \item{name}{of the header field to be extracted}
+
+\item{x}{A  \code{Spectra} object}
 }
 \description{
 Extracts the value of a field in the header slot of \code{Spectra} object

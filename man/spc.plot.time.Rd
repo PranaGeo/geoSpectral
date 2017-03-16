@@ -4,12 +4,12 @@
 \alias{spc.plot.time}
 \title{Plotting \code{Spectra} object}
 \usage{
-spc.plot.time(object,...)
+spc.plot(x,...)
 }
 \arguments{
-\item{object}{a \code{Spectra} data}
-
 \item{...}{any further arguments of plot}
+
+\item{x}{a \code{Spectra} data}
 }
 \description{
 Generating plot of the contents of a \code{Spectra} object with respect to time
