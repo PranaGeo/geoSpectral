@@ -2008,7 +2008,7 @@ spc.header.infos = function(header){
 setGeneric(name="spc.export.xlsx",
            def=function(input,filename,sheetName,writeheader=TRUE,append=F,sep=";",...) {standardGeneric("spc.export.xlsx")})
 setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,filename,sheetName,writeheader,append,sep,...){
-  if (!requireNamespace("xls", quietly = TRUE)) {
+  if (!requireNamespace("xlsx", quietly = TRUE)) {
     print("xlsx needed for this function to work. Please install it.")
   } else {
     if(missing(sheetName))
