@@ -4,7 +4,8 @@
 \alias{spc.plot.depth}
 \title{Plotting \code{Spectra} object}
 \usage{
-spc.plot.depth(x,...)
+spc.plot.depthobject,X,maxSp=10,lab_cex,
+title, add=FALSE, xlab=NULL, ylab=NULL, ylim=NULL,xlim=NULL,lwd=2,...)
 }
 \arguments{
 \item{...}{any further arguments of plot}

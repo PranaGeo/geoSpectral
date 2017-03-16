@@ -4,7 +4,7 @@
 \alias{spc.interp.spectral}
 \title{Interpolate spectral values}
 \usage{
-spc.interp.spectral(source1,target_lbd,show.plot=FALSE)
+spc.interp.spectral(source1,target_lbd,show.plot,...)
 }
 \arguments{
 \item{source1}{A \code{Spectra} object}

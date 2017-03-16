@@ -915,7 +915,6 @@ setReplaceMethod(f="spc.setwavelengths", signature="Spectra",
 #'omitted, the @ShortName slot is used.
 #'
 #' @usage 
-#' spc.cname.construct(object)
 #' spc.cname.construct(object, value)
 #'
 #' @param value A character object
@@ -1171,9 +1170,9 @@ setMethod("spc.bbox2lines",signature="Spectra",definition=function(object){
 #' Detect invalid things insade of a \code{Spectra} object and returns logical object
 #'
 #' @usage 
-#' spc.invalid.detect(x)
+#' spc.invalid.detect(source1)
 #' 
-#' @param x  A  \code{Spectra} object 
+#' @param source1  A  \code{Spectra} object 
 #' @examples 
 #' sp=spc.example_spectra()
 #' invalid=spc.invalid.detect(sp)
@@ -1194,11 +1193,11 @@ setMethod("spc.invalid.detect", signature = "Spectra", def=function(source1){
 #' Extracts the value of a field in the header slot of \code{Spectra} object
 #'
 #' @usage 
-#' spc.getheader(x,name)
+#' spc.getheader(object,name)
 #'
 #' @seealso \code{\link{spc.setheader<-}}
 #' 
-#' @param x  A  \code{Spectra} object 
+#' @param object  A  \code{Spectra} object 
 #' @param name of the header field to be extracted
 #' 
 #' @examples 
@@ -1232,11 +1231,11 @@ setMethod("spc.getheader", signature = "Spectra",
 #' Function sets or changes the value of a field in the header slot of \code{Spectra} object
 #'
 #'@usage 
-#' spc.setheader(x,name,...)<-value
+#' spc.setheader(object,name,...)<-value
 #'
 #' @seealso \code{\link{spc.getheader}}
 #' @param value Object of class SpcHeader
-#' @param x A \code{Spectra} object 
+#' @param object A \code{Spectra} object 
 #' @param name of the header field to be setted
 #' @param ... arguments to be passed to or from other methods
 #' @examples 
@@ -1263,9 +1262,9 @@ setReplaceMethod(f="spc.setheader", signature="Spectra",
 #'  Updates or changes the value of a field in the header slot of \code{Spectra} object 
 #'
 #' @usage 
-#' spc.updateheader(x,name,...)<-value
+#' spc.updateheader(object,name,...)<-value
 #' @param ... arguments to be passed to or from other methods 
-#' @param x A \code{Spectra} objec 
+#' @param object A \code{Spectra} objec 
 #' @param name of the header field to be updated
 #' @examples 
 #' sp=spc.example_spectra()
@@ -1699,7 +1698,7 @@ setMethod("rep", signature(x = "Spectra"),
 #' using approx().
 #'
 #' @usage 
-#' spc.interp.spectral(source1,target_lbd,show.plot=FALSE)
+#' spc.interp.spectral(source1,target_lbd,show.plot,...)
 #' 
 #' @param source1  A \code{Spectra} object 
 #' @param  target_lbd numeric vector giving desired wavelengths  
@@ -1749,9 +1748,9 @@ setMethod("spc.interp.spectral", signature = "Spectra",
 #' Save the \code{Spectra} object on disk in text format
 #'
 #' @usage 
-#' spc.export.text(x,filename,sep,append,writeheader,...)
+#' spc.export.text(input,filename,sep,append,writeheader,...)
 #' @seealso \code{\link{spc.import.text}}
-#' @param x  A \code{Spectra} object 
+#' @param input  A \code{Spectra} object 
 #' @param  filename Name of the output text file
 #' @param ... arguments to be passed to or from other methods
 #' @param sep the field separator string
@@ -2059,13 +2058,13 @@ setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,file
 #'It is possible to perform a row-wise selection
 #'
 #' @usage 
-#' subset(x,y,select,drop,...)
+#' subset(x,subset,select,drop,...)
 #' 
 #' 
 #' @param drop passed on to [ indexing operator. Default is FALSE 
 #' @param ... arguments to be passed to or from other methods.
 #' @param x A \code{Spectra} object 
-#' @param y Subset
+#' @param subset Subset
 #' @param  select Condition selected
 #' @examples 
 #' fnm = file.path(system.file(package = "geoSpectral"), "test_data","particulate_absorption.csv.gz")
@@ -2259,8 +2258,8 @@ spc.makeSpcList = function(myobj, name){
 #'
 #' 
 #' @usage 
-#' spc.plot(x,...)
-#' @param x	 a \code{Spectra} data 
+#' spc.plot.time(object,...)
+#' @param object	 a \code{Spectra} data 
 #' @param ... any further arguments of plot
 #' @seealso \code{\link{spc.plot.depth}}
 #' @examples
@@ -2350,7 +2349,8 @@ setMethod("spc.plot.time", signature="Spectra", function (object,Y,maxSp=50,xdat
 #'
 #' 
 #' @usage 
-#' spc.plot.depth(x,...)
+#' spc.plot.depthobject,X,maxSp=10,lab_cex,
+#' title, add=FALSE, xlab=NULL, ylab=NULL, ylim=NULL,xlim=NULL,lwd=2,...)
 #' @param x	 a \code{Spectra} data 
 #' @param ... any further arguments of plot
 #' @seealso \code{\link{spc.plot}}

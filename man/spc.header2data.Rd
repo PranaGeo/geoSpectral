@@ -9,7 +9,7 @@
 \usage{
 spc.header2data(object,headerfield,dataname,...)
 
-spc.header2data(object,headerfield,dataname,compress=TRUE,...)
+spc.header2data(object,headerfield,dataname,compress,...)
 
 \S4method{spc.header2data}{SpcList}(object, headerfield, dataname,
   compress = TRUE, ...)
