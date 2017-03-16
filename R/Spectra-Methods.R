@@ -54,6 +54,7 @@
 #'
 #' #Space and time columns are explicitly chosen from inDF columns
 #' myS<-Spectra(abs,Wavelengths=lbd, space=c("LONG","LAT"), time="TIME",Units=Units,ShortName="a_nap")
+#' @export
 Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...){
   longcol="";latcol="";timecol=""
   
@@ -520,7 +521,7 @@ setReplaceMethod("$", signature = "Spectra",
 setGeneric("spc.colnames",function(x,...){standardGeneric("spc.colnames")})
 setMethod("spc.colnames", signature = "Spectra", 
           def = function (x){ return(colnames(x@Spectra)) })
-setGeneric("spc.colnames<-",function(x,...){standardGeneric("spc.colnames<-")})
+setGeneric("spc.colnames<-",function(x,value){standardGeneric("spc.colnames<-")})
 setReplaceMethod("spc.colnames", signature = "Spectra", def = function (x,value){
   colnames(x@Spectra) = value
   validObject(x)
@@ -915,6 +916,7 @@ setReplaceMethod(f="spc.setwavelengths", signature="Spectra",
 #'omitted, the @ShortName slot is used.
 #'
 #' @usage 
+#' spc.cname.construct(object)
 #' spc.cname.construct(object, value)
 #'
 #' @param value A character object
@@ -1170,9 +1172,9 @@ setMethod("spc.bbox2lines",signature="Spectra",definition=function(object){
 #' Detect invalid things insade of a \code{Spectra} object and returns logical object
 #'
 #' @usage 
-#' spc.invalid.detect(source1)
+#' spc.invalid.detect(x)
 #' 
-#' @param source1  A  \code{Spectra} object 
+#' @param x  A  \code{Spectra} object 
 #' @examples 
 #' sp=spc.example_spectra()
 #' invalid=spc.invalid.detect(sp)
@@ -1193,11 +1195,11 @@ setMethod("spc.invalid.detect", signature = "Spectra", def=function(source1){
 #' Extracts the value of a field in the header slot of \code{Spectra} object
 #'
 #' @usage 
-#' spc.getheader(object,name)
+#' spc.getheader(x,name)
 #'
 #' @seealso \code{\link{spc.setheader<-}}
 #' 
-#' @param object  A  \code{Spectra} object 
+#' @param x  A  \code{Spectra} object 
 #' @param name of the header field to be extracted
 #' 
 #' @examples 
@@ -1231,11 +1233,11 @@ setMethod("spc.getheader", signature = "Spectra",
 #' Function sets or changes the value of a field in the header slot of \code{Spectra} object
 #'
 #'@usage 
-#' spc.setheader(object,name,...)<-value
+#' spc.setheader(x,name,...)<-value
 #'
 #' @seealso \code{\link{spc.getheader}}
 #' @param value Object of class SpcHeader
-#' @param object A \code{Spectra} object 
+#' @param x A \code{Spectra} object 
 #' @param name of the header field to be setted
 #' @param ... arguments to be passed to or from other methods
 #' @examples 
@@ -1245,9 +1247,9 @@ setMethod("spc.getheader", signature = "Spectra",
 #' spc.setheader(sp,"Station") <- a
 #' sp@header
 setGeneric (name="spc.setheader<-",
-            def=function(object,value,...){standardGeneric("spc.setheader<-")})
+            def=function(object,value){standardGeneric("spc.setheader<-")})
 setReplaceMethod(f="spc.setheader", signature="Spectra",
-                 definition=function(object,value,...){
+                 definition=function(object,value){
                    stopifnot(class(value)=="SpcHeader")
                    object@header<-value
                    validObject(object)
@@ -1262,9 +1264,9 @@ setReplaceMethod(f="spc.setheader", signature="Spectra",
 #'  Updates or changes the value of a field in the header slot of \code{Spectra} object 
 #'
 #' @usage 
-#' spc.updateheader(object,name,...)<-value
+#' spc.updateheader(x,name,...)<-value
 #' @param ... arguments to be passed to or from other methods 
-#' @param object A \code{Spectra} objec 
+#' @param x A \code{Spectra} objec 
 #' @param name of the header field to be updated
 #' @examples 
 #' sp=spc.example_spectra()
@@ -1698,7 +1700,7 @@ setMethod("rep", signature(x = "Spectra"),
 #' using approx().
 #'
 #' @usage 
-#' spc.interp.spectral(source1,target_lbd,show.plot,...)
+#' spc.interp.spectral(source1,target_lbd,show.plot=FALSE)
 #' 
 #' @param source1  A \code{Spectra} object 
 #' @param  target_lbd numeric vector giving desired wavelengths  
@@ -1748,9 +1750,9 @@ setMethod("spc.interp.spectral", signature = "Spectra",
 #' Save the \code{Spectra} object on disk in text format
 #'
 #' @usage 
-#' spc.export.text(input,filename,sep,append,writeheader,...)
+#' spc.export.text(x,filename,sep,append,writeheader,...)
 #' @seealso \code{\link{spc.import.text}}
-#' @param input  A \code{Spectra} object 
+#' @param x  A \code{Spectra} object 
 #' @param  filename Name of the output text file
 #' @param ... arguments to be passed to or from other methods
 #' @param sep the field separator string
@@ -2006,7 +2008,7 @@ spc.header.infos = function(header){
 setGeneric(name="spc.export.xlsx",
            def=function(input,filename,sheetName,writeheader=TRUE,append=F,sep=";",...) {standardGeneric("spc.export.xlsx")})
 setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,filename,sheetName,writeheader,append,sep,...){
-  if (!requireNamespace("xls", quietly = TRUE)) {
+  if (!requireNamespace("xlsx", quietly = TRUE)) {
     print("xlsx needed for this function to work. Please install it.")
   } else {
     if(missing(sheetName))
@@ -2058,13 +2060,13 @@ setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,file
 #'It is possible to perform a row-wise selection
 #'
 #' @usage 
-#' subset(x,subset,select,drop,...)
+#' subset(x,y,select,drop,...)
 #' 
 #' 
 #' @param drop passed on to [ indexing operator. Default is FALSE 
 #' @param ... arguments to be passed to or from other methods.
 #' @param x A \code{Spectra} object 
-#' @param subset Subset
+#' @param y Subset
 #' @param  select Condition selected
 #' @examples 
 #' fnm = file.path(system.file(package = "geoSpectral"), "test_data","particulate_absorption.csv.gz")
@@ -2230,6 +2232,7 @@ setMethod("spc.select", signature = "Spectra",
 #' sp <- spc.example_spectra()
 #' BL = spc.makeSpcList(sp,"CAST")
 #' show(BL)
+#' @export
 #Method : Conversion from Spectra to SpcList using a data field (factor)
 #Later add the functionality with FUN (i.e. taking means)
 spc.makeSpcList = function(myobj, name){
@@ -2258,8 +2261,8 @@ spc.makeSpcList = function(myobj, name){
 #'
 #' 
 #' @usage 
-#' spc.plot.time(object,...)
-#' @param object	 a \code{Spectra} data 
+#' spc.plot(x,...)
+#' @param x	 a \code{Spectra} data 
 #' @param ... any further arguments of plot
 #' @seealso \code{\link{spc.plot.depth}}
 #' @examples
@@ -2349,8 +2352,7 @@ setMethod("spc.plot.time", signature="Spectra", function (object,Y,maxSp=50,xdat
 #'
 #' 
 #' @usage 
-#' spc.plot.depthobject,X,maxSp=10,lab_cex,
-#' title, add=FALSE, xlab=NULL, ylab=NULL, ylim=NULL,xlim=NULL,lwd=2,...)
+#' spc.plot.depth(x,...)
 #' @param x	 a \code{Spectra} data 
 #' @param ... any further arguments of plot
 #' @seealso \code{\link{spc.plot}}
@@ -2523,8 +2525,8 @@ setMethod("spc.plot.depth", signature="Spectra", function (object,X,maxSp=10,lab
 #' sp = spc.example_spectra()
 #' class(sp)
 #' show(sp)
-#' 
-spc.example_spectra = function(){
+#' @export
+spc.example_spectra <- function(){
   #Search in the package installation directory
   fnm = file.path(base::system.file(package = "geoSpectral"),"test_data","particulate_absorption.csv.gz")
   #If the previous search fails, search the file in the source code directory

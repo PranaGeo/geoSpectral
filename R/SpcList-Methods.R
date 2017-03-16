@@ -450,8 +450,9 @@ setMethod("show", "SpcList", function(object){
 #' @examples 
 #' sp=spc.example_spectra()
 #' as(list(sp,sp^2), "SpcList")
-SpcList = function (spclist){
-	new("SpcList", spclist)
+#' @export
+SpcList = function (x){
+	new("SpcList", x)
 }
 #########################################################################
 # Method : spc.invalid.detect
@@ -523,7 +524,7 @@ setMethod("spc.getheader", signature = "list", def = function (object,name){
 #' h
 #' 
 setReplaceMethod(f="spc.setheader", signature="list",
-		definition=function(object,value,...){
+		definition=function(object,value){
 			if(inherits(value,"Spectra"))
 				stop("It is forbidden to set a SpcHeader an object that inherits from the Spectra class")
 			if(length(value)==1)
@@ -555,7 +556,7 @@ setReplaceMethod(f="spc.setheader", signature="list",
 #' spc.updateheader(BL[[1]],"Station")<-11
 #' BL[[1]]@header
 setReplaceMethod(f="spc.updateheader", signature="list",
-		definition=function(object,Name,value,...){
+		definition=function(object,Name,value){
 			if(inherits(value,"Spectra"))
 				stop("It is forbidden to place in a SpcHeader an object that inherits from the Spectra class")
 			if(length(value)==1)
