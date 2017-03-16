@@ -520,11 +520,7 @@ setMethod("spc.getheader", signature = "list", def = function (object,name){
 #' h
 #' 
 setReplaceMethod(f="spc.setheader", signature="list",
-<<<<<<< HEAD
-		definition=function(object,value){
-=======
 		definition=function(object,name,value,...){
->>>>>>> 83febb7f733cd671c07061f9ea3eb580475924bc
 			if(inherits(value,"Spectra"))
 				stop("It is forbidden to set a SpcHeader an object that inherits from the Spectra class")
 			if(length(value)==1)

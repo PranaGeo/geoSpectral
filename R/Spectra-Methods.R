@@ -1232,13 +1232,7 @@ setMethod("spc.getheader", signature = "Spectra",
 #' @description
 #' Function sets or changes the value of a field in the header slot of \code{Spectra} object
 #'
-<<<<<<< HEAD
-#'@usage 
-#' spc.setheader(x,name,...)<-value
-#'
-=======
 #' @usage spc.setheader(object,name,value,...)
->>>>>>> 83febb7f733cd671c07061f9ea3eb580475924bc
 #' @seealso \code{\link{spc.getheader}}
 #' @param value Object of class SpcHeader
 #' @param x A \code{Spectra} object 
@@ -1251,15 +1245,9 @@ setMethod("spc.getheader", signature = "Spectra",
 #' spc.setheader(sp,"Station") <- a
 #' sp@header
 setGeneric (name="spc.setheader<-",
-<<<<<<< HEAD
-            def=function(object,value){standardGeneric("spc.setheader<-")})
-setReplaceMethod(f="spc.setheader", signature="Spectra",
-                 definition=function(object,value){
-=======
             def=function(object,name,value,...){standardGeneric("spc.setheader<-")})
 setReplaceMethod(f="spc.setheader", signature="Spectra",
                  definition=function(object,name,value,...){
->>>>>>> 83febb7f733cd671c07061f9ea3eb580475924bc
                    stopifnot(class(value)=="SpcHeader")
                    object@header<-value
                    validObject(object)
@@ -1273,19 +1261,11 @@ setReplaceMethod(f="spc.setheader", signature="Spectra",
 #' @description
 #'  Updates or changes the value of a field in the header slot of \code{Spectra} object 
 #'
-<<<<<<< HEAD
-#' @usage 
-#' spc.updateheader(x,name,...)<-value
-#' @param ... arguments to be passed to or from other methods 
-#' @param x A \code{Spectra} objec 
-#' @param name of the header field to be updated
-=======
 #' @usage spc.updateheader(object,Name,value,...)
 #' @param object A \code{Spectra} object
 #' @param Name of the header field to be updated
 #' @param value to update header with
 #' @param ... arguments to be passed to or from other methods
->>>>>>> 83febb7f733cd671c07061f9ea3eb580475924bc
 #' @examples 
 #' sp=spc.example_spectra()
 #' sp@header
@@ -2075,11 +2055,8 @@ setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,file
 #' Subsetting can be achieved using the implementation of the R function subset() for \code{Spectra} and SpcList classes
 #'It is possible to perform a row-wise selection
 #'
-<<<<<<< HEAD
 #' @usage 
 #' subset(x,y,select,drop,...)
-=======
->>>>>>> 83febb7f733cd671c07061f9ea3eb580475924bc
 #' 
 #' 
 #' @param drop passed on to [ indexing operator. Default is FALSE 
