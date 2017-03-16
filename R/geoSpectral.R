@@ -28,4 +28,5 @@
 
 #' @docType package
 #' @name geoSpectral
+#' @import dplyr maps methods reshape2 rgdal spacetime xts
 NULL

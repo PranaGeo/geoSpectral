@@ -1,6 +1,9 @@
 #########################################################################
 # Class : SpcList
 #########################################################################
+#' @slot by character, Determines the header field in the Spectra objects
+#' within the SpcList that describes how they are different one from the other.
+#' @export
 setClass("SpcList",contains="list",
 		representation=representation(by="character"), 
 		prototype=prototype(by="VariousVariables")

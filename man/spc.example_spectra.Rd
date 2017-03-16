@@ -13,5 +13,4 @@ Example of Spectral object is created by the function
 sp = spc.example_spectra()
 class(sp)
 show(sp)
-
 }

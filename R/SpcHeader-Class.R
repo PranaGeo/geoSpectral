@@ -8,6 +8,7 @@
 #' 
 #' @examples 
 #' new("SpcHeader")
+#' @export
 setClass("SpcHeader", contains="list",
 		prototype=prototype(list(Station=NA,Cruise=NA,Latitude=NA,Longitude=NA)))
 setMethod("initialize",

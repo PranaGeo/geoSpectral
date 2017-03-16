@@ -2524,8 +2524,8 @@ setMethod("spc.plot.depth", signature="Spectra", function (object,X,maxSp=10,lab
 #' sp = spc.example_spectra()
 #' class(sp)
 #' show(sp)
-#' 
-spc.example_spectra = function(){
+#' @export
+spc.example_spectra <- function(){
   #Search in the package installation directory
   fnm = file.path(base::system.file(package = "geoSpectral"),"test_data","particulate_absorption.csv.gz")
   #If the previous search fails, search the file in the source code directory
