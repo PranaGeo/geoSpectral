@@ -83,15 +83,15 @@ test_that("test for head()",{
  
                 })
 
-  test_that("test for spc.lapply()",{
-   sp=spc.example_spectra() 
-   BL = spc.makeSpcList(sp,"STATION")
-   BL2=spc.lapply(BL, function(x) x=x+1)
-    expect_is(BL2,"SpcList")
-   
-   
-  })
-  
+  # test_that("test for spc.lapply()",{
+  #  sp=spc.example_spectra() 
+  #  BL = spc.makeSpcList(sp,"STATION")
+  #  BL2=spc.lapply(BL, function(x) x=x+1)
+  #   expect_is(BL2,"SpcList")
+  #  
+  #  
+  # })
+  # 
   test_that("test for spc.getwavelenghts()",{
     
     expect_equal(length(spc.getwavelengths(sp)),ncol(sp))
