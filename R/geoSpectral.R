@@ -1,4 +1,4 @@
-#' @title Classes and methods for working with spectral (electromagnetic) data in R.
+#' @title Classes and methods for working with spectral (electromagnetic) data in R
 #'
 #' @description 
 #' \pkg{geoSpectral} is an R package providing a new data type for R that stores
