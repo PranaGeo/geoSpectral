@@ -450,8 +450,9 @@ setMethod("show", "SpcList", function(object){
 #' @examples 
 #' sp=spc.example_spectra()
 #' as(list(sp,sp^2), "SpcList")
+#' @export
 SpcList = function (x){
-	new("SpcList", spclist)
+	new("SpcList", x)
 }
 #########################################################################
 # Method : spc.invalid.detect
