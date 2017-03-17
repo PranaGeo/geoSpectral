@@ -27,5 +27,4 @@ Create a point map with leaflet engine using \code{Spectra} rows
 \examples{
 sp=spc.example_spectra()
 spc.plot.map.leaflet(sp)
-
 }

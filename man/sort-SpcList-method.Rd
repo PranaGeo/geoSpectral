@@ -31,4 +31,5 @@ spL <- spc.makeSpcList(sp,"STATION")
 #Sort all Spectra objects with respect to their rows using the CAST column
 spL.s <- sort(spL,which.col="CAST",decreasing=TRUE)
 lapply(spL.s, function(x) as.character(x[["CAST"]]))
+
 }

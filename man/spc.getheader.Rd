@@ -19,7 +19,6 @@ sp=spc.example_spectra()
 sp@header
 spc.getheader(sp,"Latitude")
 
-
 }
 \seealso{
 \code{\link{spc.setheader<-}}

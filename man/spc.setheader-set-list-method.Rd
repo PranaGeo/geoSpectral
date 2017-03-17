@@ -10,9 +10,6 @@
 \arguments{
 \item{value}{Object of class SpcList}
 
-\item{...}{arguments to be passed to or from other methods}
-
-\item{x}{A \code{SpcList} object}
 \item{x}{A \code{SpcList} object}
 
 \item{name}{of the header field to be setted}
@@ -30,5 +27,4 @@ a$Longitude=123
 spc.setheader(BL[[1]],"Station") <- a
 h=spc.getheader(BL[[1]])
 h
-
 }

@@ -26,4 +26,5 @@ Operators acting on  \code{Spectra} objects  to extract or replace parts
  head(spc.colnames(sp))
  head(sp$anap_300)
  sp[,"anap_345"]
+ @export
 }

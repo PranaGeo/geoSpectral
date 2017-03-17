@@ -20,5 +20,4 @@ nrow(x)  #[1] 26
 x2 <- spc.rbind(x,x)
 nrow(x2)  #[1] 52
 
-
 }

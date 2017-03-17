@@ -5,7 +5,6 @@
 \alias{as<-}
 \alias{as<-.Spectra}
 \alias{Spectra-coerce}
-\alias{Spectra-coerce}
 \title{Conversion between \code{Spectra} and data.frame objects}
 \usage{
 \method{as}{Spectra}(from, to)

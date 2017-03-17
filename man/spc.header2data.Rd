@@ -55,8 +55,6 @@ sp <- spc.header2data(sp, "Zone")
 sp$Zone
 
 
-
-
 sp <- spc.example_spectra()
 BL=spc.makeSpcList(sp,"CAST")
 spc.updateheader(BL[[1]], "Zone")<- "Zone"

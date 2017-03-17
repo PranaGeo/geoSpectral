@@ -18,5 +18,4 @@ x <- spc.example_spectra()
 ncol(x)  #501 
 nrow(x)  #26
 
-
 }

@@ -40,4 +40,6 @@ sp@header
 sp$CAST=rep(33, nrow(sp))
 sp=spc.data2header(sp,"CAST","ProjectCast", compress=TRUE)
 sp@header
+
+
 }

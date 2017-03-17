@@ -19,7 +19,4 @@ Display a \code{Spectra} object
 \examples{
 x <- spc.example_spectra()
 show(x)
-
-
-
 }
