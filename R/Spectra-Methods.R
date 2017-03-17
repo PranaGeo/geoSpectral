@@ -179,8 +179,6 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
 #' attr(df2, "Wavelengths") <- c(500, 600)
 #' attr(df2, "ShortName") <- "abs"
 #' as(df2, "Spectra")
-#' @name Spectra-coerce
-#' @export
 setAs(from="Spectra", to="data.frame", def=function(from){
   if(ncol(from@data)>0)
     output = cbind(as.data.frame(from@Spectra),from@data)
@@ -954,25 +952,34 @@ setMethod(f="spc.cname.construct", signature="Spectra",
 #' @param master ordered sequence of variable of class \code{Spectra}
 #' @param searched A variable of class \code{Spectra}which is searched
 #' @param returnList Boolean; should a list be returned with all matches (TRUE), or a vector with single matches (FALSE)?
-#' @param method Uses the simple  technique, same as of spacetime::timeMatch(),
+#' @param method Method used in time-based matching. See the details section.
 #' @param limits the interval limits
 #' @param report return character string which has information about searching results, default is False
 #' @details 
-#' Another version of spacetime::timeMatch(),method="over" uses the simple over technique. Same as of spacetime::timeMatch(),
-#' method="nearest" finds the nearest measurement. Matches only one data for all elements of master
-#' method="within" finds the measurements that are within the interval limits=c(upper,lower) (in seconds) 
+#' spc.timeMatch is similar to spacetime::timeMatch(), only adding some more matching methods.
+#' When method is "over", the same technique used by spacetime::timeMatch() is used. Useful when
+#' matched timestamps of both master and searched are exactly equal.
+#' When method is "nearest", the nearest measurement will be found, 
+#' matching only one data for ALL elements of master.
+#' When method is "within", measurements that are within the interval limits=c(upper,lower) (in seconds) 
+#' will be found.
 #' @examples 
+#' #Read the Nomad database inside a SpcList object.
+#' dat = SpcList(spc.Read_NOMAD_v2())
+#' 
+#' #Different list elements containt different parameters
+#' names(dat)
+#' 
+#' #We would like to find elements of Es that match time-wise rows of Kd.
+#' nrow(dat$kd), nrow(dat$es)
+#' 
+#' #Use spc.timeMatch() to get row indexes of Es that would match those of Kd time-wise
+#' t_idx=spc.timeMatch((dat$kd), (dat$es))
+#' #Verification
+#' all(time(dat$es)[t_idx]==time(dat$kd))
+#' 
 #' 
 #' @export
-#Another version of spacetime::timeMatch(). 
-#method="over" uses the simple over technique. Same as of spacetime::timeMatch().  
-#method="nearest" finds the nearest measurement. Matches only one data for all elements of master
-#method="within" finds the measurements that are within the interval limits=c(upper,lower) (in seconds)
-#setGeneric("spc.timeMatch",function(master,searched,returnList=FALSE,method="over",limits,report=FALSE)
-#		{standardGeneric("spc.timeMatch")})
-#setMethod(f="spc.timeMatch", signature=c("Spectra","Spectra"),
-#		definition=function(master,searched,returnList,method,limits,report){
-#		})
 spc.timeMatch = function(master,searched,returnList=FALSE,method="over",limits,report=FALSE) {
   if(!is.timeBased(master))
     if(!(inherits(master,"ST")) & is.timeBased(master))
@@ -983,7 +990,8 @@ spc.timeMatch = function(master,searched,returnList=FALSE,method="over",limits,r
       stop("Input argument 'searched' needs to either inherit from spacetime::ST class or be a timeBased variable")
   stopifnot(inherits(searched,"ST"))
   if(method=="over")
-    out = spacetime::timeMatch(master,searched,returnList=returnList)
+    browser()
+    out = spacetime::timeMatch(time(master),time(searched),returnList=returnList)
   if(method=="nearest"){
     out = sapply(time(master),function(x){mymin = which.min(abs(time(searched)-x))})
     if(returnList)
@@ -2575,16 +2583,17 @@ spc.example_spectra <- function(){
 #' Imports the NOMAD v2 database of the SeaBASS project. More information 
 #' about this dataset can be found at \url{http://seabass.gsfc.nasa.gov/wiki/article.cgi?article=NOMAD}
 #'
-#' @param infile \code{character} containing the name of the input file.
+#' @param skip.all.na.rows \code{logical} whether or not eliminate records where all 
+#' channels are NAs 
 #'
 #' @return Returns an object of class \code{data.frame}.
 #'
 #' @examples
-#' ap = spc.Read_NOMAD_v2(fnm)
+#' ap = spc.Read_NOMAD_v2()
 #' class(ap)
 #' spc.plot.plotly(ap[[4]], plot.max=15)
 #' @export
-spc.Read_NOMAD_v2 = function(fnm,skip.all.na.rows=TRUE) {
+spc.Read_NOMAD_v2 = function(skip.all.na.rows=TRUE) {
   fnm = file.path(system.file(package = "geoSpectral"), "test_data","nomad_seabass_v2.a_2008200.txt.gz")
   #Read data off disk
   print(paste("Reading the NOMAD file", fnm, "off disk."))
