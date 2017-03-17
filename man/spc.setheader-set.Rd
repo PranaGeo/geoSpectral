@@ -13,7 +13,16 @@ spc.setheader(x,name,...)<-value
 
 \item{name}{of the header field to be setted}
 
+spc.setheader(object,name,value,...)
+}
+\arguments{
+\item{name}{of the header field to be setted}
+
+\item{value}{Object of class SpcHeader}
+\item{name}{of the header field to be setted}
 \item{...}{arguments to be passed to or from other methods}
+
+\item{x}{A \code{Spectra} object}
 }
 \description{
 Function sets or changes the value of a field in the header slot of \code{Spectra} object

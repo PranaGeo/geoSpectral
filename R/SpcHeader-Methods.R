@@ -49,6 +49,7 @@ setMethod("SpcHeaderAdd", signature="SpcHeader", function(object,Name,Value){
 #' x=spc.example_spectra()
 #' show(x@header)
 #' 
+#' @export
 setMethod("show", signature="SpcHeader", function(object){
 			fieldnames = names(object)
 			sapply(1:length(fieldnames), function(x) cat(paste(fieldnames[x], " : ", 

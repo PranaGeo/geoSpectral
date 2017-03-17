@@ -5,8 +5,17 @@
 \alias{subset,Spectra-method}
 \title{Subsetting for a \code{Spectra} and spcList classes}
 \usage{
+<<<<<<< HEAD
 subset(x,y,select,drop,...)
 }
+=======
+<<<<<<< HEAD
+subset(x,y,select,drop,...)
+}
+=======
+\S4method{subset}{Spectra}(x, subset, select, drop = FALSE, ...)
+>>>>>>> 3e10b3d95b04b6b215debcee1a9489c029ec09eb
+>>>>>>> 5bd0768bcf96078b5df53071db5d4b15b6a80132
 \arguments{
 \item{x}{A \code{Spectra} object}
 
