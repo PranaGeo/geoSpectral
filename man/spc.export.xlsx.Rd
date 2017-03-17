@@ -37,4 +37,3 @@ a \code{Spectra} object into an Excel file. Make sure \code{xlsx} is installed.
      spc.export.xlsx(sp,"test.xlsx")
 }
 }
-
