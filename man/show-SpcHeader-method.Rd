@@ -21,4 +21,3 @@ show(x@header)
 \seealso{
 \code{\link{show}}
 }
-

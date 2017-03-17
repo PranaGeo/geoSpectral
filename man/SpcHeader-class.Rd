@@ -11,4 +11,3 @@ for the @header slot of \code{Spectra} object.
 \examples{
 new("SpcHeader")
 }
-

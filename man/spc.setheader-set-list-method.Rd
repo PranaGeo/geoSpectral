@@ -5,14 +5,15 @@
 \alias{spc.setheader<-,list-method}
 \title{Set a field of the @header slot of a \code{spclist} object}
 \usage{
-\S4method{spc.setheader}{list}(object, name, ...) <- value
+\S4method{spc.setheader}{list}(object) <- value
 }
 \arguments{
+\item{value}{Object of class SpcList}
+
+\item{x}{A \code{SpcList} object}
+
 \item{name}{of the header field to be setted}
 
-\item{value}{Object of class SpcList}
-\item{x}{A \code{SpcList} object}
-\item{name}{of the header field to be setted}
 \item{...}{arguments to be passed to or from other methods}
 }
 \description{
@@ -28,4 +29,3 @@ h=spc.getheader(BL[[1]])
 h
 
 }
-

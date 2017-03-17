@@ -38,4 +38,3 @@ spc.plot.overlay(BL, col=c("red"), leg_idx=FALSE, lty=2)
 spc.plot.overlay(BL, col=c("red","blue","green","yellow","cyan","black"))
 
 }
-
