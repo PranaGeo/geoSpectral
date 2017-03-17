@@ -12,14 +12,9 @@
 
 \item{value}{Object of class SpcList}
 
-\item{x}{A \code{SpcList} object}
-<<<<<<< HEAD
-
-\item{name}{of the header field to be setted}
-
 \item{...}{arguments to be passed to or from other methods}
-=======
->>>>>>> 83febb7f733cd671c07061f9ea3eb580475924bc
+
+\item{x}{A \code{SpcList} object}
 }
 \description{
 Function sets or changes the value of a field in the header slot of \code{spclist} object
@@ -34,4 +29,3 @@ h=spc.getheader(BL[[1]])
 h
 
 }
-

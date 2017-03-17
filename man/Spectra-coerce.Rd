@@ -4,6 +4,8 @@
 \alias{Spectra-coerce}
 \alias{as<-}
 \alias{as<-.Spectra}
+\alias{Spectra-coerce}
+\alias{Spectra-coerce}
 \title{Conversion between \code{Spectra} and data.frame objects}
 \usage{
 \method{as}{Spectra}(from, to)
@@ -40,4 +42,3 @@ attr(df2, "Wavelengths") <- c(500, 600)
 attr(df2, "ShortName") <- "abs"
 as(df2, "Spectra")
 }
-

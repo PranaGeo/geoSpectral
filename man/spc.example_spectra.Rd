@@ -14,4 +14,3 @@ sp = spc.example_spectra()
 class(sp)
 show(sp)
 }
-
