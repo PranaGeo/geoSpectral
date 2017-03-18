@@ -5,8 +5,7 @@
 \alias{[,Spectra-method}
 \title{Extract or replace parts of a \code{Spectra} object}
 \usage{
-x[i]
-x[i,j]
+\S4method{[}{Spectra}(x, i, j)
 }
 \arguments{
 \item{x}{A \code{Spectra} object from which to extract element(s) or in which to replace element(s).}

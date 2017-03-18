@@ -4,7 +4,7 @@
 \alias{spc.setselected.idx<-}
 \title{Set index to a \code{Spectra} object}
 \usage{
-spc.setselected.idx(x,value)
+spc.setselected.idx(object) <- value
 }
 \arguments{
 \item{value}{index for a \code{Spectra} object}

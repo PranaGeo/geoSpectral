@@ -4,7 +4,7 @@
 \alias{spc.setinvalid.idx<-}
 \title{Set rows of \code{Spectra} as invalid}
 \usage{
-spc.setinvalid.idx(object,value)
+spc.setinvalid.idx(object) <- value
 }
 \arguments{
 \item{value}{Logical vector}
@@ -23,5 +23,7 @@ vld[1:5]<-FALSE
 spc.setinvalid.idx(sp)<-vld #Mark the first 5 rows as invalid
 spc.getinvalid.idx(sp)
 
-
+}
+\seealso{
+\code{\link{spc.setselected.idx<-}}
 }

@@ -4,8 +4,7 @@
 \alias{spc.rbind}
 \title{Combine \code{Spectra} Objects by Rows}
 \usage{
-spc.cbind(...,compressHeader)
-spc.rbind(...,compressHeader)
+spc.rbind(...)
 }
 \arguments{
 \item{...}{\code{Spectra} object}
@@ -23,4 +22,5 @@ x <- spc.example_spectra()
 nrow(x)  #[1] 26
 x2=spc.rbind(x,x)
 nrow(x2)  #[1] 52
+
 }

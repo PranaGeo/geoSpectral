@@ -157,10 +157,9 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
 #' While these attributes are generally created during the conversion of a
 #' \code{Spectra} object into data.frame, they can 
 #' also be manually set if they are non-existant (see the example below).
-#' @aliases as<- as<-.Spectra
-#' @usage \method{as}{Spectra}(from, to)
 #' @param from The input object
 #' @param to Name of the class of output object
+#' @aliases as,Spectra
 #' @name Spectra-coerce
 #' @examples 
 #' #Convert a Spectra object to data.frame
@@ -340,9 +339,6 @@ setMethod("nrow", signature = "Spectra",
 #'
 #' @description
 #'  Retrieve  the names of \code{Spectra} object 
-#'  
-#' @usage 
-#' names(x)
 #'
 #' @param  x  a \code{Spectra} object
 #' @examples
@@ -684,10 +680,6 @@ setMethod("spc.lines",signature = "Spectra",definition = function(x,...){
 #' @description
 #' Take a \code{Spectra} objects and combine by rows
 #'
-#'@usage 
-#' spc.cbind(...,compressHeader)
-#' spc.rbind(...,compressHeader)
-#'
 #' @param ... \code{Spectra} object
 #' @param compressHeader Compress the header (make multiple all-equal header elements as ONE, default value is TRUE	
 #' @return  \code{Spectra} object 
@@ -696,10 +688,8 @@ setMethod("spc.lines",signature = "Spectra",definition = function(x,...){
 #' nrow(x)  #[1] 26
 #' x2=spc.rbind(x,x)
 #' nrow(x2)  #[1] 52
+#' 
 #' @export
-#' 
-#' 
-#compressHeader=T Compress the header (make multiple all-equal header elements as ONE	
 setGeneric (name= "spc.rbind",def=function(...){standardGeneric("spc.rbind")})
 setMethod("spc.rbind", signature = "Spectra", def = function (...,compressHeader=TRUE){
   #Check that column names match
@@ -802,22 +792,17 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...,compressHeader
 #########################################################################
 # Method : spc.rbind
 #########################################################################
-#' Combine \code{Spectra} objects by Rows
+#' Combine \code{STIDF} objects by Rows
 #'
 #' @description
-#' Take a \code{Spectra} objects and combine by rows
+#' Take a \code{STIDF} objects and combine by rows
 #'
-#' @usage 
-#' spc.cbind(...)
-#' spc.rbind(...)
-#'
-#' @param ... \code{Spectra} object
-#' 
+#' @param ... \code{STIDF} object
 #'
 #' @examples
 #' x <- spc.example_spectra()
 #' nrow(x)  #[1] 26
-#' x2 <- spc.rbind(x,x)
+#' x2 <- spc.rbind(as(x, "STIDF"),as(x, "STIDF"))
 #' nrow(x2)  #[1] 52
 #' 
 #' @export
@@ -1323,9 +1308,6 @@ setReplaceMethod(f="spc.updateheader", signature="Spectra",
 #' @description
 #' Extracts index of rows marked as selected
 #' 
-#'@usage 
-#' spc.getselected.idx(object)
-#'
 #' @seealso \code{\link{spc.setselected.idx<-}}
 #' 
 #' @param object  A \code{Spectra} object 
@@ -1344,14 +1326,13 @@ setMethod("spc.getselected.idx", signature = "Spectra",
           def = function (object){
             return(object@SelectedIdx)
           })
+
 #########################################################################
 # Method : spc.setselected.idx	
 #########################################################################
 #' Set index to a \code{Spectra} object
 #' @description
 #' Set or change selected  row index of a \code{Spectra} object 
-#' @usage 
-#' spc.setselected.idx(x,value)
 #'
 #' @param x A \code{Spectra} object 
 #' @param value index for a \code{Spectra} object
@@ -1410,13 +1391,10 @@ setMethod("spc.getinvalid.idx", signature = "Spectra",
 #' @description
 #' Stores the row indexes as invalid
 #'
-#' @usage 
-#' spc.setinvalid.idx(object,value)
-#'
-#' 
-#' 
 #' @param x A \code{Spectra} object 
 #' @param value Logical vector 
+#' 
+#' @seealso \code{\link{spc.setselected.idx<-}}
 #' @examples  
 #' sp = spc.example_spectra()
 #' spc.getinvalid.idx(sp) #No invalid rows
@@ -1424,7 +1402,6 @@ setMethod("spc.getinvalid.idx", signature = "Spectra",
 #' vld[1:5]<-FALSE
 #' spc.setinvalid.idx(sp)<-vld #Mark the first 5 rows as invalid
 #' spc.getinvalid.idx(sp)
-#' 
 #' 
 #' @export
 setGeneric("spc.setinvalid.idx<-",function(object,value)
@@ -1549,9 +1526,6 @@ setMethod("spc.header2data", signature = "Spectra",
 #' @description
 #' Operators acting on \code{Spectra} object and \code{Spectra} lists to extract or replace parts.
 #'
-#' @usage 
-#' x[i]
-#' x[i,j]
 #' @param x A \code{Spectra} object from which to extract element(s) or in which to replace element(s). 
 #' @param i,j indices specifying elements to extract or replace. Indices are numeric or character vectors 
 #' @details 
@@ -1631,10 +1605,6 @@ setMethod("[", signature(x = "Spectra"), function(x, i, j) {
 #' Extract or replace parts of a \code{Spectra} object
 #' @description
 #' Operators acting on \code{Spectra} object and \code{Spectra} lists to extract or replace parts.
-#'
-#' @usage 
-#' x[[i]]
-#' x[[i,j]]
 #'
 #' @param x A \code{Spectra} object from which to extract element(s) or in which to replace element(s). 
 #' @param i,j indices specifying elements to extract or replace. Indices are numeric or character vectors 
@@ -2221,12 +2191,12 @@ setMethod("subset",  signature="Spectra",
 #'  spc.select(x, y, ...)
 #'  @param x and y a \code{Spectra} object
 #'  @param ... arguments to be passed to or from other methods.
+#'  @aliases [,Spectra
 #' @examples 
 #' sp=spc.example_spectra()
 #' spc.plot(sp)
 #' spc.select(sp)
 #' 
-#' @export
 mat_identify <- function(x, y, ...){
   l <- locator(1)
   if(all(x <= l$x) || all(x >= l$x)){

@@ -331,9 +331,7 @@ setMethod("subset",  signature="SpcList",
 #' @description
 #' Retrieve   names of a \code{SpcList} object
 #'
-#' @usage 
-#' names(x)
-#' @param x  A \code{SpcList} object
+#' @param x A \code{SpcList} object
 #' 
 #' @return Returns the coulmn names of an object of class \code{SpcList} as a charecter vector.
 #'
@@ -368,12 +366,6 @@ setMethod("names", "SpcList", function(x){
 #'
 #' @description
 #' Operators acting on  \code{Spectra} objects  to extract or replace parts
-#' 
-#' @usage 
-#' x[i] 
-#' x[i, j] 
-#' x[[i]] 
-#' x$i
 #' 
 #' 
 #' @param \code{Spectra} object from which to extract element(s) or in which to replace element(s)
