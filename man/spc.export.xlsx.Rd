@@ -28,7 +28,8 @@ Exports  a \code{Spectra} object into Excel format.
 }
 \details{
 \code{spc.export.xlsx()} calls functions from package \code{xlsx} to write the contents of 
-a \code{Spectra} object into an Excel file. Make sure \code{xlsx} is installed.
+a \code{Spectra} object into an Excel file. For this function to work, make sure the 
+package \code{xlsx} is installed.
 }
 \examples{
 \dontrun{
