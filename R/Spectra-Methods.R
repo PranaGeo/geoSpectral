@@ -2183,20 +2183,6 @@ setMethod("subset",  signature="Spectra",
 #########################################################################
 # Method : spc.select Select Spectra with the help of the mouse
 #########################################################################
-#' Gives logical vector after clicking \code{Spectra} object in plot 
-#' @description
-#' when click on graph to select a \code{Spectra} adn print which row select,
-#'  click Esc to quit after that, it returns logical vector
-#'  @usage 
-#'  spc.select(x, y, ...)
-#'  @param x and y a \code{Spectra} object
-#'  @param ... arguments to be passed to or from other methods.
-#'  @aliases [,Spectra
-#' @examples 
-#' sp=spc.example_spectra()
-#' spc.plot(sp)
-#' spc.select(sp)
-#' 
 mat_identify <- function(x, y, ...){
   l <- locator(1)
   if(all(x <= l$x) || all(x >= l$x)){
