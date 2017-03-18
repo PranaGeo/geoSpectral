@@ -58,5 +58,10 @@ These operators are generic. You can write methods to handle indexing of specifi
  sp[,"anap_345"]
 sp=spc.example_spectra()
 sp #501 spectral channels in columns and 26 observations in rows 
-sp[1] #501 spectral channels in columns and 1 observations in rows 
+sp[1] #returns Spectra object, 501 spectral channels in columns and 1 observations in rows
+names(sp)
+sp[["CAST"]] #returns the CAST data column
+sp[[4]] #returns the CAST data column
+sp[["CAST"]]=12 #Modify the CAST column
+sp[["CAST"]] #returns the CAST data column
 }
