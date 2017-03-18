@@ -340,15 +340,12 @@ setMethod("nrow", signature = "Spectra",
 #' @description
 #'  Retrieve  the names of \code{Spectra} object 
 #'  
-#' @usage 
-#' names(x)
-#'
 #' @param  x  a \code{Spectra} object
 #' @examples
 #' 
 #' x <- spc.example_spectra() 
 #' names(x)
-#'@export
+#' @export
 setMethod("names", signature = "Spectra", 
           def = function (x){ 
             #			if(ncol(x@data)>1)
@@ -382,7 +379,7 @@ setMethod("endTime", signature = "Spectra", def = function (x){
 #' x <- spc.example_spectra()
 #' head(x)
 #' 
-#'  @export
+#' @export
 setMethod("head", signature = "Spectra", 
           def = function (x, ...){  return(head(x@Spectra, ...)) })
 #########################################################################
@@ -453,12 +450,6 @@ setMethod("show", "Spectra", function(object){
 #' @description
 #' Operators acting on  \code{Spectra} objects  to extract or replace parts
 #' 
-#' @usage 
-#' x[i] 
-#' x[i, j] 
-#' x[[i]] 
-#' x$i 
-#' 
 #' 
 #' @param \code{Spectra} object from which to extract element(s) or in which to replace element(s)
 #' @param i A numeric (row index) variable
@@ -471,7 +462,7 @@ setMethod("show", "Spectra", function(object){
 #'  head(spc.colnames(sp))
 #'  head(sp$anap_300)
 #'  sp[,"anap_345"]
-#'  @export
+#' @export
 setMethod("$", signature="Spectra",
           function(x, name) {
             if (name %in% colnames(x@Spectra)){
@@ -537,6 +528,7 @@ setReplaceMethod("spc.colnames", signature = "Spectra", def = function (x,value)
 #' @usage 
 #' spc.plot(x, Y, maxSp, lab_cex,xlab,ylab,type,pch,lwd,cex,...)
 #' @param x and Y	 a \code{Spectra} data 
+#' @param Y fskjldsk
 #' @param xlab title for x  axix, as in plot().
 #' @param ylab title for y axis, as in plot().
 #' @param pch character string or vector of 1-characters or integers for plotting characters
@@ -552,7 +544,7 @@ setReplaceMethod("spc.colnames", signature = "Spectra", def = function (x,value)
 #' spc.plot(x)
 #' 
 #' @export
-setGeneric("spc.plot",function(x,Y,maxSp,lab_cex,xlab,ylab,type,pch,lwd,cex,...){standardGeneric("spc.plot")})
+setGeneric("spc.plot",function(x,Y,...){standardGeneric("spc.plot")})
 setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="l",pch=19,lwd=2,cex=0.3,...){						
   if (length(x@InvalidIdx)==0)
     x@InvalidIdx = rep(FALSE,nrow(x@Spectra))
@@ -1233,10 +1225,9 @@ setMethod("spc.getheader", signature = "Spectra",
 #' @description
 #' Function sets or changes the value of a field in the header slot of \code{Spectra} object
 #'
-#' @usage spc.setheader(object,name,value,...)
 #' @seealso \code{\link{spc.getheader}}
 #' @param value Object of class SpcHeader
-#' @param x A \code{Spectra} object 
+#' @param object A \code{Spectra} object 
 #' @param name of the header field to be setted
 #' @param ... arguments to be passed to or from other methods
 #' @examples 
@@ -1335,7 +1326,7 @@ setMethod("spc.getselected.idx", signature = "Spectra",
 #' spc.plot(x)
 #' @return \code{Spectra} object
 #' 
-#'@export 
+#' @export 
 setGeneric("spc.setselected.idx<-",function(object,value)
 {standardGeneric("spc.setselected.idx<-")})
 setReplaceMethod(f="spc.setselected.idx", signature="Spectra",
@@ -2648,7 +2639,7 @@ spc.Read_NOMAD_v2 = function(fnm,skip.all.na.rows=TRUE) {
 #'spc.plot.plotly(sp,legend_field = "STATION")
 #'spc.plot.plotly(sp,legend_field = "anap_440")
 #'
-#'@export
+#' @export
 setGeneric (name= "spc.plot.plotly",
             def=function(sp, plot.max=10,showlegend=FALSE,legend_field="row",hoverinfo="title",title=sp@LongName){standardGeneric("spc.plot.plotly")})
 setMethod("spc.plot.plotly", signature="Spectra", function (sp, plot.max=10,showlegend = FALSE,legend_field,hoverinfo,title) {
@@ -2883,7 +2874,7 @@ setMethod("spc.plot.map.plotly", signature="Spectra", function (sp, hover_field,
 #' @examples 
 #' sp=spc.example_spectra()
 #' spc.plot.map.leaflet(sp)
-#'@export
+#' @export
  setGeneric (name= "spc.plot.map.leaflet",
             def=function(sp,hover_field = "row",color = "#FF0000",opacity = 1,  weight=5){standardGeneric("spc.plot.map.leaflet")})
  setMethod("spc.plot.map.leaflet", signature="Spectra", function (sp,hover_field = "row",color = "#FF0000",opacity = 1,  weight=5) {

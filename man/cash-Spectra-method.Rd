@@ -5,10 +5,7 @@
 \alias{$,Spectra-method}
 \title{Extract or replace parts of a \code{Spectra} object}
 \usage{
-x[i] 
-x[i, j] 
-x[[i]] 
-x$i
+\S4method{$}{Spectra}(x, name)
 }
 \arguments{
 \item{\code{Spectra}}{object from which to extract element(s) or in which to replace element(s)}
@@ -26,6 +23,5 @@ Operators acting on  \code{Spectra} objects  to extract or replace parts
  head(spc.colnames(sp))
  head(sp$anap_300)
  sp[,"anap_345"]
- @export
 }
 
