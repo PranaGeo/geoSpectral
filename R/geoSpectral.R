@@ -1,4 +1,4 @@
-#' @title Manipulation of spectral (electromagnetic) data
+#' @title Classes and methods for working with spectral (electromagnetic) data in R
 #'
 #' @description 
 #' \pkg{geoSpectral} is an R package providing a new data type for R that stores
@@ -28,4 +28,5 @@
 
 #' @docType package
 #' @name geoSpectral
+#' @import dplyr maps methods reshape2 rgdal spacetime xts
 NULL

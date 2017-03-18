@@ -53,7 +53,7 @@
 #' sp <- spc.example_spectra()
 #' BL = spc.makeSpcList(sp,"CAST")
 #' spc.plot.grid(BL,"spc.plot",3,2)
-#' 
+#' @export
 setGeneric (name= "spc.plot.grid",
 		def=function(x,FUN, nnrow, nncol,mar, oma, lab_cex,...){standardGeneric("spc.plot.grid")})
 setMethod("spc.plot.grid", "SpcList", function (x,FUN, nnrow, nncol, mar=c(4,4.5,1,0.5), 
@@ -122,7 +122,7 @@ setMethod("spc.plot.grid", "SpcList", function (x,FUN, nnrow, nncol, mar=c(4,4.5
 #' spc.plot.overlay(BL, xlim=c(400,500),ylim=c(0,0.2),lwd=2)
 #' spc.plot.overlay(BL, col=c("red"), leg_idx=FALSE, lty=2)
 #' spc.plot.overlay(BL, col=c("red","blue","green","yellow","cyan","black"))
-#' 
+#' @export
 setGeneric (name= "spc.plot.overlay",
 		def=function(object,lab_cex, leg_idx, type, lty, lwd, col, ...){standardGeneric("spc.plot.overlay")})
 setMethod("spc.plot.overlay", "SpcList", function (object, lab_cex=1,leg_idx=T, type="l", lty=1,lwd=1, col, ...){
@@ -205,7 +205,7 @@ setMethod("spc.plot.overlay", "SpcList", function (object, lab_cex=1,leg_idx=T, 
 #' BL = spc.makeSpcList(sp,"CAST")
 #' spc.plot.depth.overlay(BL, "anap_555")
 #' 
-#' 
+#' @export
 setGeneric (name= "spc.plot.depth.overlay",
 		def=function(object,X,lab_cex,...){standardGeneric("spc.plot.depth.overlay")})
 setMethod("spc.plot.depth.overlay", "SpcList", function (object, X, lab_cex, ...){
@@ -282,7 +282,7 @@ setMethod("spc.plot.depth.overlay", "SpcList", function (object, X, lab_cex, ...
 #' subset(myS,anap_440<=0.01) #Subsetting rows with respect to the value of Spectral data
 #' subset(myS,subset=DEPTH<=30,select="CAST") #Selecting Ancillary data columns, leaving Spectral columns intact
 #' 
-#' 
+#' @export
 #The argument "select" is not implemented yet. Use "[]"
 setMethod("subset",  signature="SpcList",
 		definition=function(x, subset, select, drop = FALSE, ...) {                   
@@ -341,7 +341,7 @@ setMethod("subset",  signature="SpcList",
 #' sp <- spc.example_spectra()
 #' BL = spc.makeSpcList(sp,"CAST")
 #' names(BL)
-#' 
+#' @export
 setMethod("names", "SpcList", function(x){
 			sapply(x, function(mobject) {
 			  if (!is.null(x@by) & !is.na(x@by) & x@by!="VariousVariables") {
@@ -395,7 +395,7 @@ setMethod("names", "SpcList", function(x){
 #'   BL[[4]]$CRUISE="Cruise4"
 #'   names(BL)
 #'   BL$Cruise4
-#' 
+#' @export
 setMethod("$", signature = "SpcList", 
 		function(x, name) {
 			myn = names(x)
@@ -420,6 +420,7 @@ setMethod("$", signature = "SpcList",
 #' x <- spc.example_spectra()
 #' BL = spc.makeSpcList(x,"CAST")
 #' show(BL)
+#' @export
 setMethod("show", "SpcList", function(object){
 			if(length(object)>0)
 				sapply(1:length(object), function(x) {
@@ -448,8 +449,9 @@ setMethod("show", "SpcList", function(object){
 #' @examples 
 #' sp=spc.example_spectra()
 #' as(list(sp,sp^2), "SpcList")
+#' @export
 SpcList = function (x){
-	new("SpcList", spclist)
+	new("SpcList", x)
 }
 #########################################################################
 # Method : spc.invalid.detect
@@ -467,6 +469,7 @@ SpcList = function (x){
 #' BL = spc.makeSpcList(sp,"CAST")
 #' invalid=spc.getheader(BL)
 #' show(invalid)
+#' @export
 setMethod("spc.invalid.detect", signature = "list", def=function(source1){
 			out = lapply(source1, function(x) {SetInvalidIdx(x)<-spc.invalid.detect(x)})
 			return(out)
@@ -491,7 +494,7 @@ setMethod("spc.invalid.detect", signature = "list", def=function(source1){
 #' BL = spc.makeSpcList(sp,"CAST")
 #' BL[[1]]@header
 #' spc.getheader(BL,"CAST")
-#' 
+#' @export
 #' 
 setMethod("spc.getheader", signature = "list", def = function (object,name){
 			sapply(object, spc.getheader,name)
@@ -517,7 +520,7 @@ setMethod("spc.getheader", signature = "list", def = function (object,name){
 #' spc.setheader(BL[[1]],"Station") <- a
 #' h=spc.getheader(BL[[1]])
 #' h
-#' 
+#' @export
 setReplaceMethod(f="spc.setheader", signature="list",
 		definition=function(object,name,value,...){
 			if(inherits(value,"Spectra"))
@@ -548,8 +551,10 @@ setReplaceMethod(f="spc.setheader", signature="list",
 #' BL[[1]]@header
 #' spc.updateheader(BL[[1]],"Station")<-11
 #' BL[[1]]@header
+#' 
+#' @export
 setReplaceMethod(f="spc.updateheader", signature="list",
-		definition=function(object,Name,value,...){
+		definition=function(object,Name,value){
 			if(inherits(value,"Spectra"))
 				stop("It is forbidden to place in a SpcHeader an object that inherits from the Spectra class")
 			if(length(value)==1)
@@ -597,7 +602,8 @@ setReplaceMethod(f="spc.updateheader", signature="list",
 #' BL[[1]]$CAST=rep(33, nrow( BL[[1]]))
 #' BL[[1]]=spc.data2header(BL[[1]],"CAST","ProjectCast", compress=T)
 #' BL[[1]]@header
-
+#' 
+#' @export
 setMethod("spc.data2header", signature = "list", 
 		def=function(object,dataname,headerfield,compress=TRUE,...){
 			temp = lapply(object, spc.data2header, dataname,headerfield,compress,...)
@@ -626,6 +632,8 @@ setMethod("spc.data2header", signature = "list",
 #' #Sort all Spectra objects with respect to their rows using the CAST column
 #' spL.s <- sort(spL,which.col="CAST",decreasing=TRUE)
 #' lapply(spL.s, function(x) as.character(x[["CAST"]]))
+#' 
+#' @export
 setMethod("sort", signature="SpcList", definition= function (x, decreasing = FALSE, na.last=NA, which.col, ...){
 			newdata = lapply(x, sort, which.col=which.col, decreasing=decreasing, na.last=na.last, ...)
 			x@.Data = newdata
@@ -653,6 +661,8 @@ setMethod("sort", signature="SpcList", definition= function (x, decreasing = FAL
 #' spc.lapply(BL,function(x) {nrow(x)})
 #' #Perform arithmetic operations on all Spectra elements. Returns a SpcList object.
 #' spc.lapply(BL,function(x) {x^2+1})
+#' 
+#' @export
 setGeneric (name= "spc.lapply",
 		def=function(X, FUN,...){standardGeneric("spc.lapply")})
 setMethod("spc.lapply", signature="SpcList", definition= function (X, FUN, ...) {
@@ -708,6 +718,7 @@ h2d = function(object,headerfield,dataname,compress=TRUE,...) {
 #' BL[[1]] <- spc.header2data(BL[[1]], "Zone")
 #' BL[[1]]$Zone
 #' @name spc.header2data
+#' @export
 setMethod("spc.header2data", signature="list", definition=
             h2d)
 
@@ -778,6 +789,7 @@ setMethod("spc.header2data", signature="SpcList",
 #' head(stidx@data)
 #' stidx = spc.make.stindex(BL, rowSimplify="spc.colMeans")
 #' dim(stidx)
+#' @export
 spc.make.stindex = function(input,what2include="",rowSimplify="none",
                             includeTIME=FALSE,includeLATLON=FALSE) {
   

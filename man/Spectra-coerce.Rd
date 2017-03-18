@@ -2,12 +2,8 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{Spectra-coerce}
 \alias{Spectra-coerce}
-\alias{as<-}
-\alias{as<-.Spectra}
+\alias{as,Spectra}
 \title{Conversion between \code{Spectra} and data.frame objects}
-\usage{
-\method{as}{Spectra}(from, to)
-}
 \arguments{
 \item{from}{The input object}
 

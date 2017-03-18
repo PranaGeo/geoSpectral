@@ -23,6 +23,5 @@ sp <- spc.example_spectra()
 BL = spc.makeSpcList(sp,"CAST")
 spc.plot.depth.overlay(BL, "anap_555")
 
-
 }
 

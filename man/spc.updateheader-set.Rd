@@ -23,5 +23,6 @@ sp=spc.example_spectra()
 sp@header
 spc.updateheader(sp,"Station")<-11
 sp@header
+
 }
 
