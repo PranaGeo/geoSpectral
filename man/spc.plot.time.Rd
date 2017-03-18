@@ -12,9 +12,9 @@ spc.plot.time(object, ...)
   lab_cex, lwd = 2, ...)
 }
 \arguments{
-\item{...}{any further arguments of plot}
+\item{object}{a \code{Spectra} data}
 
-\item{x}{a \code{Spectra} data}
+\item{...}{any further arguments of plot}
 }
 \description{
 Generating plot of the contents of a \code{Spectra} object with respect to time

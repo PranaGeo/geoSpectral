@@ -2267,7 +2267,7 @@ spc.makeSpcList = function(myobj, name){
 #' @description
 #' Generating plot of the contents of a \code{Spectra} object with respect to time
 #' 
-#' @param x	 a \code{Spectra} data 
+#' @param object	 a \code{Spectra} data 
 #' @param ... any further arguments of plot
 #' @seealso \code{\link{spc.plot.depth}}
 #' @examples
@@ -2359,7 +2359,7 @@ setMethod("spc.plot.time", signature="Spectra", function (object,Y,maxSp=50,xdat
 #'
 #' 
 #' @usage 
-#' spc.plot.depth(x,...)
+#' spc.plot.depth(object,...)
 #' @param x	 a \code{Spectra} data 
 #' @param ... any further arguments of plot
 #' @seealso \code{\link{spc.plot}}
