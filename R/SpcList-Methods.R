@@ -537,38 +537,25 @@ setReplaceMethod(f="spc.setheader", signature="list",
 			validObject(object)
 			return(object)
 		})
+
 #########################################################################
-# Method : spc.updateheader<-
+# Method : spc.updateheader
 #########################################################################
-#' Update a field of the @header slot of a \code{spclist} object
-#' @description
-#'  Updates or changes the value of a field in the header slot of \code{spclist} object 
-#'
-#' @param ... arguments to be passed to or from other methods 
-#' @param object A \code{Spectra} objec 
-#' @param name of the header field to be updated
-#' @examples 
-#' sp=spc.example_spectra()
-#' BL=spc.makeSpcList(sp,"CAST")
-#' BL[[1]]@header
-#' spc.updateheader(BL[[1]],"Station")<-11
-#' BL[[1]]@header
-#' 
+#' @rdname spc.updateheader
 #' @export
-setReplaceMethod(f="spc.updateheader", signature="list",
-		definition=function(object,Name,value){
-			if(inherits(value,"Spectra"))
-				stop("It is forbidden to place in a SpcHeader an object that inherits from the Spectra class")
-			if(length(value)==1)
-				value = rep(value,length(object))
-			stopifnot(length(value)==length(object))			
-			
-			for(xx in 1:length(object)){
-				spc.updateheader(object[[xx]],Name)<-value[xx]
-			}
-			validObject(object)
-			return(object)
-		})
+setMethod(f="spc.updateheader", signature="list", definition=function(object,Name,value){
+  if(inherits(value,"Spectra"))
+    stop("It is forbidden to place in a SpcHeader an object that inherits from the Spectra class")
+  if(length(value)==1)
+    value = rep(value,length(object))
+  stopifnot(length(value)==length(object))			
+  
+  for(xx in 1:length(object)){
+    object[[xx]] <- spc.updateheader(object[[xx]], Name, value[xx])
+  }
+  validObject(object)
+  return(object)
+})
 
 #########################################################################
 # Method : spc.data2header

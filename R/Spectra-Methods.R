@@ -1299,22 +1299,28 @@ setReplaceMethod(f="spc.setheader", signature="Spectra",
 #' @examples 
 #' sp=spc.example_spectra()
 #' sp@header
-#' spc.updateheader(sp,"Station")<-11
+#' sp <- spc.updateheader(sp,"Station", 11)
 #' sp@header
+#' 
+#' #SpcList example
+#' sp=spc.example_spectra()
+#' BL=spc.makeSpcList(sp,"CAST")
+#' BL[[1]]@header
+#' BL[[1]] <- spc.updateheader(BL[[1]],"Station", 11)
+#' BL[[1]]@header
 #' @rdname spc.updateheader
 #' @export
-setGeneric (name="spc.updateheader<-",
-            def=function(object,Name,value,...){standardGeneric("spc.updateheader<-")})
+setGeneric(name="spc.updateheader",
+            def=function(object,Name,value,...){standardGeneric("spc.updateheader")})
 
 #' @rdname spc.updateheader
-setReplaceMethod(f="spc.updateheader", signature="Spectra",
-                 definition=function(object,Name,value,...){
-                   hdr=spc.getheader(object)
-                   hdr[[Name]]=value
-                   spc.setheader(object)<-hdr
-                   validObject(object)
-                   return(object)
-                 })
+setMethod("spc.updateheader", signature="Spectra", definition=function(object,Name,value,...){
+  hdr=spc.getheader(object)
+  hdr[[Name]]=value
+  spc.setheader(object)<-hdr
+  validObject(object)
+  return(object)
+})
 
 #########################################################################
 # Method : spc.getselected.idx
@@ -2261,7 +2267,7 @@ spc.makeSpcList = function(myobj, name){
   #For each row index in the list, subset the DF, return a list
   output = lapply(idx,function(x) {
     out = myobj[x,]
-    spc.updateheader(out, name)<-as.character(out[[name]][1])
+    out <- spc.updateheader(out, name, as.character(out[[name]][1]))
     out
   })
   output = SpcList(output)
