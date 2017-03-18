@@ -440,15 +440,18 @@ setMethod("show", "SpcList", function(object){
 #########################################################################
 # Constructor function : SpcList()
 #########################################################################
-#'  \code{SpcList} class.
-#' @description Definition for \code{SpcList}. This class provides
-#' a collection of multiple \code{Spectra} objects inside a list.
+#' Constructor function for the \code{SpcList} class.
+#' @description With this function, it is easy to create a \code{SpcList} object
+#' given an list containing multipls \code{Spectra} objects.
 #' @usage 
 #' SpcList(x)
 #' @param x a list object
 #' @examples 
 #' sp=spc.example_spectra()
+#' #Create an SpcList object using two Spectra objects
 #' as(list(sp,sp^2), "SpcList")
+#' #the above is the same as 
+#' SpcList(list(sp,sp^2))
 #' @export
 SpcList = function (x){
 	new("SpcList", x)
