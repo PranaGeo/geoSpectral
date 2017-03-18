@@ -13,7 +13,7 @@ spc.timeMatch(master,searched,returnList,method,limits,report)
 
 \item{returnList}{Boolean; should a list be returned with all matches (TRUE), or a vector with single matches (FALSE)?}
 
-\item{method}{Uses the simple  technique, same as of spacetime::timeMatch(),}
+\item{method}{Method used in time-based matching. See the details section.}
 
 \item{limits}{the interval limits}
 
@@ -23,11 +23,29 @@ spc.timeMatch(master,searched,returnList,method,limits,report)
 Match two time sequences for a \code{Spectra} object, where each can be intervals or instances.
 }
 \details{
-Another version of spacetime::timeMatch(),method="over" uses the simple over technique. Same as of spacetime::timeMatch(),
-method="nearest" finds the nearest measurement. Matches only one data for all elements of master
-method="within" finds the measurements that are within the interval limits=c(upper,lower) (in seconds)
+spc.timeMatch is similar to spacetime::timeMatch(), only adding some more matching methods.
+When method is "over", the same technique used by spacetime::timeMatch() is used. Useful when
+matched timestamps of both master and searched are exactly equal.
+When method is "nearest", the nearest measurement will be found, 
+matching only one data for ALL elements of master.
+When method is "within", measurements that are within the interval limits=c(upper,lower) (in seconds) 
+will be found.
 }
 \examples{
+#Read the Nomad database inside a SpcList object.
+dat = SpcList(spc.Read_NOMAD_v2())
+
+#Different list elements containt different parameters
+names(dat)
+
+#We would like to find elements of Es that match time-wise rows of Kd.
+nrow(dat$kd), nrow(dat$es)
+
+#Use spc.timeMatch() to get row indexes of Es that would match those of Kd time-wise
+t_idx=spc.timeMatch((dat$kd), (dat$es))
+#Verification
+all(time(dat$es)[t_idx]==time(dat$kd))
+
 
 }
 

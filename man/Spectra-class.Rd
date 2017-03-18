@@ -3,7 +3,7 @@
 \docType{class}
 \name{Spectra-class}
 \alias{Spectra-class}
-\title{Create a spectra class definition}
+\title{Spectra class definition}
 \description{
 Spectra class is the main class provided by the package geoSpectRal. It allows storage
 of spectral or non-spectra data with space and time attributes.

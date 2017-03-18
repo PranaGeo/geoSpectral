@@ -9,7 +9,6 @@ Depends:
     dplyr,
     rgdal,
     spacetime,
-    reshape2,
     xts,
     maps
 Imports:
