@@ -5,7 +5,7 @@
 \alias{names,SpcList-method}
 \title{names of \code{SpcList} object}
 \usage{
-names(x)
+\S4method{names}{SpcList}(x)
 }
 \arguments{
 \item{x}{A \code{SpcList} object}

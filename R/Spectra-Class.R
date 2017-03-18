@@ -1,7 +1,7 @@
 #########################################################################
 # Class : Spectra
 #########################################################################
-#' Create a spectra class definition
+#' Spectra class definition
 #' @description
 #' Spectra class is the main class provided by the package geoSpectRal. It allows storage
 #' of spectral or non-spectra data with space and time attributes.
