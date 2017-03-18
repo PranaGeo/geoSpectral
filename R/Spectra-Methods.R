@@ -2581,7 +2581,7 @@ spc.example_spectra <- function(){
 #'
 #'@description
 #' Imports the NOMAD v2 database of the SeaBASS project. More information 
-#' about this dataset can be found at \url{http://seabass.gsfc.nasa.gov/wiki/article.cgi?article=NOMAD}
+#' about this dataset can be found at \url{https://seabass.gsfc.nasa.gov/wiki/NOMAD}
 #'
 #' @param skip.all.na.rows \code{logical} whether or not eliminate records where all 
 #' channels are NAs 
