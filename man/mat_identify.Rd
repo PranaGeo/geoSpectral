@@ -18,5 +18,6 @@ when click on graph to select a \code{Spectra} adn print which row select,
 sp=spc.example_spectra()
 spc.plot(sp)
 spc.select(sp)
+
 }
 

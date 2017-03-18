@@ -18,7 +18,6 @@ Get wave lenghts inside of  a \code{Spectra} object
 \examples{
  x <- spc.example_spectra()
  spc.getwavelengths(x)
-
 }
 \seealso{
 \code{\link{spc.setwavelengths<-}}

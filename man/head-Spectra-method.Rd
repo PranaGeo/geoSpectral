@@ -22,6 +22,6 @@ Return the first or last parts of a \code{Spectra} object
 x <- spc.example_spectra()
 head(x)
 
- 
+ @export
 }
 

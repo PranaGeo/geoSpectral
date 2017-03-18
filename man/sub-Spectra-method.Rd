@@ -23,6 +23,5 @@ These operators are generic. You can write methods to handle indexing of specifi
 sp=spc.example_spectra()
 sp #501 spectral channels in columns and 26 observations in rows 
 sp[1] #501 spectral channels in columns and 1 observations in rows 
-
 }
 

@@ -4,11 +4,9 @@
 \alias{spc.export.text}
 \title{Exporting into text format}
 \usage{
-spc.export.text(input,filename,sep,append,writeheader,...)
+spc.export.text(x,filename,sep,append,writeheader,...)
 }
 \arguments{
-\item{input}{A \code{Spectra} object}
-
 \item{filename}{Name of the output text file}
 
 \item{sep}{the field separator string}
@@ -18,6 +16,8 @@ spc.export.text(input,filename,sep,append,writeheader,...)
 \item{writeheader}{either a logical value indicating whether the header names  are to be written}
 
 \item{...}{arguments to be passed to or from other methods}
+
+\item{x}{A \code{Spectra} object}
 }
 \description{
 Save the \code{Spectra} object on disk in text format
@@ -28,6 +28,7 @@ spc.export.text(x,filename="anap.txt")
 aa=spc.import.text("anap.txt")
 dev.new()
 spc.plot(aa)
+
 }
 \seealso{
 \code{\link{spc.import.text}}
