@@ -452,27 +452,29 @@ setMethod("show", "Spectra", function(object){
 #' Extract or replace parts of a \code{Spectra} object
 #'
 #' @description
-#' Operators acting on  \code{Spectra} objects  to extract or replace parts
+#' Operators acting on \code{Spectra} objects to extract parts
 #' 
 #' @usage 
 #' x[i] 
 #' x[i, j] 
-#' x[[i]] 
 #' x$i 
-#' 
 #' 
 #' @param \code{Spectra} object from which to extract element(s) or in which to replace element(s)
 #' @param i A numeric (row index) variable
 #' @param j A character (column name) or a numeric (column index) variable
 #' 
-#'
 #' @examples
 #'  sp<-spc.example_spectra()
 #'  # spc.colnames() is used to extract column names
 #'  head(spc.colnames(sp))
 #'  head(sp$anap_300)
-#'  sp[,"anap_345"]
-#'  @export
+#'  sp[,"anap_345"] #returns Spectra object with only one channel (column)
+#'  sp[1:3,"anap_345"] #returns Spectra object with first 3 rows and only one channel (column)
+#'  
+#' @name $
+#' @rdname Spectra-Access
+#' @aliases $,Spectra
+#' @docType methods
 setMethod("$", signature="Spectra",
           function(x, name) {
             if (name %in% colnames(x@Spectra)){
@@ -485,6 +487,21 @@ setMethod("$", signature="Spectra",
               stop("Could not match any Spectral or Ancillary (@data) columns")
             return(Boutput)
           })
+
+#' Replace parts of a \code{Spectra} object
+#'
+#' @description
+#' Operators acting on \code{Spectra} objects to replace parts
+#' 
+#' @examples
+#'  # spc.colnames() is used to extract column names
+#'  head(spc.colnames(sp))
+#'  head(sp$anap_300)
+#'  sp[,"anap_345"]
+#' @name $
+#' @rdname Spectra-Access
+#' @aliases $<-,Spectra
+#' @docType methods
 setReplaceMethod("$", signature = "Spectra", 
                  function(x, name, value) {
                    x[[name]]=value
@@ -1064,20 +1081,19 @@ spc.STI.stdistance = function(master,searched,report=F){
 #########################################################################
 #' Apply arithmetic operations on/between \code{Spectra} objects
 #' @description
-#' Methods defining Arithmetic operations between two \code{Spectra} objects e1 and e2 or one
+#' Methods defining Arithmetic and Math operations between two \code{Spectra} objects e1 and e2 or one
 #' \code{Spectra} object e1 and a numeric value.
 #'
 #' @param e1 spectra object 
 #' @param e2 spectra object or other
-#' 
+#' @param x spectra object 
 #' @details 
 #' These methods allow performing arithmetic operations involving \code{Spectra} objects.
-#' @name Arith
+#' @name Spectra-Arith
 #' @seealso \code{\link{Arith}}
-#' @export
 NULL
 
-#' @name Arith
+#' @name Spectra-Arith
 setMethod("Arith", signature(e1 = "Spectra", e2 = "Spectra"),function (e1, e2) {
   result <- methods::callGeneric(e1@Spectra, e2@Spectra)
   output = e1
@@ -1086,7 +1102,7 @@ setMethod("Arith", signature(e1 = "Spectra", e2 = "Spectra"),function (e1, e2) {
   return(output)
 })
 
-#' @name Arith
+#' @name Spectra-Arith
 setMethod("Arith", signature(e1 = "Spectra", e2 = "numeric"),function (e1, e2) {
   result <- callGeneric(e1@Spectra, e2)
   output = e1
@@ -1095,6 +1111,7 @@ setMethod("Arith", signature(e1 = "Spectra", e2 = "numeric"),function (e1, e2) {
   return(output)
 })
 
+#' @name Spectra-Arith
 setMethod("Math", signature("Spectra"),function (x) {
   x@Spectra <- callGeneric(x@Spectra)
   validObject(x)
@@ -1619,7 +1636,6 @@ setMethod("[", signature(x = "Spectra"), function(x, i, j) {
 #' x[[i]]
 #' x[[i,j]]
 #'
-#' 
 #' @param x A \code{Spectra} object from which to extract element(s) or in which to replace element(s). 
 #' @param i,j indices specifying elements to extract or replace. Indices are numeric or character vectors 
 #' 
@@ -1679,36 +1695,53 @@ setReplaceMethod("[[",  signature=c("Spectra","character","missing"), definition
   return(x)
 })
 
-setMethod("rep", signature(x = "Spectra"),
-          function(x, times, length.out, each, ...) {
-            if(!missing(length.out))
-              stop("The argument 'length.out' is not supported yet")
-            if(!missing(each))
-              stop("The argument 'each' is not supported yet")
-            SP = sapply(1:ncol(x), function(y) rep(x@Spectra[1,y], times))
-            
-            if(prod(dim(x@data))!=0){
-              DT = as.data.frame(matrix(rep(matrix(NA,1,ncol(x@data)), times), ncol = ncol(x@data)))
-              for (I in 1:ncol(DT))
-                DT[,I] = rep(x@data[,I],times)
-              names(DT)<-names(x@data)
-            }
-            
-            if (length(x@InvalidIdx)>1)
-              x@InvalidIdx = rep(x@InvalidIdx,times)
-            
-            crds = matrix(rep(x@sp@coords,times),ncol=ncol(x@sp@coords),byrow=T)
-            colnames(crds)<-c("LON","LAT")
-            x@time = xts::xts(rep(x@time,times),rep(time(x@time),times))
-            x@endTime = rep(x@endTime,times)
-            x@sp@coords <- crds
-            if(prod(dim(x@data))!=0)
-              x@data = DT 
-            x@Spectra = SP	
-            x@SelectedIdx = logical()
-            validObject(x)
-            return(x)
-          })
+#########################################################################
+# Method : rep
+#########################################################################
+#' Replicate rows of \code{Spectra} object
+#' @description
+#' Operators 
+#'
+#' @param x A \code{Spectra} object whose rows are to be replicated.
+#' @param times A integer vector giving the (non-negative) number of times to repeat each row.
+#' See help of \code{\link{rep}}.
+#'  
+#' @details Replicates rows of \code{x}, making \code{times} copies of each row. Replicates \code{Spectra}, 
+#' \code{data}, \code{sp}, \code{time}, \code{endTime}, \code{InvalidIdx} slots. Resets the \code{SelectedIdx} slot.
+#' 
+#' @return A \code{Spectra} object
+#' @examples 
+#' sp=spc.example_spectra()
+#' dim(sp)
+#' sp2 = rep(sp, 5)
+#' dim(sp2)
+#' @export
+setMethod("rep", signature(x = "Spectra"), function(x, times, ...) {
+  SP = sapply(1:ncol(x), function(y) rep(x@Spectra[,y], times))
+  
+  if(prod(dim(x@data))!=0){
+    DT = as.data.frame(matrix(rep(matrix(NA,nrow(x@data),ncol(x@data)), times), ncol = ncol(x@data)))
+    for (I in 1:ncol(DT))
+      DT[,I] = rep(x@data[,I],times)
+    names(DT)<-names(x@data)
+  }
+  
+  if (length(x@InvalidIdx)>1)
+    x@InvalidIdx = rep(x@InvalidIdx,times)
+  
+  crds = matrix(rep(x@sp@coords,times),ncol=ncol(x@sp@coords),byrow=T)
+  colnames(crds)<-c("LON","LAT")
+  x@time = xts::xts(rep(x@time,times),rep(time(x@time),times))
+  x@endTime = rep(x@endTime,times)
+  x@sp@coords <- crds
+  if(prod(dim(x@data))!=0)
+    x@data = DT 
+  x@Spectra = SP	
+  x@InvalidIdx = rep(x@InvalidIdx, times)
+  x@SelectedIdx = logical()
+  validObject(x)
+  return(x)
+})
 
 #########################################################################
 # Method : spc.interp.spectral
@@ -2018,7 +2051,8 @@ spc.header.infos = function(header){
 #' 
 #'@details
 #' \code{spc.export.xlsx()} calls functions from package \code{xlsx} to write the contents of 
-#' a \code{Spectra} object into an Excel file. Make sure \code{xlsx} is installed.
+#' a \code{Spectra} object into an Excel file. For this function to work, make sure the 
+#' package \code{xlsx} is installed.
 #' 
 #' @return None. Simply creates an Excel file on disk.
 #'
