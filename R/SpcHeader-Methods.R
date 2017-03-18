@@ -18,9 +18,11 @@
 #' sp@ShortName
 #' sp@header=SpcHeaderAdd(sp@header,sp@ShortName,10)
 #' sp@header
+#' @rdname SpcHeaderAdd
 #' @export
 setGeneric("SpcHeaderAdd",function(object,Name,Value,...)
 		{standardGeneric("SpcHeaderAdd")})
+#' @rdname SpcHeaderAdd
 setMethod("SpcHeaderAdd", signature="SpcHeader", function(object,Name,Value){	
 			templist = list()
 			if (length(Value)>1){
