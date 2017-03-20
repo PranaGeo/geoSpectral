@@ -22,7 +22,7 @@ sp=spc.example_spectra()
 BL=spc.makeSpcList(sp,"CAST")
 a=new("SpcHeader") # create new SpcHeader class
 a$Longitude=123 
-spc.setheader(BL[[1]],"Station") <- a
+spc.setheader(BL[[1]]) <- a
 h=spc.getheader(BL[[1]])
 h
 

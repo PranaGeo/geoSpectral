@@ -8,7 +8,7 @@
 \usage{
 spc.plot.overlay(object,lab_cex,leg_idx, type, lty,lwd, col, ...)
 
-\S4method{spc.plot.overlay}{SpcList}(object, lab_cex = 1, leg_idx = T,
+\S4method{spc.plot.overlay}{SpcList}(object, lab_cex = 1, leg_idx = TRUE,
   type = "l", lty = 1, lwd = 1, col, ...)
 }
 \arguments{

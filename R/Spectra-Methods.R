@@ -554,7 +554,8 @@ setReplaceMethod("spc.colnames", signature = "Spectra", def = function (x,value)
 #' 
 #' @rdname spc.plot
 #' @export
-setGeneric("spc.plot",function(x,Y,maxSp,lab_cex,xlab,ylab,type,pch,lwd,cex,...){standardGeneric("spc.plot")})
+setGeneric("spc.plot",function(x,Y,maxSp,lab_cex,xlab,ylab,type="l",pch=19,lwd=2,cex=0.3,...){standardGeneric("spc.plot")})
+
 #' @rdname spc.plot
 setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="l",pch=19,lwd=2,cex=0.3,...){						
   if (length(x@InvalidIdx)==0)
@@ -1260,7 +1261,7 @@ setMethod("spc.getheader", signature = "Spectra", def = function (object,name){
 #' sp=spc.example_spectra()
 #' a=new("SpcHeader") # create new SpcHeader class
 #' a$Longitude=123 
-#' spc.setheader(sp,"Station") <- a
+#' spc.setheader(sp) <- a
 #' sp@header
 #' 
 #' @rdname spc.setheader
@@ -1757,7 +1758,7 @@ setMethod("rep", signature(x = "Spectra"), function(x, times, ...) {
 #' @rdname spc.interp.spectral
 #' @export
 setGeneric (name= "spc.interp.spectral",
-            def=function(source1,target_lbd,show.plot,...){standardGeneric("spc.interp.spectral")})
+            def=function(source1,target_lbd,show.plot=FALSE,...){standardGeneric("spc.interp.spectral")})
 
 #' @rdname spc.interp.spectral
 setMethod("spc.interp.spectral", signature = "Spectra", def = function (source1,target_lbd,show.plot=FALSE){
@@ -2971,9 +2972,11 @@ setMethod("spc.plot.map.leaflet", signature="Spectra", function (sp,hover_field 
 #' @param glyph Value(s) or field name of the glyph to
 #'  use \code{\link{point_types}}
 #' @examples 
-#' sp=spc.example_spectra()
-#' spc.plot.map.rbokeh(sp, hover = "Snap")
-#' spc.plot.map.rbokeh(sp)
+#' \dontrun{
+#'   sp=spc.example_spectra()
+#'   spc.plot.map.rbokeh(sp, hover = "Snap")
+#'   spc.plot.map.rbokeh(sp)
+#' }
 #' 
 #' @rdname spc.plot.map.rbokeh
 #' @export
