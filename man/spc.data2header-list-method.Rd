@@ -9,18 +9,18 @@
   compress = TRUE, ...)
 }
 \arguments{
-\item{object}{\code{spclist} object}
+\item{object}{\code{SpcList} object}
 
 \item{dataname}{A character object specifying the name of @data column to be used}
 
 \item{headerfield}{A character object specifying the name of the @header field to be changed}
 
-\item{compress}{true or false}
+\item{compress}{TRUE or FALSE}
 
 \item{...}{arguments to be passed to or from methods. See help of \code{\link{spc.data2header}}.}
 }
 \value{
-object of class \code{spclist}
+object of class \code{SpcList}
 }
 \description{
 Populates a field of @header with a column data from @data slot.
@@ -41,7 +41,7 @@ BL[[1]]@header
  BL[[1]]=spc.data2header(BL[[1]],"CAST","ProjectCast")
 BL[[1]]@header
 BL[[1]]$CAST=rep(33, nrow( BL[[1]]))
-BL[[1]]=spc.data2header(BL[[1]],"CAST","ProjectCast", compress=T)
+BL[[1]]=spc.data2header(BL[[1]],"CAST","ProjectCast", compress=TRUE)
 BL[[1]]@header
 
 }

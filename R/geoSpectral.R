@@ -20,16 +20,19 @@
 #' @author Servet Ahmet Cizmeli <ahmet@pranageo.com>
 #' 
 #' @references
-#' There is a tutorial for \pkg{geoSpectral} at the package's GitHub page: \url{https://github.com/PranaGeo/geoSpectral/wiki/RPackage_geoSpectral_Tutorial}.
+#' There is a tutorial for \pkg{geoSpectral} at the package's GitHub page: \url{https://pranageo.com/geospectral/geospectral-tutorial/}.
 #'
 #' @concept Spectral Wavelength
-#' @seealso See also the packages \pkg{spacetime}, \pkg{rgdal},
-#'\pkg{sp}, \pkg{xts}
-
-#' @docType package
-#' @name geoSpectral
-#' @import maps methods rgdal spacetime xts
-#' @importFrom dplyr select everything
-#' @importFrom rbokeh figure ly_map ly_points
+#' @seealso See also the packages \pkg{spacetime}, \pkg{rgdal},'\pkg{sp}, \pkg{xts}
+#' @rdname geoSpectral
+#' @import sp methods maps rgdal spacetime xts
+#' @importFrom dplyr select everything %>%
+#' @importFrom rbokeh figure ly_map ly_points %>%
+#' @importFrom leaflet addCircles addTiles leaflet %>%
 #' @importFrom plotly plot_ly add_trace layout toRGB subplot
+#' @importFrom grDevices dev.new rainbow
+#' @importFrom graphics abline axis box grid hist legend lines locator matlines matplot matpoints mtext par plot.new points title
+#' @importFrom stats approx time
+#' @importFrom utils modifyList read.table write.table
+#' @importFrom sp Line Lines SpatialPoints coordinates spDistsN1
 NULL

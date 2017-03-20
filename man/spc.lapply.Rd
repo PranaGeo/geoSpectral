@@ -11,7 +11,7 @@ spc.lapply(X, FUN, ...)
 \S4method{spc.lapply}{SpcList}(X, FUN, ...)
 }
 \arguments{
-\item{X}{A \code{spclist} object .}
+\item{X}{A \code{SpcList} object .}
 
 \item{FUN}{function to be applied to each element of X.}
 

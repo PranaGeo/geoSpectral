@@ -486,7 +486,7 @@ setReplaceMethod("$", signature = "Spectra",  function(x, name, value) {
 #' Column names of \code{Spectra} object
 #'
 #' @description
-#' Retrieve  column names of a \code{Spectra} object
+#' Retrieve column names of a \code{Spectra} object
 #'
 #'
 #' @param x  A \code{Spectra} object
@@ -494,7 +494,7 @@ setReplaceMethod("$", signature = "Spectra",  function(x, name, value) {
 #'
 #' @examples
 #' x <- spc.example_spectra()
-#' spc.colnames(x)
+#' head(spc.colnames(x))
 #' # or 
 #' spc.colnames(x) <- spc.cname.construct(x)
 #' spc.colnames(x)
@@ -506,7 +506,13 @@ setGeneric("spc.colnames",function(x){standardGeneric("spc.colnames")})
 #' @rdname spc.colnames
 setMethod("spc.colnames", signature = "Spectra", 
           def = function (x){ return(colnames(x@Spectra)) })
+
+#' Set column names of a \code{Spectra} object
+#' @rdname spc.colnames
+#' @export
 setGeneric("spc.colnames<-",function(x,value){standardGeneric("spc.colnames<-")})
+
+#' @rdname spc.colnames
 setReplaceMethod("spc.colnames", signature = "Spectra", def = function (x,value){
   colnames(x@Spectra) = value
   validObject(x)
@@ -963,7 +969,7 @@ setMethod(f="spc.cname.construct", signature="Spectra",definition=function(objec
 #' names(dat)
 #' 
 #' #We would like to find elements of Es that match time-wise rows of Kd.
-#' nrow(dat$kd), nrow(dat$es)
+#' nrow(dat$kd); nrow(dat$es)
 #' 
 #' #Use spc.timeMatch() to get row indexes of Es that would match those of Kd time-wise
 #' t_idx=spc.timeMatch((dat$kd), (dat$es))
@@ -1028,7 +1034,7 @@ spc.STI.stdistance = function(master,searched,report=F){
   if(inherits(master,"STI"))
     mastertime = time(master)
   if(is.timeBased(master))
-    mastertime = maste	
+    mastertime = master	
   if(inherits(searched,"STI"))
     searchedtime = time(searched)
   if(is.timeBased(searched))
@@ -1170,17 +1176,22 @@ setMethod("spc.bbox2lines",signature="Spectra",definition=function(object){
 #########################################################################
 # Method : spc.invalid.detect
 #########################################################################
-#' Determinate invalid things insade of a \code{Spectra} object
+#' Determinate invalid rows of a \code{Spectra} object
 #' @description
-#' Detect invalid things insade of a \code{Spectra} object and returns logical object
+#' Determine invalid rows (records) of a \code{Spectra} \code{SpcList} object
 #'
 #' @usage 
 #' spc.invalid.detect(source1)
-#' 
-#' @param source1  A  \code{Spectra} object 
+#' @return logical. TRUE for invalid rows
+#' @param source1 A  \code{Spectra} object 
 #' @examples 
 #' sp=spc.example_spectra()
+#' nrow(sp)
 #' invalid=spc.invalid.detect(sp)
+#' show(invalid); length(invalid)
+#' 
+#' BL = spc.makeSpcList(sp,"CAST")
+#' invalid=spc.invalid.detect(BL)
 #' show(invalid)
 #' 
 #' @rdname spc.invalid.detect
@@ -2601,6 +2612,7 @@ spc.example_spectra <- function(){
 #' spc.plot.plotly(ap[[4]], plot.max=15)
 #' 
 #' @export
+# @importFrom dplyr "%>%" select
 spc.Read_NOMAD_v2 = function(skip.all.na.rows=TRUE) {
   fnm = file.path(system.file(package = "geoSpectral"), "test_data","nomad_seabass_v2.a_2008200.txt.gz")
   #Read data off disk
@@ -2633,7 +2645,8 @@ spc.Read_NOMAD_v2 = function(skip.all.na.rows=TRUE) {
   mydata = mydata [, -do.call(c, idx)]
   
   #Reorder columns
-  mydata = mydata %>% select(TIME, LON, LAT, cruise, flag, everything())
+  #mydata = mydata %>% dplyr::select(TIME, LON, LAT, cruise, flag, everything())
+  mydata = mydata %>% dplyr::select_("TIME", "LON", "LAT", "cruise", "flag", everything())
   
   out = lapply(1:length(ShortNames), function(x) {
     #Find rows that do not contain NAs
@@ -2990,9 +3003,9 @@ setMethod("spc.plot.map.rbokeh", signature="Spectra", function (sp,glyph,color, 
   
   figure(xlim=c(bbx[1,1],bbx[1,2]),ylim=c(bbx[2,1],bbx[2,2]),padding_factor = 0) %>%
     #gmap(lat = mean(sp@sp@bbox[2,]), lng = mean(sp@sp@bbox[1,]),zoom = 12, width = 680, height = 600)
-    ly_map("world", col = "gray") %>%
+    ly_map("world", color = "gray") %>%
     #ly_points(x=sp@sp@coords[,"LON"], y=sp@sp@coords[,"LAT"],legend=legend,hover=hover )
-    ly_points(x=LON, y=LAT, data=df, color=color,fill_alpha=opacity,
+    ly_points(x="LON", y="LAT", data=df, color=color,fill_alpha=opacity,
               line_alpha=opacity,hover=names(df)[5:length(names(df))] )
 })
 

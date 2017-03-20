@@ -456,31 +456,24 @@ SpcList = function (x){
 #########################################################################
 # Method : spc.invalid.detect
 #########################################################################
-#' Determinate invalid records insade of a \code{spclist} object
-#' @description
-#' Detect invalid records (rows) inside of a \code{spclist} object and returns logical object
-#'
-#' @param source1  A \code{spclist} object 
-#' @examples 
-#' sp=spc.example_spectra()
-#' BL = spc.makeSpcList(sp,"CAST")
-#' invalid=spc.getheader(BL)
-#' show(invalid)
-#' 
+#' Determine invalid records inside a \code{SpcList} object
+#' @rdname spc.invalid.detect
 #' @export
 setMethod("spc.invalid.detect", signature = "list", def=function(source1){
-			out = lapply(source1, function(x) {SetInvalidIdx(x)<-spc.invalid.detect(x)})
-			return(out)
-		})
+  out = lapply(source1, function(x) {
+    spc.setinvalid.idx(x)<-spc.invalid.detect(x)
+  })
+  return(out)
+})
 
 #########################################################################
 # Method : spc.getheader
 #########################################################################
-#' Extract a field of the @header slot of a \code{spclist} object
+#' Extract a field of the @header slot of a \code{SpcList} object
 #' @description
-#' Extracts the value of a field in the header slot of \code{spclist} object
+#' Extracts the value of a field in the header slot of \code{SpcList} object
 #' 
-#' @param object  A  \code{spclist} object 
+#' @param object  A  \code{SpcList} object 
 #' @param name of the header field to be extracted
 #' 
 #' @examples 
@@ -498,9 +491,9 @@ setMethod("spc.getheader", signature = "list", def = function (object,name){
 #########################################################################
 # Method : spc.setheader<-
 #########################################################################
-#' Set a field of the @header slot of a \code{spclist} object
+#' Set a field of the @header slot of a \code{SpcList} object
 #' @description
-#' Function sets or changes the value of a field in the header slot of \code{spclist} object.
+#' Function sets or changes the value of a field in the header slot of \code{SpcList} object.
 #'
 #' @param value Object of class SpcList.
 #' @param object A \code{SpcList} object.
@@ -523,7 +516,7 @@ setReplaceMethod(f="spc.setheader", signature="list",definition=function(object,
 			stopifnot(length(value)==length(object))			
 			
 			a=sapply(1:length(object), function(x) {
-						object[[x]] = spc.setheader(object[[x]],value[x])
+						spc.setheader(object[[x]]) <- value[x]
 					})
 			validObject(object)
 			return(object)
@@ -556,11 +549,11 @@ setMethod(f="spc.updateheader", signature="list", definition=function(object,Nam
 #' Populates a field of @header with a column data from @data slot.
 #'
 #' @param dataname A character object specifying the name of @data column to be used
-#' @param object \code{spclist} object 
-#' @param compress true or false
+#' @param object \code{SpcList} object 
+#' @param compress TRUE or FALSE
 #' @param headerfield A character object specifying the name of the @header field to be changed
 #' @param ...	arguments to be passed to or from methods. See help of \code{\link{spc.data2header}}.
-#' @return object of class \code{spclist}
+#' @return object of class \code{SpcList}
 #' @details 
 #' This function extracts data from a column of the @data slot (specified by dataname)  
 #' and creates a new @header field with it. If headerfield is not provided, the name 
@@ -576,7 +569,7 @@ setMethod(f="spc.updateheader", signature="list", definition=function(object,Nam
 #'  BL[[1]]=spc.data2header(BL[[1]],"CAST","ProjectCast")
 #' BL[[1]]@header
 #' BL[[1]]$CAST=rep(33, nrow( BL[[1]]))
-#' BL[[1]]=spc.data2header(BL[[1]],"CAST","ProjectCast", compress=T)
+#' BL[[1]]=spc.data2header(BL[[1]],"CAST","ProjectCast", compress=TRUE)
 #' BL[[1]]@header
 #' 
 #' @export
@@ -627,7 +620,7 @@ setMethod("sort", signature="SpcList", definition= function (x, decreasing = FAL
 #' @usage 
 #' spc.lapply(X, FUN, ...)
 #'
-#' @param X A \code{spclist} object .
+#' @param X A \code{SpcList} object .
 #' @param ...  optional arguments to FUN.
 #' @param FUN function to be applied to each element of X.
 #' @return list or SpcList object.

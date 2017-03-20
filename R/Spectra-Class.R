@@ -23,6 +23,7 @@
 #' @slot ClassVersion numeric, Version of the class.
 #' 
 #' @export
+#' @importClassesFrom spacetime STIDF
 setClass("Spectra", contains="STIDF", 
 		representation=representation(
 				ShortName="character",
