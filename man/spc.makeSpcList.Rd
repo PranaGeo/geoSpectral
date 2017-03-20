@@ -17,4 +17,6 @@ Conversion from \code{Spectra} to \code{Spclist} using a data field
 sp <- spc.example_spectra()
 BL = spc.makeSpcList(sp,"CAST")
 show(BL)
+
 }
+

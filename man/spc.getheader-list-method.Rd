@@ -20,4 +20,6 @@ sp=spc.example_spectra()
 BL = spc.makeSpcList(sp,"CAST")
 BL[[1]]@header
 spc.getheader(BL,"CAST")
+
 }
+

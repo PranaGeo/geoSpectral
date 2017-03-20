@@ -2,18 +2,16 @@
 % Please edit documentation in R/Spectra-Methods.R
 \docType{methods}
 \name{$,Spectra-method}
-\alias{$,Spectra-method}
 \alias{$,Spectra}
-\alias{$<-,Spectra-method}
+\alias{$,Spectra-method}
 \alias{$<-,Spectra}
+\alias{$<-,Spectra-method}
 \alias{[,Spectra-method}
 \alias{[[,Spectra,character,missing-method}
 \alias{[[<-,Spectra,character,missing-method}
 \title{Extract or replace parts of a \code{Spectra} object}
 \usage{
-x[i] 
-x[i, j] 
-x$i
+\S4method{$}{Spectra}(x, name)
 
 \S4method{$}{Spectra}(x, name) <- value
 
@@ -49,9 +47,9 @@ These operators are generic. You can write methods to handle indexing of specifi
  # spc.colnames() is used to extract column names
  head(spc.colnames(sp))
  head(sp$anap_300)
+ sp[,"anap_345"]
  sp[,"anap_345"] #returns Spectra object with only one channel (column)
  sp[1:3,"anap_345"] #returns Spectra object with first 3 rows and only one channel (column)
- 
  # spc.colnames() is used to extract column names
  head(spc.colnames(sp))
  head(sp$anap_300)
@@ -64,4 +62,6 @@ sp[["CAST"]] #returns the CAST data column
 sp[[4]] #returns the CAST data column
 sp[["CAST"]]=12 #Modify the CAST column
 sp[["CAST"]] #returns the CAST data column
+
 }
+

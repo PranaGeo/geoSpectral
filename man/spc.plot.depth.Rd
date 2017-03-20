@@ -6,11 +6,23 @@
 \alias{spc.plot.depth,Spectra-method}
 \title{Plotting \code{Spectra} object}
 \usage{
+<<<<<<< HEAD
+<<<<<<< HEAD
 spc.plot.depth(x,...)
+=======
+spc.plot.depth(object,...)
+>>>>>>> khaliilhaji-devv
 
 \S4method{spc.plot.depth}{Spectra}(object, X, maxSp = 10, lab_cex, title,
   add = FALSE, xlab = NULL, ylab = NULL, ylim = NULL, xlim = NULL,
   lwd = 2, ...)
+<<<<<<< HEAD
+=======
+spc.plot.depthobject,X,maxSp=10,lab_cex,
+title, add=FALSE, xlab=NULL, ylab=NULL, ylim=NULL,xlim=NULL,lwd=2,...)
+>>>>>>> khaliilhaji-dev
+=======
+>>>>>>> khaliilhaji-devv
 }
 \arguments{
 \item{...}{any further arguments of plot}
@@ -23,7 +35,9 @@ Generating plot of the contents of a \code{Spectra} object with respect to depth
 \examples{
 x <- spc.example_spectra()
 spc.plot.depth(x)
+
 }
 \seealso{
 \code{\link{spc.plot}}
 }
+

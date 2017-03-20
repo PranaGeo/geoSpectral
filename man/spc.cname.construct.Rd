@@ -6,7 +6,6 @@
 \alias{spc.cname.construct,Spectra-method}
 \title{Generating column names for a \code{Spectra} object}
 \usage{
-spc.cname.construct(object)
 spc.cname.construct(object, value)
 
 \S4method{spc.cname.construct}{Spectra}(object, value)
@@ -28,4 +27,6 @@ omitted, the @ShortName slot is used.
 sp <- spc.example_spectra()
 spc.cname.construct(sp)
 spc.cname.construct(sp,"Newvar")
+
 }
+

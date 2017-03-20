@@ -28,4 +28,6 @@ sp=spc.example_spectra()
 dim(sp)
 sp2 = rep(sp, 5)
 dim(sp2)
+
 }
+

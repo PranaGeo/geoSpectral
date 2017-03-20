@@ -17,4 +17,6 @@ evals its elements in case the text contains some R code
 \examples{
 sp=spc.example_spectra()
 spc.header.infos(sp@header)
+
 }
+

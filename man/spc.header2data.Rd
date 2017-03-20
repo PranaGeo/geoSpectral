@@ -3,9 +3,18 @@
 \docType{methods}
 \name{spc.header2data}
 \alias{spc.header2data}
+<<<<<<< HEAD
+<<<<<<< HEAD
 \alias{spc.header2data,Spectra-method}
 \alias{spc.header2data,list-method}
 \alias{spc.header2data,SpcList-method}
+=======
+>>>>>>> khaliilhaji-dev
+=======
+\alias{spc.header2data,SpcList-method}
+\alias{spc.header2data,Spectra-method}
+\alias{spc.header2data,list-method}
+>>>>>>> khaliilhaji-devv
 \title{Get header for data}
 \usage{
 spc.header2data(object, headerfield, dataname, compress, ...)
@@ -42,7 +51,9 @@ procedure is repeated for all elements of the list containing \code{Spectra} obj
 }
 \examples{
 sp <- spc.example_spectra()
-spc.updateheader(sp, "Zone")<- "ZoneA"
+sp <- spc.updateheader(sp,"Zone", "ZoneA")
 sp <- spc.header2data(sp, "Zone")
 sp$Zone
+
 }
+

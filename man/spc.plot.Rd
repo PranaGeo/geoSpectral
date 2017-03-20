@@ -14,6 +14,8 @@ spc.plot(x, Y, maxSp, lab_cex,xlab,ylab,type,pch,lwd,cex,...)
 \arguments{
 \item{x}{and Y     a \code{Spectra} data}
 
+\item{Y}{fskjldsk}
+
 \item{lab_cex}{vector of character expansion sizes, used cyclically}
 
 \item{xlab}{title for x  axix, as in plot().}
@@ -35,7 +37,9 @@ Generating plot of the intensity of a measurement inside a \code{Spectra} object
 \examples{
 x <- spc.example_spectra()
 spc.plot(x)
+
 }
 \seealso{
 \code{\link{spc.lines}}
 }
+

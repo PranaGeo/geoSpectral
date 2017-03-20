@@ -6,10 +6,20 @@
 \alias{spc.interp.spectral,Spectra-method}
 \title{Interpolate spectral values}
 \usage{
-spc.interp.spectral(source1,target_lbd,show.plot=FALSE)
+<<<<<<< HEAD
+spc.interp.spectral(source1,target_lbd,show.plot)
+=======
+spc.interp.spectral(source1, target_lbd, show.plot, ...)
+>>>>>>> 14134e3400d5c89dbe16674b95ec8b8c419d95e3
 
 \S4method{spc.interp.spectral}{Spectra}(source1, target_lbd,
   show.plot = FALSE)
+<<<<<<< HEAD
+=======
+spc.interp.spectral(source1,target_lbd,show.plot,...)
+>>>>>>> khaliilhaji-dev
+=======
+>>>>>>> khaliilhaji-devv
 }
 \arguments{
 \item{source1}{A \code{Spectra} object}
@@ -32,4 +42,6 @@ spc.plot.overlay(SpcList(list(sp,sp2)))
 
 #Quick Plot only the first row
 spc.interp.spectral(sp[,lbd],c(430,450,500),show.plot=TRUE)
+
 }
+

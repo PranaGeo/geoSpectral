@@ -6,14 +6,22 @@
 \alias{spc.getheader,Spectra-method}
 \title{Extract a field of the @header slot of a \code{Spectra} object}
 \usage{
-spc.getheader(x,name)
+spc.getheader(object,name)
+<<<<<<< HEAD
+<<<<<<< HEAD
 
 \S4method{spc.getheader}{Spectra}(object, name)
+=======
+>>>>>>> khaliilhaji-dev
+=======
+
+\S4method{spc.getheader}{Spectra}(object, name)
+>>>>>>> khaliilhaji-devv
 }
 \arguments{
-\item{name}{of the header field to be extracted}
+\item{object}{A  \code{Spectra} object}
 
-\item{x}{A  \code{Spectra} object}
+\item{name}{of the header field to be extracted}
 }
 \description{
 Extracts the value of a field in the header slot of \code{Spectra} object
@@ -26,3 +34,4 @@ spc.getheader(sp,"Latitude")
 \seealso{
 \code{\link{spc.setheader<-}}
 }
+

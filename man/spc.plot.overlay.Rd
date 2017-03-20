@@ -7,9 +7,18 @@
 \title{Plotting multiple \code{Spectra} objects inside a \code{SpcList}}
 \usage{
 spc.plot.overlay(object,lab_cex,leg_idx, type, lty,lwd, col, ...)
+<<<<<<< HEAD
+<<<<<<< HEAD
 
 \S4method{spc.plot.overlay}{SpcList}(object, lab_cex = 1, leg_idx = T,
   type = "l", lty = 1, lwd = 1, col, ...)
+=======
+>>>>>>> khaliilhaji-dev
+=======
+
+\S4method{spc.plot.overlay}{SpcList}(object, lab_cex = 1, leg_idx = T,
+  type = "l", lty = 1, lwd = 1, col, ...)
+>>>>>>> khaliilhaji-devv
 }
 \arguments{
 \item{lab_cex}{vector of character expansion sizes, used cyclically}
@@ -41,4 +50,6 @@ spc.plot.overlay(BL)
 spc.plot.overlay(BL, xlim=c(400,500),ylim=c(0,0.2),lwd=2)
 spc.plot.overlay(BL, col=c("red"), leg_idx=FALSE, lty=2)
 spc.plot.overlay(BL, col=c("red","blue","green","yellow","cyan","black"))
+
 }
+

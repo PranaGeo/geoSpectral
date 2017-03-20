@@ -19,4 +19,6 @@ Gives number of dimension of a \code{Spectra} object
 \examples{
 sp<-spc.example_spectra()
 dim(sp)
+
 }
+

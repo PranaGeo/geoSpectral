@@ -10,3 +10,4 @@
 \description{
 @rdname spc.getwavelengths
 }
+

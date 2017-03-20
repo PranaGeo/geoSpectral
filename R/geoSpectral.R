@@ -22,8 +22,8 @@
 #' @references
 #' There is a tutorial for \pkg{geoSpectral} at the package's GitHub page: \url{https://github.com/PranaGeo/geoSpectral/wiki/RPackage_geoSpectral_Tutorial}.
 #'
-#'@concept Spectral Wavelength
-#'@seealso See also the packages \pkg{spacetime}, \pkg{rgdal},
+#' @concept Spectral Wavelength
+#' @seealso See also the packages \pkg{spacetime}, \pkg{rgdal},
 #'\pkg{sp}, \pkg{xts}
 
 #' @docType package
