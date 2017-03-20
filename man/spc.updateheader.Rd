@@ -7,18 +7,18 @@
 \alias{spc.updateheader,list-method}
 \title{Update a field of the @header slot of a \code{Spectra} object}
 \usage{
-spc.updateheader(x,name,...)<-value
+spc.updateheader(object,Name,...)<-value
 
 \S4method{spc.updateheader}{Spectra}(object, Name, value, ...)
 
 \S4method{spc.updateheader}{list}(object, Name, value)
 }
 \arguments{
+\item{object}{A \code{Spectra} objec}
+
+\item{Name}{of the header field to be updated}
+
 \item{...}{arguments to be passed to or from other methods}
-
-\item{x}{A \code{Spectra} objec}
-
-\item{name}{of the header field to be updated}
 }
 \description{
 Updates or changes the value of a field in the header slot of \code{Spectra} object

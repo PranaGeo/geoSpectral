@@ -926,7 +926,6 @@ setReplaceMethod(f="spc.setwavelengths", signature="Spectra",
 #'omitted, the @ShortName slot is used.
 #'
 #' @usage 
-#' spc.cname.construct(object)
 #' spc.cname.construct(object, value)
 #'
 #' @param value A character object
@@ -1194,9 +1193,9 @@ setMethod("spc.bbox2lines",signature="Spectra",definition=function(object){
 #' Detect invalid things insade of a \code{Spectra} object and returns logical object
 #'
 #' @usage 
-#' spc.invalid.detect(x)
+#' spc.invalid.detect(source1)
 #' 
-#' @param x  A  \code{Spectra} object 
+#' @param source1  A  \code{Spectra} object 
 #' @examples 
 #' sp=spc.example_spectra()
 #' invalid=spc.invalid.detect(sp)
@@ -1222,11 +1221,11 @@ setMethod("spc.invalid.detect", signature = "Spectra", def=function(source1){
 #' Extracts the value of a field in the header slot of \code{Spectra} object
 #'
 #' @usage 
-#' spc.getheader(x,name)
+#' spc.getheader(object,name)
 #'
 #' @seealso \code{\link{spc.setheader<-}}
 #' 
-#' @param x  A  \code{Spectra} object 
+#' @param object  A  \code{Spectra} object 
 #' @param name of the header field to be extracted
 #' 
 #' @examples 
@@ -1292,10 +1291,10 @@ setReplaceMethod(f="spc.setheader", signature="Spectra",
 #'  Updates or changes the value of a field in the header slot of \code{Spectra} object 
 #'
 #' @usage 
-#' spc.updateheader(x,name,...)<-value
+#' spc.updateheader(object,Name,...)<-value
 #' @param ... arguments to be passed to or from other methods 
-#' @param x A \code{Spectra} objec 
-#' @param name of the header field to be updated
+#' @param object A \code{Spectra} objec 
+#' @param Name of the header field to be updated
 #' @examples 
 #' sp=spc.example_spectra()
 #' sp@header
@@ -1735,7 +1734,7 @@ setMethod("rep", signature(x = "Spectra"), function(x, times, ...) {
 #' using approx().
 #'
 #' @usage 
-#' spc.interp.spectral(source1,target_lbd,show.plot=FALSE)
+#' spc.interp.spectral(source1,target_lbd,show.plot)
 #' 
 #' @param source1  A \code{Spectra} object 
 #' @param  target_lbd numeric vector giving desired wavelengths  
