@@ -28,5 +28,8 @@
 
 #' @docType package
 #' @name geoSpectral
-#' @import dplyr maps methods reshape2 rgdal spacetime xts
+#' @import maps methods rgdal spacetime xts
+#' @importFrom dplyr select everything
+#' @importFrom rbokeh figure ly_map ly_points
+#' @importFrom plotly plot_ly add_trace layout toRGB subplot
 NULL

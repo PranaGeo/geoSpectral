@@ -5,12 +5,8 @@
 \alias{subset,Spectra-method}
 \title{Subsetting for a \code{Spectra} and spcList classes}
 \usage{
-<<<<<<< HEAD
 subset(x,y,select,drop,...)
 }
-=======
-\S4method{subset}{Spectra}(x, subset, select, drop = FALSE, ...)
->>>>>>> 3e10b3d95b04b6b215debcee1a9489c029ec09eb
 \arguments{
 \item{x}{A \code{Spectra} object}
 
@@ -56,6 +52,5 @@ head(myS[[c("Snap","Offset")]]) #Returns data.frame
 subset(myS,DEPTH<=30) #Subsetting rows with respect to the value of Ancillary data
 subset(myS,anap_440<=0.01) #Subsetting rows with respect to the value of Spectral data
 subset(myS,subset=DEPTH<=30,select="CAST") #Selecting Ancillary data columns, leaving Spectral columns intact
-
 
 }
