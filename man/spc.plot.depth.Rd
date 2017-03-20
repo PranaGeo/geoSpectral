@@ -6,7 +6,7 @@
 \alias{spc.plot.depth,Spectra-method}
 \title{Plotting \code{Spectra} object}
 \usage{
-spc.plot.depth(object,X,maxSp,lab_cex,title, add, xlab, ylab, ylim,xlim,lwd,...)
+spc.plot.depth(object, ...)
 
 \S4method{spc.plot.depth}{Spectra}(object, X, maxSp = 10, lab_cex, title,
   add = FALSE, xlab = NULL, ylab = NULL, ylim = NULL, xlim = NULL,

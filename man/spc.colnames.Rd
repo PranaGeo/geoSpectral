@@ -18,12 +18,15 @@ spc.colnames(x) <- value
 }
 \arguments{
 \item{x}{A \code{Spectra} object}
+
+\item{value}{character vector containing new column names to be assigned}
 }
 \value{
-Returns the column  names of an object of class \code{Spectra} as a character  vector.
+spc.colnames() returns the column  names of an object of class \code{Spectra} 
+as a character vector. spc.colnames()<- returns a \code{Spectra} object.
 }
 \description{
-Retrieve column names of a \code{Spectra} object
+Set or retrieve column names of a \code{Spectra} object
 
 Set column names of a \code{Spectra} object
 }
