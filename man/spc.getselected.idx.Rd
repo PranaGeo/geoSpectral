@@ -30,3 +30,4 @@ spc.getselected.idx(x)
 \seealso{
 \code{\link{spc.setselected.idx<-}}
 }
+

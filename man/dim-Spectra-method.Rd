@@ -21,3 +21,4 @@ sp<-spc.example_spectra()
 dim(sp)
 
 }
+

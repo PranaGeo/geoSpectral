@@ -22,3 +22,4 @@ data table (@data) associated to that measurement as that of the mean spectra
 sp=spc.example_spectra()
 spc.colMeans(sp)
 }
+

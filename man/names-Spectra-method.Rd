@@ -19,3 +19,4 @@ x <- spc.example_spectra()
 names(x)
 
 }
+

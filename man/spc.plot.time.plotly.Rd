@@ -36,4 +36,7 @@ spc.plot.time.plotly(sp, plot.max = 3)
 spc.plot.time.plotly(sp, c("anap_450","anap_550","anap_650"))
 }
 
+<<<<<<< HEAD
 }
+=======
+>>>>>>> khaliilhaji-dev

@@ -24,3 +24,4 @@ Function  to change or set wavelengths  inside  of  a \code{Spectra} object
 \seealso{
 \code{\link{spc.getwavelengths}}
 }
+

@@ -5,18 +5,18 @@
 \alias{subset,Spectra-method}
 \title{Subsetting for a \code{Spectra} and spcList classes}
 \usage{
-subset(x,y,select,drop,...)
+\S4method{subset}{Spectra}(x, subset, select, drop = FALSE, ...)
 }
 \arguments{
 \item{x}{A \code{Spectra} object}
+
+\item{subset}{Subset}
 
 \item{select}{Condition selected}
 
 \item{drop}{passed on to [ indexing operator. Default is FALSE}
 
 \item{...}{arguments to be passed to or from other methods.}
-
-\item{y}{Subset}
 }
 \description{
 Subsetting can be achieved using the implementation of the R function subset() for \code{Spectra} and SpcList classes
@@ -54,3 +54,4 @@ subset(myS,anap_440<=0.01) #Subsetting rows with respect to the value of Spectra
 subset(myS,subset=DEPTH<=30,select="CAST") #Selecting Ancillary data columns, leaving Spectral columns intact
 
 }
+

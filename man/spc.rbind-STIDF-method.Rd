@@ -20,3 +20,4 @@ x2 <- spc.rbind(as(x, "STIDF"),as(x, "STIDF"))
 nrow(x2)  #[1] 52
 
 }
+

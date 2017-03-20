@@ -21,3 +21,4 @@ as(list(sp,sp^2), "SpcList")
 SpcList(list(sp,sp^2))
 
 }
+

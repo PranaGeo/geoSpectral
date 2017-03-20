@@ -7,8 +7,11 @@
 \title{Determinate invalid things insade of a \code{Spectra} object}
 \usage{
 spc.invalid.detect(source1)
+<<<<<<< HEAD
 
 \S4method{spc.invalid.detect}{Spectra}(source1)
+=======
+>>>>>>> khaliilhaji-dev
 }
 \arguments{
 \item{source1}{A  \code{Spectra} object}
@@ -22,3 +25,4 @@ invalid=spc.invalid.detect(sp)
 show(invalid)
 
 }
+

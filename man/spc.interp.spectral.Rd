@@ -6,10 +6,14 @@
 \alias{spc.interp.spectral,Spectra-method}
 \title{Interpolate spectral values}
 \usage{
+<<<<<<< HEAD
 spc.interp.spectral(source1,target_lbd,show.plot)
 
 \S4method{spc.interp.spectral}{Spectra}(source1, target_lbd,
   show.plot = FALSE)
+=======
+spc.interp.spectral(source1,target_lbd,show.plot,...)
+>>>>>>> khaliilhaji-dev
 }
 \arguments{
 \item{source1}{A \code{Spectra} object}
@@ -34,3 +38,4 @@ spc.plot.overlay(SpcList(list(sp,sp2)))
 spc.interp.spectral(sp[,lbd],c(430,450,500),show.plot=TRUE)
 
 }
+

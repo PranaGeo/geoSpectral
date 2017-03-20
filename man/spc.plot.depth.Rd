@@ -6,11 +6,16 @@
 \alias{spc.plot.depth,Spectra-method}
 \title{Plotting \code{Spectra} object}
 \usage{
+<<<<<<< HEAD
 spc.plot.depth(x,...)
 
 \S4method{spc.plot.depth}{Spectra}(object, X, maxSp = 10, lab_cex, title,
   add = FALSE, xlab = NULL, ylab = NULL, ylim = NULL, xlim = NULL,
   lwd = 2, ...)
+=======
+spc.plot.depthobject,X,maxSp=10,lab_cex,
+title, add=FALSE, xlab=NULL, ylab=NULL, ylim=NULL,xlim=NULL,lwd=2,...)
+>>>>>>> khaliilhaji-dev
 }
 \arguments{
 \item{...}{any further arguments of plot}
@@ -28,3 +33,4 @@ spc.plot.depth(x)
 \seealso{
 \code{\link{spc.plot}}
 }
+

@@ -7,8 +7,11 @@
 \title{Extract a field of the @header slot of a \code{Spectra} object}
 \usage{
 spc.getheader(object,name)
+<<<<<<< HEAD
 
 \S4method{spc.getheader}{Spectra}(object, name)
+=======
+>>>>>>> khaliilhaji-dev
 }
 \arguments{
 \item{object}{A  \code{Spectra} object}
@@ -26,3 +29,4 @@ spc.getheader(sp,"Latitude")
 \seealso{
 \code{\link{spc.setheader<-}}
 }
+

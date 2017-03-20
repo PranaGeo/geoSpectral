@@ -31,3 +31,4 @@ spc.getinvalid.idx(sp)
 \seealso{
 \code{\link{spc.setselected.idx<-}}
 }
+
