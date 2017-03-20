@@ -6,12 +6,13 @@
 \usage{
 spc.makeSpcList(myobj, name)
 }
+\arguments{
+\item{myobj}{a \code{Spectra} object}
+
+\item{name}{name of station of a \code{Spectra} object}
+}
 \description{
 Conversion from \code{Spectra} to \code{Spclist} using a data field
- @usage 
- spc.makeSpcList(myobj, name)
- @param myobj a \code{Spectra} object
- @param name  name of station of a \code{Spectra} object
 }
 \examples{
 sp <- spc.example_spectra()

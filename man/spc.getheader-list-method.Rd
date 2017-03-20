@@ -5,7 +5,7 @@
 \alias{spc.getheader,list-method}
 \title{Extract a field of the @header slot of a \code{spclist} object}
 \usage{
-spc.getheader(object,name)
+\S4method{spc.getheader}{list}(object, name)
 }
 \arguments{
 \item{object}{A  \code{spclist} object}

@@ -5,10 +5,10 @@
 \alias{spc.invalid.detect,list-method}
 \title{Determinate invalid records insade of a \code{spclist} object}
 \usage{
-spc.invalid.detect(source1)
+\S4method{spc.invalid.detect}{list}(source1)
 }
 \arguments{
-\item{source1}{A  \code{spclist} object}
+\item{source1}{A \code{spclist} object}
 }
 \description{
 Detect invalid records (rows) inside of a \code{spclist} object and returns logical object

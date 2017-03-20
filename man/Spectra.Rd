@@ -71,5 +71,4 @@ myS<-Spectra(abs,Wavelengths=lbd,Units=Units,ShortName="a_nap")
 #Space and time columns are explicitly chosen from inDF columns
 myS<-Spectra(abs,Wavelengths=lbd, space=c("LONG","LAT"), time="TIME",Units=Units,ShortName="a_nap")
 
- @export
 }

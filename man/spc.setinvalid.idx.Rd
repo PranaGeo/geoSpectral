@@ -11,12 +11,12 @@ spc.setinvalid.idx(object) <- value
 \S4method{spc.setinvalid.idx}{Spectra}(object) <- value
 }
 \arguments{
-\item{value}{Logical vector}
+\item{object}{A \code{Spectra} object}
 
-\item{x}{A \code{Spectra} object}
+\item{value}{Logical vector}
 }
 \description{
-Stores the row indexes as invalid
+Stores the row indexes to be stored as invalid.
 }
 \examples{
  

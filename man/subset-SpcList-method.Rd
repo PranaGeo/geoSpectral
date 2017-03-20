@@ -8,19 +8,20 @@
 \S4method{subset}{SpcList}(x, subset, select, drop = FALSE, ...)
 }
 \arguments{
-\item{x}{A \code{Spectra} object}
+\item{x}{A \code{Spectra} object.}
 
-\item{select}{Condition selected}
+\item{subset}{logical expression indicating elements or rows to keep: missing values are taken as false.}
 
-\item{drop}{passed on to [ indexing operator. Default is FALSE}
+\item{select}{expression, indicating columns to select from the \code{Spectra} object.}
+
+\item{drop}{passed on to [ indexing operator. Default is FALSE .}
 
 \item{...}{arguments to be passed to or from other methods.}
-
-\item{y}{Subset}
 }
 \description{
-Subsetting can be achieved using the implementation of the R function subset() for \code{Spectra} and SpcList classes
-It is possible to perform a row-wise selection
+Subsetting can be achieved using the implementation of the R function subset() for 
+\code{Spectra} and SpcList classes. It is possible to perform a row-wise selection. 
+The argument "select" is not implemented yet. Use "[]".
 }
 \examples{
 fnm = file.path(system.file(package = "geoSpectral"), "test_data","particulate_absorption.csv.gz")

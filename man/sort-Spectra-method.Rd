@@ -18,6 +18,8 @@ sort.idx() function from the base package. Default is FALSE.}
 sort.idx() function from the base package. Default is NA.}
 
 \item{which.col}{A character, defining the name of the column to be used in the sorting}
+
+\item{...}{arguments to be passed to or from methods. See help of \code{\link{sort}}.}
 }
 \description{
 Sort a \code{Spectra} object with respect to its rows with respect to values of one 

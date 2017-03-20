@@ -10,13 +10,14 @@
 \arguments{
 \item{x}{A \code{Spectra} object}
 
+\item{subset}{logical expression indicating elements or rows to keep: 
+missing values are taken as false.}
+
 \item{select}{Condition selected}
 
 \item{drop}{passed on to [ indexing operator. Default is FALSE}
 
 \item{...}{arguments to be passed to or from other methods.}
-
-\item{y}{Subset}
 }
 \description{
 Subsetting can be achieved using the implementation of the R function subset() for \code{Spectra} and SpcList classes

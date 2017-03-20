@@ -8,16 +8,14 @@
 \S4method{spc.setheader}{list}(object) <- value
 }
 \arguments{
-\item{value}{Object of class SpcList}
+\item{object}{A \code{SpcList} object.}
 
-\item{x}{A \code{SpcList} object}
+\item{value}{Object of class SpcList.}
 
-\item{name}{of the header field to be setted}
-
-\item{...}{arguments to be passed to or from other methods}
+\item{...}{arguments to be passed to or from other methods.}
 }
 \description{
-Function sets or changes the value of a field in the header slot of \code{spclist} object
+Function sets or changes the value of a field in the header slot of \code{spclist} object.
 }
 \examples{
 sp=spc.example_spectra()

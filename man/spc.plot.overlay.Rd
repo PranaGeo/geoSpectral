@@ -12,6 +12,8 @@ spc.plot.overlay(object,lab_cex,leg_idx, type, lty,lwd, col, ...)
   type = "l", lty = 1, lwd = 1, col, ...)
 }
 \arguments{
+\item{object}{A \code{SpcList} data}
+
 \item{lab_cex}{vector of character expansion sizes, used cyclically}
 
 \item{leg_idx}{logical If it is of length 1, it determines whether or not to display the legend.
@@ -26,8 +28,6 @@ If length(leg_idx) is bigger than 1, then its lengths has to equal length(object
 \item{col}{A specification for the default plotting color. See par().}
 
 \item{...}{any further arguments to the plotting function matplot() or spc.plot()}
-
-\item{x}{a \code{SpcList} data}
 }
 \description{
 This function overlays spectra plots of several \code{Spectra} objects inside a 

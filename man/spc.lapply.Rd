@@ -11,12 +11,14 @@ spc.lapply(X, FUN, ...)
 \S4method{spc.lapply}{SpcList}(X, FUN, ...)
 }
 \arguments{
-\item{X}{A \code{spclist} object}
+\item{X}{A \code{spclist} object .}
+
+\item{FUN}{function to be applied to each element of X.}
 
 \item{...}{optional arguments to FUN.}
 }
 \value{
-FUN  function to be applied to each element of X
+list or SpcList object.
 }
 \description{
 lapply returns a list of the same length as X, each element of which is the result of applying FUN to the corresponding element of X.

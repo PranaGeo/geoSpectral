@@ -20,6 +20,8 @@ spc.export.text(input, filename, sep = ";", append = FALSE,
 spc.import.text(filename, sep = ";", ...)
 }
 \arguments{
+\item{input}{A \code{Spectra} object}
+
 \item{filename}{Name of the output text file}
 
 \item{sep}{character. the field separator string}
@@ -29,8 +31,6 @@ spc.import.text(filename, sep = ";", ...)
 \item{writeheader}{either a logical value indicating whether the header names  are to be written}
 
 \item{...}{arguments to be passed to or from other methods}
-
-\item{x}{A \code{Spectra} object}
 }
 \description{
 Save the \code{Spectra} and \code{SpcHeader} objects on disk in text format and read back in.
