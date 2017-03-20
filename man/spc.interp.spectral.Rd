@@ -32,4 +32,5 @@ spc.plot.overlay(SpcList(list(sp,sp2)))
 
 #Quick Plot only the first row
 spc.interp.spectral(sp[,lbd],c(430,450,500),show.plot=TRUE)
+
 }

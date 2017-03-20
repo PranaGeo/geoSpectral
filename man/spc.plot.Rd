@@ -35,6 +35,7 @@ Generating plot of the intensity of a measurement inside a \code{Spectra} object
 \examples{
 x <- spc.example_spectra()
 spc.plot(x)
+
 }
 \seealso{
 \code{\link{spc.lines}}

@@ -36,4 +36,5 @@ spc.plot.plotly(sp,legend_field = "CAST")
 spc.plot.plotly(sp,legend_field = "NISKIN")
 spc.plot.plotly(sp,legend_field = "STATION")
 spc.plot.plotly(sp,legend_field = "anap_440")
+
 }

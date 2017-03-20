@@ -31,4 +31,6 @@ Operators acting on  \code{Spectra} objects  to extract or replace parts
   BL[[4]]$CRUISE="Cruise4"
   names(BL)
   BL$Cruise4
+
+ @export
 }

@@ -20,4 +20,5 @@ Detect invalid things insade of a \code{Spectra} object and returns logical obje
 sp=spc.example_spectra()
 invalid=spc.invalid.detect(sp)
 show(invalid)
+
 }

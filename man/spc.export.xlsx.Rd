@@ -42,4 +42,5 @@ package \code{xlsx} is installed.
   if("xlsx" \%in\% installed.packages())
      spc.export.xlsx(sp,"test.xlsx")
 }
+
 }

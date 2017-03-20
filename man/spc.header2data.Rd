@@ -42,7 +42,8 @@ procedure is repeated for all elements of the list containing \code{Spectra} obj
 }
 \examples{
 sp <- spc.example_spectra()
-spc.updateheader(sp, "Zone")<- "ZoneA"
+sp <- spc.updateheader(sp,"Zone", "ZoneA")
 sp <- spc.header2data(sp, "Zone")
 sp$Zone
+
 }

@@ -29,4 +29,5 @@ BL=spc.makeSpcList(sp,"CAST")
 spc.lapply(BL,function(x) {nrow(x)})
 #Perform arithmetic operations on all Spectra elements. Returns a SpcList object.
 spc.lapply(BL,function(x) {x^2+1})
+
 }

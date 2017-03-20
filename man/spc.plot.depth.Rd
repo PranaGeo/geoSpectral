@@ -23,6 +23,7 @@ Generating plot of the contents of a \code{Spectra} object with respect to depth
 \examples{
 x <- spc.example_spectra()
 spc.plot.depth(x)
+
 }
 \seealso{
 \code{\link{spc.plot}}

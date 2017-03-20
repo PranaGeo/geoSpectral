@@ -27,4 +27,5 @@ a$Longitude=123
 spc.setheader(BL[[1]],"Station") <- a
 h=spc.getheader(BL[[1]])
 h
+
 }

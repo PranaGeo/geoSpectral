@@ -46,6 +46,7 @@ spc.plot(aa)
 spc.export.text(x@header,filename="anap_header.txt")
 hdr=spc.import.text("anap_header.txt")
 class(hdr)
+
 }
 \seealso{
 \code{\link{spc.import.text}}

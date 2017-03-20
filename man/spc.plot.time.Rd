@@ -22,6 +22,7 @@ Generating plot of the contents of a \code{Spectra} object with respect to time
 \examples{
 x <- spc.example_spectra()
 spc.plot.time(x)
+
 }
 \seealso{
 \code{\link{spc.plot.depth}}

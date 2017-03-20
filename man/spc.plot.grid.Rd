@@ -36,4 +36,5 @@ Generating plot of the contents of a \code{SpcList} object in a grid
 sp <- spc.example_spectra()
 BL = spc.makeSpcList(sp,"CAST")
 spc.plot.grid(BL,"spc.plot",3,2)
+
 }

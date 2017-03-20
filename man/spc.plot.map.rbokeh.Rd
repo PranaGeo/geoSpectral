@@ -36,4 +36,5 @@ Create a point map with rbokeh engine using \code{Spectra} rows
 sp=spc.example_spectra()
 spc.plot.map.rbokeh(sp, hover = "Snap")
 spc.plot.map.rbokeh(sp)
+
 }

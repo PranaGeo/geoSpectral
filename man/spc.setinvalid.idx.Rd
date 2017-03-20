@@ -26,6 +26,7 @@ vld = rep(TRUE,26)
 vld[1:5]<-FALSE
 spc.setinvalid.idx(sp)<-vld #Mark the first 5 rows as invalid
 spc.getinvalid.idx(sp)
+
 }
 \seealso{
 \code{\link{spc.setselected.idx<-}}

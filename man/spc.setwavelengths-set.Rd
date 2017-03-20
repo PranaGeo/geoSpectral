@@ -20,7 +20,6 @@ Function  to change or set wavelengths  inside  of  a \code{Spectra} object
  spc.setwavelengths(x) <- 300:800
  show(x)
  
- @export
 }
 \seealso{
 \code{\link{spc.getwavelengths}}

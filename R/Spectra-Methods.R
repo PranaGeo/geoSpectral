@@ -1531,7 +1531,7 @@ setMethod("spc.data2header", signature = "Spectra",
 #' procedure is repeated for all elements of the list containing \code{Spectra} objects.
 #' @examples 
 #' sp <- spc.example_spectra()
-#' spc.updateheader(sp, "Zone")<- "ZoneA"
+#' sp <- spc.updateheader(sp,"Zone", "ZoneA")
 #' sp <- spc.header2data(sp, "Zone")
 #' sp$Zone
 #' 

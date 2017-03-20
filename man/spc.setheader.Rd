@@ -28,6 +28,7 @@ a=new("SpcHeader") # create new SpcHeader class
 a$Longitude=123 
 spc.setheader(sp,"Station") <- a
 sp@header
+
 }
 \seealso{
 \code{\link{spc.getheader}}
