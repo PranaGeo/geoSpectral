@@ -129,10 +129,10 @@ setMethod("spc.plot.grid", "SpcList", function (x,FUN, nnrow, nncol, mar=c(4,4.5
 #' @rdname spc.plot.overlay
 #' @export
 setGeneric (name= "spc.plot.overlay",
-		def=function(object,lab_cex, leg_idx, type, lty, lwd, col, ...){standardGeneric("spc.plot.overlay")})
+		def=function(object,lab_cex=1,leg_idx=TRUE,type="l",lty=1,lwd=1,col,...){standardGeneric("spc.plot.overlay")})
 
 #' @rdname spc.plot.overlay
-setMethod("spc.plot.overlay", "SpcList", function (object, lab_cex=1,leg_idx=T, type="l", lty=1,lwd=1, col, ...){
+setMethod("spc.plot.overlay", "SpcList", function (object, lab_cex=1,leg_idx=TRUE, type="l", lty=1,lwd=1, col, ...){
 			if(missing(col))
 				col = 1:length(object)
 			if(length(col)==1)
@@ -506,7 +506,7 @@ setMethod("spc.getheader", signature = "list", def = function (object,name){
 #' BL=spc.makeSpcList(sp,"CAST")
 #' a=new("SpcHeader") # create new SpcHeader class
 #' a$Longitude=123 
-#' spc.setheader(BL[[1]],"Station") <- a
+#' spc.setheader(BL[[1]]) <- a
 #' h=spc.getheader(BL[[1]])
 #' h
 #' 

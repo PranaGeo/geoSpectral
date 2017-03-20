@@ -22,7 +22,7 @@ Function sets or changes the value of a field in the header slot of \code{Spectr
 sp=spc.example_spectra()
 a=new("SpcHeader") # create new SpcHeader class
 a$Longitude=123 
-spc.setheader(sp,"Station") <- a
+spc.setheader(sp) <- a
 sp@header
 
 }
