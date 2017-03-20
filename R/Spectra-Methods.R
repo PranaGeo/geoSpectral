@@ -2306,8 +2306,13 @@ spc.makeSpcList = function(myobj, name){
 #' @description
 #' Generating plot of the contents of a \code{Spectra} object with respect to time
 #'
-#' @usage spc.plot(x,...)
-#' @param x	 a \code{Spectra} data 
+#' @usage sspc.plot.time(object,Y,maxSp,xdata,lab_cex,lwd, ...)
+#' @param object	 a \code{Spectra} data 
+#' @param Y a \code{Spectra} rows 
+#' @param maxSp maximum number of \code{Spectra} to plot
+#' @param xdata type of data
+#' @param lab_cex vector of character expansion sizes, used cyclically.
+#' @param lwd vector of line widths
 #' @param ... any further arguments of plot
 #' @seealso \code{\link{spc.plot.depth}}
 #' @examples
@@ -2400,8 +2405,17 @@ setMethod("spc.plot.time", signature="Spectra", function (object,Y,maxSp=50,xdat
 #'
 #' 
 #' @usage 
-#' spc.plot.depth(x,...)
-#' @param x	 a \code{Spectra} data 
+#' spc.plot.depth(object,X,maxSp,lab_cex,title, add, xlab, ylab, ylim,xlim,lwd,...)
+#' 
+#' @param object a \code{Spectra} data 
+#' @param x a \code{Spectra} rows 
+#' @param maxSp maximum number of \code{Spectra} to plot
+#' @param lab_cex vector of character expansion sizes, used cyclically.
+#' @param title a chracter string, title for plot
+#' @param add logical. If TRUE, plots are added to current one,
+#' @param xlab,ylab titles for x and y axes, as in plot.
+#' @param ylim,xlim ranges of x and y axes, as in plot.
+#' @param lwd vector of line widths
 #' @param ... any further arguments of plot
 #' @seealso \code{\link{spc.plot}}
 #' @examples
