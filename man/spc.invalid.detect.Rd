@@ -8,10 +8,15 @@
 \usage{
 spc.invalid.detect(source1)
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 \S4method{spc.invalid.detect}{Spectra}(source1)
 =======
 >>>>>>> khaliilhaji-dev
+=======
+
+\S4method{spc.invalid.detect}{Spectra}(source1)
+>>>>>>> khaliilhaji-devv
 }
 \arguments{
 \item{source1}{A  \code{Spectra} object}

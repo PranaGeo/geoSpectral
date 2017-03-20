@@ -57,6 +57,8 @@
 #' @export
 setGeneric (name= "spc.plot.grid",
 		def=function(x,FUN, nnrow, nncol,mar, oma, lab_cex,...){standardGeneric("spc.plot.grid")})
+
+#' @rdname spc.plot.grid
 setMethod("spc.plot.grid", "SpcList", function (x,FUN, nnrow, nncol, mar=c(4,4.5,1,0.5), 
 				oma = c(0,0,0,0), lab_cex, ...){
 			nb_spc = length(which(sapply(x, inherits, "Spectra")))
@@ -129,6 +131,7 @@ setMethod("spc.plot.grid", "SpcList", function (x,FUN, nnrow, nncol, mar=c(4,4.5
 setGeneric (name= "spc.plot.overlay",
 		def=function(object,lab_cex, leg_idx, type, lty, lwd, col, ...){standardGeneric("spc.plot.overlay")})
 
+#' @rdname spc.plot.overlay
 setMethod("spc.plot.overlay", "SpcList", function (object, lab_cex=1,leg_idx=T, type="l", lty=1,lwd=1, col, ...){
 			if(missing(col))
 				col = 1:length(object)
@@ -213,6 +216,7 @@ setMethod("spc.plot.overlay", "SpcList", function (object, lab_cex=1,leg_idx=T, 
 #' @export
 setGeneric (name= "spc.plot.depth.overlay",
 		def=function(object,X,lab_cex,...){standardGeneric("spc.plot.depth.overlay")})
+#' @rdname spc.plot.depth.overlay
 setMethod("spc.plot.depth.overlay", "SpcList", function (object, X, lab_cex, ...){
 			if(missing(lab_cex))
 				lab_cex = 1
@@ -529,7 +533,7 @@ setMethod("spc.getheader", signature = "list", def = function (object,name){
 #' 
 #' @export
 setReplaceMethod(f="spc.setheader", signature="list",
-		definition=function(object,name,value,...){
+		definition=function(object,value){
 			if(inherits(value,"Spectra"))
 				stop("It is forbidden to set a SpcHeader an object that inherits from the Spectra class")
 			if(length(value)==1)
@@ -546,33 +550,21 @@ setReplaceMethod(f="spc.setheader", signature="list",
 #########################################################################
 # Method : spc.updateheader
 #########################################################################
-#' Update a field of the @header slot of a \code{spclist} object
-#' @description
-#'  Updates or changes the value of a field in the header slot of \code{spclist} object 
-#'
-#' @param ... arguments to be passed to or from other methods 
-#' @param object A \code{Spectra} objec 
-#' @param name of the header field to be updated
-#' @examples 
-#' sp=spc.example_spectra()
-#' BL=spc.makeSpcList(sp,"CAST")
-#' BL[[1]]@header
-#' spc.updateheader(BL[[1]],"Station")<-11
-#' BL[[1]]@header
-setReplaceMethod(f="spc.updateheader", signature="list",
-		definition=function(object,Name,value){
-			if(inherits(value,"Spectra"))
-				stop("It is forbidden to place in a SpcHeader an object that inherits from the Spectra class")
-			if(length(value)==1)
-				value = rep(value,length(object))
-			stopifnot(length(value)==length(object))			
-			
-			for(xx in 1:length(object)){
-				spc.updateheader(object[[xx]],Name)<-value[xx]
-			}
-			validObject(object)
-			return(object)
-		})
+#' @rdname spc.updateheader
+#' @export
+setMethod(f="spc.updateheader", signature="list", definition=function(object,Name,value){
+  if(inherits(value,"Spectra"))
+    stop("It is forbidden to place in a SpcHeader an object that inherits from the Spectra class")
+  if(length(value)==1)
+    value = rep(value,length(object))
+  stopifnot(length(value)==length(object))			
+  
+  for(xx in 1:length(object)){
+    object[[xx]] <- spc.updateheader(object[[xx]], Name, value[xx])
+  }
+  validObject(object)
+  return(object)
+})
 
 #########################################################################
 # Method : spc.data2header

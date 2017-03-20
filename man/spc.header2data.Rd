@@ -4,11 +4,17 @@
 \name{spc.header2data}
 \alias{spc.header2data}
 <<<<<<< HEAD
+<<<<<<< HEAD
 \alias{spc.header2data,Spectra-method}
 \alias{spc.header2data,list-method}
 \alias{spc.header2data,SpcList-method}
 =======
 >>>>>>> khaliilhaji-dev
+=======
+\alias{spc.header2data,SpcList-method}
+\alias{spc.header2data,Spectra-method}
+\alias{spc.header2data,list-method}
+>>>>>>> khaliilhaji-devv
 \title{Get header for data}
 \usage{
 spc.header2data(object, headerfield, dataname, compress, ...)

@@ -43,6 +43,7 @@ of t variables. This slot is inherited from STIDF class.}
 }}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 \item{prototype}{n object providing the default data for the slots in this class}
 }
@@ -52,3 +53,5 @@ plus other optional details. As a side effect, the class definition is stored in
 }
 
 >>>>>>> 83febb7f733cd671c07061f9ea3eb580475924bc
+=======
+>>>>>>> khaliilhaji-devv

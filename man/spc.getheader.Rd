@@ -8,10 +8,15 @@
 \usage{
 spc.getheader(object,name)
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 \S4method{spc.getheader}{Spectra}(object, name)
 =======
 >>>>>>> khaliilhaji-dev
+=======
+
+\S4method{spc.getheader}{Spectra}(object, name)
+>>>>>>> khaliilhaji-devv
 }
 \arguments{
 \item{object}{A  \code{Spectra} object}

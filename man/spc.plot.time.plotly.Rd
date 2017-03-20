@@ -37,6 +37,11 @@ spc.plot.time.plotly(sp, c("anap_450","anap_550","anap_650"))
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 }
 =======
 >>>>>>> khaliilhaji-dev
+=======
+}
+
+>>>>>>> khaliilhaji-devv

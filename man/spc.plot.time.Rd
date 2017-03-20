@@ -7,6 +7,7 @@
 \title{Plotting \code{Spectra} object}
 \usage{
 <<<<<<< HEAD
+<<<<<<< HEAD
 spc.plot(x,...)
 
 \S4method{spc.plot.time}{Spectra}(object, Y, maxSp = 50, xdata = "time",
@@ -14,6 +15,12 @@ spc.plot(x,...)
 =======
 spc.plot.time(object,...)
 >>>>>>> khaliilhaji-dev
+=======
+spc.plot.time(object, ...)
+
+\S4method{spc.plot.time}{Spectra}(object, Y, maxSp = 50, xdata = "time",
+  lab_cex, lwd = 2, ...)
+>>>>>>> khaliilhaji-devv
 }
 \arguments{
 \item{object}{a \code{Spectra} data}
