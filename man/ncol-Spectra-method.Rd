@@ -5,7 +5,7 @@
 \alias{ncol,Spectra-method}
 \title{The Number of Columns  of a Spectra object}
 \usage{
-ncol(x)
+\S4method{ncol}{Spectra}(x)
 }
 \arguments{
 \item{x}{A \code{Spectra} object}
@@ -18,7 +18,4 @@ x <- spc.example_spectra()
 ncol(x)  #501 
 nrow(x)  #26
 
-
-
 }
-

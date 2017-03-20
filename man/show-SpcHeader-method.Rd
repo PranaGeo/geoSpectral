@@ -5,7 +5,7 @@
 \alias{show,SpcHeader-method}
 \title{Show a SpcHeader object}
 \usage{
-show(object)
+\S4method{show}{SpcHeader}(object)
 }
 \arguments{
 \item{object}{of class SpcHeader}
@@ -21,4 +21,3 @@ show(x@header)
 \seealso{
 \code{\link{show}}
 }
-

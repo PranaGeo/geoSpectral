@@ -8,10 +8,10 @@ test_that("Output of Spectra() is of type 'Spectra' ", {
   expect_equal(nrow(sp), 26)
 })
 
-test_that("Conversion to/from data.frame", {
-  expect_is(as(sp, "data.frame"),"data.frame")
-  expect_is(as(as(sp, "data.frame"), "Spectra"), "Spectra")
-})
+# test_that("Conversion to/from data.frame", {
+#   expect_is(as(sp, "data.frame"),"data.frame")
+#   expect_is(as(as(sp, "data.frame"), "Spectra"), "Spectra")
+# })
 dim(sp)
 c=dim(sp)
 a=spc.getwavelengths(sp)
@@ -84,14 +84,14 @@ test_that("test for head()",{
                 })
 
   test_that("test for spc.lapply()",{
-   sp=spc.example_spectra() 
+   sp=spc.example_spectra()
    BL = spc.makeSpcList(sp,"STATION")
    BL2=spc.lapply(BL, function(x) x=x+1)
     expect_is(BL2,"SpcList")
-   
-   
+
+
   })
-  
+
   test_that("test for spc.getwavelenghts()",{
     
     expect_equal(length(spc.getwavelengths(sp)),ncol(sp))
@@ -100,8 +100,8 @@ test_that("test for head()",{
   })
   
   
-  test_that("test for spc.update()",{
-    spc.updateheader(sp,"Station")<-11
+  test_that("test for spc.updateheader()",{
+    sp <- spc.updateheader(sp,"Station", 11)
     expect_equal(as.numeric(sp@header[1]),11)
     
     
@@ -123,24 +123,24 @@ test_that("test for head()",{
     
   })
   
-  test_that("test for spc.plot.map.rbokeh()",{
-    
-    expect_warning( spc.plot.map.rbokeh(sp),NA)
-    expect_warning( spc.plot.map.rbokeh(sp, hover = "Snap"),NA)
-    expect_warning( spc.plot.map.rbokeh(sp,glyph = 4 ),NA)
-    expect_warning( spc.plot.map.rbokeh(sp,color=" #0000ff " ),NA)
-    
-    
-     })
-  
-  test_that("test for spc.plot.map.leaflet()",{
-    
-    expect_warning( spc.plot.map.leaflet(sp),NA)
-    expect_warning( spc.plot.map.leaflet(sp,weight=100 ),NA)
-   
-  })
-  
-  
+  # test_that("test for spc.plot.map.rbokeh()",{
+  #   
+  #   expect_warning( spc.plot.map.rbokeh(sp),NA)
+  #   expect_warning( spc.plot.map.rbokeh(sp, hover = "Snap"),NA)
+  #   expect_warning( spc.plot.map.rbokeh(sp,glyph = 4 ),NA)
+  #   expect_warning( spc.plot.map.rbokeh(sp,color=" #0000ff " ),NA)
+  #   
+  #   
+  #    })
+  # 
+  # test_that("test for spc.plot.map.leaflet()",{
+  #   
+  #   expect_warning( spc.plot.map.leaflet(sp),NA)
+  #   expect_warning( spc.plot.map.leaflet(sp,weight=100 ),NA)
+  #  
+  # })
+  # 
+  # 
   
   
   

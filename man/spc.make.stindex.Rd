@@ -50,8 +50,8 @@ stidx = spc.make.stindex(BL, what2include = "CAST")
 head(stidx@data)
 stidx = spc.make.stindex(BL, rowSimplify="spc.colMeans")
 dim(stidx)
+
 }
 \seealso{
 \code{\link{spc.makeSpcList}}
 }
-

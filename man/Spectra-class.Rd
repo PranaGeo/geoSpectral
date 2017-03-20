@@ -3,21 +3,42 @@
 \docType{class}
 \name{Spectra-class}
 \alias{Spectra-class}
-\title{Create a spectra class definition}
-\usage{
-setClass(class, contains,pepresentation,prototype)
-}
-\arguments{
-\item{contains}{STIDF}
-
-\item{class}{character string name for the class.}
-
-\item{pepresentation}{avoided}
-
-\item{prototype}{n object providing the default data for the slots in this class}
-}
+\title{Spectra class definition}
 \description{
-Create a spectra class definition, specifying the representation (the slots) and/or the classes contained in this one (the superclasses),
-plus other optional details. As a side effect, the class definition is stored in the specified environment
+Spectra class is the main class provided by the package geoSpectRal. It allows storage
+of spectral or non-spectra data with space and time attributes.
 }
+\section{Slots}{
+
+\describe{
+\item{\code{ShortName}}{character, A short name for the parameter described in the spectra object.}
+
+\item{\code{LongName}}{character, A long name for the parameter described in the spectra object.}
+
+\item{\code{Spectra}}{matrix, n by m matrix, describing n rows of spectral data
+(or time) in m channels (columns).}
+
+\item{\code{data}}{data.frame n by t data frame, describind n rows of ancillary data
+of t variables. This slot is inherited from STIDF class.}
+
+\item{\code{Wavelengths}}{numeric vector, length of m. Wavelength data.}
+
+\item{\code{WavelengthsUnit}}{character,  Units of the @Wavelength slot}
+
+\item{\code{header}}{SpcHeader, Header object. See SpcHeader-class.}
+
+\item{\code{Units}}{character, Units of spectral data.}
+
+\item{\code{UnitsAnc}}{character, Units of each column of the @data slot holding ancillary data.}
+
+\item{\code{ShortNameAnc}}{character, A short name for each column of the @data slot holding ancillary data.}
+
+\item{\code{LongNameAnc}}{character, A long name for each column of the @data slot holding ancillary data.}
+
+\item{\code{InvalidIdx}}{logical, length of m. Row index for measurements marked by the user as invalid.}
+
+\item{\code{SelectedIdx}}{logical, length of m. Row index for measurements marked by the user as selected.}
+
+\item{\code{ClassVersion}}{numeric, Version of the class.}
+}}
 
