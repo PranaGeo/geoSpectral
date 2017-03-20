@@ -1,7 +1,7 @@
 Package: geoSpectral
 Type: Package
 Title: Classes and methods for working with spectral (electromagnetic) data in R
-Version: 0.11
+Version: 0.15
 Date: 2012-07-02
 Depends:
     R (>= 2.10.0)
