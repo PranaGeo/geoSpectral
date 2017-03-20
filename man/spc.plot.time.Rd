@@ -6,15 +6,15 @@
 \alias{spc.plot.time,Spectra-method}
 \title{Plotting \code{Spectra} object}
 \usage{
-spc.plot(x,...)
+spc.plot.time(object, ...)
 
 \S4method{spc.plot.time}{Spectra}(object, Y, maxSp = 50, xdata = "time",
   lab_cex, lwd = 2, ...)
 }
 \arguments{
-\item{...}{any further arguments of plot}
+\item{object}{a \code{Spectra} data}
 
-\item{x}{a \code{Spectra} data}
+\item{...}{any further arguments of plot}
 }
 \description{
 Generating plot of the contents of a \code{Spectra} object with respect to time
@@ -27,3 +27,4 @@ spc.plot.time(x)
 \seealso{
 \code{\link{spc.plot.depth}}
 }
+

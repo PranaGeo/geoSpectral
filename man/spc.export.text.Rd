@@ -3,8 +3,8 @@
 \docType{methods}
 \name{spc.export.text}
 \alias{spc.export.text}
-\alias{spc.export.text,Spectra-method}
 \alias{spc.export.text,SpcHeader-method}
+\alias{spc.export.text,Spectra-method}
 \alias{spc.import.text}
 \title{Exporting into text format}
 \usage{
@@ -51,3 +51,4 @@ class(hdr)
 \seealso{
 \code{\link{spc.import.text}}
 }
+

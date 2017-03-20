@@ -5,7 +5,7 @@
 \alias{subset,Spectra-method}
 \title{Subsetting for a \code{Spectra} and spcList classes}
 \usage{
-subset(x,y,select,drop,...)
+\S4method{subset}{Spectra}(x, subset, select, drop = FALSE, ...)
 }
 \arguments{
 \item{x}{A \code{Spectra} object}
@@ -54,3 +54,4 @@ subset(myS,anap_440<=0.01) #Subsetting rows with respect to the value of Spectra
 subset(myS,subset=DEPTH<=30,select="CAST") #Selecting Ancillary data columns, leaving Spectral columns intact
 
 }
+

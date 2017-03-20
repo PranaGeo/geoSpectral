@@ -6,18 +6,16 @@
 \alias{spc.setheader<-,Spectra-method}
 \title{Set a field of the @header slot of a \code{Spectra} object}
 \usage{
-spc.setheader(x,name,...)<-value
+spc.setheader(object) <- value
 
 \S4method{spc.setheader}{Spectra}(object) <- value
 }
 \arguments{
+\item{object}{A \code{Spectra} object}
+
 \item{value}{Object of class SpcHeader}
 
-\item{x}{A \code{Spectra} object}
-
 \item{name}{of the header field to be setted}
-
-\item{...}{arguments to be passed to or from other methods}
 }
 \description{
 Function sets or changes the value of a field in the header slot of \code{Spectra} object
@@ -33,3 +31,4 @@ sp@header
 \seealso{
 \code{\link{spc.getheader}}
 }
+

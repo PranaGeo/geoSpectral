@@ -26,3 +26,4 @@ STI-inherited object \code{master}
 Reports the space and time distance of each row of the STI-inherited object
 \code{searched} to the corresponding row of the STI-inherited object \code{master}.
 }
+

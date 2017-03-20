@@ -34,3 +34,4 @@ sp=spc.example_spectra()
 spc.plot.map.leaflet(sp)
 
 }
+

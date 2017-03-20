@@ -73,3 +73,4 @@ myS<-Spectra(abs,Wavelengths=lbd, space=c("LONG","LAT"), time="TIME",Units=Units
 
  @export
 }
+

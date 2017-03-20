@@ -3,9 +3,6 @@
 \docType{methods}
 \name{Spectra-Arith}
 \alias{Spectra-Arith}
-\alias{Spectra-Arith}
-\alias{Spectra-Arith}
-\alias{Spectra-Arith}
 \title{Apply arithmetic operations on/between \code{Spectra} objects}
 \usage{
 \S4method{Arith}{Spectra,Spectra}(e1, e2)
@@ -31,3 +28,4 @@ These methods allow performing arithmetic operations involving \code{Spectra} ob
 \seealso{
 \code{\link{Arith}}
 }
+
