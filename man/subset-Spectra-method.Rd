@@ -54,4 +54,3 @@ subset(myS,anap_440<=0.01) #Subsetting rows with respect to the value of Spectra
 subset(myS,subset=DEPTH<=30,select="CAST") #Selecting Ancillary data columns, leaving Spectral columns intact
 
 }
-

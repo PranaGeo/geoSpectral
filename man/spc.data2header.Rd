@@ -47,4 +47,3 @@ sp=spc.data2header(sp,"CAST","ProjectCast", compress=TRUE)
 sp@header
 
 }
-

@@ -30,4 +30,3 @@ sp2 = rep(sp, 5)
 dim(sp2)
 
 }
-

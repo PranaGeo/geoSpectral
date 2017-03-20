@@ -42,16 +42,3 @@ of t variables. This slot is inherited from STIDF class.}
 \item{\code{ClassVersion}}{numeric, Version of the class.}
 }}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-\item{prototype}{n object providing the default data for the slots in this class}
-}
-\description{
-Create a spectra class definition, specifying the representation (the slots) and/or the classes contained in this one (the superclasses),
-plus other optional details. As a side effect, the class definition is stored in the specified environment
-}
-
->>>>>>> 83febb7f733cd671c07061f9ea3eb580475924bc
-=======
->>>>>>> khaliilhaji-devv

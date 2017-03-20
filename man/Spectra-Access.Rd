@@ -2,10 +2,10 @@
 % Please edit documentation in R/Spectra-Methods.R
 \docType{methods}
 \name{$,Spectra-method}
-\alias{$,Spectra}
 \alias{$,Spectra-method}
-\alias{$<-,Spectra}
+\alias{$,Spectra}
 \alias{$<-,Spectra-method}
+\alias{$<-,Spectra}
 \alias{[,Spectra-method}
 \alias{[[,Spectra,character,missing-method}
 \alias{[[<-,Spectra,character,missing-method}
@@ -64,4 +64,3 @@ sp[["CAST"]]=12 #Modify the CAST column
 sp[["CAST"]] #returns the CAST data column
 
 }
-

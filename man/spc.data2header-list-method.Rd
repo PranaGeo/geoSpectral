@@ -40,4 +40,3 @@ BL[[1]]$CAST=rep(33, nrow( BL[[1]]))
 BL[[1]]=spc.data2header(BL[[1]],"CAST","ProjectCast", compress=T)
 BL[[1]]@header
 }
-

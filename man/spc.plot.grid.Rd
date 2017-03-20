@@ -7,18 +7,9 @@
 \title{Plotting \code{SpcList} object in a grid}
 \usage{
 spc.plot.grid(x,FUN, nnrow, nncol, mar,oma, lab_cex, ...)
-<<<<<<< HEAD
-<<<<<<< HEAD
 
 \S4method{spc.plot.grid}{SpcList}(x, FUN, nnrow, nncol, mar = c(4, 4.5, 1,
   0.5), oma = c(0, 0, 0, 0), lab_cex, ...)
-=======
->>>>>>> khaliilhaji-dev
-=======
-
-\S4method{spc.plot.grid}{SpcList}(x, FUN, nnrow, nncol, mar = c(4, 4.5, 1,
-  0.5), oma = c(0, 0, 0, 0), lab_cex, ...)
->>>>>>> khaliilhaji-devv
 }
 \arguments{
 \item{x}{a \code{SpcList} data}
@@ -47,4 +38,3 @@ BL = spc.makeSpcList(sp,"CAST")
 spc.plot.grid(BL,"spc.plot",3,2)
 
 }
-

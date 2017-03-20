@@ -7,28 +7,18 @@
 \alias{spc.updateheader,list-method}
 \title{Update a field of the @header slot of a \code{Spectra} object}
 \usage{
-<<<<<<< HEAD
-spc.updateheader(object,Name,...)<-value
-=======
 spc.updateheader(object,Name,value,...)
->>>>>>> 14134e3400d5c89dbe16674b95ec8b8c419d95e3
 
 \S4method{spc.updateheader}{Spectra}(object, Name, value, ...)
 
 \S4method{spc.updateheader}{list}(object, Name, value)
 }
 \arguments{
-<<<<<<< HEAD
-\item{object}{A \code{Spectra} objec}
-
-\item{Name}{of the header field to be updated}
-=======
 \item{object}{A \code{Spectra} object}
 
 \item{Name}{of the header field to be updated}
 
 \item{value}{to update header with}
->>>>>>> 14134e3400d5c89dbe16674b95ec8b8c419d95e3
 
 \item{...}{arguments to be passed to or from other methods}
 }
@@ -49,4 +39,3 @@ BL[[1]] <- spc.updateheader(BL[[1]],"Station", 11)
 BL[[1]]@header
 
 }
-

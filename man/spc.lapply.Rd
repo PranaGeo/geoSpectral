@@ -31,4 +31,3 @@ spc.lapply(BL,function(x) {nrow(x)})
 spc.lapply(BL,function(x) {x^2+1})
 
 }
-

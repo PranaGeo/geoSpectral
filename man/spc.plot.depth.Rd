@@ -6,28 +6,32 @@
 \alias{spc.plot.depth,Spectra-method}
 \title{Plotting \code{Spectra} object}
 \usage{
-<<<<<<< HEAD
-<<<<<<< HEAD
-spc.plot.depth(x,...)
-=======
-spc.plot.depth(object,...)
->>>>>>> khaliilhaji-devv
+spc.plot.depth(object,X,maxSp,lab_cex,title, add, xlab, ylab, ylim,xlim,lwd,...)
 
 \S4method{spc.plot.depth}{Spectra}(object, X, maxSp = 10, lab_cex, title,
   add = FALSE, xlab = NULL, ylab = NULL, ylim = NULL, xlim = NULL,
   lwd = 2, ...)
-<<<<<<< HEAD
-=======
-spc.plot.depthobject,X,maxSp=10,lab_cex,
-title, add=FALSE, xlab=NULL, ylab=NULL, ylim=NULL,xlim=NULL,lwd=2,...)
->>>>>>> khaliilhaji-dev
-=======
->>>>>>> khaliilhaji-devv
 }
 \arguments{
+\item{object}{a \code{Spectra} data}
+
 \item{...}{any further arguments of plot}
 
-\item{x}{a \code{Spectra} data}
+\item{maxSp}{maximum number of \code{Spectra} to plot}
+
+\item{lab_cex}{vector of character expansion sizes, used cyclically.}
+
+\item{title}{a chracter string, title for plot}
+
+\item{add}{logical. If TRUE, plots are added to current one,}
+
+\item{xlab, ylab}{titles for x and y axes, as in plot.}
+
+\item{ylim, xlim}{ranges of x and y axes, as in plot.}
+
+\item{lwd}{vector of line widths}
+
+\item{x}{a \code{Spectra} rows}
 }
 \description{
 Generating plot of the contents of a \code{Spectra} object with respect to depth
@@ -40,4 +44,3 @@ spc.plot.depth(x)
 \seealso{
 \code{\link{spc.plot}}
 }
-

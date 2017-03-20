@@ -3,15 +3,11 @@
 \docType{methods}
 \name{spc.export.text}
 \alias{spc.export.text}
-\alias{spc.export.text,SpcHeader-method}
 \alias{spc.export.text,Spectra-method}
+\alias{spc.export.text,SpcHeader-method}
 \alias{spc.import.text}
 \title{Exporting into text format}
 \usage{
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> khaliilhaji-devv
 spc.export.text(input, filename, sep = ";", append = FALSE,
   writeheader = TRUE, ...)
 
@@ -22,12 +18,6 @@ spc.export.text(input, filename, sep = ";", append = FALSE,
   append = FALSE, writeheader = TRUE, ...)
 
 spc.import.text(filename, sep = ";", ...)
-<<<<<<< HEAD
-=======
-spc.export.text(input,filename,sep,append,writeheader,...)
->>>>>>> khaliilhaji-dev
-=======
->>>>>>> khaliilhaji-devv
 }
 \arguments{
 \item{filename}{Name of the output text file}
@@ -61,4 +51,3 @@ class(hdr)
 \seealso{
 \code{\link{spc.import.text}}
 }
-

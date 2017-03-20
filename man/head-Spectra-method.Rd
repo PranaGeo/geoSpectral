@@ -23,4 +23,3 @@ x <- spc.example_spectra()
 head(x)
 
 }
-

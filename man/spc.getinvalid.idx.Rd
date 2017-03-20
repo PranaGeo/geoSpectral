@@ -24,4 +24,3 @@ sp= spc.example_spectra()
 spc.getinvalid.idx(sp) #No invalid rows
 
 }
-

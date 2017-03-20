@@ -55,4 +55,3 @@ dim(stidx)
 \seealso{
 \code{\link{spc.makeSpcList}}
 }
-

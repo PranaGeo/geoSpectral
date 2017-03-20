@@ -3,8 +3,8 @@
 \docType{methods}
 \name{spc.bbox2lines}
 \alias{spc.bbox2lines}
-\alias{spc.bbox2lines,STI-method}
 \alias{spc.bbox2lines,Spatial-method}
+\alias{spc.bbox2lines,STI-method}
 \alias{spc.bbox2lines,Spectra-method}
 \title{Constructs a rectangle with a \code{Spectra} object}
 \usage{
@@ -27,4 +27,3 @@ sp=spc.example_spectra()
 spc.bbox2lines(sp)
 
 }
-

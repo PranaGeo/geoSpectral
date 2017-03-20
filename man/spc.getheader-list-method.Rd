@@ -22,4 +22,3 @@ BL[[1]]@header
 spc.getheader(BL,"CAST")
 
 }
-

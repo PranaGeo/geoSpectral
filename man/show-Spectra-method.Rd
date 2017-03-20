@@ -21,4 +21,3 @@ x <- spc.example_spectra()
 show(x)
 
 }
-

@@ -1,6 +1,6 @@
 #' Constructor function for the class \code{Spectra}.
 #'
-#'@description
+#' @description
 #' \code{Spectra} Creates an instance of class \code{Spectra}.
 #'
 #' @param inDF a long-format \code{data.frame} containing LAT,LON and TIME columns as well as Ancillary data.
@@ -26,7 +26,7 @@
 #' @param header \code{SpcHeader} object containing metadata
 #' @param ... other input arguments to be passed to the new() function 
 #' 
-#'@details
+#' @details
 #' This constructor function uses The function \code{Spectra()} calls \code{spacetime::stConstruct()}
 #' that is the constructor  of the \code{STIDF} class using an input \code{data.frame} object of long-table format.
 #'
@@ -161,7 +161,7 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
 #' @param from The input object
 #' @param to Name of the class of output object
 #' @aliases as,Spectra
-#' @name Spectra-coerce
+#' @rdname Spectra-coerce
 #' @examples 
 #' #Convert a Spectra object to data.frame
 #' sp <- spc.example_spectra()
@@ -203,7 +203,7 @@ setAs(from="Spectra", to="data.frame", def=function(from){
   return(output)
 })
 
-#' @name Spectra-coerce
+#' @rdname Spectra-coerce
 setAs(from="data.frame", to="Spectra", def=function(from){
   #This function makes use of geoSpectral::Spectra()
   if(!any(grepl("Wavelengths", names(attributes(from))))) 
@@ -293,7 +293,7 @@ setMethod("dim", signature = "Spectra",
 #########################################################################
 #' The Number of Columns  of a Spectra object
 #'
-#'@description
+#' @description
 #' \code{nrow} and \code{ncol} return the number of rows or columns of a \code{Spectra} object 
 #' 
 #' 
@@ -316,7 +316,7 @@ setMethod("ncol", signature = "Spectra",
 #########################################################################
 #' The Number of rows  of a \code{Spectra} object
 #'
-#'@description
+#' @description
 #' \code{nrow} and \code{ncol} return the number of rows or columns present in a \code{Spectra} object 
 #'  
 #' @usage 
@@ -1115,7 +1115,7 @@ setMethod("Math", signature("Spectra"),function (x) {
 #' Computes the mean along the rows of a \code{Spectra} object. The method finds the measurement 
 #' closest in time to the mean time and keeps the spatial/time attributes as well as Ancillary
 #' data table (@data) associated to that measurement as that of the mean spectra
-#'@usage 
+#' @usage 
 #' spc.colMeans(object)
 #'
 #' @param object a \code{Spectra} object 
@@ -1149,7 +1149,7 @@ setMethod("spc.colMeans", signature("Spectra"),function (object) {
 #'  Constructs a rectangle with a \code{Spectra} object
 #' @description
 #' Constructs a rectangle of sp::Lines using the bounding box of a \code{Spectra} object.
-#'@usage 
+#' @usage 
 #' spc.bbox2lines(object)
 #'
 #' @param object spectra object t 
@@ -2023,7 +2023,7 @@ spc.header.infos = function(header){
 
 #' Exports a \code{Spectra} object into Excel format.
 #'
-#'@description
+#' @description
 #' Exports  a \code{Spectra} object into Excel format.
 #' 
 #' @param sheetName The \code{Spectra} object to be output.
@@ -2034,7 +2034,7 @@ spc.header.infos = function(header){
 #' @param sep Not used.
 #' @param ... Not used.
 #' 
-#'@details
+#' @details
 #' \code{spc.export.xlsx()} calls functions from package \code{xlsx} to write the contents of 
 #' a \code{Spectra} object into an Excel file. For this function to work, make sure the 
 #' package \code{xlsx} is installed.
@@ -2605,7 +2605,7 @@ spc.example_spectra <- function(){
 
 #' Read the NOMAD v2 bio-optical database
 #'
-#'@description
+#' @description
 #' Imports the NOMAD v2 database of the SeaBASS project. More information 
 #' about this dataset can be found at \url{https://seabass.gsfc.nasa.gov/wiki/NOMAD}
 #'

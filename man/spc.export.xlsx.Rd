@@ -44,4 +44,3 @@ package \code{xlsx} is installed.
 }
 
 }
-

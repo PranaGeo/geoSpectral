@@ -38,4 +38,3 @@ spc.plot.map.rbokeh(sp, hover = "Snap")
 spc.plot.map.rbokeh(sp)
 
 }
-

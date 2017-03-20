@@ -19,4 +19,3 @@ BL = spc.makeSpcList(sp,"CAST")
 show(BL)
 
 }
-
