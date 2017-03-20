@@ -35,8 +35,8 @@
 #' @return Returns an object of class \code{Spectra}.
 #'
 #' @examples
-#' 
-#' fnm = file.path(base::system.file(package = "geoSpectral"),"test_data","particulate_absorption.csv.gz")
+#' fnm = file.path(base::system.file(package = "geoSpectral"),
+#' "test_data","particulate_absorption.csv.gz")
 #' fnm=gsub("\\\\", "/", fnm)
 #' abs = read.table(fnm,sep=",",header=TRUE)
 #' abs$STATION=factor(abs$STATION)
@@ -53,7 +53,8 @@
 #' myS<-Spectra(abs,Wavelengths=lbd,Units=Units,ShortName="a_nap")
 #'
 #' #Space and time columns are explicitly chosen from inDF columns
-#' myS<-Spectra(abs,Wavelengths=lbd, space=c("LONG","LAT"), time="TIME",Units=Units,ShortName="a_nap")
+#' myS<-Spectra(abs,Wavelengths=lbd, space=c("LONG","LAT"), time="TIME",
+#' Units=Units,ShortName="a_nap")
 #'
 #' @export
 Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...){
@@ -895,16 +896,17 @@ setMethod("spc.getwavelengths", signature = "Spectra", def = function (object){
 #'  show(x)
 #'  spc.setwavelengths(x) <- 300:800
 #'  show(x)
-#'  
+#' @rdname spc.setwavelengths
 #' @export
-setGeneric("spc.setwavelengths<-",function(object,value)
-{standardGeneric("spc.setwavelengths<-")})
-setReplaceMethod(f="spc.setwavelengths", signature="Spectra",
-                 definition=function(object,value){
-                   object@Wavelengths <-value
-                   validObject(object)
-                   return (object)
-                 })
+setGeneric("spc.setwavelengths<-",function(object,value){standardGeneric("spc.setwavelengths<-")})
+
+#' @rdname spc.setwavelengths
+setReplaceMethod(f="spc.setwavelengths", signature="Spectra",definition=function(object,value){
+  object@Wavelengths <-value
+  validObject(object)
+  return (object)
+})
+
 #########################################################################
 # Method : spc.cname.construct
 #########################################################################
@@ -1736,7 +1738,7 @@ setMethod("rep", signature(x = "Spectra"), function(x, times, ...) {
 #' using approx().
 #'
 #' @usage 
-#' spc.interp.spectral(source1,target_lbd,show.plot)
+#' spc.interp.spectral(source1,target_lbd,show.plot, ...)
 #' 
 #' @param source1  A \code{Spectra} object 
 #' @param  target_lbd numeric vector giving desired wavelengths  
@@ -2133,9 +2135,12 @@ setMethod("spc.export.xlsx", signature="Spectra", definition=function(input,file
 #' myS$anap_400 #Returns spectra as numeric vector
 #' head(myS[["anap_400"]]) #Returns spectra as numeric vector
 #' head(myS[[c("Snap","Offset")]]) #Returns data.frame
-#' subset(myS,DEPTH<=30) #Subsetting rows with respect to the value of Ancillary data
-#' subset(myS,anap_440<=0.01) #Subsetting rows with respect to the value of Spectral data
-#' subset(myS,subset=DEPTH<=30,select="CAST") #Selecting Ancillary data columns, leaving Spectral columns intact
+#' #Subsetting rows with respect to the value of Ancillary data
+#' subset(myS,DEPTH<=30)
+#' #Subsetting rows with respect to the value of Spectral data
+#' subset(myS,anap_440<=0.01)
+#' #Selecting Ancillary data columns, leaving Spectral columns intact
+#' subset(myS,subset=DEPTH<=30,select="CAST") 
 #' 
 #' @export
 setMethod("subset",  signature="Spectra",definition=function(x, subset, select, drop = FALSE, ...) {
@@ -2287,7 +2292,6 @@ spc.makeSpcList = function(myobj, name){
 #' If xdata is 'time', data is plotted with respect to the 'TIME' column. If xdata 
 #' is 'observations', data is plotted with respect to an integer index equal to 1:nrow(object).
 #'
-#' @usage spc.plot.time(object,Y,maxSp,xdata,lab_cex,lwd, ...)
 #' @param object A \code{Spectra} object.
 #' @param Y character. Name of the columns of the \code{Spectra} object to be plotted.
 #' @param maxSp numeric. Maximum number of \code{Spectra} to plot.
@@ -2382,10 +2386,6 @@ setMethod("spc.plot.time", signature="Spectra", function (object,Y,maxSp=50,xdat
 #'
 #' @description
 #' Generating plot of the contents of a \code{Spectra} object with respect to depth
-#'
-#' 
-#' @usage 
-#' spc.plot.depth(object,X,maxSp,lab_cex,title, add, xlab, ylab, ylim,xlim,lwd,...)
 #' 
 #' @param object a \code{Spectra} data.
 #' @param X character. Column names of the a \code{Spectra} object to be plotted.

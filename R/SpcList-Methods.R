@@ -286,9 +286,12 @@ setMethod("spc.plot.depth.overlay", "SpcList", function (object, X, lab_cex, ...
 #' myS$anap_400 #Returns spectra as numeric vector
 #' head(myS[["anap_400"]]) #Returns spectra as numeric vector
 #' head(myS[[c("Snap","Offset")]]) #Returns data.frame
-#' subset(myS,DEPTH<=30) #Subsetting rows with respect to the value of Ancillary data
-#' subset(myS,anap_440<=0.01) #Subsetting rows with respect to the value of Spectral data
-#' subset(myS,subset=DEPTH<=30,select="CAST") #Selecting Ancillary data columns, leaving Spectral columns intact
+#' #Subsetting rows with respect to the value of Ancillary data
+#' subset(myS,DEPTH<=30) 
+#' #Subsetting rows with respect to the value of Spectral data
+#' subset(myS,anap_440<=0.01)
+#' #Selecting Ancillary data columns, leaving Spectral columns intact
+#' subset(myS,subset=DEPTH<=30,select="CAST") 
 #' 
 #' @export
 setMethod("subset",  signature="SpcList",

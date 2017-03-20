@@ -6,7 +6,7 @@
 \alias{spc.plot.time,Spectra-method}
 \title{Plotting \code{Spectra} object}
 \usage{
-spc.plot.time(object,Y,maxSp,xdata,lab_cex,lwd, ...)
+spc.plot.time(object, ...)
 
 \S4method{spc.plot.time}{Spectra}(object, Y, maxSp = 50, xdata = "time",
   lab_cex, lwd = 2, ...)
