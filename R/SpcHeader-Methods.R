@@ -6,20 +6,23 @@
 #' @description Function add the value of a field in the header slot of \code{SpcHeader} class object
 #'
 #' @usage 
-#' SpcHeaderAdd (object,Name,Value)
+#' SpcHeaderAdd (object,Name,Value,...)
 #' 
 #' @param object of class SpcHeader
 #' @param Name a character variable  
 #' @param Value a numeric variable
-#' 
+#' @param ... arguments to be passed to or from other methods
 #' @examples 
 #' sp=spc.example_spectra()
 #' sp@header
 #' sp@ShortName
 #' sp@header=SpcHeaderAdd(sp@header,sp@ShortName,10)
 #' sp@header
+#' @rdname SpcHeaderAdd
+#' @export
 setGeneric("SpcHeaderAdd",function(object,Name,Value,...)
 		{standardGeneric("SpcHeaderAdd")})
+#' @rdname SpcHeaderAdd
 setMethod("SpcHeaderAdd", signature="SpcHeader", function(object,Name,Value){	
 			templist = list()
 			if (length(Value)>1){
@@ -41,9 +44,6 @@ setMethod("SpcHeaderAdd", signature="SpcHeader", function(object,Name,Value){
 #' Show a SpcHeader object
 #' @description Display a SpcHeader object
 #'
-#' @usage 
-#' show(object)
-#' 
 #' @param object of class SpcHeader
 #' @seealso \code{\link{show}}
 #' 
@@ -51,6 +51,7 @@ setMethod("SpcHeaderAdd", signature="SpcHeader", function(object,Name,Value){
 #' x=spc.example_spectra()
 #' show(x@header)
 #' 
+#' @export
 setMethod("show", signature="SpcHeader", function(object){
 			fieldnames = names(object)
 			sapply(1:length(fieldnames), function(x) cat(paste(fieldnames[x], " : ", 

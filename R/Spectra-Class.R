@@ -1,33 +1,29 @@
-# TODO: Add comment
-# 
-# Author: acizmeli
-###############################################################################
 #########################################################################
 # Class : Spectra
 #########################################################################
-#' Create a spectra class definition
+#' Spectra class definition
 #' @description
-#' Create a spectra class definition, specifying the representation (the slots) and/or the classes contained in this one (the superclasses),
-#' plus other optional details. As a side effect, the class definition is stored in the specified environment
-#'
-#' @usage 
-#' setClass(class, contains,pepresentation,prototype)
+#' Spectra class is the main class provided by the package geoSpectRal. It allows storage
+#' of spectral or non-spectra data with space and time attributes.
+#' @slot ShortName character, A short name for the parameter described in the spectra object. 
+#' @slot LongName character, A long name for the parameter described in the spectra object. 
+#' @slot Spectra matrix, n by m matrix, describing n rows of spectral data
+#'  (or time) in m channels (columns).
+#' @slot data data.frame n by t data frame, describind n rows of ancillary data
+#' of t variables. This slot is inherited from STIDF class. 
+#' @slot Wavelengths numeric vector, length of m. Wavelength data. 
+#' @slot WavelengthsUnit character,  Units of the @Wavelength slot
+#' @slot header SpcHeader, Header object. See SpcHeader-class.
+#' @slot Units character, Units of spectral data.
+#' @slot UnitsAnc character, Units of each column of the @data slot holding ancillary data.
+#' @slot ShortNameAnc character, A short name for each column of the @data slot holding ancillary data.
+#' @slot LongNameAnc character, A long name for each column of the @data slot holding ancillary data.
+#' @slot InvalidIdx logical, length of m. Row index for measurements marked by the user as invalid.
+#' @slot SelectedIdx logical, length of m. Row index for measurements marked by the user as selected.
+#' @slot ClassVersion numeric, Version of the class.
 #' 
-#' 
-#'
-#' 
-#' @param  contains STIDF 
-#' @param class  character string name for the class.
-#' @param  pepresentation avoided
-#' @param  prototype n object providing the default data for the slots in this class
-#' 
-#' 
-#' 
-#' 
-#' 
-#' 
-#' 
-#' 
+#' @export
+#' @importClassesFrom spacetime STIDF
 setClass("Spectra", contains="STIDF", 
 		representation=representation(
 				ShortName="character",

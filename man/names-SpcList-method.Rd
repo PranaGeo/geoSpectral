@@ -5,7 +5,7 @@
 \alias{names,SpcList-method}
 \title{names of \code{SpcList} object}
 \usage{
-spc.colnames(x)
+\S4method{names}{SpcList}(x)
 }
 \arguments{
 \item{x}{A \code{SpcList} object}
@@ -22,4 +22,3 @@ BL = spc.makeSpcList(sp,"CAST")
 names(BL)
 
 }
-

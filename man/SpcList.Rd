@@ -2,16 +2,22 @@
 % Please edit documentation in R/SpcList-Methods.R
 \name{SpcList}
 \alias{SpcList}
-\title{\code{SpcList} class.}
+\title{Constructor function for the \code{SpcList} class.}
 \usage{
-SpcList(spclist)
+SpcList(x)
+}
+\arguments{
+\item{x}{a list object}
 }
 \description{
-Definition for \code{SpcList}. This class provides
-a collection of multiple \code{Spectra} objects inside a list.
+With this function, it is easy to create a \code{SpcList} object
+given an list containing multipls \code{Spectra} objects.
 }
 \examples{
 sp=spc.example_spectra()
+#Create an SpcList object using two Spectra objects
 as(list(sp,sp^2), "SpcList")
-}
+#the above is the same as 
+SpcList(list(sp,sp^2))
 
+}

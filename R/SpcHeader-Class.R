@@ -2,12 +2,14 @@
 #########################################################################
 # Class : SpcHeader	
 #########################################################################
-#'  \code{SpcHeader} class.
+#' \code{SpcHeader} class for header object storing metadata.
 #' @description Definition for \code{SpcHeader}. This class is required
-#' for the @header slot of \code{Spectra} object.
+#' for the @header slot of \code{Spectra} object. This class directly inherits
+#' R lists, so there is no additional slots.
 #' 
 #' @examples 
 #' new("SpcHeader")
+#' @export
 setClass("SpcHeader", contains="list",
 		prototype=prototype(list(Station=NA,Cruise=NA,Latitude=NA,Longitude=NA)))
 setMethod("initialize",
@@ -38,6 +40,7 @@ setValidity("SpcHeader", function(object){
 #' h2 = new("SpcHeader")
 #' as(list(h1, h2), "SpcHeaderList")
 #' new("SpcHeaderList") 
+#' @export
 setClass("SpcHeaderList", contains="list",
 		prototype=prototype(list(new("SpcHeader"))))
 

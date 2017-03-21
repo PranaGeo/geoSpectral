@@ -5,7 +5,7 @@
 \alias{names,Spectra-method}
 \title{The Names of a \code{Spectra} object}
 \usage{
-names(x)
+\S4method{names}{Spectra}(x)
 }
 \arguments{
 \item{x}{a \code{Spectra} object}
@@ -19,4 +19,3 @@ x <- spc.example_spectra()
 names(x)
 
 }
-

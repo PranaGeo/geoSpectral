@@ -3,12 +3,12 @@
 \docType{class}
 \name{SpcHeader-class}
 \alias{SpcHeader-class}
-\title{\code{SpcHeader} class.}
+\title{\code{SpcHeader} class for header object storing metadata.}
 \description{
 Definition for \code{SpcHeader}. This class is required
-for the @header slot of \code{Spectra} object.
+for the @header slot of \code{Spectra} object. This class directly inherits
+R lists, so there is no additional slots.
 }
 \examples{
 new("SpcHeader")
 }
-

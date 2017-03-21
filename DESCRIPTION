@@ -1,14 +1,22 @@
 Package: geoSpectral
 Type: Package
-Title: Classes and methods for spectral (optical) data
-Version: 0.11
+Title: Classes and methods for working with spectral (electromagnetic) data in R
+Version: 0.15
 Date: 2012-07-02
 Depends:
-    R (>= 2.10.0),
+    R (>= 2.10.0)
+Imports:
     methods,
-    rgdal,
+    dplyr,
     spacetime,
-    reshape2
+    xts,
+    maps,
+    rgdal,
+    leaflet,
+    rbokeh,
+    plotly,
+    sp,
+    stats
 Author: Servet Cizmeli
 Maintainer: Servet Cizmeli <ahmet@pranageo.com>
 Description: This package provides S4 classes and basic manipulation methods
@@ -20,12 +28,14 @@ Description: This package provides S4 classes and basic manipulation methods
 License: GPL
 LazyLoad: yes
 Collate:
+    geoSpectral.R
     SpcHeader-Class.R
     SpcHeader-Methods.R
     Spectra-Class.R
     Spectra-Methods.R
     SpcList-Class.R
     SpcList-Methods.R
-    geoSpectral.R
-RoxygenNote: 5.0.1
-Suggests: testthat
+RoxygenNote: 6.0.1
+Suggests:
+    testthat,
+    xlsx

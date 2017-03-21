@@ -5,7 +5,7 @@
 \alias{head,Spectra-method}
 \title{Return the first or last part of a \code{Spectra} object}
 \usage{
-head(x, ...)
+\S4method{head}{Spectra}(x, ...)
 }
 \arguments{
 \item{x}{a \code{Spectra} object}
@@ -22,6 +22,4 @@ Return the first or last parts of a \code{Spectra} object
 x <- spc.example_spectra()
 head(x)
 
- 
 }
-
