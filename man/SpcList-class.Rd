@@ -11,8 +11,6 @@ objects inside a list-like object. See the help of the constructor function \cod
 \section{Slots}{
 
 \describe{
-\item{\code{.Data}}{list, Inherited R list object}
-
 \item{\code{by}}{character, Determines the header field in the Spectra objects
 within the SpcList that describes how they are different one from the other.}
 }}
