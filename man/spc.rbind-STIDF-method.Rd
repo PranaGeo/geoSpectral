@@ -3,26 +3,20 @@
 \docType{methods}
 \name{spc.rbind,STIDF-method}
 \alias{spc.rbind,STIDF-method}
-\title{Combine \code{Spectra} objects by Rows}
+\title{Combine \code{STIDF} objects by Rows}
 \usage{
-spc.cbind(...)
-spc.rbind(...)
+\S4method{spc.rbind}{STIDF}(...)
 }
 \arguments{
-\item{...}{\code{Spectra} object}
+\item{...}{\code{STIDF} object}
 }
 \description{
-Take a \code{Spectra} objects and combine by rows
+Take a \code{STIDF} objects and combine by rows
 }
 \examples{
 x <- spc.example_spectra()
 nrow(x)  #[1] 26
-x2 <- spc.rbind(x,x)
+x2 <- spc.rbind(as(x, "STIDF"),as(x, "STIDF"))
 nrow(x2)  #[1] 52
 
-
 }
-\seealso{
-\code{\link{spc.cbind}}
-}
-
