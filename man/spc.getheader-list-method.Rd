@@ -3,22 +3,22 @@
 \docType{methods}
 \name{spc.getheader,list-method}
 \alias{spc.getheader,list-method}
-\title{Extract a field of the @header slot of a \code{spclist} object}
+\title{Extract a field of the @header slot of a \code{SpcList} object}
 \usage{
-spc.getheader(object,name)
+\S4method{spc.getheader}{list}(object, name)
 }
 \arguments{
-\item{object}{A  \code{spclist} object}
+\item{object}{A  \code{SpcList} object}
 
 \item{name}{of the header field to be extracted}
 }
 \description{
-Extracts the value of a field in the header slot of \code{spclist} object
+Extracts the value of a field in the header slot of \code{SpcList} object
 }
 \examples{
 sp=spc.example_spectra()
 BL = spc.makeSpcList(sp,"CAST")
 BL[[1]]@header
 spc.getheader(BL,"CAST")
-}
 
+}

@@ -21,7 +21,9 @@
 #' @slot InvalidIdx logical, length of m. Row index for measurements marked by the user as invalid.
 #' @slot SelectedIdx logical, length of m. Row index for measurements marked by the user as selected.
 #' @slot ClassVersion numeric, Version of the class.
+#' 
 #' @export
+#' @importClassesFrom spacetime STIDF
 setClass("Spectra", contains="STIDF", 
 		representation=representation(
 				ShortName="character",

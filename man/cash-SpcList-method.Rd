@@ -8,11 +8,9 @@
 \S4method{$}{SpcList}(x, name)
 }
 \arguments{
-\item{\code{Spectra}}{object from which to extract element(s) or in which to replace element(s)}
+\item{x}{A \code{Spectra} object from which to extract element(s) or in which to replace element(s)}
 
-\item{i}{A numeric (row index) variable}
-
-\item{j}{A character (column name) or a numeric (column index) variable}
+\item{name}{A character (column name)}
 }
 \description{
 Operators acting on  \code{Spectra} objects  to extract or replace parts
@@ -31,5 +29,5 @@ Operators acting on  \code{Spectra} objects  to extract or replace parts
   BL[[4]]$CRUISE="Cruise4"
   names(BL)
   BL$Cruise4
-}
 
+}

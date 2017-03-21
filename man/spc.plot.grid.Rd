@@ -17,6 +17,10 @@ spc.plot.grid(x,FUN, nnrow, nncol, mar,oma, lab_cex, ...)
 \item{FUN}{a character string giving the name of the ploting function to be used. 
 Can be either of "spc.plot"}
 
+\item{nnrow}{number of rows for the grid to be produced}
+
+\item{nncol}{number of columns for the grid to be produced}
+
 \item{mar}{A numeric vector of length 4, which sets the margin sizes in the following order: bottom, left, top, and right. The default is c(4,4.5,1,0.5)}
 
 \item{oma}{oma the "outer margin area" around a figure or figures. The usage of mar and oma is shown when plotting a single figure,}
@@ -24,10 +28,6 @@ Can be either of "spc.plot"}
 \item{lab_cex}{vector of character expansion sizes, used cyclically}
 
 \item{...}{any further arguments of plot}
-
-\item{nrow}{number of row for grid}
-
-\item{ncol}{number of column for grid}
 }
 \description{
 Generating plot of the contents of a \code{SpcList} object in a grid
@@ -36,5 +36,5 @@ Generating plot of the contents of a \code{SpcList} object in a grid
 sp <- spc.example_spectra()
 BL = spc.makeSpcList(sp,"CAST")
 spc.plot.grid(BL,"spc.plot",3,2)
-}
 
+}

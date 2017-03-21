@@ -13,6 +13,8 @@ spc.plot.time.plotly(sp, column, plot.max = 10, showlegend = FALSE,
   showlegend = FALSE, hoverinfo = "name", title = sp@LongName)
 }
 \arguments{
+\item{sp}{A \code{Spectra} object}
+
 \item{column}{Number or name , defoult value is 10 if a number or name has not been entered}
 
 \item{plot.max}{numeric value for a maximum number of data in plot}
@@ -25,7 +27,6 @@ spc.plot.time.plotly(sp, column, plot.max = 10, showlegend = FALSE,
 }
 \description{
 Plot a \code{Spectra} object with respect to time
- @param sp A \code{Spectra} object
 }
 \examples{
 \dontrun{
@@ -34,5 +35,5 @@ spc.plot.time.plotly(sp)
 spc.plot.time.plotly(sp, plot.max = 3)
 spc.plot.time.plotly(sp, c("anap_450","anap_550","anap_650"))
 }
-}
 
+}

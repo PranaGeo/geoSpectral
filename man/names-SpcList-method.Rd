@@ -20,5 +20,5 @@ Retrieve   names of a \code{SpcList} object
 sp <- spc.example_spectra()
 BL = spc.makeSpcList(sp,"CAST")
 names(BL)
-}
 
+}

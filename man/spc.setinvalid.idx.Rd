@@ -11,12 +11,12 @@ spc.setinvalid.idx(object) <- value
 \S4method{spc.setinvalid.idx}{Spectra}(object) <- value
 }
 \arguments{
-\item{value}{Logical vector}
+\item{object}{A \code{Spectra} object}
 
-\item{x}{A \code{Spectra} object}
+\item{value}{Logical vector}
 }
 \description{
-Stores the row indexes as invalid
+Stores the row indexes to be stored as invalid.
 }
 \examples{
  
@@ -26,8 +26,8 @@ vld = rep(TRUE,26)
 vld[1:5]<-FALSE
 spc.setinvalid.idx(sp)<-vld #Mark the first 5 rows as invalid
 spc.getinvalid.idx(sp)
+
 }
 \seealso{
 \code{\link{spc.setselected.idx<-}}
 }
-

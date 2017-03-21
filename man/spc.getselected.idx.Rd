@@ -25,8 +25,8 @@ idx=rep(FALSE,nrow(x));
 idx[1:5]=TRUE
 spc.setselected.idx(x)<-idx 
 spc.getselected.idx(x)
+
 }
 \seealso{
 \code{\link{spc.setselected.idx<-}}
 }
-

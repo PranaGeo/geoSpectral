@@ -33,8 +33,10 @@ between 0 (transparent) and 1 (opaque)}
 Create a point map with rbokeh engine using \code{Spectra} rows
 }
 \examples{
-sp=spc.example_spectra()
-spc.plot.map.rbokeh(sp, hover = "Snap")
-spc.plot.map.rbokeh(sp)
+\dontrun{
+  sp=spc.example_spectra()
+  spc.plot.map.rbokeh(sp, hover = "Snap")
+  spc.plot.map.rbokeh(sp)
 }
 
+}

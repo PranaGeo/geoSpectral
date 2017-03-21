@@ -100,8 +100,8 @@ test_that("test for head()",{
   })
   
   
-  test_that("test for spc.update()",{
-    spc.updateheader(sp,"Station")<-11
+  test_that("test for spc.updateheader()",{
+    sp <- spc.updateheader(sp,"Station", 11)
     expect_equal(as.numeric(sp@header[1]),11)
     
     

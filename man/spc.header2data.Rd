@@ -3,10 +3,10 @@
 \docType{methods}
 \name{spc.header2data}
 \alias{spc.header2data}
-\alias{spc.header2data,SpcList-method}
 \alias{spc.header2data,Spectra-method}
 \alias{spc.header2data,list-method}
-\title{Get header for data}
+\alias{spc.header2data,SpcList-method}
+\title{Copy header data into the @data slot}
 \usage{
 spc.header2data(object, headerfield, dataname, compress, ...)
 
@@ -22,9 +22,12 @@ spc.header2data(object, headerfield, dataname, compress, ...)
 \arguments{
 \item{object}{A \code{Spectra} object}
 
-\item{headerfield}{data column}
+\item{headerfield}{character. Field name of the header to be copied.}
 
-\item{dataname}{list \code{Spectra} object}
+\item{dataname}{character. Column name of @data slot to copy the incoming data.}
+
+\item{compress}{logical. Whether or not to compress data put into the header. 
+See help of \code{\link{spc.data2header}}.}
 
 \item{...}{arguments to be passed to or from other methods}
 }
@@ -39,11 +42,12 @@ If header element has length >1, its type is checked. If it is "character",
 its elements will be pasted using paste(...,collapse="|"). If it is another 
 type, only the first element will be taken. For list and SpcList objects, the same 
 procedure is repeated for all elements of the list containing \code{Spectra} objects.
+If \code{dataname} is missing, then it will be taken equal to \code{headerfield}.
 }
 \examples{
 sp <- spc.example_spectra()
-spc.updateheader(sp, "Zone")<- "ZoneA"
+sp <- spc.updateheader(sp,"Zone", "ZoneA")
 sp <- spc.header2data(sp, "Zone")
 sp$Zone
-}
 
+}

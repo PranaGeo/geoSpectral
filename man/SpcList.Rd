@@ -19,5 +19,5 @@ sp=spc.example_spectra()
 as(list(sp,sp^2), "SpcList")
 #the above is the same as 
 SpcList(list(sp,sp^2))
-}
 
+}

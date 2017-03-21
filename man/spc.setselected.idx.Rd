@@ -11,9 +11,9 @@ spc.setselected.idx(object) <- value
 \S4method{spc.setselected.idx}{Spectra}(object) <- value
 }
 \arguments{
-\item{value}{index for a \code{Spectra} object}
+\item{object}{A \code{Spectra} object}
 
-\item{x}{A \code{Spectra} object}
+\item{value}{index for a \code{Spectra} object}
 }
 \value{
 A \code{Spectra} object
@@ -31,4 +31,3 @@ spc.plot(x)
 \seealso{
 \code{\link{spc.getselected.idx}}
 }
-

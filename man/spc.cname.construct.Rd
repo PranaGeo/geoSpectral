@@ -27,5 +27,5 @@ omitted, the @ShortName slot is used.
 sp <- spc.example_spectra()
 spc.cname.construct(sp)
 spc.cname.construct(sp,"Newvar")
-}
 
+}

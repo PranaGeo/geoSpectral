@@ -16,6 +16,8 @@ spc.plot(x, Y, maxSp, lab_cex,xlab,ylab,type,pch,lwd,cex,...)
 
 \item{Y}{fskjldsk}
 
+\item{maxSp}{maximum number of \code{Spectra} to plot}
+
 \item{lab_cex}{vector of character expansion sizes, used cyclically}
 
 \item{xlab}{title for x  axix, as in plot().}
@@ -25,9 +27,13 @@ spc.plot(x, Y, maxSp, lab_cex,xlab,ylab,type,pch,lwd,cex,...)
 \item{type}{character string (length 1 vector) or vector of 1-character strings indicating 
 the type of plot for each column of y. See help of matplot() or plot().}
 
-\item{pch}{character string or vector of 1-characters or integers for plotting characters}
+\item{pch}{character string or vector of 1-characters or integers for plotting characters.
+See help of \code{\link{par}}.}
 
-\item{lwd}{vector of line widths}
+\item{lwd}{vector of line widths. See help of \code{\link{par}}.}
+
+\item{cex}{A numerical value giving the amount by which plotting text and symbols should 
+be magnified relative to the default. See help of \code{\link{par}}.}
 
 \item{...}{any further arguments to be passed to matplot}
 }
@@ -37,8 +43,8 @@ Generating plot of the intensity of a measurement inside a \code{Spectra} object
 \examples{
 x <- spc.example_spectra()
 spc.plot(x)
+
 }
 \seealso{
-\code{\link{spc.lines}}
+\code{\link{spc.lines}}, \code{\link{par}}
 }
-

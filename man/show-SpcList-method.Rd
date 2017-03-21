@@ -8,7 +8,7 @@
 \S4method{show}{SpcList}(object)
 }
 \arguments{
-\item{x}{a \code{SpcList} object}
+\item{object}{a \code{SpcList} object}
 }
 \value{
 show returns an invisible \code{NULL}
@@ -20,5 +20,5 @@ Display a \code{SpcList} object
 x <- spc.example_spectra()
 BL = spc.makeSpcList(x,"CAST")
 show(BL)
-}
 
+}

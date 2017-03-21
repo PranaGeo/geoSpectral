@@ -5,7 +5,7 @@
 \alias{nrow,Spectra-method}
 \title{The Number of rows  of a \code{Spectra} object}
 \usage{
-nrow(x)
+\S4method{nrow}{Spectra}(x)
 }
 \arguments{
 \item{x}{a \code{Spectra} object}
@@ -19,4 +19,3 @@ ncol(x)  #501
 nrow(x)  #26
 
 }
-
