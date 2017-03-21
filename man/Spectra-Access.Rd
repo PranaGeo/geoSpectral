@@ -2,10 +2,10 @@
 % Please edit documentation in R/Spectra-Methods.R
 \docType{methods}
 \name{$,Spectra-method}
-\alias{$,Spectra}
 \alias{$,Spectra-method}
-\alias{$<-,Spectra}
+\alias{$,Spectra}
 \alias{$<-,Spectra-method}
+\alias{$<-,Spectra}
 \alias{[,Spectra-method}
 \alias{[[,Spectra,character,missing-method}
 \alias{[[<-,Spectra,character,missing-method}
@@ -17,25 +17,25 @@
 
 \S4method{[}{Spectra}(x, i, j)
 
-\S4method{[[}{Spectra,character,missing}(x, i, j, ...)
+\S4method{[[}{Spectra,character,missing}(x, i, j)
 
 \S4method{[[}{Spectra,character,missing}(x, i, j) <- value
 }
 \arguments{
-\item{x}{A \code{Spectra} object from which to extract element(s) or in which to replace element(s).}
+\item{x}{A \code{Spectra} object from which to extract element(s) or in which to replace element(s)}
+
+\item{name}{A character (column name) or a numeric (column index) variable}
+
+\item{value}{A vector or matrix or data.frame. Values to be replaced with matched \code{Spectra} column.}
 
 \item{i}{A numeric (row index) variable}
 
 \item{j}{A character (column name) or a numeric (column index) variable}
-
-\item{\code{Spectra}}{object from which to extract element(s) or in which to replace element(s)}
-
-\item{i, j}{indices specifying elements to extract or replace. Indices are numeric or character vectors}
 }
 \description{
 Operators acting on \code{Spectra} objects to extract parts
 
-Operators acting on \code{Spectra} objects to replace parts
+Replace parts of a \code{Spectra} object
 
 Operators acting on \code{Spectra} object and \code{Spectra} lists to extract or replace parts.
 }
@@ -62,5 +62,5 @@ sp[["CAST"]] #returns the CAST data column
 sp[[4]] #returns the CAST data column
 sp[["CAST"]]=12 #Modify the CAST column
 sp[["CAST"]] #returns the CAST data column
-}
 
+}

@@ -8,7 +8,7 @@
 \S4method{show}{Spectra}(object)
 }
 \arguments{
-\item{x}{a \code{Spectra} object}
+\item{object}{a \code{Spectra} object}
 }
 \value{
 show returns an invisible \code{NULL}
@@ -19,5 +19,5 @@ Display a \code{Spectra} object
 \examples{
 x <- spc.example_spectra()
 show(x)
-}
 
+}

@@ -12,18 +12,30 @@ spc.plot.time(object, ...)
   lab_cex, lwd = 2, ...)
 }
 \arguments{
-\item{object}{a \code{Spectra} data}
+\item{object}{A \code{Spectra} object.}
 
 \item{...}{any further arguments of plot}
+
+\item{Y}{character. Name of the columns of the \code{Spectra} object to be plotted.}
+
+\item{maxSp}{numeric. Maximum number of \code{Spectra} to plot.}
+
+\item{xdata}{character. Type of time-series data. Can be 'time' or 'observations'.}
+
+\item{lab_cex}{vector of character expansion sizes, used cyclically.}
+
+\item{lwd}{vector of line widths}
 }
 \description{
-Generating plot of the contents of a \code{Spectra} object with respect to time
+Generating plot of the contents of a \code{Spectra} object with respect to time.
+If xdata is 'time', data is plotted with respect to the 'TIME' column. If xdata 
+is 'observations', data is plotted with respect to an integer index equal to 1:nrow(object).
 }
 \examples{
 x <- spc.example_spectra()
 spc.plot.time(x)
+
 }
 \seealso{
 \code{\link{spc.plot.depth}}
 }
-

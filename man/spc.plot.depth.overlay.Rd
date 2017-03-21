@@ -26,5 +26,5 @@ Generating plot of the contents of a \code{SpcList} object overlay with respect 
 sp <- spc.example_spectra()
 BL = spc.makeSpcList(sp,"CAST")
 spc.plot.depth.overlay(BL, "anap_555")
-}
 
+}

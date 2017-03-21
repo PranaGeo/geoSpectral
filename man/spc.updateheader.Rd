@@ -37,5 +37,5 @@ BL=spc.makeSpcList(sp,"CAST")
 BL[[1]]@header
 BL[[1]] <- spc.updateheader(BL[[1]],"Station", 11)
 BL[[1]]@header
-}
 
+}

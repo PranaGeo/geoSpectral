@@ -22,8 +22,8 @@ Adds spectra to an existing plot created by spc.plot() using lines()
 sp = spc.example_spectra()
 spc.plot(sp[2,])
 spc.lines(sp[3,],col="red")
+
 }
 \seealso{
 \code{\link{spc.plot}}
 }
-

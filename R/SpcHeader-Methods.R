@@ -11,7 +11,7 @@
 #' @param object of class SpcHeader
 #' @param Name a character variable  
 #' @param Value a numeric variable
-#' 
+#' @param ... arguments to be passed to or from other methods
 #' @examples 
 #' sp=spc.example_spectra()
 #' sp@header

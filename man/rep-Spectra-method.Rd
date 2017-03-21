@@ -12,6 +12,9 @@
 
 \item{times}{A integer vector giving the (non-negative) number of times to repeat each row.
 See help of \code{\link{rep}}.}
+
+\item{...}{further arguments to be passed to or from other methods. 
+See help of \code{\link{rep}}.}
 }
 \value{
 A \code{Spectra} object
@@ -20,13 +23,14 @@ A \code{Spectra} object
 Operators
 }
 \details{
-Replicates rows of \code{x}, making \code{times} copies of each row. Replicates \code{Spectra}, 
-\code{data}, \code{sp}, \code{time}, \code{endTime}, \code{InvalidIdx} slots. Resets the \code{SelectedIdx} slot.
+Replicates rows of \code{x}, making \code{times} copies of each row. 
+Replicates \code{Spectra}, \code{data}, \code{sp}, \code{time}, \code{endTime}, 
+\code{InvalidIdx} slots. Resets the \code{SelectedIdx} slot.
 }
 \examples{
 sp=spc.example_spectra()
 dim(sp)
 sp2 = rep(sp, 5)
 dim(sp2)
-}
 
+}

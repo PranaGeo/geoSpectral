@@ -12,4 +12,3 @@ R lists, so there is no additional slots.
 \examples{
 new("SpcHeader")
 }
-

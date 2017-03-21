@@ -51,8 +51,8 @@ that is the constructor  of the \code{STIDF} class using an input \code{data.fra
 \code{length{@Wavelengths}==ncol(@Spectra)}. The default @WavelengthsUnit is nm^{-1}.
 }
 \examples{
-
-fnm = file.path(base::system.file(package = "geoSpectral"),"test_data","particulate_absorption.csv.gz")
+fnm = file.path(base::system.file(package = "geoSpectral"),
+"test_data","particulate_absorption.csv.gz")
 fnm=gsub("\\\\\\\\", "/", fnm)
 abs = read.table(fnm,sep=",",header=TRUE)
 abs$STATION=factor(abs$STATION)
@@ -69,6 +69,7 @@ abs$TIME = as.POSIXct(as.character(abs$TIME),tz=tz) #Compute the time
 myS<-Spectra(abs,Wavelengths=lbd,Units=Units,ShortName="a_nap")
 
 #Space and time columns are explicitly chosen from inDF columns
-myS<-Spectra(abs,Wavelengths=lbd, space=c("LONG","LAT"), time="TIME",Units=Units,ShortName="a_nap")
-}
+myS<-Spectra(abs,Wavelengths=lbd, space=c("LONG","LAT"), time="TIME",
+Units=Units,ShortName="a_nap")
 
+}

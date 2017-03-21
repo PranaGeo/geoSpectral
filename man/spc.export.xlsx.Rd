@@ -13,6 +13,10 @@ spc.export.xlsx(input, filename, sheetName, writeheader = TRUE, append = F,
   writeheader = TRUE, append = F, sep = ";", ...)
 }
 \arguments{
+\item{input}{A \code{Spectra} object}
+
+\item{filename}{Name of the output xlsx file}
+
 \item{sheetName}{The \code{Spectra} object to be output.}
 
 \item{writeheader}{A boolean, indicating whether or not the metadata (contents of the 
@@ -42,5 +46,5 @@ package \code{xlsx} is installed.
   if("xlsx" \%in\% installed.packages())
      spc.export.xlsx(sp,"test.xlsx")
 }
-}
 
+}

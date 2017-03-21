@@ -22,5 +22,5 @@ Extract the row indexes stored as invalid
 \examples{
 sp= spc.example_spectra()
 spc.getinvalid.idx(sp) #No invalid rows
-}
 
+}
