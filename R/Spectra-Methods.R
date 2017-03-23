@@ -152,17 +152,17 @@ Spectra = function(inDF,Spectra,Wavelengths,Units,space,time,endTime,header,...)
 
 #' @title Conversion between \code{Spectra} and data.frame objects
 #'
-#' @description Convert a \code{Spectra} object into a data.frame.
-#' 
-#' Converting a data.frame object to \code{Spectra} requires a set of attributes
-#'  to be present in the source data.frame object.
-#' While these attributes are generally created during the conversion of a
+#' @description Converting \code{Spectra} object to data.frame is straightforward 
+#' while the conversion in the opposite direction requires a set of attributes
+#' to be present in the source data.frame object.
+#' These attributes are generally created during the conversion of a
 #' \code{Spectra} object into data.frame, they can 
 #' also be manually set if they are non-existant (see the example below).
 #' @param from The input object
 #' @param to Name of the class of output object
 #' @aliases as,Spectra
 #' @rdname Spectra-coerce
+#' @name Spectra-coerce
 #' @examples 
 #' #Convert a Spectra object to data.frame
 #' sp <- spc.example_spectra()
@@ -205,6 +205,7 @@ setAs(from="Spectra", to="data.frame", def=function(from){
 })
 
 #' @rdname Spectra-coerce
+#' @name Spectra-coerce
 setAs(from="data.frame", to="Spectra", def=function(from){
   #This function makes use of geoSpectral::Spectra()
   if(!any(grepl("Wavelengths", names(attributes(from))))) 

@@ -36,4 +36,5 @@
 #' @importFrom stats approx time
 #' @importFrom utils modifyList read.table write.table
 #' @importFrom sp Line Lines SpatialPoints coordinates spDistsN1
+#' @name geoSpectral
 NULL
