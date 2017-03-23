@@ -19,7 +19,7 @@ Imports:
     stats
 Author: Servet Ahmet Cizmeli
 Maintainer: Servet Ahmet Cizmeli <ahmet@pranageo.com>
-Description: This package provides S4 classes and data import, preprocessing, graphing, 
+Description: Provides S4 classes and data import, preprocessing, graphing, 
     manipulation and export methods for geo-Spectral datasets (datasets with space/time/spectral 
     dimensions). These type of data are frequently collected within earth observation projects 
     (remote sensing, spectroscopy, bio-optical oceanography, mining, agricultural, atmospheric, 

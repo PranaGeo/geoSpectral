@@ -1,7 +1,7 @@
 #' @title Classes and Methods for Working with Spectral Data with Space-Time Attributes
 #'
 #' @description 
-#' This package provides S4 classes and data import, preprocessing, graphing, manipulation and
+#' Provides S4 classes and data import, preprocessing, graphing, manipulation and
 #' export methods for geo-Spectral datasets (datasets with space/time/spectral dimensions). 
 #' These type of data are frequently collected within earth observation projects (remote sensing, 
 #' spectroscopy, bio-optical oceanography, mining, agricultural, atmospheric, environmental or 
