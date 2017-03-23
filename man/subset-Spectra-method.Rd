@@ -5,14 +5,19 @@
 \alias{subset,Spectra-method}
 \title{Subsetting for a \code{Spectra} and spcList classes}
 \usage{
-subset(x,y,select)
+\S4method{subset}{Spectra}(x, subset, select, drop = FALSE, ...)
 }
 \arguments{
 \item{x}{A \code{Spectra} object}
 
+\item{subset}{logical expression indicating elements or rows to keep: 
+missing values are taken as false.}
+
 \item{select}{Condition selected}
 
-\item{y}{Subset}
+\item{drop}{passed on to [ indexing operator. Default is FALSE}
+
+\item{...}{arguments to be passed to or from other methods.}
 }
 \description{
 Subsetting can be achieved using the implementation of the R function subset() for \code{Spectra} and SpcList classes
@@ -20,7 +25,7 @@ It is possible to perform a row-wise selection
 }
 \examples{
 fnm = file.path(system.file(package = "geoSpectral"), "test_data","particulate_absorption.csv.gz")
-abs = read.table(fnm,sep=",",header=T)
+abs = read.table(fnm,sep=",",header=TRUE)
 abs$STATION=factor(abs$STATION)
 abs[1:2,1:17] #Display only the first 2 rows and first 17 columns if the data frame
 lbd = as.numeric(gsub("X","",colnames(abs)[14:514]))
@@ -45,10 +50,11 @@ myS$CAST #Returns Ancillary data
 myS$anap_400 #Returns spectra as numeric vector
 head(myS[["anap_400"]]) #Returns spectra as numeric vector
 head(myS[[c("Snap","Offset")]]) #Returns data.frame
-subset(myS,DEPTH<=30) #Subsetting rows with respect to the value of Ancillary data
-subset(myS,anap_440<=0.01) #Subsetting rows with respect to the value of Spectral data
-subset(myS,subset=DEPTH<=30,select="CAST") #Selecting Ancillary data columns, leaving Spectral columns intact
-
+#Subsetting rows with respect to the value of Ancillary data
+subset(myS,DEPTH<=30)
+#Subsetting rows with respect to the value of Spectral data
+subset(myS,anap_440<=0.01)
+#Selecting Ancillary data columns, leaving Spectral columns intact
+subset(myS,subset=DEPTH<=30,select="CAST") 
 
 }
-
