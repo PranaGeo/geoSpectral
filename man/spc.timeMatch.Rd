@@ -39,12 +39,7 @@ dat = SpcList(spc.Read_NOMAD_v2())
 names(dat)
 
 #We would like to find elements of Es that match time-wise rows of Kd.
-<<<<<<< HEAD
-nrow(dat$kd)
-nrow(dat$es)
-=======
 nrow(dat$kd); nrow(dat$es)
->>>>>>> 90556bdd7246ce80dadb84c2e3cb30a43895d159
 
 #Use spc.timeMatch() to get row indexes of Es that would match those of Kd time-wise
 t_idx=spc.timeMatch((dat$kd), (dat$es))
