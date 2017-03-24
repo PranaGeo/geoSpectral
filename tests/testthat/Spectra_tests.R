@@ -105,3 +105,17 @@ test_that("spc.colMeans() function", {
 test_that("spc.bbox2lines() function outputs correctly", {
   expect_is(spc.bbox2lines(sptest), "Lines")
 })
+
+headertest <- spc.example_spectra()
+a <- new("SpcHeader")
+a$Longitude = 123
+a$Station = 5
+spc.setheader(headertest) <- a
+test_that("spc.getheader() gets correct headers", {
+  expect_is(spc.getheader(headertest, "Station"), "numeric")
+  expect_equal(spc.getheader(headertest, "Station"), headertest@header[[1]])
+})
+
+test_that("spc.setheader() sets headers correctly", {
+  expect_equal(headertest@header$Longitude, a$Longitude)
+})
