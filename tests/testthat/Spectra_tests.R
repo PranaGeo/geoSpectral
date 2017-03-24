@@ -125,3 +125,13 @@ test_that("spc.updateheader() funciton updates header", {
   expect_is(headertest@header$Station, "numeric")
   expect_equal(headertest@header$Station, 11)
 })
+
+idx <- rep(FALSE, nrow(sptest))
+idx[1:5] = TRUE
+spc.setselected.idx(sptest) <- idx
+gettest <- spc.getselected.idx(sptest)
+x<- rep(TRUE, 5)
+test_that("spc.getselected.idx() and spc.setselected.idx() work properly", {
+  expect_equal(gettest[1:5], x)
+  expect_is(gettest, "logical")
+})
