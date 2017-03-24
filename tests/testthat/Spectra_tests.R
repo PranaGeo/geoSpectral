@@ -96,3 +96,8 @@ t_idx = spc.timeMatch((dat$kd), (dat$es))
 test_that("spc.timeMatch() function ouputs correctly", {
   expect_equal(all(time(dat$es)[t_idx]==time(dat$kd)), TRUE)
 })
+
+test_that("spc.colMeans() function", {
+  expect_is(spc.colMeans(sptest), "Spectra")
+  expect_error(spc.colMeans(5))
+})
