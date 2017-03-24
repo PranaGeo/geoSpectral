@@ -91,3 +91,8 @@ test_that("spc.cname.construct() outputs correctly", {
   expect_equal(spc.cname.construct(sptest, "anap"), spc.colnames(sptest))
 })
 
+dat = SpcList(spc.Read_NOMAD_v2())
+t_idx = spc.timeMatch((dat$kd), (dat$es))
+test_that("spc.timeMatch() function ouputs correctly", {
+  expect_equal(all(time(dat$es)[t_idx]==time(dat$kd)), TRUE)
+})

@@ -992,7 +992,6 @@ spc.timeMatch = function(master,searched,returnList=FALSE,method="over",limits,r
       stop("Input argument 'searched' needs to either inherit from spacetime::ST class or be a timeBased variable")
   stopifnot(inherits(searched,"ST"))
   if(method=="over")
-    browser()
     out = spacetime::timeMatch(time(master),time(searched),returnList=returnList)
   if(method=="nearest"){
     out = sapply(time(master),function(x){mymin = which.min(abs(time(searched)-x))})
