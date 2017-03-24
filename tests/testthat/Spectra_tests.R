@@ -1,0 +1,93 @@
+library(geoSpectral)
+library(testthat)
+context("Tests for Spectra methods")
+
+fnm = file.path(base::system.file(package = "geoSpectral"),"test_data","particulate_absorption.csv.gz")
+fnm=gsub("\\\\", "/", fnm)
+abs = read.table(fnm,sep=",",header=TRUE)
+abs$STATION=factor(abs$STATION)
+abs[1:2,1:17] #Display only the first 2 rows and first 17 columns if the data frame
+lbd = as.numeric(gsub("X","",colnames(abs)[14:514]))
+Units="1/m"
+colnames(abs)= gsub("X",paste("anap","_",sep=""), colnames(abs))
+colnames(abs)= gsub("PRES","DEPTH", colnames(abs))
+abs = abs[,c(14:514,1:13)] #Rearrange so that Spectra columns come first
+tz<-strsplit(as.character(abs$TIME)," ")[[1]][[3]] #Extract the timezone
+abs$TIME = as.POSIXct(as.character(abs$TIME),tz=tz) #Compute the time
+myS<-Spectra(abs,Wavelengths=lbd,Units=Units,ShortName="a_nap")
+myS<-Spectra(abs,Wavelengths=lbd, space=c("LONG","LAT"), time="TIME",Units=Units,ShortName="a_nap")
+test_that("Spectra objects are created properly", {
+  expect_is(myS, "Spectra")
+  expect_equal(length(myS), 26)
+  })
+
+df2 <- data.frame(ch1=c(1,2,3,4), ch2=c(5,6,7,8), TIME=Sys.time()+1:4, LAT=1:4, LON=5:8)
+attr(df2, "Units") <- "m-1"
+attr(df2, "Wavelengths") <- c(500, 600)
+attr(df2, "ShortName") <- "abs"
+sptest <- spc.example_spectra()
+test_that("Spectra object can be converted", {
+  expect_is(as(sptest, "data.frame"), "data.frame")
+  expect_is(as(as(sptest, "data.frame"), "Spectra"), "Spectra")
+  expect_is(as(df2, "Spectra"), "Spectra")
+})
+
+test_that("Dim function provides correct dimensions for Spectra object", {
+  expect_is(dim(sptest), "integer")
+  expect_equal(dim(sptest), dim(sptest@Spectra))
+})
+
+test_that("ncol returns correct values", {
+  expect_is(ncol(sptest), "integer")
+  expect_equal(ncol(sptest), ncol(sptest@Spectra))
+})
+
+test_that("nrow returns correct values", {
+  expect_is(nrow(sptest), "integer")
+  expect_equal(nrow(sptest), nrow(sptest@Spectra))
+  expect_equal(nrow(sptest), nrow(sptest@data))
+})
+
+# test_that("names() functions gives correct names for Spectra Object", {
+#   expect_that(names(sptest), matches(names(sptest@data)))
+# })
+
+test_that("head() function returns correct values", {
+  expect_is(head(sptest), "matrix")
+  expect_equal(head(sptest), sptest@Spectra[1:6,])
+})
+
+test_that("Spectra objects can be extracted and replaced properly", {
+  expect_equal(sptest[["CAST"]], sptest$CAST)
+})
+
+test_that("spc.colnames() provides correct ouput", {
+  expect_is(spc.colnames(sptest), "character")
+  expect_equal(length(spc.colnames(sptest)), ncol(sptest@Spectra))
+})
+
+sptest2 <- spc.rbind(sptest, sptest)
+sptest3 <- spc.rbind(as(sptest, "STIDF"),as(sptest, "STIDF"))
+test_that("spc.rbind combines Spectra objects correctly", {
+  expect_is(sptest2, "Spectra")
+  expect_equal(nrow(sptest2), 2*nrow(sptest))
+  expect_is(sptest3, "STIDF")
+  expect_equal(nrow(sptest2), 2*nrow(sptest))
+})
+
+test_that("spc.getwavelengths() returns correct output", {
+  expect_is(spc.getwavelengths(sptest), "numeric")
+  expect_equal(spc.getwavelengths(sptest), sptest@Wavelengths)
+})
+
+sptestwave <- spc.example_spectra()
+spc.setwavelengths(sptestwave) <- 200:700
+
+test_that("spc.setwavelengths() sets new wavelengths correctly", {
+  expect_equal(range(sptestwave@Wavelengths), c(200,700))
+})
+
+test_that("spc.cname.construct() outputs correctly", {
+  expect_equal(spc.cname.construct(sptest, "anap"), spc.colnames(sptest))
+})
+
