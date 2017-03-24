@@ -101,3 +101,7 @@ test_that("spc.colMeans() function", {
   expect_is(spc.colMeans(sptest), "Spectra")
   expect_error(spc.colMeans(5))
 })
+
+test_that("spc.bbox2lines() function outputs correctly", {
+  expect_is(spc.bbox2lines(sptest), "Lines")
+})
