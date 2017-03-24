@@ -119,3 +119,9 @@ test_that("spc.getheader() gets correct headers", {
 test_that("spc.setheader() sets headers correctly", {
   expect_equal(headertest@header$Longitude, a$Longitude)
 })
+
+headertest <- spc.updateheader(headertest, "Station", 11)
+test_that("spc.updateheader() funciton updates header", {
+  expect_is(headertest@header$Station, "numeric")
+  expect_equal(headertest@header$Station, 11)
+})
