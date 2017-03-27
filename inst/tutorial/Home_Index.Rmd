@@ -17,15 +17,14 @@ Click on one of the following sections to begin learning how to use **geoSpectra
 ##[7. Plotting](../../subsections/Plotting/Plotting.html)
 
 ###More Information
-The documentation of individual functions is not complete yet. To inquire about all the input arguments of a method, use the function showMethods()
+To obtain a general overview about the package, try :
+```
+?geoSpectral
+```
+To inquire about all the input arguments of a method, use the function showMethods()
 
 ```{r eval=FALSE}
 showMethods("spc.plot.overlay",includeDefs=T) 
 ```
 ###TO BE DONE
-**geoSpectral** is an open-source project. Contributions are welcome for the tasks in our to-do list:
-
-* documenting the functions
-* better (interactive) plotting and mapping functions (ggplot, ggmap, Rmaps etc)
-
-Please contact the author at ahmet@pranageo.com if you would like to contribute to the project.
+**geoSpectral** is an open-source project. Contributions are welcome.If you would like to contribute to the project or if you have special tasks you want to be covered, please [contact us](https://pranageo.com/#contact-us).
