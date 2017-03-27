@@ -1,10 +1,11 @@
-#' @title Classes and methods for working with spectral (electromagnetic) data in R
+#' @title Classes and Methods for Working with Spectral Data with Space-Time Attributes
 #'
 #' @description 
-#' \pkg{geoSpectral} is an R package providing a new data type for R that stores
-#'  spectral, temporal, and spatial attributes of measurement data as well as methods for 
-#' accessing and manipulating the spectral (and non-spectral) data
-#' with code.
+#' Provides S4 classes and data import, preprocessing, graphing, manipulation and
+#' export methods for geo-Spectral datasets (datasets with space/time/spectral dimensions). 
+#' These type of data are frequently collected within earth observation projects (remote sensing, 
+#' spectroscopy, bio-optical oceanography, mining, agricultural, atmospheric, environmental or 
+#' similar branch of science). 
 #'
 #' @details 
 #' This package provides the following S4 classes: 
@@ -35,4 +36,5 @@
 #' @importFrom stats approx time
 #' @importFrom utils modifyList read.table write.table
 #' @importFrom sp Line Lines SpatialPoints coordinates spDistsN1
+#' @name geoSpectral
 NULL

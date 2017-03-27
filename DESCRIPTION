@@ -1,8 +1,8 @@
 Package: geoSpectral
 Type: Package
-Title: Classes and methods for working with spectral (electromagnetic) data in R
-Version: 0.15
-Date: 2012-07-02
+Title: Classes and Methods for Working with Spectral Data with Space-Time Attributes
+Version: 0.17
+Date: 2017-03-22
 Depends:
     R (>= 2.10.0)
 Imports:
@@ -17,14 +17,13 @@ Imports:
     plotly,
     sp,
     stats
-Author: Servet Cizmeli
-Maintainer: Servet Cizmeli <ahmet@pranageo.com>
-Description: This package provides S4 classes and basic manipulation methods
-    for datasets frequently used in remote sensing, bio-optical oceanography and
-    environmental and earth sciences. The package is based on the data type called
-    Spectra which extends the STIDF class of package spacetime. Spatial/temporal and
-    spectral aspects of Bio-Optical data that are regularly collected during Bio-
-    Optical oceanography campaigns can be easily represented with the Spectra class.
+Author: Servet Ahmet Cizmeli
+Maintainer: Servet Ahmet Cizmeli <ahmet@pranageo.com>
+Description: Provides S4 classes and data import, preprocessing, graphing, 
+    manipulation and export methods for geo-Spectral datasets (datasets with space/time/spectral 
+    dimensions). These type of data are frequently collected within earth observation projects 
+    (remote sensing, spectroscopy, bio-optical oceanography, mining, agricultural, atmospheric, 
+    environmental or similar branch of science).
 License: GPL
 LazyLoad: yes
 Collate:
