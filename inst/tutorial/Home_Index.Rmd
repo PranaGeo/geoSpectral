@@ -1,0 +1,30 @@
+---
+output:
+  html_document:
+    keep_md: yes
+    theme: spacelab
+---
+
+This is the documentation for the R package **geoSpectral** v.`r packageVersion("geoSpectral")`
+Click on one of the following sections to begin learning how to use **geoSpectral**
+
+##[1. Introduction to geoSpectral](../../subsections/Introduction_to_geoSpectral/Introduction_to_geoSpectral.html)
+##[2. Obtaining and Installing](../../subsections/Obtaining_and_Installing/Obtaining_and_Installing.html)
+##[3. The Spectra Class](../../subsections/The_Spectra_Class/The_Spectra_Class.html)
+##[4. Importing Data](../../subsections/Importing_Data/Importing_Data.html)
+##[5. Accessing Data](../../subsections/Accessing_Data/Accessing_Data.html)
+##[6. Data Conversion](../../subsections/Data_Conversion/Data_Conversion.html)
+##[7. Plotting](../../subsections/Plotting/Plotting.html)
+
+###More Information
+To obtain a general overview about the package, try :
+```
+?geoSpectral
+```
+To inquire about all the input arguments of a method, use the function showMethods()
+
+```{r eval=FALSE}
+showMethods("spc.plot.overlay",includeDefs=T) 
+```
+###TO BE DONE
+**geoSpectral** is an open-source project. Contributions are welcome.If you would like to contribute to the project or if you have special tasks you want to be covered, please [contact us](https://pranageo.com/#contact-us).
