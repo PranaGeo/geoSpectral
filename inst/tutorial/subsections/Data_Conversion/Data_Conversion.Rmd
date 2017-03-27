@@ -1,0 +1,109 @@
+---
+title: 'Data Conversion'
+output:
+  html_document:
+    keep_md: yes
+    theme: spacelab
+    toc: yes
+  pdf_document:
+    toc: yes
+---
+```{r echo=FALSE, meesage=TRUE, warning=TRUE, include=FALSE}
+source('Script:Data_Conversion.R')
+```
+
+#Data conversion
+##Converting to/from different R data types
+###Converting from data.frame
+A data.frame can be directly converted to a *Spectra* object using the as() function if the **ShortName**, **LongName** (optional), **Wavelengths** and **Units** are present as *data.frame attributes* and if there is a column called **TIME** containing a time-based (see `xts::is.timeBased()` data. The columns  of the data.frame need to be rearranged before the conversion so that numeric columns bearing spectral data come first :
+
+```{r warning=FALSE}
+#Set the attributes
+attr(abs,"ShortName")="anap"
+attr(abs,"LongName")="Non-algal particulate absorption"
+attr(abs,"Wavelengths")=lbd
+attr(abs,"Units")=Units 
+class(myS<-as(abs,"Spectra"))
+```
+
+The attribute “LongName" is optional. If not provided, the constructor function *Spectra* will assume `LongName="spvar longname"` while the conversion function takes **ShortName** as **LongName**.
+
+###Converting to data frame
+Converting the Spectra object back to data.frame
+```{r}
+class(as(myS,"data.frame"))
+```
+
+###Converting to STIDF
+Converting the Spectra object to *STIDF* class of package *spacetime*. Note that both the ancillary and spectral data is preserved but all spectral attributes (units, wavelengths, short name, long name etc.) are lost after such a conversion.
+
+```{r}
+class(as(myS,"STIDF"))
+```
+
+###Converting from STIDF
+See the example using the constructor function `geoSpectRal::Spectra()` given in section [ *Importing data*](#importing-data).
+
+###Creating a SpcList
+Creating a SpcList object from a list of Spectra objects. The two following lines produces the same result
+```{r}
+BL = SpcList(list(myS,myS))
+BL = as(list(myS,myS),"SpcList")
+```
+
+A more useful application would be through the use of the function spc.makeSpcList(). This function constructs a SpcList object from a Spectra object using an ancillary data column that is of type factor. In the following example, we separate the Spectra object myS (containing rows from 4 stations) into several Spectra objects, each of which containing rows from the same station.
+
+```{r}
+myS$STATION 
+BL = spc.makeSpcList(myS,"STATION")
+```
+
+The function `spc.data2header()` can be used to populate the header of each element of BL with the value of the column STATION. Since we are certain that all the STATION columns of all individuals elements of BL are the same, we can compress the column (taking only the first element from data column into the header.
+
+```{r}
+BL=spc.data2header(BL,dataname="STATION", headerfield="Station", compress=T)  
+spc.getheader(BL,"Station")
+```
+
+Set the *by* slot of SpcList so that elements of it are distinguished from one another using the Station header value. This is also useful when plotting several items of a *SpcList* together. See the section on [plotting *Spectra* objects](#plotting).
+
+```{r}
+BL@by="Station"
+BL
+```
+
+##Converting to/from different file formats
+###Exporting into text format
+It is possible to save the spectra object on disk using `spc.export.text()`.
+
+```{r}
+spc.export.text(myS,filename="anap.txt")
+```
+
+The resulting text file has a special arrangement in a text file and can easily be read in a spreadsheet program like LibreOffice or Excel. It contains the header information in lines that start with *Spectra|header*. Informations relevant to the spectral object slots start with *Spectra|*. These two tokens are followed by the name of the field that is being described and its value, separated by ";". Multiple values are supported. Text files that were saved with `spc.export.text()` or arranged in this format by other means can be imported back into R with `spc.import.text()`, resulting in a *Spectra* object :
+
+```{r warning=FALSE}
+class(myS<-spc.import.text("anap.txt"))
+```
+###Exporting into spreadsheet format
+It is also possible to export a spectra object into Excel's *.xlsx* format using the R package *xlsx*. The resulting file contains only one sheet and the name of the sheet is taken from the value of the slot *ShortName* :  
+
+```{r}
+#spc.export.xlsx(myS,filename="anap.xlsx") #Gives an error in RStudio
+```
+###Exporting into various spatial formats
+It is very easy to export data stored in a *Spectra* object compatible with a GIS or web mapping application, thanks to its architecture that relies on packages **sp** and **rgdal**. If only the spatial features are to be exported, just extract the **\@sp** slot of the *Spectra* object and feed it to `rgdal::writeOGR()` to save it on disk in a vector format supported by **rgdal**. If the data are also to be included, combine spectral and/or non-spectral in one *data.frame* object and  combine them under one of the *sp* object that represent data in a data.frame object (*SpatialPixelsDataFrame*, 	*SpatialPixelsDataFrame*, *SpatialPointsDataFrame*, *SpatialPointsDataFrame*, *SpatialLinesDataFrame* or *SpatialPolygonsDataFrame*) before feeding it into `rgdal::writeOGR()`. 
+
+```
+example here
+```
+
+Try `rgdal::ogrDrivers()` to inquire which spatial vector formats are supported in your installation of **rgdal**. For more information on how to export an **sp** object, consult **rgdal** documentation with `?rgdal::writeOGR` as its syntax largely depends on the export format. 
+
+Please note that saving spectral data into an vector format supported by *OGR* will probably result in the loss of the spectral attributes. It is of course possible to manually pack wavelength and other spectral attributes along with data or inside metadata. However, to our knowledge, as of writing of this text, there is still no well-known vector spatial format that expresses spectral attributes of data in a convenient, consistent and standard fashion. This is also partly why the package **geoSpectRal** was developed.
+
+[Back to Index](http://pranageo.com/geospectral/geospectral-tutorial/)
+
+[Previous Page (Accessing Data)](../Accessing_Data/Accessing_Data.html)
+
+[Next Page (Plotting)](../Plotting/Plotting.html)

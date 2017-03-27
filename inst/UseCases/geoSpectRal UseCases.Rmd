@@ -1,0 +1,116 @@
+---
+title: "geoSpectRal Use Cases"
+output: 
+  flexdashboard::flex_dashboard:
+    theme: spacelab
+---
+
+Frost Prediction {.storyboard data-icon="fa-list"}
+=========================================
+
+### The problem
+- Frost is a big problem for farmers
+- It easy to detect that frost is happening. But it is usually too late then.
+- It is harder to predict the frost before it happens.  
+
+### 1. Data Import
+- Agrotics sensors
+- Dataset / Measured parameters
+- Importing
+- Database
+
+```{r}
+```   
+ 
+### 2. Visualization
+- Time-series graphs
+- Minutely-Hourly-Daily
+
+```{r}
+plot(1:10, 3*(1:10))
+```
+
+### 3. Pre-processing
+- Conversion to regular
+- Eliminating bad values
+
+```{r}
+plot(1:10, 3*(1:10))
+```
+
+### 4. Modeling
+- Frost Model
+- Prediction
+
+```{r}
+plot(1:10, 3*(1:10))
+```
+
+### 5. Validation
+- Comparison with measurements
+
+```{r}
+```
+
+### 5. Reporting
+- PDF
+- Dashboard?
+
+```{r}
+```
+
+### 6. Validation
+- Comparison with measurements
+
+```{r}
+```
+
+### 7. Sharing the results
+- Excel
+- Txt
+- Gis
+
+```{r}
+```
+
+Above Water Radiometry { .storyboard data-icon="fa-hashtag"}
+======================================
+
+
+### The problem
+- Frost is a big problem for farmers
+- It easy to detect that frost is happening. But it is usually too late then.
+- It is harder to predict it.
+
+### 1. Data Import
+- Agrotics sensors
+- Dataset / Measured parameters
+- Importing
+- Database
+
+```{r}
+```   
+ 
+### 2. Visualization
+- Time-series graphs
+- Minutely-Hourly-Daily
+
+```{r}
+plot(1:10, 3*(1:10))
+```
+
+### 3. Pre-processing
+- Matching
+- Eliminating bad values
+
+```{r}
+plot(1:10, 3*(1:10))
+```
+
+### 4. Modeling
+- Frost Model
+- Prediction
+
+```{r}
+plot(1:10, 3*(1:10))
+```

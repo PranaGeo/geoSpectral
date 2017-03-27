@@ -1,0 +1,49 @@
+---
+title: 'Introduction to geoSpectRal'
+output:
+  html_document:
+    keep_md: yes
+    number_sections: no
+    theme: spacelab
+    toc: yes
+  pdf_document:
+    toc: yes
+---
+
+
+This is the documentation for the R package **geoSpectRal** v.`r packageVersion("geoSpectRal")`
+
+
+#Introduction to geoSpectRal
+
+**geoSpectRal** is an R package providing a new S4 data type for R that stores spectral, temporal and spatial attributes of measurement data.  Spectral data is usually obtained through radiometric measurements of the electromagnetic energy at various wavelengths. The package also offers methods for accessing and manipulating the spectral (and non-spectral) data. **geoSpectRal** was initially created to answer needs encountered in bio-optical oceanography, remote sensing, environmental and earth sciences. However anyone using spatial/temporal/spectral data of any kind can possibly make use of tools and methods provided by the package. The following S4 classes:
+
+* **_Spectra_** class (stores spatial/temporal/spectral aspects of data)
+* **_SpcHeader_** class (stores metadata in an R list object)
+* **_SpcList_** class (makes a collection of Spectra objects in an R list)
+
+and basic data access and manipulation methods for :
+
++ importing 
++ accessing and subsetting
++ converting into R objects
++ analyzing
++ plotting
++ exporting
+
+scientific data are provided. Once spectral data is imported into a *geoSpectRal* object, the  statistical and data processing power of R is available for various kinds of scientific analyses. 
+
+**geoSpectRal** was build on top of another R package called [spacetime](http://cran.r-project.org/web/packages/spacetime/index.html), which, itself, was built on the packages *rgdal* (built on *sp*) and *xts* (built on *zoo*). *rgdal* and *sp* provide spatial attributes and methods. *xts* and *zoo* provide temporal attributes and methods time series analysis methods. *spacetime* facilitates spatio-temporal characterization of data, standardizing the way space and time attributes are stored in the variable. **geoSpectRal** adds the spectral attributes and a simple metadata structure on top of the *STIDF* object provided by *spacetime*.
+
+##Requirements
+**geoSpectRal** depends on the R packages *rgdal* and *spacetime*. You need to install them before you can install **geoSpectRal**. If you don't have them already, try :
+```{r eval=FALSE}
+install.packages(c("rgdal","spacetime"),dep=T)
+```
+
+##License
+The package is issued with a [GPLv3](http://www.gnu.org/copyleft/gpl.html) license. Please consult the license documentation if you would like to use **geoSpectRal** in your software projects.
+
+[Back to Index](http://pranageo.com/geospectral/geospectral-tutorial)
+
+[Next Page (Obtaining and Installing)](../Obtaining_and_Installing/Obtaining_and_Installing.html)

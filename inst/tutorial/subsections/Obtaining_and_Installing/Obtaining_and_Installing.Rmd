@@ -1,0 +1,50 @@
+---
+title: 'Obtaining and Installing'
+output:
+  html_document:
+    keep_md: yes
+    number_sections: no
+    theme: spacelab
+    toc: yes
+  pdf_document:
+    toc: yes
+---
+
+#Obtaining and installing
+The package **geoSpectRal** is maintained and hosted in [Github](https://github.com/PranaGeo/geoSpectRal). There are two ways of getting and setting it up under your R installation :
+
+##Installing from within R
+You can first install the **devtools** package using the command :
+```{r eval=FALSE}
+install.packages("devtools")
+```
+
+If you have unresolved dependencies to other packages, you can always try to add the parameter `dependencies=TRUE` into `install.packages()`:
+```{r eval=FALSE}
+install.packages("devtools",dependencies=T)
+```
+
+Once **devtools** is installed, you can install **geoSpectRal** using the command :
+```{r eval=FALSE}
+require(devtools)
+install_github("PranaGeo/geoSpectRal")
+```
+
+##Installing from system command line
+You can obtain the source code either by cloning the *git* repository from the command line :
+```
+git clone https://github.com/PranaGeo/geoSpectRal.git
+```
+or using another (GUI-based) *git* client. Then, in your shell command prompt, try
+
+```
+R CMD INSTALL geoSpectRal
+```
+
+where *geoSpectRal* is the name of the folder the package source code has been downloaded by git. The above command installs the package for the current user only. If you want to install the package for globally in a multi-user OS, you have to do the installation with super-user privileges. On a debian-based Linux machine, this can be achieved by prepending the command `sudo` into the previous command. For more information on how to install R packages, consult the official [R Installation and Administration](http://cran.r-project.org/doc/manuals/r-release/R-admin.html#Installing-packages) documentation.
+
+[Back to Index](http://pranageo.com/geospectral/geospectral-tutorial)
+
+[Previous Page (Introduction to geoSpectRal)](../Introduction_to_geoSpectRal/Introduction_to_geoSpectRal.html)
+
+[Next Page (The Spectra Class)](../The_Spectra_Class/The_Spectra_Class.html)

@@ -1,0 +1,26 @@
+---
+title: 'The Spectra Class'
+output:
+  html_document:
+    keep_md: yes
+    theme: spacelab
+    toc: yes
+  pdf_document:
+    toc: yes
+---
+
+#The Spectra class
+*Spectra* is the main S4 class provided by the package **geoSpectRal**. It contains slots (members) that store the name of the spectral variable (**\@ShortName** and **\@LongName**), wavelengths of spectral data (**\@Wavelengths**), and units of wavelengths (**\@WavelengthsUnit**), spectral data (**\@Spectra**), non-spectral data (**\@data**), non-spectral data units (**\@Units**) metadata (**\@header**), spatial attributes (**\@sp**), temporal attributes (**\@time** and **\@endtime**) and class version (**\@ClassVersion**).
+
+Let us examine the slots and their respective data types: 
+```{r}
+library('geoSpectRal')
+showClass("Spectra")
+```
+If you have a dataset that is non-spectral, you could use the *ST*, *STI* and *STIDF* classes provided by *spacetime* package that provides the slot **\@data**. This slot is optional in **geoSpectRal**, but it makes it possible to work with non-spectral (ancillary) data as well.
+
+[Back to Index](http://pranageo.com/geospectral/geospectral-tutorial)
+
+[Previous Page (Obtaining and Installing)](../Obtaining_and_Installing/Obtaining_and_Installing.html)
+
+[Next Page (Importing Data)](../Importing_Data/Importing_Data.html)

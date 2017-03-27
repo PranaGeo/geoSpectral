@@ -1,0 +1,66 @@
+---
+title: 'Importing Data'
+output:
+  html_document:
+    keep_md: yes
+    theme: spacelab
+    toc: no
+  pdf_document:
+    toc: no
+---
+```{r echo=FALSE, message=TRUE, warning=TRUE, include=FALSE}
+source('Script:Importing_Data.R')
+```
+
+#Importing data
+This section describes stages of creation of a Spectra object from data located in a csv file. The file is distributed with **geoSpectRal** and contains spectral data, a vertical profile of the particulate absorption coefficient collected at sea at discrete depth in 4 different stations. 
+
+The first step is to create a *data.frame* object using the R function *read.table()*. We have a comma-delimited text file with several measured parameters in columns and observations from different bottles (stations and depths). 
+
+```{r}
+fnm = file.path(base::system.file(package = "geoSpectRal"),"test_data","particulate_absorption.csv.gz")
+abs = read.table(fnm,sep=",",header=T)
+abs$STATION=factor(abs$STATION)
+abs[1:2,1:17] #Display only the first 2 rows and first 17 columns if the data frame
+```
+   
+Ancillary (non-spectral) and spectral data are stored in columns 1-13 and 14:514 respectively. Wavelengths are extracted from column names of spectral data. The string variable *Units* stores the units of the spectral variable. The data columns were then arranged so that ancillary data are located at the right of spectral data columns. 
+
+```{r}
+lbd = as.numeric(gsub("X","",colnames(abs)[14:514]))
+Units="1/m"
+colnames(abs)= gsub("X",paste("anap","_",sep=""), colnames(abs))
+colnames(abs)= gsub("PRES","DEPTH", colnames(abs))
+abs = abs[,c(14:514,1:13)]
+```
+
+Note that we need to rename the depth column (*PRES*) so that it is called *DEPTH*. The *TIME* column needs to be an R *POSIXct* object with the right timezone information. Type `help(POSIXct)` at the R command prompt to get more information about this class.
+
+```{r}
+tz<-strsplit(as.character(abs$TIME)," ")[[1]][[3]] #Extract the timezone
+abs$TIME = as.POSIXct(as.character(abs$TIME),tz=tz)
+```
+
+The *Spectra* object is created with the constructor function *Spectra()*.
+```{r}
+myS<-Spectra(abs,Wavelengths=lbd,Units=Units,ShortName="a_nap")
+myS
+```
+The function Spectra() calls `spacetime::stConstruct()` that creates a `STIDF` object from an input *data.frame* object of long-table format. Type `?spacetime::stConstruct` at the R prompt for more information long and wide tables. *geoSpectRal* accepts the following column names when searching latitude and longitude information : `"Latitude"`, `"LATITUDE"`, `"lat"`, `"LAT"`, `"Longitude",`,`"LONGITUDE"`, `"lon"`, `"LON"`,`"long"`, `"LONG"`. If no suitable column is found, *LAT* and *LONG* takes the artificial value of 1. As mentioned above, Time needs to be stored in column `"TIME"`. If no such a column is found, an artificial vector sequence was created from 1 to the number of rows.  According to the way spacetime is built,  if the measurements have been performed over a time interval (instead of instantaneous measurements), the length of intervals can be specified in the column `"ENDTIME"`. If no such column is found, the data is assumed to be acquired in a time instance (`ENDTIME=TIME`).
+
+Ancillary data is stored in the slot **\@data** while the spectral data, in slot **\@Spectra**. A spectra object could also be created with or without ancillary data. Since we will later need Ancillary data, it is best to conserve it in the case of this example. 
+
+It is possible to inquire about the Spectra object using utility functions `dim()`, `ncol()`, `nrow()`, `names()` and `spc.colnames()`. The latter function returns the column names of spectral data, omitting those of ancillary data.
+```{r}
+dim(myS) 
+ncol(myS) 
+nrow(myS) 
+tail(names(myS))
+tail(spc.colnames(myS))
+```
+
+[Back to Index](http://pranageo.com/geospectral/geospectral-tutorial)
+
+[Previous Page (The Spectra Class)](../The_Spectra_Class/The_Spectra_Class.html)
+
+[Next Page (Accessing Data)](../Accessing_Data/Accessing_Data.html)
