@@ -2318,25 +2318,25 @@ setMethod("spc.plot.time", signature="Spectra", function (object,Y,maxSp=50,xdat
   
   if (length(object@InvalidIdx)==0)
     object@InvalidIdx = rep(FALSE,nrow(object@data))		
-  
+
   if(missing(Y)){
     Y = spc.colnames(object)
   }
   if(ncol(object)>maxSp)
     Y = Y[seq(1,ncol(object),length.out=maxSp)]
   
-  Y = object[[Y]][!object@InvalidIdx,]
+  tsdata = object[[Y]] #[!object@InvalidIdx,]
   
   if(missing(lab_cex))
     lab_cex = 1
   
-  tsCol = rainbow(ncol(Y))
+  tsCol = rainbow(ncol(tsdata))
   
   if(xdata=="time") {
     x = time(object)
     x = x[!object@InvalidIdx]
     xlb = "Time"
-    XX = xts::xts(Y,time(object@time))
+    XX = xts::xts(tsdata,time(object@time))
     plot.new()
     #xts::plot.xts(XX,screens=1) #,xlab="",ylab="",lwd=lwd,col=tsCol, ...)
     #xtsExtra::plot.xts(XX,screens=1, xlab="",ylab="",lwd=lwd,col=tsCol, ...)#Problem: does not plot inside the function
@@ -2346,21 +2346,16 @@ setMethod("spc.plot.time", signature="Spectra", function (object,Y,maxSp=50,xdat
     x = 1:nrow(object)
     xlb = "Observation number"
     x = x[!object@InvalidIdx]
-    matplot(x,Y, type="l", pch=19,cex=0.3,xlab="",ylab="",lwd=lwd,col=tsCol,...)        
+    matplot(x,tsdata, type="l", pch=19,cex=0.3,xlab="",ylab="",lwd=lwd,col=tsCol,...)        
   }
-  
   
   # 			df$Date <- as.Date( df$Date, '%m/%d/%Y')
   # 			require(ggplot2)
   # 			ggplot( data = df, aes( Date, Visits )) + geom_line() 
   
-  
   grid(col="black")
   
   #Draw the legend
-  if(class(Y)=="numeric")
-    Y = names(object)[Y]
-  
   if(length(Y)>1&length(Y)<=10) {
     legend("bottomright",Y,col=1:length(Y),fill=1:length(Y),bty="n",cex=lab_cex)
     ylb = bquote(.(object@LongName[1])*", ["*.(object@Units[1])*"]")	
