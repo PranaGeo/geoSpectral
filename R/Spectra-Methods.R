@@ -2438,7 +2438,8 @@ setMethod("spc.plot.depth", signature="Spectra", function (object,X,maxSp=10,lab
     }
   }
   if(missing(ylim)){
-    ylim = rev(range(pretty(depth[!object@InvalidIdx],n=10)))
+    #ylim = rev(range(pretty(depth[!object@InvalidIdx],n=10)))
+    ylim = rev(range(pretty(depth,n=10)))
     ylim[2]=-0.1	
   }
   #If any, do not draw these parameters
