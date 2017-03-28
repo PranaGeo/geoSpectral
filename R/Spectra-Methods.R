@@ -566,13 +566,13 @@ setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="
     idx = seq(1,nrow(x),length.out=maxSp	)
   else
     idx = 1:nrow(x)
-  
+
   Xidx = rep(FALSE, nrow(x@Spectra))
   Xidx[idx] = TRUE
   
-  if(any(x@InvalidIdx)){
-    Xidx[x@InvalidIdx]=FALSE
-  }
+  #if(any(x@InvalidIdx)){
+  #  Xidx[x@InvalidIdx]=FALSE
+  #}
   #			if(any(x@SelectedIdx)){
   #				mycol = rep("gray", nrow(x@Spectra))
   #				mycol[x@SelectedIdx]="red"
