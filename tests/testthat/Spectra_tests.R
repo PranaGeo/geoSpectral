@@ -135,3 +135,10 @@ test_that("spc.getselected.idx() and spc.setselected.idx() work properly", {
   expect_equal(gettest[1:5], x)
   expect_is(gettest, "logical")
 })
+
+
+
+# test_that("spc.getinvalid.idx function", {
+#   expect_equal(length(spc.getinvalid.idx(sptest)), 0)
+# })
+# 
