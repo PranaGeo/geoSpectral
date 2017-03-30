@@ -13,8 +13,8 @@ output:
 source('Script:Plotting.R')
 ```
 
-#Plotting
-To plot a Spectra object using the base R graphics, use spc.plot(). This method uses the R function matplot(). If there are too many observations (rows), plotting with matplot() can be very slow and may result in a  figure cluttered with too many curves. To avoid such a disturbance such a case, use the argument maxSp. The following command will graph four spectra only, distributed evenly between the first and the last rows :
+# Graphics using the traditional R way
+To plot a Spectra object using the base R graphics, use spc.plot(). This method uses the R function matplot(). If there are too many observations (rows), plotting with matplot() can be very slow and may result in a figure cluttered with too many curves. To avoid such a disturbance such a case, use the argument *maxSp*. The following command will graph four spectra only, distributed evenly between the first and the last rows :
 
 
 ```{r fig.width=10, fig.height=5}
@@ -78,15 +78,9 @@ It is also possible to draw spectra from various SpcLists objects on the same gr
 ```{r}
 spc.plot.overlay(BL,lw=2)
 ```
-##Interactive Graphics with Plotly
 
-To plot **Spectra** objects using plotly you must first install the **plotly** R package and load it.
-```{r eval=FALSE}
-install.packages("plotly")
-```
-```{r}
-library("plotly")
-```
+
+# Interactive Graphics with Javascript libraries
 
 To plot a **Spectra** object with **plotly**, simply pass the **Spectra** object to *spc.plot.plotly()*
 ```{r fig.width=5, echo=TRUE, fig.height=5}
@@ -105,19 +99,12 @@ To plot the depth profile we pass the **SpcList** object we just created to *spc
 spc.plot.depth.plotly(BL[[4]])
 ```
 
-To use **rbokeh** with geoSpectRal you must install the **rbokeh** package and load its library.
-```{r eval=FALSE}
-install.packages("rbokeh")
-```
-```{r}
-library("rbokeh")
-```
-
-To plot a **Spectra** object using **rbokeh** pass the object to *spc.plot.map.rbokeh()*.
+To make a map using **rbokeh** tools, first manually load the **maps** package providing the basemap showing the continents and pass the **Spectra** object to *spc.plot.map.rbokeh()*. The 26 observations stored in this object come from a total of 4 stations which are shown in the map below :
 ```{r fig.width=5, echo=TRUE, fig.height=5}
+library("maps")
 spc.plot.map.rbokeh(myS)
 ```
-To plot a **Spectra** object with its time, simply pass the object to *spc.plot.time.plotly()*
+To plot a **Spectra** object with respect to time, simply pass the object to *spc.plot.time.plotly()*
 ```{r fig.width=5, echo=TRUE, fig.height=5}
 spc.plot.time.plotly(myS)
 ```
