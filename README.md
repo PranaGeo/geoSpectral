@@ -7,10 +7,12 @@ It provides the S4 classes: **_Spectra_** (stores spatial/temporal/spectral aspe
 ## License
 The package is issued with a [GPLv3](http://www.gnu.org/copyleft/gpl.html) license. Please consult the license documentation if you would like to use **geoSpectral** in your software projects.
 
-## Installation
+## Quick Installation 
+For more details about installing and using **geoSpectral**, consult the [Tutorial](https://pranageo.com/geospectral/geospectral-tutorial/).
+
 To install **geoSpectral**, try the following R commands :
 
-```{r eval=FALSE}
+```
 #Stable Version
 install.packages("devtools")
 or 
@@ -19,9 +21,7 @@ devtools::install_github("PranaGeo/geoSpectral", ref="dev", dependencies=TRUE)
 ```
 
 ## Usage
-After installing the package, you can try from the R prompt : ```?geoSpectral``` to consult the brief documentation of the package or ```?Spectra``` to  see the help of the constructor function the main class : *Spectra()*.
-
-You can view the documentation [wiki](https://github.com/PranaGeo/geoSpectral/wiki) to learn how to use the package. 
+After installing the package, you can try from the R prompt : ```?geoSpectral``` to consult the brief documentation of the package or ```?Spectra``` to  see the help of the constructor function the main class, *Spectra()*.
 
 ## Contributions
 Your comments,suggestions and contributions are very welcome. Please feel free to open issues [here](https://github.com/PranaGeo/geoSpectral/issues).
