@@ -13,10 +13,12 @@ For more details about installing and using **geoSpectral**, consult the [Tutori
 To install **geoSpectral**, try the following R commands :
 
 ```
-#Stable Version
-install.packages("devtools")
+#Stable Version from CRAN
+install.packages("geoSpectral ")
+
 or 
-#Development Version
+
+#Development Version from the dev branch of Github
 devtools::install_github("PranaGeo/geoSpectral", ref="dev", dependencies=TRUE)
 ```
 
