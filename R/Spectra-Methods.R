@@ -191,9 +191,8 @@ setAs(from="Spectra", to="data.frame", def=function(from){
   
   output$LON = from@sp@coords[,1]
   output$LAT = from@sp@coords[,2]
-  output$TIME=as.POSIXct(time(from@time))
+  output$TIME= time(from@time)
   output$ENDTIME=from@endTime
-  
   attr(output,"ShortName") = from@ShortName
   attr(output,"LongName") = from@LongName
   attr(output,"Wavelengths") = from@Wavelengths
@@ -262,7 +261,7 @@ setAs(from="data.frame", to="Spectra", def=function(from){
     endTime = from$ENDTIME
   }
   outS =geoSpectral::Spectra(data,Spectra,Wavelengths,Units=Units,
-                          header=header,ShortName=ShortName,LongName=LongName)
+                          header=header,ShortName=ShortName,LongName=LongName,endTime=endTime)
   #			outS = new("Spectra", time = TIME, endTime = endTime,
   #					Spectra=Spectra, data=data,
   #					Wavelengths=Wavelengths, Units=Units[1], 
