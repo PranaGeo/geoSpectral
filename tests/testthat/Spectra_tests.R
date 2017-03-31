@@ -150,3 +150,15 @@ test_that("spc.data2header() functions correctly", {
   expect_equal(sphead2@header$ProjectCast, sptest@data$CAST)
 })
 
+sptestdata = spc.updateheader(sp, "Zone", "ZoneA")
+sptestdata = spc.header2data(sp, "Zone")
+test_that("spc.header2data() sets fields correctly", {
+  expect_equal(sptestdata@data$Zone, sptestdata$Zone)
+})
+
+sptestrep = rep(sptest, 4)
+test_that("rep() function replicates rows correctly", {
+  expect_is(dim(sptestrep), "integer")
+  expect_equal(dim(sptestrep)[1], dim(sptest)[1]*4)
+})
+
