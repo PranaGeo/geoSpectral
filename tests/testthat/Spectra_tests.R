@@ -142,3 +142,11 @@ test_that("spc.getselected.idx() and spc.setselected.idx() work properly", {
 #   expect_equal(length(spc.getinvalid.idx(sptest)), 0)
 # })
 # 
+
+sphead = spc.data2header(sptest, "CAST")
+sphead2 = spc.data2header(sptest, "CAST", "ProjectCast")
+test_that("spc.data2header() functions correctly", {
+  expect_equal(sphead@header$CAST, sptest@data$CAST)
+  expect_equal(sphead2@header$ProjectCast, sptest@data$CAST)
+})
+
