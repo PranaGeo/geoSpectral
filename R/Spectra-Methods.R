@@ -2213,8 +2213,28 @@ mat_identify <- function(x, y, ...){
   #  text(l, label=colnames(y)[result])
   return(result)
 }
-setGeneric (name= "spc.select",
-            def=function(object){standardGeneric("spc.select")})
+
+#########################################################################
+# spc.select
+#########################################################################
+#' Selecting rows of a \code{Spectra} object with the mouse
+#' @description
+#' This function allows the selection of \code{Spectra} rows that is drawn 
+#' with spc.plot or spc.lines. Selected lines will be colored red. Pressing
+#' the escape button will end the selection process and return selecion results.
+#' @param object A \code{Spectra} object
+#' @return logical Row indexes, TRUE for selected data rows.
+#' @examples 
+#' sp <- spc.example_spectra()
+#' spc.plot(sp)
+#' spc.setselected.idx(sp)<-spc.select(sp)
+#' 
+#' @seealso \code{\link{spc.plot}} \code{\link{spc.lines}}
+#' @rdname spc.select
+#' @export
+setGeneric (name= "spc.select",def=function(object){standardGeneric("spc.select")})
+
+#' @rdname spc.select
 setMethod("spc.select", signature = "Spectra", 
           def = function (object){
             print("Click on graph to select Spectra, click Esc to quit ")
