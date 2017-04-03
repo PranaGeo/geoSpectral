@@ -162,3 +162,29 @@ test_that("rep() function replicates rows correctly", {
   expect_equal(dim(sptestrep)[1], dim(sptest)[1]*4)
 })
 
+# lbd = as.numeric(c(412, 440, 490, 555, 670))
+# sp2 = spc.interp.spectral(sptest[,lbd], c(430, 450, 500))
+# test_that("spc.interp.spectral estimates wavelengths correctly", {
+#   expect_equal()
+# })
+
+spc.export.text(sptest, "sptest.txt")
+a = spc.import.text("sptest.txt")
+test_that("spc.export.txt and spc.import.txt export and import accurately", {
+  expect_is(a, "Spectra")
+  expect_true(file.remove("sptest.txt"))
+})
+
+
+# test_that("spc.header.infos correctly determines presence of R code in header", {
+#   expect_equal((spc.header.infos(sptest@header)=="NA"), TRUE)
+# })
+
+#write test for subset()
+
+BL = spc.makeSpcList(sptest, "CAST")
+test_that("spc.makeSpcList() creates spclist correctly from Spectra object", {
+  expect_equal(length(unique(sptest$CAST)), length(BL))
+  expect_is(BL, "SpcList")
+})
+
