@@ -188,3 +188,6 @@ test_that("spc.makeSpcList() creates spclist correctly from Spectra object", {
   expect_is(BL, "SpcList")
 })
 
+test_that("spc.example_spectra creates spectra object", {
+  expect_is(spc.example_spectra(), "Spectra")
+})
