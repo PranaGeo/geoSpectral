@@ -149,9 +149,9 @@ test_that("spc.data2header() functions correctly", {
   expect_equal(sphead@header$CAST, sptest@data$CAST)
   expect_equal(sphead2@header$ProjectCast, sptest@data$CAST)
 })
-
-sptestdata = spc.updateheader(sp, "Zone", "ZoneA")
-sptestdata = spc.header2data(sp, "Zone")
+sptestdata = spc.example_spectra()
+sptestdata = spc.updateheader(sptestdata, "Zone", "ZoneA")
+sptestdata = spc.header2data(sptestdata, "Zone")
 test_that("spc.header2data() sets fields correctly", {
   expect_equal(sptestdata@data$Zone, sptestdata$Zone)
 })
