@@ -2390,7 +2390,6 @@ setMethod("spc.plot.time", signature="Spectra", function (object,Y,maxSp=50,xdat
   }
   mtext(xlb,side=1,line=2,cex=lab_cex)
   mtext(ylb,side=2,line=2,cex=lab_cex)
-  
   #Draw the legend
   if(length(Y)>1 & length(Y)<=10)
     legend("bottomright",Y,col=1:length(Y),lty=1:length(Y),bty="n",lwd=2,cex=lab_cex)
