@@ -34,6 +34,7 @@ Collate:
     Spectra-Methods.R
     SpcList-Class.R
     SpcList-Methods.R
+    Spectra-ImportFuns.R
 RoxygenNote: 6.0.1
 Suggests:
     testthat,
