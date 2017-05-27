@@ -10,9 +10,9 @@
 #' @return Returns an object of class \code{data.frame}.
 #'
 #' @examples
-#' ap = spc.Read_NOMAD_v2()
-#' class(ap)
-#' spc.plot.plotly(ap[[4]], plot.max=15)
+#' nomad = spc.Read_NOMAD_v2()
+#' class(nomad)
+#' spc.plot.plotly(nomad[[4]], plot.max=15)
 #' 
 #' @export
 # @importFrom dplyr "%>%" select
@@ -74,7 +74,7 @@ spc.Read_NOMAD_v2 = function(skip.all.na.rows=TRUE) {
 #' Read the ASD Spectra from text file
 #'
 #' @description
-#' Imports 
+#' Imports ASD spectra from text files prepared by the software provided by ASD inc. Note that this function imports only one spectra per file.
 #'
 #' @param filename A \code{string} name of the input text file containing the raw ASD data.
 #'
@@ -84,52 +84,40 @@ spc.Read_NOMAD_v2 = function(skip.all.na.rows=TRUE) {
 #' filename = file.path(system.file(package = "geoSpectral"),"test_data", "106.064.txt")
 #' L = spc.Read_ASD(filename)
 #' class(L)
-#' spc.plot.plotly(L, plot.max=15)
+#' spc.plot.plotly(L)
 #' 
 #' @export
 spc.Read_ASD <- function(filename){
+  ONECOLUMN = FALSE
+  
   #Reading data
   asd=readLines(filename)
   
   # Finding breaking point
   id = grep("Wavelength", asd)
-  # for(x in 1:nrow(asd)){
-  #   nxx= "Wavelength"
-  #   if(length(grep(nxx,asd[x,1]))>0){
-  #     id=x
-  #   }
-  # }
-  
+  if(length(id)==0){
+    ONECOLUMN = TRUE
+    nxx = "Spectrum file is"
+    id = grep(nxx, asd)+1
+  }
+    
   DF = read.table(filename, header = FALSE, skip = id)
-  Wavelengths = DF$V1
+
+  if (ONECOLUMN)
+    names(DF)<-"V2"
   
-  # deviding data frame for wavelenghts
-  #Wavelengths = asd[id+1:length(asd)]
-  #Wavelengths= na.omit(Wavelengths)
-  #Wavelengths= as.factor(Wavelengths)
-  
-  # Creating Spectra
-  sp <- new("Spectra")
-  
-  # setting wavelenghts into spectra
-  sp@Wavelengths <- Wavelengths
-  
-  #Spectra slot create
-  sp@Spectra = matrix(1,length(Wavelengths))
-  sp@Spectra[,1] = DF$V2
-  
-  #creating spcheader
+  #creating an spcHeader object
   h=new("SpcHeader")
   
   #rowfilename
   h$RawFilename= as.character(filename)
   
-  #Comments ###########################
+  # Comments ####
   nxx= "The instrument number was"
   id = grep(nxx, asd)
   h$comment=asd[id] #chek
-
-  #Time
+  
+  #Time ====
   nxx= "Spectrum saved:"
   id = grep(nxx, asd)
   k=strsplit(as.character(asd[id]),"Spectrum saved:")
@@ -150,237 +138,192 @@ spc.Read_ASD <- function(filename){
   k2=k[[1]][2]
   k=paste0(k1[[1]],k2[[1]])
   k = strptime(k, "%m/%d/%Y %H:%M:%S")
-  k=as.POSIXct(k)
-  sp@time=xts(1,k)
+  ttime=as.POSIXct(k)
+  #sp@time=xts(1,k)
   
-  browser()
-UNTIL here
-
   # asdSerialNo and CalibrationNo
-  for(x in 1:id){
-    nxx= "The instrument number was"
-    if(length(grep(nxx,asd[x,1]))>0){
-      indx=x
-      k=strsplit(as.character(asd[indx,])," ")
-      k=k[[1]][length(k[[1]])]
-      k=strsplit(as.character(k),"/")
-      h$asdSerialNo=as.numeric(k[[1]][1])
-      h$CalibrationNo=as.numeric(k[[1]][2])
-    }
-  }
+  nxx= "The instrument number was"
+  id = grep(nxx, asd)
+  k=strsplit(as.character(asd[id])," ")
+  k=k[[1]][length(k[[1]])]
+  k=strsplit(as.character(k),"/")
+  h$asdSerialNo=as.numeric(k[[1]][1])
+  h$CalibrationNo=as.numeric(k[[1]][2])
   
-  
-  # InstrumentDescription   not added yet
+  # InstrumentDescription not added yet
   
   # ProgramVersion  and  FileVersion      
-  for(x in 1:id){
-    nxx= "New ASD spectrum file:"
-    if(length(grep(nxx,asd[x,1]))>0){
-      dx=x
-      k=strsplit(as.character(asd[dx,]),":")
-      k=k[[1]][2]
-      k=strsplit(as.character(k),"file")
-      k1=k[[1]][1]
-      k2=k[[1]][2]
-      k1=strsplit(as.character(k1)," ")
-      k2=strsplit(as.character(k2)," ")
-      k1=k1[[1]][length(k1[[1]])]
-      k2=k2[[1]][length(k2[[1]])]
-      h$ProgramVersion=as.numeric(k1)
-      h$FileVersion=as.numeric(k2)
-    }
-  }
-  
-  
+  nxx= "New ASD spectrum file:"
+  id = grep(nxx, asd)
+  k=strsplit(as.character(asd[id]),":")
+  k=k[[1]][2]
+  k=strsplit(as.character(k),"file")
+  k1=k[[1]][1]
+  k2=k[[1]][2]
+  k1=strsplit(as.character(k1)," ")
+  k2=strsplit(as.character(k2)," ")
+  k1=k1[[1]][length(k1[[1]])]
+  k2=k2[[1]][length(k2[[1]])]
+  h$ProgramVersion=as.numeric(k1)
+  h$FileVersion=as.numeric(k2)
+    
   #BeginTime
-  for(x in 1:id){
-    nxx= "Spectrum saved:"
-    if(length(grep(nxx,asd[x,1]))>0){
-      ww=x
-      k=strsplit(as.character(asd[ww,]),":")
-      k=k[[1]][2]
-      h$BeginTime= as.factor(k)
-    }
-  }
-  
+  h$BeginTime = ttime[1]
   
   # IntegrationTime       
-  for(x in 1:id){
-    nxx= " Integration time"
-    if(length(grep(nxx,asd[x,1]))>0){
-      ww=x
-      k=strsplit(as.character(asd[ww,]),":")
-      k=k[[1]][2]
-      h$IntegrationTime= as.factor(k)
-    }
-  }
-  
-  
+  nxx= "Integration time"
+  id = grep(nxx, asd)
+  k=strsplit(as.character(asd[id]),":")
+  k=k[[1]][2]
+  h$IntegrationTime= as.numeric(k)
+
   #BeginWavelength and WavelengthStep
-  for(x in 1:id){
-    nxx= "  Channel 1"
-    if(length(grep(nxx,asd[x,1]))>0){
-      ww=x
-      k=strsplit(as.character(asd[ww,]),"=")
-      k=k[[1]][2]
-      k=strsplit(as.character(k),"wavelength")
-      k1=k[[1]][2]
-      k2=k[[1]][3]
-      k1=strsplit(as.character(k1)," ")
-      k1=k1[[1]][1]
-      h$BeginWavelength=as.numeric(k1)
-      h$WavelengthStep=as.numeric(k2)
-      
-    }
-  }
+  nxx= "Channel 1"
+  id = grep(nxx, asd)
+  k=strsplit(as.character(asd[id]),"=")
+  kk1=k[[1]][2]
+  kk2=k[[1]][3]
+  k1=strsplit(kk1,"wavelength")[[1]][1]
+  h$BeginWavelength=as.numeric(k1)
+  h$WavelengthStep=as.numeric(kk2)
   
   #  SamplesPerDataValue    
-  for(x in 1:id){
-    nxx= "sample per data"
-    if(length(grep(nxx,asd[x,1]))>0){
-      ww=x
-      k=asd[ww,]
-      h$SamplesPerDataValue =as.factor(k)
-    }
+  nxx= "sample per data"
+  id = grep(nxx, asd)
+  if (length(id)==0){
+    nxx= "samples per data"
+    id = grep(nxx, asd)
   }
-  
-  
+  k=asd[id]
+  k = strsplit(k," ")
+  sample_id = grep("sample",k[[1]])
+  k = k[[1]][sample_id-1]
+  if (k=="one")
+    k=1
+  k = as.numeric(k)
+  h$SamplesPerDataValue = k
+
   # xmin and xmax  
-  for(x in 1:id){
-    nxx= "xmin"
-    if(length(grep(nxx,asd[x,1]))>0){
-      ww=x
-      k=strsplit(as.character(asd[ww,]),"xmax")
-      k1=strsplit(as.character(k[[1]][1]),"=")
-      k2=strsplit(as.character(k[[1]][2]),"=")
-      h$xmax=k2[[1]][2]
-      h$xmin=k1[[1]][2]
-    }
-  }
-  
+  nxx= "xmin"
+  id = grep(nxx, asd)
+  k=strsplit(as.character(asd[id]),"xmax")
+  k1=strsplit(as.character(k[[1]][1]),"=")
+  k2=strsplit(as.character(k[[1]][2]),"=")
+  h$xmax=as.numeric(k2[[1]][2])
+  h$xmin=as.numeric(k1[[1]][2])
+
+  if (ONECOLUMN)
+    DF$V1 <- seq(h$xmin, h$xmax, length.out = nrow(DF))
   
   #ymin  and ymax   
-  for(x in 1:id){
-    nxx= "ymin"
-    if(length(grep(nxx,asd[x,1]))>0){
-      ww=x
-      k=strsplit(as.character(asd[ww,]),"ymax")
-      k1=strsplit(as.character(k[[1]][1]),"=")
-      k2=strsplit(as.character(k[[1]][2]),"=")
-      h$ymax=k2[[1]][2]
-      h$ymin=k1[[1]][2]
-      
-    }
-  }
-  
+  nxx= "ymin"
+  id = grep(nxx, asd)
+  k=strsplit(as.character(asd[id]),"ymax")
+  k1=strsplit(as.character(k[[1]][1]),"=")
+  k2=strsplit(as.character(k[[1]][2]),"=")
+  h$ymax=as.numeric(k2[[1]][2])
+  h$ymin=as.numeric(k1[[1]][2])
+
   #Digitization
-  for(x in 1:id){
-    nxx= "The instrument digitizes spectral values"
-    if(length(grep(nxx,asd[x,1]))>0){
-      ww=x
-      k=strsplit(as.character(asd[ww,]),"to")
-      h$Digitization=as.numeric(k[[1]][1])
-    }
-  }
-  
+  nxx= "The instrument digitizes spectral values"
+  id = grep(nxx, asd)
+  k=strsplit(as.character(asd[id]),"to")
+  h$Digitization=as.numeric(k[[1]][2])
   
   #DarkCurrentCorrected   
-  for(x in 1:id){
-    nxx= "dark signal subtracted"
-    nx="dark signal not subtracted"
-    if(length(grep(nxx,asd[x,1]))>0){
-      h$DarkCurrentCorrected="TRUE"
-    }
-    if(length(grep(nx,asd[x,1]))>0){
-      h$DarkCurrentCorrected="FALSE"
-    }
+  nxx= "dark signal subtracted"
+  nx="dark signal not subtracted"
+  h$DarkCurrentCorrected = NA
+  if(length(grep(nxx,asd))>0) {
+    h$DarkCurrentCorrected="TRUE"
   }
-  
+  if(length(grep(nx,asd))>0) {
+    h$DarkCurrentCorrected="FALSE"
+  }
+
   #DarkCurrentNumbers    and DarkCurrentAcquisition    
-  for(x in 1:id){
-    nxx= "dark measurements taken"
-    if(length(grep(nxx,asd[x,1]))>0){
-      ww=x
-      k=strsplit(as.character(asd[ww,]),"dark measurements taken")
-      h$DarkCurrentNumbers=as.factor(k[[1]][1])
-      h$DarkCurrentAcquisition=as.factor(k[[1]][2])
-    }
-  }
-  
-  
-  # DccValue
-  for(x in 1:id){
+  nx = "VNIR dark signal not subtracted"
+  nxx = "dark measurements taken"
+  id = grep(nxx,asd)
+  if(length(id)>0) {
+    k=strsplit(as.character(asd[id]),"dark measurements taken")
+    h$DarkCurrentNumbers=as.numeric(k[[1]][1])
+    h$DarkCurrentAcquisitionTime = as.POSIXct(strptime(k[[1]][2],  " %a %B %d %T %Y"))
+    
+    # DccValue
     nxx= "DCC value was"
-    if(length(grep(nxx,asd[x,1]))>0){
-      ww=x
-      k=strsplit(as.character(asd[ww,]),"DCC value was")
-      h$DccValue=k[[1]][2]
-    }
+    id = grep(nxx, asd)
+    k=strsplit(as.character(asd[id]),"DCC value was")
+    h$DccValue=as.numeric(k[[1]][2])
   }
-  
-  
+
   #WhitePanelReferenced   
-  for(x in 1:id){
-    nxx= "Data is compared to a white reference"
-    nx="Data is not compared to a white reference"
-    if(length(grep(nxx,asd[x,1]))>0){
-      h$WhitePanelReferenced="TRUE"
-    }
-    if(length(grep(nx,asd[x,1]))>0){
-      h$WhitePanelReferenced="FALSE"
-    }
+  nxx = "Data is compared to a white reference"
+  nx  = "Data is not compared to a white reference"
+  h$WhitePanelReferenced = NA
+  if(length(grep(nxx,asd))>0){
+    h$WhitePanelReferenced="TRUE"
+  }
+  if(length(grep(nx,asd))>0){
+    h$WhitePanelReferenced="FALSE"
   }
   
   # ForeOptics     
-  for(x in 1:id){
-    nxx= "There was foreoptic attached"
-    nx="There was no foreoptic attached"
-    if(length(grep(nxx,asd[x,1]))>0){
-      h$ForeOptics="TRUE"
-    }
-    if(length(grep(nx,asd[x,1]))>0){
-      h$ForeOptics="FALSE"
-    }
+  nxx= "There was foreoptic attached"
+  nx="There was no foreoptic attached"
+  h$ForeOptics = NA
+  if(length(grep(nxx,asd))>0){
+    h$ForeOptics="TRUE"
   }
-  
+  if(length(grep(nx,asd))>0){
+    h$ForeOptics="FALSE"
+  }
+
   #RadiometricCalibration  
-  for(x in 1:id){
-    nxx= "Spectrum file is"
-    if(length(grep(nxx,asd[x,1]))>0){
-      ww=x
-      k=strsplit(as.character(asd[ww,]),"is")
-      h$RadiometricCalibration=k[[1]][2]
-    }
-  }
-  
+  nxx= "Spectrum file is"
+  id = grep(nxx, asd)
+  if (grepl("raw data", asd[id]))
+    h$RadiometricCalibration=FALSE
+  else
+    h$RadiometricCalibration=TRUE
   
   #IntegrationTimeCorrected   
-  for(x in 1:id){
-    nxx= "Integration Time Corrected"
-    if(length(grep(nxx,asd[x,1]))>0){
-      h$IntegrationTimeCorrected="TRUE"
-    }else{
-      h$IntegrationTimeCorrected="FALSE"
-    }
+  nxx= "Integration Time Corrected"
+  h$IntegrationTimeCorrected = NA
+  if(length(grep(nxx,asd))>0){
+    h$IntegrationTimeCorrected="TRUE"
+  }else{
+    h$IntegrationTimeCorrected="FALSE"
   }
+
+  #Coordinates
+  crd = data.frame(LAT=1,LON=2)
+  #coordinates(crd) = ~LON+LAT
   
-  # Index.SpectralName                                                                              
-  h$Index.SpectralName =sp@ShortName                                                                             
-  
-  # ColumnNames               
-  ss=spc.cname.construct(sp)
-  spc.colnames<-(ss)  
-  #there is not code for rest of row not 
-  # Station                                                                                     
-  # Series                                                                                            
-  # DataType                                                              
-  # DataName                                                        
-  # GeographicalCoverage                                                                  
+  #there is no code for the following
   # FileName                 
-  # RawFileIndex                                                                          
   # SaturationCorrected      
   
-  spc.setheader(sp) <- h # header added to spectra
+  df = as.data.frame(t(as.matrix(as.numeric(DF$V2))))
+  df = cbind(df, crd, ttime)
+
+  #endTime = BeginTime + Integration Time
+  endTime = ttime[1]+h$IntegrationTime/1000
+
+  #Predict optical measurement Units
+  Units = "DC"
+  if (h$RadiometricCalibration)
+    warning("Estimating Units from a calibrated reading is not supported yet")
+  
+  sp <- Spectra(df,Wavelengths=DF$V1, header=h,
+          space=c("LON","LAT"), time="ttime",
+          Units=Units,ShortName="L", endTime=endTime,
+          LongName = basename(h$RawFilename))
+
+  # ColumnNames               
+  spc.colnames(sp) <-spc.cname.construct(sp)
+  
+  #spc.setheader(sp) <- h # header added to spectra
   validObject(sp)
   return(sp)
 }
