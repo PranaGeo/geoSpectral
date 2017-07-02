@@ -18,8 +18,8 @@ Imports the NOMAD v2 database of the SeaBASS project. More information
 about this dataset can be found at \url{https://seabass.gsfc.nasa.gov/wiki/NOMAD}
 }
 \examples{
-ap = spc.Read_NOMAD_v2()
-class(ap)
-spc.plot.plotly(ap[[4]], plot.max=15)
+nomad = spc.Read_NOMAD_v2()
+class(nomad[[1]])
+spc.plot.plotly(nomad[[4]], plot.max=15)
 
 }

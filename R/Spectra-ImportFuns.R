@@ -11,7 +11,7 @@
 #'
 #' @examples
 #' nomad = spc.Read_NOMAD_v2()
-#' class(nomad)
+#' class(nomad[[1]])
 #' spc.plot.plotly(nomad[[4]], plot.max=15)
 #' 
 #' @export
@@ -49,7 +49,7 @@ spc.Read_NOMAD_v2 = function(skip.all.na.rows=TRUE) {
   
   #Reorder columns
   #mydata = mydata %>% dplyr::select(TIME, LON, LAT, cruise, flag, everything())
-  mydata = mydata %>% dplyr::select_("TIME", "LON", "LAT", "cruise", "flag", everything())
+  mydata = mydata %>% dplyr::select("TIME", "LON", "LAT", "cruise", "flag", everything())
   
   out = lapply(1:length(ShortNames), function(x) {
     #Find rows that do not contain NAs
