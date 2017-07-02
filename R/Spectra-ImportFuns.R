@@ -240,6 +240,9 @@ spc.Read_ASD <- function(filename){
   }
   if(length(grep(nx,asd))>0) {
     h$DarkCurrentCorrected="FALSE"
+    h$DarkCurrentNumbers=0
+    h$DarkCurrentAcquisitionTime = NA
+    h$DccValue=NA
   }
 
   #DarkCurrentNumbers    and DarkCurrentAcquisition    
