@@ -13,7 +13,8 @@ spc.Read_ASD(filename)
 Returns an object of class \code{Spectra}.
 }
 \description{
-Imports ASD spectra from text files prepared by the software provided by ASD inc. Note that this function imports only one spectra per file.
+Imports ASD spectra from text files prepared by the software provided by ASD inc. 
+This function imports only one spectra per file.
 }
 \examples{
 filename = file.path(system.file(package = "geoSpectral"),"test_data", "106.064.txt")
