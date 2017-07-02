@@ -737,7 +737,7 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...,compressHeader
       for(J in 1:length(sltn)){
         myslot = slot(eval((allinargs[[I]])),sltn[J])
         if(class(myslot)[1]=="SpcHeader"){
-          aa=rbind(as.data.frame(slot(outt,sltn[J]),stringsAsFactors=F), as.data.frame(myslot,,stringsAsFactors=F))
+          aa=rbind(as.data.frame(slot(outt,sltn[J]),stringsAsFactors=F), as.data.frame(myslot,stringsAsFactors=F))
           rownames(aa)=NULL
           bb = as.list(aa)
           bb = lapply(bb,function(x){names(x)<-NULL;x})
@@ -750,8 +750,12 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...,compressHeader
         if(class(myslot)[1]=="logical"|class(myslot)[1]=="numeric"|
              class(myslot)[1]=="character"|class(myslot)[1]=="POSIXct")
           if(class(myslot)[1]=="POSIXct"){
-            mytz = attr(outt@endTime,"tzone")
-            slot(outt,sltn[J])<-as.POSIXct(as.POSIXlt(c(slot(outt,sltn[J]),myslot),tz=mytz))
+            mytz <- format(outt@endTime,"%Z")
+            #Check if all values are similar, throw an error otherwise
+            if (length(mytz)>1 && !do.call(all.equal, lapply(mytz, function(x)x)))
+              stop("Time zone values of all elements are not equal. Stop.")
+            slot(outt,sltn[J])<-as.POSIXct(as.POSIXlt(c(slot(outt,sltn[J]),myslot),tz=mytz[1]))
+            #browser()
           }
         if(class(myslot)[1]=="xts"){
           slot(outt,sltn[J])<-c(slot(outt,sltn[J]),myslot)
@@ -781,6 +785,7 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...,compressHeader
       }
     }
   }
+  #browser()
   validObject(outt)
   return(outt) 
 })
