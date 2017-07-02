@@ -137,7 +137,7 @@ spc.Read_ASD <- function(filename){
   k1=paste0(k1[[1]],collapse = "/")
   k2=k[[1]][2]
   k=paste0(k1[[1]],k2[[1]])
-  k = strptime(k, "%m/%d/%Y %H:%M:%S")
+  k = strptime(k, "%m/%d/%Y %H:%M:%S",tz = "UTC")
   ttime=as.POSIXct(k)
   #sp@time=xts(1,k)
   
