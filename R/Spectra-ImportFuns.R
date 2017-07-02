@@ -74,7 +74,8 @@ spc.Read_NOMAD_v2 = function(skip.all.na.rows=TRUE) {
 #' Read the ASD Spectra from text file
 #'
 #' @description
-#' Imports ASD spectra from text files prepared by the software provided by ASD inc. Note that this function imports only one spectra per file.
+#' Imports ASD spectra from text files prepared by the software provided by ASD inc. 
+#' This function imports only one spectra per file.
 #'
 #' @param filename A \code{string} name of the input text file containing the raw ASD data.
 #'

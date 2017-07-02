@@ -13,11 +13,12 @@ spc.Read_ASD(filename)
 Returns an object of class \code{Spectra}.
 }
 \description{
-Imports
+Imports ASD spectra from text files prepared by the software provided by ASD inc. Note that this function imports only one spectra per file.
 }
 \examples{
-L = spc.Read_ASD()
+filename = file.path(system.file(package = "geoSpectral"),"test_data", "106.064.txt")
+L = spc.Read_ASD(filename)
 class(L)
-spc.plot.plotly(L, plot.max=15)
+spc.plot.plotly(L)
 
 }
