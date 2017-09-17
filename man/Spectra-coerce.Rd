@@ -27,7 +27,6 @@ attributes(df)
 
 #Convert the data.frame back to Spectra
 sp2 <- as(df, "Spectra")
-sp2
 
 #Convert a bare data.frame to Spectra with minimal attributes
 df2 <- data.frame(ch1=c(1,2,3,4), ch2=c(5,6,7,8), TIME=Sys.time()+1:4, LAT=1:4, LON=5:8)
