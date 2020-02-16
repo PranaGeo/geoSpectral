@@ -1,13 +1,16 @@
 library(geoSpectral)
 library(testthat)
+
 sptest = spc.example_spectra()
 test_that("SpcLists are created properly", {
   expect_equal(SpcList(list(sptest,sptest^2)), as(list(sptest,sptest^2), "SpcList"))
 })
+
 spctest = spc.makeSpcList(sptest, "CAST")
 test_that("Names function returns correct number of names", {
   expect_true(all(names(spctest)==unique(sptest$CAST)))
 })
+
 headertest <- spc.makeSpcList(sptest, "STATION")
 a = new("SpcHeader")
 a$Longitude = 123

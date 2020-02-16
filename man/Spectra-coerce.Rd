@@ -3,7 +3,6 @@
 \name{Spectra-coerce}
 \alias{Spectra-coerce}
 \alias{as,Spectra}
-\alias{Spectra-coerce}
 \title{Conversion between \code{Spectra} and data.frame objects}
 \arguments{
 \item{from}{The input object}

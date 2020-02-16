@@ -500,7 +500,6 @@ setMethod("spc.getheader", signature = "list", def = function (object,name){
 #'
 #' @param value Object of class SpcList.
 #' @param object A \code{SpcList} object.
-#' @param ... arguments to be passed to or from other methods.
 #' @examples 
 #' sp=spc.example_spectra()
 #' BL=spc.makeSpcList(sp,"CAST")

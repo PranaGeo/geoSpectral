@@ -1,8 +1,8 @@
 Package: geoSpectral
 Type: Package
 Title: Classes and Methods for Working with Spectral Data with Space-Time Attributes
-Version: 0.17.3
-Date: 2017-03-22
+Version: 0.17.5
+Date: 2020-02-17
 Depends:
     R (>= 2.10.0)
 Imports:
@@ -17,8 +17,12 @@ Imports:
     plotly,
     sp,
     stats
-Author: Servet Ahmet Cizmeli
+Author: Servet Ahmet Cizmeli [aut, cre] (<https://orcid.org/0000-0001-6694-9305>)
+Authors@R: 
+    person("Servet Ahmet", "Cizmeli", , "ahmet@pranageo.com", c("aut", "cre"), comment = c(ORCID = "0000-0001-6694-9305"))
 Maintainer: Servet Ahmet Cizmeli <ahmet@pranageo.com>
+URL: https://github.com/PranaGeo/geoSpectral
+BugReports: https://github.com/PranaGeo/geoSpectral/issues
 Description: Provides S4 classes and data import, preprocessing, graphing, 
     manipulation and export methods for geo-Spectral datasets (datasets with space/time/spectral 
     dimensions). These type of data are frequently collected within earth observation projects 
@@ -35,7 +39,8 @@ Collate:
     SpcList-Class.R
     SpcList-Methods.R
     Spectra-ImportFuns.R
-RoxygenNote: 6.0.1
+RoxygenNote: 7.0.2
 Suggests:
     testthat,
-    xlsx
+    xlsx,
+    geoSpectral

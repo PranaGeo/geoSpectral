@@ -19,9 +19,6 @@
 #' data formats. Have a look at the constructor function by typing \code{?Spectra} to get started.
 #'
 #' @author Servet Ahmet Cizmeli <ahmet@pranageo.com>
-#' 
-#' @references
-#' There is a tutorial for \pkg{geoSpectral} at the package's GitHub page: \url{https://pranageo.com/geospectral/geospectral-tutorial/}.
 #'
 #' @concept Spectral Wavelength
 #' @seealso See also the packages \pkg{spacetime}, \pkg{rgdal},'\pkg{sp}, \pkg{xts}

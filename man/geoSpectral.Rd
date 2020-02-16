@@ -21,15 +21,10 @@ as well as basic data access and manipulation methods for importing, acessing an
 subsetting, converting into R objects, analyzing, plotting, and exporting to other scientific
 data formats. Have a look at the constructor function by typing \code{?Spectra} to get started.
 }
-\references{
-There is a tutorial for \pkg{geoSpectral} at the package's GitHub page: \url{https://pranageo.com/geospectral/geospectral-tutorial/}.
-}
 \seealso{
 See also the packages \pkg{spacetime}, \pkg{rgdal},'\pkg{sp}, \pkg{xts}
 }
 \author{
 Servet Ahmet Cizmeli <ahmet@pranageo.com>
 }
-\concept{
-Spectral Wavelength
-}
+\concept{Spectral Wavelength}
