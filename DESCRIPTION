@@ -1,4 +1,4 @@
-Package: geospectral
+Package: geoSpectral
 Type: Package
 Title: Classes and Methods for Working with Spectral Data with Space-Time Attributes
 Version: 0.17.5
@@ -19,7 +19,7 @@ Imports:
     stats
 Author: Servet Ahmet Cizmeli [aut, cre] (<https://orcid.org/0000-0001-6694-9305>)
 Authors@R: 
-    person("Servet", "Cizmeli", , "ahmet@pranageo.com", c("aut", "cre"), comment = c(ORCID = "0000-0001-6694-9305"))
+    person("Servet Ahmet", "Cizmeli", , "ahmet@pranageo.com", c("aut", "cre"), comment = c(ORCID = "0000-0001-6694-9305"))
 Maintainer: Servet Ahmet Cizmeli <ahmet@pranageo.com>
 URL: https://github.com/PranaGeo/geoSpectral
 BugReports: https://github.com/PranaGeo/geoSpectral/issues
