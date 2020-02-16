@@ -1,8 +1,8 @@
-Package: geoSpectral
+Package: geospectral
 Type: Package
 Title: Classes and Methods for Working with Spectral Data with Space-Time Attributes
-Version: 0.17.4
-Date: 2017-03-22
+Version: 0.17.5
+Date: 2020-02-17
 Depends:
     R (>= 2.10.0)
 Imports:
@@ -35,7 +35,8 @@ Collate:
     SpcList-Class.R
     SpcList-Methods.R
     Spectra-ImportFuns.R
-RoxygenNote: 6.0.1
+RoxygenNote: 7.0.2
 Suggests:
     testthat,
-    xlsx
+    xlsx,
+    geoSpectral
