@@ -30,6 +30,4 @@ See also the packages \pkg{spacetime}, \pkg{rgdal},'\pkg{sp}, \pkg{xts}
 \author{
 Servet Ahmet Cizmeli <ahmet@pranageo.com>
 }
-\concept{
-Spectral Wavelength
-}
+\concept{Spectral Wavelength}

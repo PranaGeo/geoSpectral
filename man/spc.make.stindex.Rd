@@ -4,8 +4,13 @@
 \alias{spc.make.stindex}
 \title{Create a spatio-temporal index based on a list of \code{Spectra} objects}
 \usage{
-spc.make.stindex(input, what2include = "", rowSimplify = "none",
-  includeTIME = FALSE, includeLATLON = FALSE)
+spc.make.stindex(
+  input,
+  what2include = "",
+  rowSimplify = "none",
+  includeTIME = FALSE,
+  includeLATLON = FALSE
+)
 }
 \arguments{
 \item{input}{An object of class \code{spectra}}
