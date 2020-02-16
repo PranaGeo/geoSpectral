@@ -1,5 +1,6 @@
 library(geoSpectral)
 library(testthat)
+
 context("Tests for Spectra methods")
 
 fnm = file.path(base::system.file(package = "geoSpectral"),"test_data","particulate_absorption.csv.gz")
