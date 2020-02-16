@@ -259,12 +259,8 @@ setAs(from="data.frame", to="Spectra", def=function(from){
   }else{
     endTime = from$ENDTIME
   }
-  outS =geoSpectral::Spectra(data,Spectra,Wavelengths,Units=Units,
+  outS = Spectra(data,Spectra,Wavelengths,Units=Units,
                           header=header,ShortName=ShortName,LongName=LongName,endTime=endTime)
-  #			outS = new("Spectra", time = TIME, endTime = endTime,
-  #					Spectra=Spectra, data=data,
-  #					Wavelengths=Wavelengths, Units=Units[1], 
-  #					LongName = LongName, ShortName = ShortName,header=header)
   
   validObject(outS)
   return(outS)
