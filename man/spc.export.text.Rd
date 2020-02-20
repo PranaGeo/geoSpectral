@@ -54,14 +54,16 @@ Save the \code{Spectra} and \code{SpcHeader} objects on disk in text format and 
 }
 \examples{
 x=spc.example_spectra()
-spc.export.text(x,filename="anap.txt")
-aa=spc.import.text("anap.txt")
+fn <- tempfile()
+spc.export.text(x,filename=fn)
+aa=spc.import.text(fn)
 dev.new()
 spc.plot(aa)
 
 #Export the SpcHeader object
-spc.export.text(x@header,filename="anap_header.txt")
-hdr=spc.import.text("anap_header.txt")
+fn2 <- tempfile()
+spc.export.text(x@header, filename=fn2)
+hdr=spc.import.text(fn2)
 class(hdr)
 
 }
