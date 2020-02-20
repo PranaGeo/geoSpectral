@@ -582,7 +582,7 @@ setMethod("spc.plot", "Spectra", function (x, Y, maxSp, lab_cex,xlab,ylab,type="
     lab_cex = 1
   
   YY = x@Spectra[Xidx,]
-  if(class(YY)=="matrix" && nrow(YY)!=length(x@Wavelengths))
+  if(inherits(YY, "matrix") && nrow(YY)!=length(x@Wavelengths))
     YY = t(YY)
   
   inargs_in <- list(...)
@@ -731,6 +731,7 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...,compressHeader
       sltn = sltn[sltn!="Units"]
       #For all slots
       for(J in 1:length(sltn)){
+
         myslot = slot(eval((allinargs[[I]])),sltn[J])
         if(class(myslot)[1]=="SpcHeader"){
           aa=rbind(as.data.frame(slot(outt,sltn[J]),stringsAsFactors=F), as.data.frame(myslot,stringsAsFactors=F))
@@ -739,24 +740,26 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...,compressHeader
           bb = lapply(bb,function(x){names(x)<-NULL;x})
           outt@header = as(bb,"SpcHeader")
         }
-        #					if (length(myslot)==0)
-        #						myslot=NA
+
         if(class(myslot)[1]=="matrix"|class(myslot)[1]=="data.frame")
           slot(outt,sltn[J])<- rbind(slot(outt,sltn[J]),myslot)
+
         if(class(myslot)[1]=="logical"|class(myslot)[1]=="numeric"|
              class(myslot)[1]=="character"|class(myslot)[1]=="POSIXct")
+
           if(class(myslot)[1]=="POSIXct"){
             mytz <- format(outt@endTime,"%Z")
             #Check if all values are similar, throw an error otherwise
             if (length(mytz)>1 && !do.call(all.equal, lapply(mytz, function(x)x)))
               stop("Time zone values of all elements are not equal. Stop.")
             slot(outt,sltn[J])<-as.POSIXct(as.POSIXlt(c(slot(outt,sltn[J]),myslot),tz=mytz[1]))
-            #browser()
           }
+
         if(class(myslot)[1]=="xts"){
           slot(outt,sltn[J])<-c(slot(outt,sltn[J]),myslot)
           slot(outt,sltn[J])<-xts::xts(1:length(slot(outt,sltn[J])),time(slot(outt,sltn[J])))
         }	
+
         if(class(myslot)[1]=="SpatialPoints"){
           prj = slot(outt,sltn[J])@proj4string
           if (!identical(prj@projargs,myslot@proj4string@projargs))
@@ -769,6 +772,7 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...,compressHeader
       } #end for all slots
     } #end for all input arguments
   } #end for if(length(allinargs)>1)
+
   #Compress the header (make multiple all-equal header elements as ONE)
   if(compressHeader){
     for(J in names(outt@header)){
@@ -781,7 +785,7 @@ setMethod("spc.rbind", signature = "Spectra", def = function (...,compressHeader
       }
     }
   }
-  #browser()
+
   validObject(outt)
   return(outt) 
 })
@@ -1799,14 +1803,16 @@ setMethod("spc.interp.spectral", signature = "Spectra", def = function (source1,
 #' @param writeheader either a logical value indicating whether the header names  are to be written        
 #' @examples 
 #' x=spc.example_spectra()
-#' spc.export.text(x,filename="anap.txt")
-#' aa=spc.import.text("anap.txt")
+#' fn <- tempfile()
+#' spc.export.text(x,filename=fn)
+#' aa=spc.import.text(fn)
 #' dev.new()
 #' spc.plot(aa)
 #' 
 #' #Export the SpcHeader object
-#' spc.export.text(x@header,filename="anap_header.txt")
-#' hdr=spc.import.text("anap_header.txt")
+#' fn2 <- tempfile()
+#' spc.export.text(x@header, filename=fn2)
+#' hdr=spc.import.text(fn2)
 #' class(hdr)
 #' 
 #' @rdname spc.export.text
