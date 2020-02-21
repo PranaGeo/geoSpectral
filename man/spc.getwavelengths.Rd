@@ -2,24 +2,27 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.getwavelengths}
 \alias{spc.getwavelengths}
+\alias{spc.getwavelengths,Spectra-method}
 \title{Extract wave lenghts of a \code{Spectra} object}
 \usage{
 spc.getwavelengths(object)
+
+\S4method{spc.getwavelengths}{Spectra}(object)
 }
 \arguments{
 \item{object}{A \code{Spectra} object}
 }
 \value{
-numeric vector of  wave lenghts
+numeric vector of  wave lengths
 }
 \description{
-Get wave lenghts insade of  a \code{Spectra} object
+Get wave lenghts inside of  a \code{Spectra} object
 }
 \examples{
  x <- spc.example_spectra()
  spc.getwavelengths(x)
-
+ 
 }
 \seealso{
-\code{\link{spc.setwavelengths}}
+\code{\link{spc.setwavelengths<-}}
 }

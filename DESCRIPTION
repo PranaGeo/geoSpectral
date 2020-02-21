@@ -1,31 +1,46 @@
 Package: geoSpectral
 Type: Package
-Title: Classes and methods for spectral (optical) data
-Version: 0.11
-Date: 2012-07-02
+Title: Classes and Methods for Working with Spectral Data with Space-Time Attributes
+Version: 0.17.5
+Date: 2020-02-17
 Depends:
-    R (>= 2.10.0),
+    R (>= 2.10.0)
+Imports:
     methods,
-    rgdal,
+    dplyr,
     spacetime,
-    reshape2
-Author: Servet Cizmeli
-Maintainer: Servet Cizmeli <ahmet@pranageo.com>
-Description: This package provides S4 classes and basic manipulation methods
-    for datasets frequently used in remote sensing, bio-optical oceanography and
-    environmental and earth sciences. The package is based on the data type called
-    Spectra which extends the STIDF class of package spacetime. Spatial/temporal and
-    spectral aspects of Bio-Optical data that are regularly collected during Bio-
-    Optical oceanography campaigns can be easily represented with the Spectra class.
+    xts,
+    maps,
+    rgdal,
+    leaflet,
+    rbokeh,
+    plotly,
+    sp,
+    stats
+Author: Servet Ahmet Cizmeli [aut, cre] (<https://orcid.org/0000-0001-6694-9305>)
+Authors@R: 
+    person("Servet Ahmet", "Cizmeli", , "ahmet@pranageo.com", c("aut", "cre"), comment = c(ORCID = "0000-0001-6694-9305"))
+Maintainer: Servet Ahmet Cizmeli <ahmet@pranageo.com>
+URL: https://github.com/PranaGeo/geoSpectral
+BugReports: https://github.com/PranaGeo/geoSpectral/issues
+Description: Provides S4 classes and data import, preprocessing, graphing, 
+    manipulation and export methods for geo-Spectral datasets (datasets with space/time/spectral 
+    dimensions). These type of data are frequently collected within earth observation projects 
+    (remote sensing, spectroscopy, bio-optical oceanography, mining, agricultural, atmospheric, 
+    environmental or similar branch of science).
 License: GPL
 LazyLoad: yes
 Collate:
+    geoSpectral.R
     SpcHeader-Class.R
     SpcHeader-Methods.R
     Spectra-Class.R
     Spectra-Methods.R
     SpcList-Class.R
     SpcList-Methods.R
-    geoSpectral.R
-RoxygenNote: 6.0.1
-Suggests: testthat
+    Spectra-ImportFuns.R
+RoxygenNote: 7.0.2
+Suggests:
+    testthat,
+    xlsx,
+    geoSpectral

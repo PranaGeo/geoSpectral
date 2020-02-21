@@ -2,13 +2,31 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.plot.map.leaflet}
 \alias{spc.plot.map.leaflet}
+\alias{spc.plot.map.leaflet,Spectra-method}
 \title{Display a Spectra object}
 \usage{
-spc.plot.map.leaflet(sp, hover_field = "row", color = "#FF0000",
-  opacity = 1, weight = 5)
+spc.plot.map.leaflet(
+  sp,
+  hover_field = "row",
+  color = "#FF0000",
+  opacity = 1,
+  weight = 5
+)
+
+\S4method{spc.plot.map.leaflet}{Spectra}(
+  sp,
+  hover_field = "row",
+  color = "#FF0000",
+  opacity = 1,
+  weight = 5
+)
 }
 \arguments{
 \item{sp}{\code{Spectra} object}
+
+\item{hover_field}{A character  or vector of strings giving column 
+names of \code{Spectra} object. This information will be displayed when 
+hovering over the glyph}
 
 \item{color}{Determine color of points}
 
@@ -16,10 +34,6 @@ spc.plot.map.leaflet(sp, hover_field = "row", color = "#FF0000",
 between 0 (transparent) and 1 (opaque)}
 
 \item{weight}{Stroke width in pixels}
-
-\item{hoverA}{chracter or vector of strings giving column 
-names of \code{Spectra} object. This information will be displayed when 
-hovering over the glyph}
 }
 \description{
 Create a point map with leaflet engine using \code{Spectra} rows

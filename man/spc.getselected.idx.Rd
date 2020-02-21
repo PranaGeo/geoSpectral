@@ -2,9 +2,12 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.getselected.idx}
 \alias{spc.getselected.idx}
+\alias{spc.getselected.idx,Spectra-method}
 \title{Extract index inside of a \code{Spectra} object}
 \usage{
 spc.getselected.idx(object)
+
+\S4method{spc.getselected.idx}{Spectra}(object)
 }
 \arguments{
 \item{object}{A \code{Spectra} object}
@@ -21,7 +24,8 @@ idx=rep(FALSE,nrow(x));
 idx[1:5]=TRUE
 spc.setselected.idx(x)<-idx 
 spc.getselected.idx(x)
+
 }
 \seealso{
-\code{\link{spc.setselected.idx}}
+\code{\link{spc.setselected.idx<-}}
 }

@@ -2,20 +2,23 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.setselected.idx<-}
 \alias{spc.setselected.idx<-}
+\alias{spc.setselected.idx<-,Spectra-method}
 \title{Set index to a \code{Spectra} object}
 \usage{
-spc.setselected.idx(x,value)
+spc.setselected.idx(object) <- value
+
+\S4method{spc.setselected.idx}{Spectra}(object) <- value
 }
 \arguments{
-\item{value}{index for a \code{Spectra} object}
+\item{object}{A \code{Spectra} object}
 
-\item{x}{A \code{Spectra} object}
+\item{value}{index for a \code{Spectra} object}
 }
 \value{
-\code{Spectra} object
+A \code{Spectra} object
 }
 \description{
-Set or change selection row index of a \code{Spectra} object
+Set or change selected  row index of a \code{Spectra} object
 }
 \examples{
 x <- spc.example_spectra()

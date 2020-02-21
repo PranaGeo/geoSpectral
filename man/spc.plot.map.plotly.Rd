@@ -2,15 +2,17 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.plot.map.plotly}
 \alias{spc.plot.map.plotly}
+\alias{spc.plot.map.plotly,Spectra-method}
 \title{Display a Spectra object}
 \usage{
-spc.plot.map.plotly(sp, hover_field = "row", color = "#FF0000",
-  opacity = 1)
+spc.plot.map.plotly(sp, hover_field = "row", color = "#FF0000", opacity = 1)
+
+\S4method{spc.plot.map.plotly}{Spectra}(sp, hover_field = "row", color = "#FF0000", opacity = 1)
 }
 \arguments{
 \item{sp}{A \code{Spectra} object}
 
-\item{hover_field}{A chracter, colmn names of sp object to be used  in hover box}
+\item{hover_field}{A character, column  names of sp object to be used  in hover box}
 
 \item{color}{Determine color of points}
 

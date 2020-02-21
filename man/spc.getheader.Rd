@@ -2,14 +2,17 @@
 % Please edit documentation in R/Spectra-Methods.R
 \name{spc.getheader}
 \alias{spc.getheader}
+\alias{spc.getheader,Spectra-method}
 \title{Extract a field of the @header slot of a \code{Spectra} object}
 \usage{
-spc.getheader(x,name)
+spc.getheader(object,name)
+
+\S4method{spc.getheader}{Spectra}(object, name)
 }
 \arguments{
-\item{name}{of the header field to be extracted}
+\item{object}{A  \code{Spectra} object}
 
-\item{x}{A  \code{Spectra} object}
+\item{name}{of the header field to be extracted}
 }
 \description{
 Extracts the value of a field in the header slot of \code{Spectra} object
@@ -18,9 +21,7 @@ Extracts the value of a field in the header slot of \code{Spectra} object
 sp=spc.example_spectra()
 sp@header
 spc.getheader(sp,"Latitude")
-
-
 }
 \seealso{
-\code{\link{spc.setheader}}
+\code{\link{spc.setheader<-}}
 }
